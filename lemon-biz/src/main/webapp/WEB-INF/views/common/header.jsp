@@ -7,6 +7,6 @@
 <html lang="ko">
 <head>
 	<meta charset="UTF-8" />
-	<title>Document</title>
+	<title>test</title>
 </head>
 <body>
