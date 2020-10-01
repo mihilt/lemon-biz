@@ -7,6 +7,8 @@
 <html lang="ko">
 <head>
 	<meta charset="UTF-8" />
-	<title>test2</title>
+	<title>🍋 Lemon Biz</title>
 </head>
 <body>
+
+<h1>Header</h1>

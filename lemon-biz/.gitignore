@@ -82,7 +82,7 @@ local.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+
 *.war
 *.nar
 *.ear
@@ -152,3 +152,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,java,java-web,windows,macos
+
+# Oracle DB Info
+/src/main/webapp/WEB-INF/config
