@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.kh.lemonbiz">
+	<logger name="com.lemon.lemonbiz">
 		<level value="info" />
 	</logger>
 	

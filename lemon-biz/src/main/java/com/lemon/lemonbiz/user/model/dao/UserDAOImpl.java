@@ -1,4 +1,4 @@
-package com.kh.lemonbiz.user.model.dao;
+package com.lemon.lemonbiz.user.model.dao;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

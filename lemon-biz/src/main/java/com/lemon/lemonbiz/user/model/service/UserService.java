@@ -1,4 +1,4 @@
-package com.kh.lemonbiz.user.model.service;
+package com.lemon.lemonbiz.user.model.service;
 
 public interface UserService {
 

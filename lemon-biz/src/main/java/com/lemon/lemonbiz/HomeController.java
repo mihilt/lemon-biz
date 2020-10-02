@@ -1,4 +1,4 @@
-package com.kh.lemonbiz;
+package com.lemon.lemonbiz;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -24,6 +24,7 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
+		
 		return "forward:/WEB-INF/views/index.jsp";
 	}
 	
