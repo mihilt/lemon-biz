@@ -7,7 +7,9 @@
 <html lang="ko">
 <head>
 	<meta charset="UTF-8" />
-	<title>🍋 Lemon Biz</title>
+	<title>Lemon Biz</title>
+	<link rel="shortcut icon" href="${pageContext.request.contextPath }/resources/favicon.ico">
+	<link rel="icon" href="${pageContext.request.contextPath }/resources/images/favicon/favicon.ico">
 </head>
 <body>
 
