@@ -8,8 +8,18 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Lemon Biz</title>
+	
+	<!-- favicon -->
 	<link rel="shortcut icon" href="${pageContext.request.contextPath }/resources/favicon.ico">
 	<link rel="icon" href="${pageContext.request.contextPath }/resources/images/favicon/favicon.ico">
+	
+	<!-- addFlashAttribute message -->
+	<c:if test="${ not empty msg }">
+		<script>
+			alert("${ msg }");
+		</script>
+	</c:if>
+
 </head>
 <body>
 

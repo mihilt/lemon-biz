@@ -12,6 +12,13 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberDAO memberDAO;
 
+	
+	
+	@Override
+	public int insertMember(String memberId) {
+		return memberDAO.insertMember(memberId);
+	}
+
 	@Override
 	public Member selectOneMember(String memberId) {
 		return memberDAO.selectOneMember(memberId);

@@ -5,12 +5,19 @@
 <mapper namespace="member">
 
 	<select id="selectOneMember" resultType="member">
-	 	select
-	 		*
-	 	from 
-	 		member
-	 	where 
-	 		member_id = #{ memberId }
+ 		select
+ 			*
+ 		from 
+ 			member
+ 		where 
+ 			member_id = #{ memberId }
 	</select>
+	
+	<insert id="insertMember">
+		insert 
+			into 
+		member 
+			(MEMBER_ID, password) values (#{ memberId }, #{ memberId })
+	</insert>
 	
 </mapper>

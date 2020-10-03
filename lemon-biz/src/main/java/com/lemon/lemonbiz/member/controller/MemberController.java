@@ -16,11 +16,27 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@RequestMapping(value = "/memberEnroll.do", method = RequestMethod.POST)
+	public String memberEnroll(@RequestParam("memberId") String memberId,
+							   RedirectAttributes redirectAttr) {
+		if(memberService.selectOneMember(memberId) != null) {
+			String msg = "이미 존재하는 아이디 입니다.";
+			redirectAttr.addFlashAttribute("msg", msg);
+			return "redirect:/";
+		}
+		
+		int result = memberService.insertMember(memberId);
+		
+		String msg = result > 0 ? "사원 등록에 성공했습니다." : "사원 등록에 실패했습니다.";
+		redirectAttr.addFlashAttribute("msg", msg);
+		
+		return "redirect:/";
+	}
 
 	@RequestMapping(value = "/memberLogin.do", method = RequestMethod.POST)
 	public String memberLogin(@RequestParam("memberId") String memberId, 
-							  @RequestParam("password") String password,
-							  RedirectAttributes redirectAttr) {
+							  @RequestParam("password") String password) {
 
 		Member loginMember = memberService.selectOneMember(memberId);
 
