@@ -1,10 +1,14 @@
 package com.lemon.lemonbiz.member.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lemon.lemonbiz.member.model.service.MemberService;
@@ -12,21 +16,30 @@ import com.lemon.lemonbiz.member.model.vo.Member;
 
 @Controller
 @RequestMapping("/member")
+@SessionAttributes({"loginMember"})
 public class MemberController {
 	
 	@Autowired
 	private MemberService memberService;
 	
+	@Autowired
+	private BCryptPasswordEncoder bcryptPasswordEncoder;
+	
 	@RequestMapping(value = "/memberEnroll.do", method = RequestMethod.POST)
-	public String memberEnroll(@RequestParam("memberId") String memberId,
-							   RedirectAttributes redirectAttr) {
-		if(memberService.selectOneMember(memberId) != null) {
+	public String memberEnroll(RedirectAttributes redirectAttr,
+							   Member member) {
+		
+		String rawPassword = member.getMemberId();
+		String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
+		member.setPassword(encodedPassword);
+		
+		if(memberService.selectOneMember(member.getMemberId()) != null) {
 			String msg = "이미 존재하는 아이디 입니다.";
 			redirectAttr.addFlashAttribute("msg", msg);
 			return "redirect:/";
 		}
 		
-		int result = memberService.insertMember(memberId);
+		int result = memberService.insertMember(member);
 		
 		String msg = result > 0 ? "사원 등록에 성공했습니다." : "사원 등록에 실패했습니다.";
 		redirectAttr.addFlashAttribute("msg", msg);
@@ -36,20 +49,34 @@ public class MemberController {
 
 	@RequestMapping(value = "/memberLogin.do", method = RequestMethod.POST)
 	public String memberLogin(@RequestParam("memberId") String memberId, 
-							  @RequestParam("password") String password) {
+							  @RequestParam("password") String password,
+							  RedirectAttributes redirectAttr,
+							  Model model) {
 
 		Member loginMember = memberService.selectOneMember(memberId);
 
-		System.out.println(loginMember);
+//		System.out.println(loginMember);
 		
 		// 로그인 성공
-		if(loginMember != null && password.equals(loginMember.getPassword())) {
-			System.out.println("성공");
+		if(loginMember != null && 
+		   bcryptPasswordEncoder.matches(password, loginMember.getPassword())
+		   ) {
+			model.addAttribute("loginMember", loginMember);
+//			redirectAttr.addFlashAttribute("msg", "로그인 성공");
 		}
 		// 로그인 실패
 		else {
-			System.out.println("실패");
+			redirectAttr.addFlashAttribute("msg", "아이디 또는 비밀번호가 일치하지 않습니다.");
 		}
+		
+		return "redirect:/";
+	}
+	
+	@RequestMapping("/memberLogout.do")
+	public String memberLogout(SessionStatus sessionStatus) {
+		
+		if(!sessionStatus.isComplete())
+			sessionStatus.setComplete();
 		
 		return "redirect:/";
 	}

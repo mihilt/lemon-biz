@@ -23,4 +23,14 @@
 </head>
 <body>
 
-<h1>Header</h1>
+<h6>-----Header-----</h6>
+<c:if test = "${ empty loginMember }">
+	로그인 세션이 존재하지 않음
+</c:if>
+
+<c:if test = "${ not empty loginMember }">
+	${ loginMember.memberId }번 사원 로그인
+	<button type="button"
+            onclick="location.href='${ pageContext.request.contextPath }/member/memberLogout.do';">로그아웃</button>
+</c:if>
+<h6>----------------</h6>

@@ -14,10 +14,12 @@
 	</select>
 	
 	<insert id="insertMember">
-		insert 
-			into 
-		member 
-			(MEMBER_ID, password) values (#{ memberId }, #{ memberId })
+		insert into 
+			member(member_id, password) 
+		values(
+			#{ memberId }, 
+			#{ password }
+		)
 	</insert>
 	
 </mapper>

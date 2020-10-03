@@ -13,10 +13,10 @@ public class MemberDAOImpl implements MemberDAO {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public int insertMember(String memberId) {
-		return sqlSession.insert("member.insertMember", memberId);
+	public int insertMember(Member member) {
+		return sqlSession.insert("member.insertMember", member);
 	}
-	
+
 	@Override
 	public Member selectOneMember(String memberId) {
 		return sqlSession.selectOne("member.selectOneMember", memberId);
