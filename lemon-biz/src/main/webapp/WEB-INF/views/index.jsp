@@ -6,10 +6,10 @@
 <fmt:requestEncoding value="utf-8"/>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
-<form method="post" id="loginFrm" action="${pageContext.request.contextPath}/user/test.do">
+<form method="post" id="loginFrm" action="${pageContext.request.contextPath}/member/memberLogin.do">
   <div>
     <label for="id">아이디</label>
-    <input type="text" id="id" name="id" placeholder="ID" >
+    <input type="text" id="memberId" name="memberId" placeholder="ID" >
     <label for="password">비밀번호</label>
     <input type="password" id="password" name="password" placeholder="Password" >
   </div>

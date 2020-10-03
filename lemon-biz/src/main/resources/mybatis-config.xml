@@ -3,15 +3,13 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
   <settings>
   	<setting name="jdbcTypeForNull" value="NULL"/>
   	<setting name="mapUnderscoreToCamelCase" value="true"/>
   </settings>
   
-  <!-- <typeAliases>
-  	<typeAlias type="" alias=""/>
+  <typeAliases>
   	<package name="com.lemon.lemonbiz"/>
-  </typeAliases> -->
+  </typeAliases>
   
 </configuration>

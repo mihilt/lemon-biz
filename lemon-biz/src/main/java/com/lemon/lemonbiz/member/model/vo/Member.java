@@ -1,4 +1,4 @@
-package com.lemon.lemonbiz.user.model.vo;
+package com.lemon.lemonbiz.member.model.vo;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,8 +14,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class User implements Serializable {
-	private String id;
+public class Member implements Serializable {
+	private String memberId;
 	private String password;
 	private int deptKey;
 	private int rankKey;
@@ -26,5 +26,4 @@ public class User implements Serializable {
 	private String address;
 	private String gender;
 	private Date leaveDate;
-	private int dayOff;
 }
