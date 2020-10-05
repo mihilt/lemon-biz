@@ -155,3 +155,9 @@ $RECYCLE.BIN/
 
 # Oracle DB Info
 /src/main/webapp/WEB-INF/config
+
+/classes/
+/test-classes/
+.settings/
+.project
+.classpath
