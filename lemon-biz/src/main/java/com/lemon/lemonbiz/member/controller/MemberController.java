@@ -1,5 +1,7 @@
 package com.lemon.lemonbiz.member.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -9,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.lemon.lemonbiz.HomeController;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Member;
 
@@ -18,6 +22,8 @@ import com.lemon.lemonbiz.member.model.vo.Member;
 @RequestMapping("/member")
 @SessionAttributes({"loginMember"})
 public class MemberController {
+	
+	private static Logger log = LoggerFactory.getLogger(HomeController.class);
 	
 	@Autowired
 	private MemberService memberService;
@@ -55,7 +61,7 @@ public class MemberController {
 
 		Member loginMember = memberService.selectOneMember(memberId);
 
-//		System.out.println(loginMember);
+		log.debug(loginMember.getMemberId() + " 로그인");
 		
 		// 로그인 성공
 		if(loginMember != null && 
@@ -63,22 +69,34 @@ public class MemberController {
 		   ) {
 			model.addAttribute("loginMember", loginMember);
 //			redirectAttr.addFlashAttribute("msg", "로그인 성공");
+			return "redirect:/member/memberLoginSuccess.do";
 		}
 		// 로그인 실패
 		else {
 			redirectAttr.addFlashAttribute("msg", "아이디 또는 비밀번호가 일치하지 않습니다.");
+			return "redirect:/";
 		}
 		
-		return "redirect:/";
 	}
 	
 	@RequestMapping("/memberLogout.do")
 	public String memberLogout(SessionStatus sessionStatus) {
+
+		log.debug("로그아웃 요청");
 		
 		if(!sessionStatus.isComplete())
 			sessionStatus.setComplete();
 		
 		return "redirect:/";
+	}
+	
+	@RequestMapping("/memberLoginSuccess.do")
+	public ModelAndView memberLoginSuccess(ModelAndView mav) {
+		
+		log.debug("로그인 성공 메인페이지 이동");
+		
+		mav.setViewName("main/main");
+		return mav;
 	}
 
 }

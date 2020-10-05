@@ -12,7 +12,7 @@
 	
 	<!-- Application Loggers -->
 	<logger name="com.lemon.lemonbiz">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
