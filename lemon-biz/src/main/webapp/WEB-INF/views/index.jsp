@@ -6,7 +6,7 @@
 <fmt:requestEncoding value="utf-8"/>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <h1>로그인 테스트</h1>
-<p></p>
+<p>test</p>
 <form method="post" id="loginFrm" action="${pageContext.request.contextPath}/member/memberLogin.do">
   <div>
     <label for="id">사원 번호</label>
