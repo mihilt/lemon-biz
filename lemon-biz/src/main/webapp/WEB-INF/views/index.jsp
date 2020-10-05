@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8"/>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
-<h1>로그인 테스트</h1><p>p태그</p>
+<h1>로그인 테스트</h1>
 <form method="post" id="loginFrm" action="${pageContext.request.contextPath}/member/memberLogin.do">
   <div>
     <label for="id">사원 번호</label>
@@ -15,10 +15,10 @@
   </div>
   <button type="submit">로그인</button>
 </form>
-
 <!-- test wj -->
 <h1>사2원 등록 테스트</h1>
 <h6>입력한 사원번호는 비밀번호와 일치합니다</h6>
+<p>p태그</p>
 <p>hks</p>
 <p>gd</p>
 <form method="post" action="${pageContext.request.contextPath}/member/memberEnroll.do">
