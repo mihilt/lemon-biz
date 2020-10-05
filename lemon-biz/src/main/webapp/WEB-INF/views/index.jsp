@@ -18,6 +18,7 @@
 
 <h1>사원 등록 테스트</h1>
 <h6>입력한 사원번호는 비밀번호와 일치합니다</h6>
+<p>ks</p>
 <form method="post" action="${pageContext.request.contextPath}/member/memberEnroll.do">
   <div>
     <label for="id">사원 번호</label>
