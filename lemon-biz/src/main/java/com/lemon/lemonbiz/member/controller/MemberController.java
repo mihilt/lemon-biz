@@ -42,7 +42,7 @@ public class MemberController {
 		if(memberService.selectOneMember(member.getMemberId()) != null) {
 			String msg = "이미 존재하는 아이디 입니다.";
 			redirectAttr.addFlashAttribute("msg", msg);
-			return "redirect:/manager/createMember.do";
+			return "redirect:/manager/insertMember.do";
 		}
 		
 		int result = memberService.insertMember(member);
@@ -50,7 +50,7 @@ public class MemberController {
 		String msg = result > 0 ? "사원 등록에 성공했습니다." : "사원 등록에 실패했습니다.";
 		redirectAttr.addFlashAttribute("msg", msg);
 		
-		return "redirect:/manager/createMember.do";
+		return "redirect:/manager/insertMember.do";
 	}
 
 	@RequestMapping(value = "/memberLogin.do", method = RequestMethod.POST)

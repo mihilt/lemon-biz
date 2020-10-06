@@ -12,11 +12,11 @@ public class ManagerController {
 	
 	private static Logger log = LoggerFactory.getLogger(ManagerController.class);
 	
-	@RequestMapping(value = "/createMember.do", method = RequestMethod.GET)
-	public String createMember() {
+	@RequestMapping(value = "/insertMember.do", method = RequestMethod.GET)
+	public String insertMember() {
 		
 		
-		return "manager/memberEnroll";
+		return "manager/insertMember";
 	}
 
 	
