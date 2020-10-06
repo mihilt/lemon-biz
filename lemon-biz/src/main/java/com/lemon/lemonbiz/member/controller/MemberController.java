@@ -90,13 +90,12 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	/*
-	 * @RequestMapping("/memberLoginSuccess.do") public ModelAndView
-	 * memberLoginSuccess(ModelAndView mav) {
-	 * 
-	 * log.debug("로그인 성공 메인페이지 이동");
-	 * 
-	 * mav.setViewName("main/main"); return mav; }
-	 */
+	@RequestMapping("memberLogin.do")
+	public String memberLogin() {
+		
+		return "forward:/WEB-INF/views/login/memberLogin.jsp";
+	}
+	
+	
 
 }
