@@ -41,7 +41,7 @@ private JavaMailSender mailSender;
 		      mailSender.send(message);
 		    } catch(Exception e){
 		    }
-		   
+		   // test
 		    return "redirect:/mail/sendMail";
 	} 
 }
