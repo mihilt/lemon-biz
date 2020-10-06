@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd"
-	>
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
@@ -45,8 +46,8 @@
 	</bean>
 	
 	<!-- gmail 발송을 위한 bean 등록. -->
- <bean id="mailSender" 
-class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	 <bean id="mailSender" 
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="smtp.gmail.com" /> <!-- gmail을 사용 -->
         <property name="port" value="587" />
         <property name="username" value="lemonbiz.manager@gmail.com" />
@@ -60,5 +61,13 @@ class="org.springframework.mail.javamail.JavaMailSenderImpl">
             </props>
         </property>
     </bean>
+    
+   	<!-- 트랜잭션 처리를 위한 트랜잭션 매니져 빈 등록 -->
+	<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		  id="transactionManager">
+		  <property name="dataSource" ref="dataSource"/>
+	</bean>
+	<!-- @Transactional 어노테이션 등록 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>
