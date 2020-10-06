@@ -69,7 +69,7 @@ public class MemberController {
 		   ) {
 			model.addAttribute("loginMember", loginMember);
 //			redirectAttr.addFlashAttribute("msg", "로그인 성공");
-			return "redirect:/member/memberLoginSuccess.do";
+			return "redirect:/";
 		}
 		// 로그인 실패
 		else {
@@ -90,13 +90,13 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	@RequestMapping("/memberLoginSuccess.do")
-	public ModelAndView memberLoginSuccess(ModelAndView mav) {
-		
-		log.debug("로그인 성공 메인페이지 이동");
-		
-		mav.setViewName("main/main");
-		return mav;
-	}
+	/*
+	 * @RequestMapping("/memberLoginSuccess.do") public ModelAndView
+	 * memberLoginSuccess(ModelAndView mav) {
+	 * 
+	 * log.debug("로그인 성공 메인페이지 이동");
+	 * 
+	 * mav.setViewName("main/main"); return mav; }
+	 */
 
 }
