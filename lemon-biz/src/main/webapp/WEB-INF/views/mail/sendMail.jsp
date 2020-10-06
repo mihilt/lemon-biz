@@ -23,7 +23,11 @@
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src='<c:url value="/js/bootstrap.min.js"  />'></script>
 <title>업무 메일 작성</title>
-
+<style>
+.summer-content{
+  text-align: justify;
+}
+</style>
 </head>
 
 <body>
@@ -42,19 +46,57 @@
     <p>
     <div align="center"><!-- 내용 --> 
       <textarea id="summernote" class="summer-content" name="content" cols="120" rows="12" 
-      			style="width:100%; height: 50em; resize:none" placeholder="내용" class="form-control"></textarea>
+      			style="width:100%; resize:none" placeholder="내용" class="form-control"></textarea>
     </div>
     <p>
     <div align="center">
-      <input type="submit" value="메일 보내기" class="btn btn-warning">
+      <input type="submit" value="메일 보내기" id="send-mail" class="btn btn-warning">
+      <input type="button" value="작성 취소" id="content-reset" class="btn btn-danger"/>
     </div>
   </form>
 </div>
 </body>
 <script>
+
+/* summernote 호출 및 각종 설정 대입 */
 $(document).ready(function() { 
-	$('#summernote').summernote(); 
+	$('#summernote').summernote({
+        placeholder: '이메일 내용을 입력 해 주세요.',
+        tabsize: 4, 
+        height: 390,
+        tooltip: true,
+        toolbar: [
+        	  ['style', ['style']],
+        	  ['font', ['bold', 'underline', 'clear']],
+        	  ['fontname', ['fontname']],
+        	  ['color', ['color']],
+        	  ['para', ['ul', 'ol', 'paragraph']],
+        	  ['table', ['table']],
+        	  ['insert', ['link', 'picture', 'video']],
+        	  ['view', ['fullscreen', 'codeview', 'help']],
+        	],
+        lang: 'ko-KR',
+        codeviewFilter: false,
+        codeviewIframeFilter: true 
+      }); 
 	});
+	
+	$('#content-reset').click(function(){
+		var reset = confirm("정말로 작성 중인 내용을 삭제하시겠습니까?");
+			if (reset == true) {
+			  alert("메일 작성을 취소하셨습니다. 이전 화면으로 돌아갑니다.");
+			  window.history.back();
+			} else {
+		}
+	});
+	
+	$('#send-mail').click(function(){
+		if ($('#summernote').summernote('isEmpty')) {
+			 alert('본문 내용을 입력해 주세요.');
+			 return false;
+		}
+	});
+	
 </script>
 </html> 
 
