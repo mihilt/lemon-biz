@@ -3,14 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<fmt:requestEncoding value="utf-8" /> <!-- 한글깨짐 방지  -->
-<jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value ="전자결제" name="title"/>	
-</jsp:include>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+<fmt:requestEncoding value="utf-8" /> <!-- 한글깨짐 방지  -->
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
+
+
 
 <div>
 	<h2>일반결제 작성</h2>
@@ -55,17 +54,17 @@
 		    </div>
 		  </div>
 	  </div>
-	</div>
+	</div> 
 
 </div>
 
 <script>
-function selectApproval(){
+ function selectApproval(){
 	$("#selectApprovalModal").modal()
-}
+} 
 
 
-$('#tt').tree({
+/* $('#tt').tree({
 	onClick: function(node){
 		
 		console.log(node);
@@ -87,7 +86,7 @@ $('#tt').tree({
 				}
 			});
 	} // if end
-});
+}); */
 
 </script>
 
@@ -95,4 +94,5 @@ $('#tt').tree({
 
 
 
+<jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

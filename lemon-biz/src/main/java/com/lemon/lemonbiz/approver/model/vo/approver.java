@@ -24,5 +24,5 @@ public class approver {
 	private Date writeDate;
 	private String status;
 	private int IsDeleted;
-
+	
 }
