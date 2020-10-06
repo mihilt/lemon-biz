@@ -26,7 +26,7 @@ public class HomeController {
 			return "forward:/WEB-INF/views/main/main.jsp";
 		} else {
 			log.debug("/요청, loginMember세션 없음");
-			return "forward:/WEB-INF/views/index.jsp";
+			return "redirect:/member/memberLogin.do";
 		}
 
 	}
