@@ -6,13 +6,11 @@ import org.springframework.stereotype.Service;
 import com.lemon.lemonbiz.member.model.dao.MemberDAO;
 import com.lemon.lemonbiz.member.model.vo.Member;
 
-
 @Service
 public class MemberServiceImpl implements MemberService {
+	
 	@Autowired
 	private MemberDAO memberDAO;
-
-	
 	
 	@Override
 	public int insertMember(Member member) {
@@ -23,6 +21,5 @@ public class MemberServiceImpl implements MemberService {
 	public Member selectOneMember(String memberId) {
 		return memberDAO.selectOneMember(memberId);
 	}
-
 	
 }
