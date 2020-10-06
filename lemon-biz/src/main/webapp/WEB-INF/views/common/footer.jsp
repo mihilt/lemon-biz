@@ -3,9 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
-	<!-- jquery -->
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	
 	<!-- bootstrap -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -17,6 +14,6 @@
 	
 	<!-- Custom scripts for all pages-->
 	<script src="${pageContext.request.contextPath }/resources/js/sb-admin-2.min.js"></script>
-		  
+
 </body>
 </html>
