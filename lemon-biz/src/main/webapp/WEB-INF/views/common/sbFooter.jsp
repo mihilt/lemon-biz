@@ -5,8 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <fmt:requestEncoding value="utf-8"/>
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
-    
         </div>
         <!-- /.container-fluid -->
 
@@ -52,11 +50,5 @@
       </div>
     </div>
   </div>
-  
-  <!-- Core plugin JavaScript-->
-  <script src="${pageContext.request.contextPath }/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="${pageContext.request.contextPath }/resources/js/sb-admin-2.min.js"></script>
   
 </body>	 
