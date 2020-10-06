@@ -15,5 +15,9 @@
 	<!-- Custom scripts for all pages-->
 	<script src="${pageContext.request.contextPath }/resources/js/sb-admin-2.min.js"></script>
 
+	<!-- include summernote css/js--> 
+	<link href="${pageContext.request.contextPath }/resources/summernote/summernote-0.8.18-dist\summernote-bs4.min.css" rel="stylesheet"> 
+	<script src="${pageContext.request.contextPath }/resources/summernote/summernote-0.8.18-dist/summernote-bs4.min.js"></script>
+
 </body>
 </html>
