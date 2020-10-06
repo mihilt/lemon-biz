@@ -23,6 +23,16 @@
 	
 	<context:component-scan base-package="com.lemon.lemonbiz" />
 	
-	
+	<!-- interceptor -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"/>
+			<beans:bean class="com.lemon.lemonbiz.common.interceptor.LoggerInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="member/main"/>
+			<beans:bean class="com.lemon.lemonbiz.common.interceptor.LoginCheckInterceptor" />
+		</interceptor>
+	</interceptors>
 	
 </beans:beans>
