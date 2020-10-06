@@ -13,7 +13,7 @@
 	action="${pageContext.request.contextPath}/member/memberEnroll.do">
 	<div>
 		<input type="text" id="memberId" name="memberId" placeholder="사원 번호">
-		<button type="submit">사원 등록</button>
+		<button class="btn bg-warning text-white font-weight-bold" type="submit">사원 등록</button>
 	</div>
 </form>
 
