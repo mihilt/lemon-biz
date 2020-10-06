@@ -25,16 +25,7 @@
 	<h1>로그인 후 보이는 페이지</h1>
 	<h1>로그인 후 보이는 페이지</h1>
 	
-<h1>사원 등록 테스트</h1>
-<h6>입력한 사원번호는 비밀번호와 일치합니다</h6>
-<form method="post"
-	action="${pageContext.request.contextPath}/member/memberEnroll.do">
-	<div>
-		<label for="id">사원 번호</label> <input type="text" id="memberId"
-			name="memberId" placeholder="사원 번호">
-	</div>
-	<button type="submit">사원 등록</button>
-</form>
+
 	
 			 
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
