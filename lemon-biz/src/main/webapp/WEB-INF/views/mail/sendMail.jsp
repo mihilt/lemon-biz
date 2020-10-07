@@ -24,61 +24,159 @@
 <script src='<c:url value="/js/bootstrap.min.js"  />'></script>
 <title>업무 메일 작성</title>
 <style>
-.summer-content{
-  text-align: justify;
-}
+	#btns{
+		margin: 1rem 0rem 1rem 0rem;
+	}
+	#send-mail, #content-temp, #attach-to{
+		margin-right: .2rem;
+	}
+	.btn.btn-light{
+		border: 1px solid lightgray;
+	}
+	form{
+		padding: .7rem;
+	}
+	.container{
+		transform: scale(.96);
+	}
+	#write-title{
+		margin: 0rem 0rem 1rem 0rem; 
+	}
+	.add-file{
+	margin-left: 7rem;
+	}
+	#plus{
+	margin-right: .5rem;
+	}
+
 </style>
 </head>
 
 <body>
-<div class="container">
-  <h5>메일 작성</h5>
-  <form action="${pageContext.request.contextPath}/mail/mailSend" method="post">
-   <div align="center"><!-- 받는 사람 이메일 -->
-      <input type="text" name="mFrom" size="120" style="width:100%" placeholder="내 이메일" class="form-control" >
-    </div>   
-    <div align="center"><!-- 받는 사람 이메일 -->
-      <input type="text" name="mTo" size="120" style="width:100%" placeholder="상대의 이메일" class="form-control" >
-    </div>     
-    <div align="center"><!-- 제목 -->
-      <input type="text" name="title" size="120" style="width:100%" placeholder="제목을 입력해주세요" class="form-control" >
+	<div class="container">
+		<div class="card">
+		  <h4 id="m-title" class="card-header"><strong>메일 작성</strong></h4>
+			<div class="container-inner card-body">
+		  <form action="${pageContext.request.contextPath}/mail/mailSend" method="post">
+		  <div class="form-group row">
+		    <label for="mFrom" class="col-sm-1 col-form-label">작성자</label>
+		    <div class="col-sm-9">
+		      <input type="text" readonly class="form-control" id="mFrom" value="사용자이메일@example.com" readonly>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="mTo" class="col-sm-1 col-form-label" id="send-to">수신자</label>
+		     <div class="col-sm-9">
+		    <input type="password" class="form-control" id="mTo" placeholder="김원식(영업부/대리), 홍기수(총무부/부장)의 형식으로 보여주기?">
+		  	</div>
+		  	<button type="submit" class="btn btn-light">수신자 추가</button>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="mFrom" class="col-sm-1 col-form-label">&ensp;제목</label>
+		    <div class="col-sm-9">
+		      <input type="text" name="title" placeholder="제목을 입력해주세요." class="form-control" id="write-title">
+		    </div>
+		  </div>
+		
+		    <div align="justify">
+		      <textarea id="summernote" class="summer-content" name="content" cols="120" rows="12" 
+		      			style="width:100%; resize:none" class="form-control"></textarea>
+		    </div>
+		  </form>
+		    <div align="center" id="btns">
+		      <input type="submit" value="메일 발송" id="send-mail" class="btn btn-success">
+		      <input type="button" value="파일 첨부" id="attach-to" class="btn btn-info" data-toggle="modal" data-target="#exampleModal"/>
+		      <input type="button" value="임시 저장" id="content-temp" class="btn btn-secondary"/>
+		      <input type="button" value="작성 취소" id="content-reset" class="btn btn-danger"/>
+		    </div>
+		     	 </div>
+		      </div> <!-- container-inner div 끝 --> 
+		</div> <!-- container div 끝 -->
+		<br />
+		
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><strong>첨부파일 추가</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <!-- <span aria-hidden="true">없어도 되는 부분인듯</span> -->
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="file" name="add-attach" id="add-attach" />
+        <div class="add-file" style="display:inline-block">
+        <i class="fas fa-plus" id="plus"></i>
+        <i class="fas fa-minus" id="minus"></i>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-sm btn-primary">첨부파일 업로드</button>
+        <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">취소</button>
+      </div>
     </div>
-    <p>
-    <div align="center"><!-- 내용 --> 
-      <textarea id="summernote" class="summer-content" name="content" cols="120" rows="12" 
-      			style="width:100%; resize:none" placeholder="내용" class="form-control"></textarea>
-    </div>
-    <p>
-    <div align="center">
-      <input type="submit" value="메일 보내기" id="send-mail" class="btn btn-warning">
-      <input type="button" value="작성 취소" id="content-reset" class="btn btn-danger"/>
-    </div>
-  </form>
+  </div>
 </div>
 </body>
 <script>
 
 /* summernote 호출 및 각종 설정 대입 */
 $(document).ready(function() { 
+	$('#plus').click(function(){
+		var fSection = $('.add-file');
+		/* fSection.add('<input type="file" name="add-attach1" id="add-attach1" />').appendTo("#add-attach"); */
+		});
+	
 	$('#summernote').summernote({
-        placeholder: '이메일 내용을 입력 해 주세요.',
+		/* 여기서부터 summernote 호출 및 각종 설정 대입 */
+        placeholder: '이메일 내용을 입력 해 주세요.'+'</br></br>'+
+        			 '배고프다 마라탕 먹고싶다'+'</br>'+
+            		 '아~~~~~~~~~ 마라마라마라마라마라마라',
         tabsize: 4, 
-        height: 390,
+        height: 370,
         tooltip: true,
         toolbar: [
+        	  /* ['custom',['pageTemplates','blocks']], */
+        	  /* ['HelloButton', ['hello']], */
         	  ['style', ['style']],
         	  ['font', ['bold', 'underline', 'clear']],
         	  ['fontname', ['fontname']],
         	  ['color', ['color']],
         	  ['para', ['ul', 'ol', 'paragraph']],
         	  ['table', ['table']],
-        	  ['insert', ['link', 'picture', 'video']],
-        	  ['view', ['fullscreen', 'codeview', 'help']],
+        	  ['insert', ['link', 'picture', 'video', 'hr']],
+        	  ['view', ['undo', 'redo']]
         	],
+        /* 	buttons: {
+        	    hello: HelloButton
+        	  }, */
         lang: 'ko-KR',
         codeviewFilter: false,
         codeviewIframeFilter: true 
       }); 
+
+	/* 여기서 부터 커스텀 버튼 생성 */
+	/* 사용자가 에디터에 작성한 내용을 파싱해서 값으로 반환받는 것도 가능할 것 같음. 더 리서칭해서 알아보기. */
+	/* 또한 사용자 정의 버튼/기능을 추가하는 것도 가능할 듯. */
+	/* var HelloButton = function (context) {
+		  var ui = $.summernote.ui;
+
+		  // create button
+		  var button = ui.button({
+		    contents: '<i class="fa fa-child"/> Hello',
+		    tooltip: 'hello',
+		    click: function () {
+		      // invoke insertText method with 'hello' on editor module.
+		      context.invoke('editor.insertText', 'hello');
+		    }
+		  });
+		  return button.render();   // return button as jquery object
+		} */
 	});
 	
 	$('#content-reset').click(function(){
@@ -96,7 +194,7 @@ $(document).ready(function() {
 			 return false;
 		}
 	});
-	
+
 </script>
 </html> 
 
