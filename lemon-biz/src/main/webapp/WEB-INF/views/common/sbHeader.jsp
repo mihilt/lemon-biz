@@ -45,7 +45,7 @@
 
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Approval</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/approver/writeForm.html">일반결재</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/approval/writeForm.html">일반결재</a>
             <a class="collapse-item" href="">근태/휴가결재</a>
             <a class="collapse-item" href="">지출결재</a>
             <a class="collapse-item" href="">임시저장함</a>

@@ -1,4 +1,4 @@
-package com.lemon.lemonbiz.approvel.model.dao;
+package com.lemon.lemonbiz.approval.model.dao;
 
 import java.util.List;
 
@@ -9,24 +9,24 @@ import org.springframework.stereotype.Repository;
 import com.lemon.lemonbiz.dept.model.vo.dept;
 
 @Repository
-public class AprovelDAOImpl implements ApprovelDAO {
+public class approvalDAOImpl implements approvalDAO {
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
 	@Override
 	public List<dept> deptList() {
-		return sqlSession.selectList("approver.selectDeptList");
+		return sqlSession.selectList("approval.selectDeptList");
 	}
 
 	@Override
 	public List<dept> child() {
-		return sqlSession.selectList("approver.selectChild");
+		return sqlSession.selectList("approval.selectChild");
 	}
 
 	@Override
 	public List<dept> child2() {
-		return sqlSession.selectList("approver.selectChild2");
+		return sqlSession.selectList("approval.selectChild2");
 	}
 	
 	

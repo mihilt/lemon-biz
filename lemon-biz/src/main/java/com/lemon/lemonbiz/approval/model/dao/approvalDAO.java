@@ -1,10 +1,10 @@
-package com.lemon.lemonbiz.approvel.model.dao;
+package com.lemon.lemonbiz.approval.model.dao;
 
 import java.util.List;
 
 import com.lemon.lemonbiz.dept.model.vo.dept;
 
-public interface ApprovelDAO {
+public interface approvalDAO {
 
 	List<dept> deptList();
 
