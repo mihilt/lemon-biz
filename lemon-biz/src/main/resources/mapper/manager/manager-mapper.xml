@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="manager">
+
+	<select id="selectDeptList" resultMap="dept">
+ 		select
+ 			D.*,(select V.name from dept V where key = D.ref) "ref_name"
+ 		from 
+ 			dept D
+        order by key
+	</select>
+	
+  	<resultMap type="map" id="dept">
+  		<id column="key" property="key"/>
+  		<result column="ref" property="ref"/>
+  		<result column="name" property="name"/>
+  		<result column="ref_name" property="refName"/>
+  	</resultMap>
+	
+</mapper>

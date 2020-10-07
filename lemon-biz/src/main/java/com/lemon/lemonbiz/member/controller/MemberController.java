@@ -100,6 +100,10 @@ public class MemberController {
 		return "forward:/WEB-INF/views/login/memberLogin.jsp";
 	}
 	
-	
+	@RequestMapping(value = "/myPage.do", method = RequestMethod.GET)
+	public String myPage() {
+		
+		return "forward:/WEB-INF/views/mypage/showMyPage.jsp";
+	}
 
 }
