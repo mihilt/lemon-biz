@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	<select id="selectBoardMapList" resultMap="boardMap">
+		select
+    		P.*,
+			    (select 
+			        count(*)
+			    from 
+			        attachment
+			    where
+		        post_key = P.key) file_count
+		from
+   			 post P
+		order by
+			key desc
+
+	</select>
+	
+	
+	<resultMap type="map" id="boardMap">
+  		<id column="key" property="key"/>
+  		<result column="mem_id" property="memId"/>
+  		<result column="categ_key" property="categKey"/>
+  		<result column="title" property="title"/>
+  		<result column="content" property="content"/>
+  		<result column="post_date" property="postDate"/>
+  		<result column="is_notice" property="isNotice"/>
+  		<result column="is_deleted" property="isDeleted"/>
+  		<result column="read_count" property="readCount"/>
+  		<result column="file_count" property="fileCount"/>
+  	</resultMap>
+  	
+  	<insert id="insertBoard">
+  	insert into
+			post
+		values(
+			seq_post_key.nextval,
+			#{ title },
+			#{ memId },
+			#{ content },
+			default,
+			default		
+		)
+		<selectKey order="AFTER" resultType="_int" keyProperty="no">
+			select
+				seq_post_key.currval
+			from 
+				dual
+		</selectKey>
+  	</insert>
+  
+  	<insert id="insertAttachment">
+  		insert into 
+			attachment
+		values (
+			seq_attachment_no.nextval, 
+			#{ postKey },
+			#{ originFilename },
+			#{ reName },
+			default,
+			default
+		)	
+		
+  	</insert>
+  
+ <!--  <select id="selectOneBoardCollection" resultMap="boardCollectionMap">
+ 	   select
+		    P.*,
+		    A.key as "attach_no",
+		    A.post_key,
+		    A.origin_name,
+		    A.re_name,
+		    A.upload_date,
+		    A.download_cnt
+		from 
+		    post P
+		        left join attachment A
+		            on P.key= A.post_key
+		where
+		    P.key= #{ key }
+  
+  </select>
+  
+  <resultMap type="board" id="boardCollectionMap">
+  		<id column="key" property="key"/>
+  		<result column="mem_id" property="memId"/>
+  		<result column="categ_key" property="categKey"/>
+  		<result column="title" property="title"/>
+  		<result column="content" property="content"/>
+  		<result column="post_date" property="postDate"/>
+  		<result column="is_notice" property="isNotice"/>
+  		<result column="is_deleted" property="isDeleted"/>
+  		<result column="read_count" property="readCount"/>
+  		
+  		<collection property="attachList" ofType="attachment">
+  			<id column="attach_no" property="no"/>
+  			<result column="board_no" property="boardNo"/>
+  			<result column="original_filename" property="originalFilename"/>
+  			<result column="renamed_filename" property="renamedFilename"/>
+  			<result column="upload_date" property="uploadDate"/>
+  			<result column="download_count" property="downloadCount"/>
+  			
+  		</collection>
+  	</resultMap> -->
+  
+</mapper>
+
+
+
