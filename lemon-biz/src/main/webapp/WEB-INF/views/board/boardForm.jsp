@@ -22,11 +22,6 @@
 <script src='<c:url value="/jquery/jquery-1.11.3.min.js" />'></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src='<c:url value="/js/bootstrap.min.js"  />'></script>
-
-	<!-- include summernote css/js : cdn --> 
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet"> 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js"></script>
-
 <title>업무 메일 작성</title>
 <style>
 	#btns{
@@ -47,110 +42,82 @@
 	#write-title{
 		margin: 0rem 0rem 1rem 0rem; 
 	}
-	#multiple-ok{
-		font-size: .9rem;
+	.add-file{
+	margin-left: 7rem;
 	}
+	#plus{
+	margin-right: .5rem;
+	}
+	
+	#file1{
+	width:400px;
+	
+	}
+	
+	#file2{
+	width:400px;
+	}
+
 </style>
 </head>
 
 <body>
 	<div class="container">
 		<div class="card">
-		  <h4 id="m-title" class="card-header"><strong>메일 작성</strong></h4>
+		  <h4 id="m-title" class="card-header"><strong>게시글 작성</strong></h4>
+		  
 			<div class="container-inner card-body">
 		  <form action="${pageContext.request.contextPath}/mail/mailSend" method="post">
-		  <div class="form-group row">
-		    <label for="mFrom" class="col-sm-1 col-form-label">작성자</label>
-		    <div class="col-sm-9">
-		      <input type="text" readonly class="form-control" id="mFrom" value="사용자이메일@example.com" readonly>
-		    </div>
-		  </div>
 		  
-		  <div class="form-group row">
-		    <label for="mTo" class="col-sm-1 col-form-label" id="send-to">수신자</label>
-		     <div class="col-sm-9">
-		    <input type="password" class="form-control" id="mTo" placeholder="김원식(영업부/대리), 홍기수(총무부/부장)의 형식으로 보여주기?">
-		  	</div>
-		  	<button type="button" class="btn btn-light" data-target="#addReceiverModal" id="addReceiverBtn">수신인 추가</button>
+  
+		 <input type="text" class="form-control" placeholder="제목" name="title" id="title" required>
+		    
 		  </div>
-		  
-		  <div class="form-group row">
-		    <label for="mFrom" class="col-sm-1 col-form-label">&ensp;제목</label>
-		    <div class="col-sm-9">
-		      <input type="text" name="title" placeholder="제목을 입력해주세요." class="form-control" id="write-title">
-		    </div>
+		  <div class="input-group mb-3" style="padding:0px;">
+		  <div class="input-group-prepend" style="padding:0px;">
+		    <span class="input-group-text" id="filename" >첨부파일1</span>
 		  </div>
+		  <div class="custom-file">
+		    <input type="file" class="custom-file-input" name="upFile" id="upFile1"  >
+		    <label class="custom-file-label" for="upFile1" id="file1" >파일을 선택하세요</label>
+		  </div>
+		</div>
+		<div class="input-group mb-3" style="padding:0px;">
+		  <div class="input-group-prepend" style="padding:0px;">
+		    <span class="input-group-text">첨부파일2</span>
+		  </div>
+		  <div class="custom-file">
+		    <input type="file" class="custom-file-input" name="upFile" id="upFile2" >
+		    <label class="custom-file-label" for="upFile2" id="file2">파일을 선택하세요</label>
+		  </div>
+		</div>
 		
 		    <div align="justify">
 		      <textarea id="summernote" class="summer-content" name="content" cols="120" rows="12" 
 		      			style="width:100%; resize:none" class="form-control"></textarea>
 		    </div>
+		    
 		  </form>
-		    <div align="center" id="btns">
-		      <input type="submit" value="메일 발송" id="send-mail" class="btn btn-success">
-		      <input type="button" value="파일 첨부" id="attach-to" class="btn btn-info" data-target="#attachModal"/>
-		      <input type="button" value="임시 저장" id="content-temp" class="btn btn-secondary"/>
+		    <div align="center" id="btns">	     
+		      <input type="button" value="작성 완료" id="content-temp" class="btn btn-secondary"/>
 		      <input type="button" value="작성 취소" id="content-reset" class="btn btn-danger"/>
 		    </div>
 		     	 </div>
-		     	 
 		      </div> <!-- container-inner div 끝 --> 
 		</div> <!-- container div 끝 -->
 		<br />
 		
-<!-- 주. 모달 본체에 해당하는 애들은 container/wrapper로 감쌀 필요가 없으므로 /body태그의 윗 편, 즉 최 하단에 위치시켜 주어야 문제가 안 생긴다! -->
-		
-	<!-- 수신인 추가 모달 -->
-		<div class="modal fade" id="addReceiverModal" role="dialog" 
-			aria-labelledby="addReceiverModal" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="addReceiverModalLabel"><strong>수신인 추가</strong></h5>
-		      </div>
-		      <div class="modal-body">
-		        <p id="add-receiver" style="display:'inline-block'">어쩌구 저쩌구 여따가 설명글</p>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn-sm btn-primary">수신인 추가</button>
-		        <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">취소</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-	<!-- 첨부파일 추가 모달 -->
-		<div class="modal fade" id="attachModal" tabindex="-1" role="dialog" 
-			aria-labelledby="attachModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-centered" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="attachModalLabel"><strong>첨부파일 추가</strong></h5>
-		      </div>
-		      <div class="modal-body">
-		        <p id="multiple-ok" style="display:'inline-block'">복수 개의 파일 선택이 가능합니다.</p>
-		    <div class="add-file">
-		        <input type="file" name="add-attach1" id="add-attach1" multiple/>
-			</div>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn-sm btn-primary">첨부파일 업로드</button>
-		        <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">취소</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-</body>
+
 
 <script>
 
 /* summernote 호출 및 각종 설정 대입 */
-$(document).ready(function() { 	
-	$("#attach-to").click(function(){
-	    $("#attachModal").modal({backdrop: true});
-	  });
-	$("#addReceiverBtn").click(function(){
-	    $("#addReceiverModal").modal({backdrop: true});
-	  });
+$(document).ready(function() { 
+	$('#plus').click(function(){
+		var fSection = $('.add-file');
+		/* fSection.add('<input type="file" name="add-attach1" id="add-attach1" />').appendTo("#add-attach"); */
+		});
+	
 	$('#summernote').summernote({
 		/* 여기서부터 summernote 호출 및 각종 설정 대입 */
         placeholder: '이메일 내용을 입력 해 주세요.'+'</br></br>'+

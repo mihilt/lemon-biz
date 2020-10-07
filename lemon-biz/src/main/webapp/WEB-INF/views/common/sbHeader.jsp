@@ -101,8 +101,8 @@
         </a>
         <div id="board" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="">전사 게시판</a>
-            <a class="collapse-item" href="">부서 게시판</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/board/boardList.do">전사 게시판</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/board/boardTeamList.do">부서 게시판</a>
           </div>
         </div>
       </li>
