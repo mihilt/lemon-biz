@@ -19,7 +19,7 @@ public class Member implements Serializable {
 	private String password;
 	private int deptKey;
 	private int rankKey;
-	private int name;
+	private String name;
 	private String telNum;
 	private String isManager;
 	private String idNum;
