@@ -1,4 +1,4 @@
-package com.lemon.lemonbiz.approvel.controller;
+package com.lemon.lemonbiz.approval.controller;
 
 import java.util.List;
 
@@ -9,24 +9,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.lemon.lemonbiz.approvel.model.service.ApprovelService;
+import com.lemon.lemonbiz.approval.model.service.approvalService;
 import com.lemon.lemonbiz.dept.model.vo.dept;
 
 @Controller
-@RequestMapping("/approver")
-public class ApprovelController {
+@RequestMapping("/approval")
+public class ApprovalController {
 	
-	private static Logger log = LoggerFactory.getLogger(ApprovelController.class);
+	private static Logger log = LoggerFactory.getLogger(ApprovalController.class);
 
 	@Autowired
-	private ApprovelService approverService;
+	private approvalService approvalService;
 	
 	@RequestMapping("/writeForm.html")
 	public String writeForm(Model model) {
 		
-		List<dept> dept = approverService.deptList();
-		List<dept> child = approverService.child();
-		List<dept> child2 = approverService.child2();
+		List<dept> dept = approvalService.deptList();
+		List<dept> child = approvalService.child();
+		List<dept> child2 = approvalService.child2();
 		log.debug("dept = {}",dept);
 		log.debug("child = {}",child);
 		log.debug("child2 = {}",child2);
@@ -35,13 +35,13 @@ public class ApprovelController {
 		model.addAttribute("child",child);
 		model.addAttribute("child2",child2);
 		
-		return "approver/writeForm";
+		return "approval/writeForm";
 	}
 	
 	//@RequestMapping("/tree.do")
 	public String approval(Model model) {
 		
-		List<dept> dept = approverService.deptList();
+		List<dept> dept = approvalService.deptList();
 		
 		
 		log.debug("dept = {}",dept);

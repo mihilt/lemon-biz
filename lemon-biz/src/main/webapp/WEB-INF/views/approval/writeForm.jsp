@@ -37,7 +37,7 @@
       <div class="modal-body" style="margin: 20px; padding: 20px; width:250px; border:1px solid lightgray;">
       <h5>부서 선택</h5>
         <!-- tree -->
-	<div id="approver">
+	<div id="appr">
         <ul id="approvalSelect">
         	<c:forEach items="${dept}" var="dept">
             <li>${dept.name}
@@ -59,11 +59,9 @@
         </ul>
     </div>
         <!-- tree end-->
-    <div>
-    	<!-- df -->
     
-    
-    </div>
+        
+        
         
       </div>
       <div class="modal-footer">
@@ -81,7 +79,7 @@
 
 <script>
 /* tree script */
-	$("#approver").jstree({
+	$("#appr").jstree({
 	  "plugins": ["wholerow","types","themes","html_data"],
 	  "themes" : {            
 	      'responsive' : true,
