@@ -73,13 +73,14 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Mail</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/mail/mailSend">메일 작성</a>
-            <a class="collapse-item" href="">전체 메일</a>
-            <a class="collapse-item" href="">받은 메일함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/mail/mailAll">전체 메일함</a>
+            <a class="collapse-item" href="">부서 메일함</a>
             <a class="collapse-item" href="">보낸 메일함</a>
-            <a class="collapse-item" href="">임시 보관함</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">My Mail</h6>
+            <a class="collapse-item" href="">중요 메일함 </a>
             <a class="collapse-item" href="">첨부 메일함</a>
+            <a class="collapse-item" href="">임시 보관함</a>
             <a class="collapse-item" href="">내게 쓴 메일함</a>
           </div>
         </div>
