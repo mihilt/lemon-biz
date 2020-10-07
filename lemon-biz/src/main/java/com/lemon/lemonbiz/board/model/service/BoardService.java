@@ -9,6 +9,8 @@ public interface BoardService {
 
 	List<Map<String, Object>> selectBoardMapList();
 
+	int insertBoard(Board board);
+
 	/* Board selectOneBoardCollection(int no); */
 
 }

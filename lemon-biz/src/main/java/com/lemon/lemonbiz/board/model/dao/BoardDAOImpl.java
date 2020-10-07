@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.lemon.lemonbiz.board.model.vo.Board;
+import com.lemon.lemonbiz.common.vo.Attachment;
 
 @Repository
 public class BoardDAOImpl implements BoardDAO {
@@ -18,6 +19,16 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public List<Map<String, Object>> selectBoardMapList() {
 		return sqlSession.selectList("board.selectBoardMapList");
+	}
+
+	@Override
+	public int insertBoard(Board board) {
+		return sqlSession.insert("board.insertBoard", board);
+	}
+
+	@Override
+	public int insertAttachment(Attachment attach) {
+		return sqlSession.insert("board.insertAttachment",attach);
 	}
 
 	

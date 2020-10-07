@@ -32,6 +32,39 @@
   		<result column="read_count" property="readCount"/>
   		<result column="file_count" property="fileCount"/>
   	</resultMap>
+  	
+  	<insert id="insertBoard">
+  	insert into
+			post
+		values(
+			seq_post_key.nextval,
+			#{ title },
+			#{ memId },
+			#{ content },
+			default,
+			default		
+		)
+		<selectKey order="AFTER" resultType="_int" keyProperty="no">
+			select
+				seq_post_key.currval
+			from 
+				dual
+		</selectKey>
+  	</insert>
+  
+  	<insert id="insertAttachment">
+  		insert into 
+			attachment
+		values (
+			seq_attachment_no.nextval, 
+			#{ postKey },
+			#{ originFilename },
+			#{ reName },
+			default,
+			default
+		)	
+		
+  	</insert>
   
  <!--  <select id="selectOneBoardCollection" resultMap="boardCollectionMap">
  	   select

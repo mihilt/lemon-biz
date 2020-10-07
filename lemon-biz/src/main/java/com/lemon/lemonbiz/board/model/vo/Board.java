@@ -1,11 +1,9 @@
 package com.lemon.lemonbiz.board.model.vo;
 
 import java.io.Serializable;
-
-import java.util.Date;
 import java.util.List;
 
-
+import com.lemon.lemonbiz.common.vo.Attachment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +30,5 @@ public class Board implements Serializable{
 	private int readCount;
 	
 	private int fileCount;
-	/* private List<Attachment> attachList; */
+	private List<Attachment> attachList; 
 }
