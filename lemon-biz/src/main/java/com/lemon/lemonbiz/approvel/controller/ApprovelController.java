@@ -1,4 +1,4 @@
-package com.lemon.lemonbiz.approver.controller;
+package com.lemon.lemonbiz.approvel.controller;
 
 import java.util.List;
 
@@ -9,17 +9,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.lemon.lemonbiz.approver.model.service.ApproverService;
-import com.lemon.lemonbiz.approver.model.vo.dept;
+import com.lemon.lemonbiz.approvel.model.service.ApprovelService;
+import com.lemon.lemonbiz.dept.model.vo.dept;
 
 @Controller
 @RequestMapping("/approver")
-public class ApproverController {
+public class ApprovelController {
 	
-	private static Logger log = LoggerFactory.getLogger(ApproverController.class);
+	private static Logger log = LoggerFactory.getLogger(ApprovelController.class);
 
 	@Autowired
-	private ApproverService approverService;
+	private ApprovelService approverService;
 	
 	@RequestMapping("/writeForm.html")
 	public String writeForm(Model model) {

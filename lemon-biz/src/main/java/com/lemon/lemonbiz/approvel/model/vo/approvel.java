@@ -1,4 +1,4 @@
-package com.lemon.lemonbiz.approver.model.vo;
+package com.lemon.lemonbiz.approvel.model.vo;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class approver {
+public class approvel {
 	
 	private String key;
 	private int typeKey;

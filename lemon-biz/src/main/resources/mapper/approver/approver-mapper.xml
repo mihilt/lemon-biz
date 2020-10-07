@@ -10,7 +10,7 @@
 		from
 	    	dept
 		<where>
-	    	level1=1
+	    	dept_level=1
 		</where>
 	</select>
 	
@@ -20,7 +20,7 @@
 		from
 			dept
 		where
-			level1=2
+			dept_level=2
 	</select>
 	
 	<select id="selectChild2" resultMap="deptMap">
@@ -29,7 +29,7 @@
 		from
 			dept
 		where
-			level1=3
+			dept_level=3
 	</select>
 	
 	

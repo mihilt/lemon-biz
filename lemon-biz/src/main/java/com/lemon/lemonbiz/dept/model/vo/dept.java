@@ -1,4 +1,4 @@
-package com.lemon.lemonbiz.approver.model.vo;
+package com.lemon.lemonbiz.dept.model.vo;
 
 import java.util.Date;
 
@@ -16,5 +16,5 @@ public class dept {
 	private int key;
 	private int ref;
 	private String name;
-	private int level1;
+	private int deptLevel;
 }
