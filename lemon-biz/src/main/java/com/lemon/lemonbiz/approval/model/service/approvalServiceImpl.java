@@ -1,33 +1,33 @@
-package com.lemon.lemonbiz.approvel.model.service;
+package com.lemon.lemonbiz.approval.model.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lemon.lemonbiz.approvel.model.dao.ApprovelDAO;
+import com.lemon.lemonbiz.approval.model.dao.approvalDAO;
 import com.lemon.lemonbiz.dept.model.vo.dept;
 
 @Service
-public class ApprovelServiceImpl implements ApprovelService {
+public class approvalServiceImpl implements approvalService {
 	
 	@Autowired
-	private ApprovelDAO approverDAO;
+	private approvalDAO approvalDAO;
 
 	@Override
 	public List<dept> deptList() {
 		
-		return approverDAO.deptList();
+		return approvalDAO.deptList();
 	}
 
 	@Override
 	public List<dept> child() {
 		
-		return approverDAO.child();
+		return approvalDAO.child();
 	}
 
 	@Override
 	public List<dept> child2() {
-		return approverDAO.child2();
+		return approvalDAO.child2();
 	}
 }
