@@ -4,6 +4,37 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="approver">
 
+	<select id="selectDeptList" resultMap="deptMap">
+		select
+	    	*
+		from
+	    	dept
+		<where>
+	    	level1=1
+		</where>
+	</select>
 	
+	<select id="selectChild" resultMap="deptMap">
+		select
+			*
+		from
+			dept
+		where
+			level1=2
+	</select>
+	
+	<select id="selectChild2" resultMap="deptMap">
+		select
+			*
+		from
+			dept
+		where
+			level1=3
+	</select>
+	
+	
+  <resultMap type="dept" id="deptMap">
+  
+  </resultMap>
 
 </mapper>

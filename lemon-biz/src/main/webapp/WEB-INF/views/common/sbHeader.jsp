@@ -48,6 +48,7 @@
           <span>전자결재</span>
         </a>
         <div id="approval" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Approval</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/approver/writeForm.html">일반결재</a>
