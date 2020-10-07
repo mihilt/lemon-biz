@@ -5,93 +5,90 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 
+
 <fmt:requestEncoding value="utf-8" /> <!-- 한글깨짐 방지  -->
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
 
+<style>
+
+</style>
+
 
 <div>
 	<h2>일반결제 작성</h2>
-	<div>
-		<button class="btn" onclick="selectApproval()">결제라인 추가</button>
-	</div>
+	
+	<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  결제라인 추가
+</button>
+
+<!-- Modal -->
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">결제라인 추가</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="margin: 20px; padding: 20px; width:250px; border:1px solid lightgray;">
+      <h5>부서 선택</h5>
+        <!-- tree -->
+	<div id="approver">
+        <ul id="approvalSelect">
+        	<c:forEach items="${dept}" var="dept">
+            <li>${dept.name}
+                <ul>
+                	<c:forEach items="${child}" var="child">
+                    <li>${child.name}
+                        <ul>
+                        	<c:forEach items="${child2}" var="child2">
+                        	<c:if test="${child.key eq child2.ref }">
+                            <li>${child2.name}</li>
+                            </c:if>
+                            </c:forEach>
+                        </ul>
+                    </li>
+                    </c:forEach>
+                </ul>
+            </li>
+            </c:forEach>
+        </ul>
+    </div>
+        <!-- tree end-->
+    
+        
+        
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 	
 	
 	
-	<!------------------------------------------모달--------------------------------------->
-	
-	<div class="modal fade" id="selectApprovalModal" tabindex="-1" role="dialog" aria-labelledby="deleteMemoModalTitle" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered" role="document">
-	    <div class="modal-content">
-		    <div class="modal-header">
-		      <h5 class="modal-title" id="selectApprovalModalTitle">결제라인 추가</h5>
-		      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		        <span aria-hidden="true">&times;</span>
-		        <div class="container col-4" style="margin: 0px; padding: 0px; width:200px; ">
-				    <div class="easyui-panel" style="margin: 0px; width: 300px; height: 400px;">
-				        <ul id="tt" class="easyui-tree">
-							<li><span>lemonbiz</span>
-								<ul>
-									<c:forEach items="${deptList}" var="dept">
-										<li data-options="state:'closed'"><span>${dept.department_id}) ${dept.department_name}</span>
-											<ul>
-	 											<c:forEach items="${memList}" var="mem">
-													<c:if test="${dept.department_id eq mem.member_department}">
-													<c:if test="${mem.rank_name == null}"> ${ mem.rank_name = "입사대기" }</c:if>
-														<li>${mem.rank_name}|${mem.member_id}|${mem.member_name}</li> 
-													</c:if>
-												</c:forEach>
-											</ul>
-										</li>
-									</c:forEach>
-								</ul>
-							</li>
-				        </ul>
-				    </div>
-				    </div>
-		      </button>
-		    </div>
-		  </div>
-	  </div>
-	</div> 
 
 </div>
 
 <script>
- function selectApproval(){
-	$("#selectApprovalModal").modal()
-} 
+/* tree script */
+	$("#approver").jstree({
+	  "plugins": ["wholerow","types","themes","html_data"],
+	  "themes" : {            
+	      'responsive' : true,
+	      'themes' : ["classic"],
+	  }
 
-
-/* $('#tt').tree({
-	onClick: function(node){
-		
-		console.log(node);
-		console.log(node.text);
-		
-			$.ajax({
-                type: 'POST',
-                async: false,
-                url: "${ pageContext.request.contextPath }/approval/getMemList",
-                success: function(data) {
-
-  					var obj = JSON.parse(data);
-  					
-  					$('#tbody').empty();
-  					
-  					printList(obj);
-					console.log('in if KITWARE')
-					return;
-				}
-			});
-	} // if end
-}); */
-
+	});
+/* tree end */
 </script>
-
-
-
 
 
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>

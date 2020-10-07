@@ -14,6 +14,10 @@
         <!-- jquery -->
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
         
+        <!-- jstree -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+        
         <!-- favicon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath }/resources/favicon.ico">
         <link rel="icon" href="${pageContext.request.contextPath }/resources/images/favicon/favicon.ico">
