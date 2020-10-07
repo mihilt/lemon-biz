@@ -22,6 +22,11 @@
 <script src='<c:url value="/jquery/jquery-1.11.3.min.js" />'></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src='<c:url value="/js/bootstrap.min.js"  />'></script>
+
+	<!-- include summernote css/js : cdn --> 
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet"> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.js"></script>
+
 <title>업무 메일 작성</title>
 <style>
 	#btns{
@@ -42,13 +47,9 @@
 	#write-title{
 		margin: 0rem 0rem 1rem 0rem; 
 	}
-	.add-file{
-	margin-left: 7rem;
+	#multiple-ok{
+		font-size: .9rem;
 	}
-	#plus{
-	margin-right: .5rem;
-	}
-
 </style>
 </head>
 
@@ -70,7 +71,7 @@
 		     <div class="col-sm-9">
 		    <input type="password" class="form-control" id="mTo" placeholder="김원식(영업부/대리), 홍기수(총무부/부장)의 형식으로 보여주기?">
 		  	</div>
-		  	<button type="submit" class="btn btn-light">수신자 추가</button>
+		  	<button type="button" class="btn btn-light" data-target="#addReceiverModal" id="addReceiverBtn">수신인 추가</button>
 		  </div>
 		  
 		  <div class="form-group row">
@@ -87,51 +88,69 @@
 		  </form>
 		    <div align="center" id="btns">
 		      <input type="submit" value="메일 발송" id="send-mail" class="btn btn-success">
-		      <input type="button" value="파일 첨부" id="attach-to" class="btn btn-info" data-toggle="modal" data-target="#exampleModal"/>
+		      <input type="button" value="파일 첨부" id="attach-to" class="btn btn-info" data-target="#attachModal"/>
 		      <input type="button" value="임시 저장" id="content-temp" class="btn btn-secondary"/>
 		      <input type="button" value="작성 취소" id="content-reset" class="btn btn-danger"/>
 		    </div>
 		     	 </div>
+		     	 
 		      </div> <!-- container-inner div 끝 --> 
 		</div> <!-- container div 끝 -->
 		<br />
 		
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><strong>첨부파일 추가</strong></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <!-- <span aria-hidden="true">없어도 되는 부분인듯</span> -->
-        </button>
-      </div>
-      <div class="modal-body">
-        <input type="file" name="add-attach" id="add-attach" />
-        <div class="add-file" style="display:inline-block">
-        <i class="fas fa-plus" id="plus"></i>
-        <i class="fas fa-minus" id="minus"></i>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-sm btn-primary">첨부파일 업로드</button>
-        <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">취소</button>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- 주. 모달 본체에 해당하는 애들은 container/wrapper로 감쌀 필요가 없으므로 /body태그의 윗 편, 즉 최 하단에 위치시켜 주어야 문제가 안 생긴다! -->
+		
+	<!-- 수신인 추가 모달 -->
+		<div class="modal fade" id="addReceiverModal" role="dialog" 
+			aria-labelledby="addReceiverModal" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="addReceiverModalLabel"><strong>수신인 추가</strong></h5>
+		      </div>
+		      <div class="modal-body">
+		        <p id="add-receiver" style="display:'inline-block'">어쩌구 저쩌구 여따가 설명글</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn-sm btn-primary">수신인 추가</button>
+		        <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">취소</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	<!-- 첨부파일 추가 모달 -->
+		<div class="modal fade" id="attachModal" tabindex="-1" role="dialog" 
+			aria-labelledby="attachModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="attachModalLabel"><strong>첨부파일 추가</strong></h5>
+		      </div>
+		      <div class="modal-body">
+		        <p id="multiple-ok" style="display:'inline-block'">복수 개의 파일 선택이 가능합니다.</p>
+		    <div class="add-file">
+		        <input type="file" name="add-attach1" id="add-attach1" multiple/>
+			</div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn-sm btn-primary">첨부파일 업로드</button>
+		        <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">취소</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 </body>
+
 <script>
 
 /* summernote 호출 및 각종 설정 대입 */
-$(document).ready(function() { 
-	$('#plus').click(function(){
-		var fSection = $('.add-file');
-		/* fSection.add('<input type="file" name="add-attach1" id="add-attach1" />').appendTo("#add-attach"); */
-		});
-	
+$(document).ready(function() { 	
+	$("#attach-to").click(function(){
+	    $("#attachModal").modal({backdrop: true});
+	  });
+	$("#addReceiverBtn").click(function(){
+	    $("#addReceiverModal").modal({backdrop: true});
+	  });
 	$('#summernote').summernote({
 		/* 여기서부터 summernote 호출 및 각종 설정 대입 */
         placeholder: '이메일 내용을 입력 해 주세요.'+'</br></br>'+
