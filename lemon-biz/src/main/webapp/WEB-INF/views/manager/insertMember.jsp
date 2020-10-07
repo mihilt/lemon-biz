@@ -16,8 +16,8 @@
 			<h6 class="text-danger">*등록한 사원의 초기 비밀번호는 사원번호와 동일합니다</h6>
 			<form method="post"
 				action="${pageContext.request.contextPath}/member/memberEnroll.do">
-				<div>
-					<input type="text" id="memberId" name="memberId"
+				<div class="form-inline">
+					<input class = "form-control mr-2" type="text" id="memberId" name="memberId"
 						placeholder="사원 번호">
 					<button class="btn bg-warning text-white font-weight-bold"
 						type="submit">사원 등록</button>
