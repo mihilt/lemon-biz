@@ -10,6 +10,14 @@
 		</layout>
 	</appender>
 	
+	<!-- log4jdbc 용 logger 등록 -->
+	<logger name="jdbc.sqlonly">
+		<level value="INFO"/>
+	</logger>
+	<logger name="jdbc.resultsettable">
+		<level value="INFO"/>
+	</logger>
+	
 	<!-- Application Loggers -->
 	<logger name="com.lemon.lemonbiz">
 		<level value="debug" />

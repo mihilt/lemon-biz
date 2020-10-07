@@ -3,9 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
@@ -30,9 +32,23 @@
 			<beans:bean class="com.lemon.lemonbiz.common.interceptor.LoggerInterceptor"/>
 		</interceptor>
 		<interceptor>
-			<mapping path="member/main"/>
+			<mapping path="/**"/>
+			<exclude-mapping path="/member/memberLogin.do"/>
 			<beans:bean class="com.lemon.lemonbiz.common.interceptor.LoginCheckInterceptor" />
 		</interceptor>
 	</interceptors>
+	
+	<!-- aop 어노테이션 등록 처리 -->
+	<!-- application-context의 tx관련설정을 가져와서 servlet-context에 적용 -->
+	<aop:aspectj-autoproxy/>
+	
+	<!-- 파일업로드를 처리한 Resolver빈 등록 -->
+	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+				id="multipartResolver">
+		<!-- maxUploadSize : 사용자요청(multipart/form-data)의 최대 허용크기 50 * 1024 * 1024 -->
+		<beans:property name="maxUploadSize" value="52428800"/>
+		<!-- maxUploadSizePerFile : 업로드파일 하나당 최대 허용크기 10MB 10 * 1024 * 1024 -->
+		<beans:property name="maxUploadSizePerFile" value="10485760"/>
+	</beans:bean>
 	
 </beans:beans>
