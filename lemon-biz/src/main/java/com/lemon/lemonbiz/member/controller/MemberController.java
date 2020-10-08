@@ -1,5 +1,7 @@
 package com.lemon.lemonbiz.member.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -11,8 +13,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.lemon.lemonbiz.manager.model.service.ManagerService;
 import com.lemon.lemonbiz.member.model.service.MemberService;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.member.model.vo.Rank;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -101,9 +106,30 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/myPage.do", method = RequestMethod.GET)
-	public String myPage() {
+	public String myPage(Model model) {
 		
+		List<Dept> deptList = memberService.selectDeptList();
+		List<Rank> rankList = memberService.selectRankList();
+		
+		
+		model.addAttribute("deptList", deptList);
+		model.addAttribute("rankList", rankList);
+				
 		return "forward:/WEB-INF/views/mypage/showMyPage.jsp";
 	}
+	
+	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.GET)
+	public String update(Member member, RedirectAttributes redirectAttr, Model model) {
+		
+		System.out.println(member);
+		
+		int result = memberService.updateMember(member);
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
+		Member loginMember = memberService.selectOneMember(member.getMemberId());
+		model.addAttribute("loginMember", loginMember);
+		
+		return "redirect:myPage.do";
+	}
+
 
 }

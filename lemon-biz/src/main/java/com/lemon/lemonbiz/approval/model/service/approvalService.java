@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.lemon.lemonbiz.dept.model.vo.dept;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 
 
 public interface approvalService {
 
-	List<dept> deptList();
+	List<Dept> deptList();
 
-	List<dept> child();
+	List<Dept> child();
 
-	List<dept> child2();
+	List<Dept> child2();
 
 	
 }

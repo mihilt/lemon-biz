@@ -1,4 +1,4 @@
-package com.lemon.lemonbiz.dept.model.vo;
+package com.lemon.lemonbiz.member.model.vo;
 
 import java.util.Date;
 
@@ -11,10 +11,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class dept {
+public class Rank {
 
 	private int key;
-	private int ref;
 	private String name;
-	private int deptLevel;
+	
 }
