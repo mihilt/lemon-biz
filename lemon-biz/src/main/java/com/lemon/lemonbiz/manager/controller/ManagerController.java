@@ -1,7 +1,6 @@
 package com.lemon.lemonbiz.manager.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.lemon.lemonbiz.manager.model.service.ManagerService;
+import com.lemon.lemonbiz.member.model.service.MemberService;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,8 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ManagerController {
 	
 	@Autowired
-	private ManagerService managerService;
-	
+	private MemberService memberService;
 	
 	@RequestMapping(value = "/insertMember.do", method = RequestMethod.GET)
 	public String insertMember() {
@@ -31,7 +30,8 @@ public class ManagerController {
 
 	@RequestMapping(value = "/manageDept.do", method = RequestMethod.GET)
 	public void manageDept(Model model) {
-		List<Map<String, Object>> deptList = managerService.selectDeptList();
+		List<Dept> deptList = memberService.selectDeptList();
+
 		model.addAttribute("deptList", deptList);
 	}
 

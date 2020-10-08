@@ -3,8 +3,8 @@ package com.lemon.lemonbiz.manager.model.service;
 import java.util.List;
 import java.util.Map;
 
-public interface ManagerService {
+import com.lemon.lemonbiz.member.model.vo.Dept;
 
-	List<Map<String, Object>> selectDeptList();
+public interface ManagerService {
 
 }

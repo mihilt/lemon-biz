@@ -26,7 +26,7 @@
 					<c:forEach items="${ deptList }" var="dept">
 						<tr>
 							<td>${ dept.key }</td>
-							<td>${ dept.refName }<c:if test="${ dept.ref != null}">
+							<td>${ dept.refName }<c:if test="${ dept.ref != 0 }">
 									(${ dept.ref })
 								</c:if>
 							</td>
