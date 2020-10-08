@@ -130,6 +130,41 @@ public class MemberController {
 		
 		return "redirect:myPage.do";
 	}
+	
+	@RequestMapping(value = "updatePassword.do", method = RequestMethod.GET)
+	public String updatePassword() {
+		return "forward:/WEB-INF/views/mypage/updatePassword.jsp";
+	}
+	@RequestMapping(value = "updatePassword.do", method = RequestMethod.POST)
+	public String updatePasswordPost(Member member,
+									 @RequestParam("change_pwd") String changePwd,
+									 RedirectAttributes redirectAttr) {
+		
+		Member loginMember = null;
+		
+		try {
+			loginMember = memberService.selectOneMember(member.getMemberId());
+
+			if(loginMember != null && 
+			   bcryptPasswordEncoder.matches(member.getPassword(), loginMember.getPassword())){
+				
+				String encodedPassword = bcryptPasswordEncoder.encode(changePwd);
+				loginMember.setPassword(encodedPassword);
+				
+				int result = memberService.updatePassword(loginMember);
+				
+				redirectAttr.addFlashAttribute("msg", "비밀번호 변경이 완료되었습니다.");
+				return "redirect:updatePassword.do";
+			} else {
+				redirectAttr.addFlashAttribute("msg", "현재 비밀번호가 일치하지 않습니다.");
+				return "redirect:updatePassword.do";
+			}
+		} catch(Exception e) {
+			redirectAttr.addFlashAttribute("msg", "비밀변호 변경 처리 중 오류가 발생했습니다.");
+			return "redirect:updatePassword.do";
+		}
+		
+	}
 
 
 }
