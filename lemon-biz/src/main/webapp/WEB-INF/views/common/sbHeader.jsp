@@ -35,12 +35,6 @@
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-
-      <!-- Heading -->
-      <div class="sidebar-heading text-white">
-        	테스트
-      </div>
-      
       <!-- 전자결재 -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#approval" aria-expanded="false" aria-controls="collapsePages">
@@ -48,9 +42,10 @@
           <span>전자결재</span>
         </a>
         <div id="approval" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Approval</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/approver/writeForm.html">일반결재</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/approval/writeForm.html">일반결재</a>
             <a class="collapse-item" href="">근태/휴가결재</a>
             <a class="collapse-item" href="">지출결재</a>
             <a class="collapse-item" href="">임시저장함</a>
@@ -112,28 +107,65 @@
           </div>
         </div>
       </li>
-      
-      <!-- 내 정보관리 -->
-      <li class="nav-item">
-        <a class="nav-link" href="내 정보관리">
-          <i class="fas fa-fw fa-user"></i>
-          <span>내 정보관리</span></a>
-      </li>
 		
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-      <!-- Nav Item - Pages Collapse Menu -->
+      <!-- 관리자 + 톱니바퀴 -->
+      <div class="sidebar-heading text-white">
+      <i class="fas fa-fw fa-cog"></i>
+        	관리자
+      </div>
+
+      <!-- 사원 관리 -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#manager" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-cog"></i>
-          <span>관리자 페이지</span>
+          <i class="fas fa-fw fa-user"></i>
+          <span>사원 관리</span>
         </a>
         <div id="manager" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">사원 관리</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">사원 생성</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">사원 등록</a>
             <a class="collapse-item" href="cards.html">사원 정보</a>
+          </div>
+        </div>
+      </li>
+      
+      <!-- 부서 관리 -->
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/manager/manageDept.do">
+          <i class="fas fa-fw fa-users"></i>
+          <span>부서 관리</span></a>
+      </li>
+      
+      <!-- 직급 관리 -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#position" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-user-tie"></i>
+          <span>직급 관리</span>
+        </a>
+        <div id="position" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">직급 관리</h6>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">직급 생성</a>
+            <a class="collapse-item" href="cards.html">직급 정보</a>
+          </div>
+        </div>
+      </li>
+      
+      <!-- 전자결재 관리 -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#approval-manage" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-file"></i>
+          <span>전자결재 관리</span>
+        </a>
+        <div id="approval-manage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">전자결재 관리</h6>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">무튼 관리</a>
+            <a class="collapse-item" href="cards.html">문서 생성</a>
+            <a class="collapse-item" href="cards.html">문서 ㅁㄴㅇ</a>
           </div>
         </div>
       </li>
@@ -301,9 +333,9 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="${pageContext.request.contextPath}/member/myPage.do">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  	내정보보기 여기할까
+                  	내 정보 보기
                 </a>
                 <a class="dropdown-item" href="#">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
