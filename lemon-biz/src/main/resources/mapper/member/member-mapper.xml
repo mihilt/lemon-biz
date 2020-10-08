@@ -15,10 +15,13 @@
 	
 	<insert id="insertMember">
 		insert into 
-			member(member_id, password) 
+			member(member_id, password, name, dept_key, rank_key) 
 		values(
 			#{ memberId }, 
-			#{ password }
+			#{ password },
+			#{ name },
+			#{ deptKey },
+			#{ rankKey }
 		)
 	</insert>
 	
@@ -47,6 +50,15 @@
 			rank_key = #{rankKey}, 
 		    tel_num = #{telNum}, 
 		    address = #{address}
+		where 
+			member_id = #{memberId}
+	</update>
+	
+	<update id="updatePassword">
+		update 
+			member 
+		set 
+			password = #{password}
 		where 
 			member_id = #{memberId}
 	</update>
