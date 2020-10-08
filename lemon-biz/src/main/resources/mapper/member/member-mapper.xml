@@ -15,10 +15,13 @@
 	
 	<insert id="insertMember">
 		insert into 
-			member(member_id, password) 
+			member(member_id, password, name, dept_key, rank_key) 
 		values(
 			#{ memberId }, 
-			#{ password }
+			#{ password },
+			#{ name },
+			#{ deptKey },
+			#{ rankKey }
 		)
 	</insert>
 	

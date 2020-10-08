@@ -41,6 +41,8 @@ public class MemberController {
 		String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
 		member.setPassword(encodedPassword);
 		
+		System.out.println(member);
+		
 		if(memberService.selectOneMember(member.getMemberId()) != null) {
 			String msg = "이미 존재하는 사원 번호 입니다.";
 			redirectAttr.addFlashAttribute("msg", msg);

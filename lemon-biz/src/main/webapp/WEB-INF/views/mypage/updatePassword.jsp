@@ -12,30 +12,28 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong><a href="${pageContext.request.contextPath}/member/myPage.do">내 정보 보기</a> / 비밀번호 변경</strong>
+			<strong>비밀번호 변경</strong>
 		</h4>
-		<form class="p-4"
+		<form class="p-4 mx-auto w-75"
 			action="${ pageContext.request.contextPath }/member/updatePassword.do"
 			method="post"
 			onsubmit="return checkFrm()"
 			>
 			<input type="hidden" name="memberId"
 					value="${ loginMember.memberId }" />
+			<div class="mb-4 row mx-5">
+				<input name="password" placeholder="현재 비밀번호" class="col form-control" type="password" value="" required>
+			</div>
+			
 			<div class="mb-1 row mx-5">
-				<div class="col-3 pt-2 text-right">현재 비밀번호 :</div>
-				<input name="password" class="col-9 form-control" type="password" value="" required>
-			</div>
-			<div class="mb-1 row mx-5 mt-4">
-				<div class="col-3 pt-2 text-right">변경 비밀번호 :</div>
-				<input id="change_pwd" name="change_pwd" class="col-9 form-control" type="password" value="" required>
+				<input id="change_pwd" placeholder="변경 비밀번호" name="change_pwd" class="col form-control" type="password" value="" required>
 			</div>
 			<div class="mb-1 row mx-5">
-				<div class="col-3 pt-2 text-right">변경 비밀번호 확인 :</div>
-				<input id="change_pwd_check" class="col-9 form-control" type="password" value="" required>
+				<input id="change_pwd_check" placeholder="변경 비밀번호 확인" class="col form-control" type="password" value="" required>
 			</div>
-			<div>
+			<div class="text-center">
 				<button
-					class="btn bg-warning text-white font-weight-bold float-right mt-3 mr-5"
+					class="btn bg-warning text-white font-weight-bold float-right mt-4 mr-5"
 					type="submit">변경하기</button>
 			</div>
 		</form>

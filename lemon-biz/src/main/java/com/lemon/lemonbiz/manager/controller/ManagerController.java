@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
+import com.lemon.lemonbiz.member.model.vo.Rank;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,10 +23,14 @@ public class ManagerController {
 	private MemberService memberService;
 	
 	@RequestMapping(value = "/insertMember.do", method = RequestMethod.GET)
-	public String insertMember() {
+	public void insertMember(Model model) {
+		List<Dept> deptList = memberService.selectDeptList();
+		List<Rank> rankList = memberService.selectRankList();
 		
 		
-		return "manager/insertMember";
+		model.addAttribute("deptList", deptList);
+		model.addAttribute("rankList", rankList);
+		
 	}
 
 	@RequestMapping(value = "/manageDept.do", method = RequestMethod.GET)
@@ -35,4 +40,9 @@ public class ManagerController {
 		model.addAttribute("deptList", deptList);
 	}
 
+	@RequestMapping(value = "/insertDept.do", method = RequestMethod.GET)
+	public void insertDept() {
+		
+	}
+	
 }

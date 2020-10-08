@@ -135,10 +135,19 @@
       
       <!-- 부서 관리 -->
       <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/manager/manageDept.do">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#dept" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-users"></i>
-          <span>부서 관리</span></a>
+          <span>부서 관리</span>
+        </a>
+        <div id="dept" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">부서 관리</h6>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertDept.do">부서 등록</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageDept.do">부서 정보</a>
+          </div>
+        </div>
       </li>
+      
       
       <!-- 직급 관리 -->
       <li class="nav-item">
@@ -330,7 +339,13 @@
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">${ loginMember.name }</span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <div class="img-profile rounded-circle" 
+                	 style="background-size: 32px 32px;
+                	 		background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
+                	 "
+                >
+                
+                </div>
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -338,13 +353,9 @@
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   	내 정보 보기
                 </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                	메뉴 예시
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  	메뉴 예시
+                <a class="dropdown-item" href="${pageContext.request.contextPath}/member/updatePassword.do">
+                  <i class="fas fa-unlock-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                	비밀번호 변경
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

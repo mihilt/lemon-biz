@@ -17,6 +17,18 @@
 		<form class="p-4"
 			action="${ pageContext.request.contextPath }/member/memberUpdate.do"
 			method="get">
+			<div class="m-5 mx-auto" 
+				 style="
+				 	width: 200px;
+				 	height: 200px;
+				 	background-size: 200px 200px;
+			 	    border-radius: 70%;
+			 	    border: 1px;
+    				overflow: hidden;
+				 	background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
+				 	cursor: pointer;
+				 ">
+			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">사번 :</div>
 				<div class="col-10 form-control bg-gray-200">${ loginMember.memberId }</div>
@@ -70,9 +82,6 @@
 				<button
 					class="btn bg-warning text-white font-weight-bold float-right mt-3 mr-5"
 					type="submit">수정하기</button>
-				<button
-					class="btn bg-danger text-white font-weight-bold float-right mt-3 mr-2"
-					type="button" onclick = "location.href = '${pageContext.request.contextPath}/member/updatePassword.do'">비빌번호 변경</button>
 			</div>
 		</form>
 	</div>

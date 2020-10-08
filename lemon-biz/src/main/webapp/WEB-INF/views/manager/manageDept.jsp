@@ -10,7 +10,7 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>부서 관리</strong>
+			<strong>부서 정보</strong>
 		</h4>
 		<div class="container-inner card-body">
 			<table class="table">
