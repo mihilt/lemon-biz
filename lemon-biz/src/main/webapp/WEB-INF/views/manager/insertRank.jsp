@@ -10,21 +10,14 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>부서 생성</strong>
+			<strong>직급 생성</strong>
 		</h4>
 		<form class="p-4 mx-auto w-75"
-			action="${ pageContext.request.contextPath }/manager/insertDept.do"
+			action="${ pageContext.request.contextPath }/manager/insertRank.do"
 			method="post"
 			>
 			<div class="mb-1 row mx-5">
-				<input name="password" placeholder="부서 번호" name="" class="col form-control" type="password" value="" required>
-			</div>
-			
-			<div class="mb-1 row mx-5 mb-4">
-				<input id="change_pwd" placeholder="부서명" name="" class="col form-control" type="password" value="" required>
-			</div>
-			<div class="mb-1 row mx-5">
-				<input id="change_pwd_check" placeholder="상위 부서 번호" name="" class="col form-control" type="password" value="">
+				<input name="name" placeholder="직급 이름" class="col form-control" type="text" value="" required>
 			</div>
 			<div class="text-center">
 				<button

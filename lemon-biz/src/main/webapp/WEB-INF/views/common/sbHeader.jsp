@@ -142,7 +142,7 @@
         <div id="dept" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">부서 관리</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertDept.do">부서 등록</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertDept.do">부서 생성</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageDept.do">부서 정보</a>
           </div>
         </div>
@@ -158,8 +158,8 @@
         <div id="position" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">직급 관리</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">직급 생성</a>
-            <a class="collapse-item" href="cards.html">직급 정보</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertRank.do">직급 생성</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageRank.do">직급 정보</a>
           </div>
         </div>
       </li>
