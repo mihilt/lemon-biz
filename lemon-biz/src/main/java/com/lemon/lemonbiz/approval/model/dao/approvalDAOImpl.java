@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 
 import com.lemon.lemonbiz.member.model.vo.Member;
-import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 
 
 @Repository
@@ -18,17 +18,17 @@ public class approvalDAOImpl implements approvalDAO {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public List<Dept1> deptList() {
+	public List<Dept> deptList() {
 		return sqlSession.selectList("approval.selectDeptList");
 	}
 
 	@Override
-	public List<Dept1> child() {
+	public List<Dept> child() {
 		return sqlSession.selectList("approval.selectChild");
 	}
 
 	@Override
-	public List<Dept1> child2() {
+	public List<Dept> child2() {
 		return sqlSession.selectList("approval.selectChild2");
 	}
 

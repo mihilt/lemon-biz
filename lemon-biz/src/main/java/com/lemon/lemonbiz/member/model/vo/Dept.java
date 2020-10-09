@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Dept1 {
+public class Dept {
 
 	private int key;
 	private int ref;

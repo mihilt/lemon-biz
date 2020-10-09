@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lemon.lemonbiz.manager.model.service.ManagerService;
 import com.lemon.lemonbiz.member.model.service.MemberService;
-import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class ManagerController {
 	
 	@RequestMapping(value = "/insertMember.do", method = RequestMethod.GET)
 	public void insertMember(Model model) {
-		List<Dept1> deptList = memberService.selectDeptList();
+		List<Dept> deptList = memberService.selectDeptList();
 		List<Rank> rankList = memberService.selectRankList();
 		
 		
@@ -41,7 +41,7 @@ public class ManagerController {
 
 	@RequestMapping(value = "/manageDept.do", method = RequestMethod.GET)
 	public void manageDept(Model model) {
-		List<Dept1> deptList = memberService.selectDeptList();
+		List<Dept> deptList = memberService.selectDeptList();
 
 		model.addAttribute("deptList", deptList);
 	}
@@ -52,10 +52,10 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/insertDept.do", method = RequestMethod.POST)
-	public String insertDeptPost(Dept1 dept, RedirectAttributes redirectAttr) {
+	public String insertDeptPost(Dept dept, RedirectAttributes redirectAttr) {
 		
-		Dept1 dept1 = managerService.selectOneDept(dept);
-		Dept1 dept2 = managerService.selectOneRefDept(dept);
+		Dept dept1 = managerService.selectOneDept(dept);
+		Dept dept2 = managerService.selectOneRefDept(dept);
 		
 		if(dept1 == null) {
 			

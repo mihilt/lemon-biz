@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lemon.lemonbiz.manager.model.service.ManagerService;
 import com.lemon.lemonbiz.member.model.service.MemberService;
-import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
@@ -110,7 +110,7 @@ public class MemberController {
 	@RequestMapping(value = "/myPage.do", method = RequestMethod.GET)
 	public String myPage(Model model) {
 		
-		List<Dept1> deptList = memberService.selectDeptList();
+		List<Dept> deptList = memberService.selectDeptList();
 		List<Rank> rankList = memberService.selectRankList();
 		
 		

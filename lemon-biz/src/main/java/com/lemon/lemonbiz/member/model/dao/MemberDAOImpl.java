@@ -6,7 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
@@ -27,7 +27,7 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 	
 	@Override
-	public List<Dept1> selectDeptList() {
+	public List<Dept> selectDeptList() {
 		return sqlSession.selectList("member.selectDeptList");
 	}
 

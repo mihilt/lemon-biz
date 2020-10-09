@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lemon.lemonbiz.approval.model.service.approvalService;
 
 import com.lemon.lemonbiz.member.model.vo.Member;
-import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 
 
 @Controller
@@ -29,9 +29,9 @@ public class ApprovalController {
 	public String writeForm(Model model) {
 		
 
-		List<Dept1> dept = approvalService.deptList();
-		List<Dept1> child = approvalService.child();
-		List<Dept1> child2 = approvalService.child2();
+		List<Dept> dept = approvalService.deptList();
+		List<Dept> child = approvalService.child();
+		List<Dept> child2 = approvalService.child2();
 
 		log.debug("dept = {}",dept);
 		log.debug("child = {}",child);

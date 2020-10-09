@@ -1,6 +1,6 @@
 package com.lemon.lemonbiz.manager.model.service;
 
-import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
 public interface ManagerService {
@@ -11,10 +11,10 @@ public interface ManagerService {
 
 	int deleteRank(Rank rank);
 
-	Dept1 selectOneDept(Dept1 dept);
+	Dept selectOneDept(Dept dept);
 
-	Dept1 selectOneRefDept(Dept1 dept);
+	Dept selectOneRefDept(Dept dept);
 
-	int insertDept(Dept1 dept);
+	int insertDept(Dept dept);
 
 }

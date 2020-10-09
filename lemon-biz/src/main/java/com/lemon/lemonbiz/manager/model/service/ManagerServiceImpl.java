@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lemon.lemonbiz.manager.model.dao.ManagerDAO;
-import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
 @Service
@@ -29,17 +29,17 @@ public class ManagerServiceImpl implements ManagerService{
 	}
 
 	@Override
-	public Dept1 selectOneDept(Dept1 dept) {
+	public Dept selectOneDept(Dept dept) {
 		return managerDAO.selectOneDept(dept);
 	}
 
 	@Override
-	public Dept1 selectOneRefDept(Dept1 dept) {
+	public Dept selectOneRefDept(Dept dept) {
 		return managerDAO.selectOneRefDept(dept);
 	}
 
 	@Override
-	public int insertDept(Dept1 dept) {
+	public int insertDept(Dept dept) {
 		return managerDAO.insertDept(dept);
 	}
 	

@@ -4,7 +4,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
 @Repository
@@ -29,17 +29,17 @@ public class ManagerDAOImpl implements ManagerDAO{
 	}
 
 	@Override
-	public Dept1 selectOneDept(Dept1 dept) {
+	public Dept selectOneDept(Dept dept) {
 		return sqlSession.selectOne("manager.selectOneDept", dept);
 	}
 
 	@Override
-	public Dept1 selectOneRefDept(Dept1 dept) {
+	public Dept selectOneRefDept(Dept dept) {
 		return sqlSession.selectOne("manager.selectOneRefDept", dept);
 	}
 
 	@Override
-	public int insertDept(Dept1 dept) {
+	public int insertDept(Dept dept) {
 		return sqlSession.insert("manager.insertDept", dept);
 	}
 	

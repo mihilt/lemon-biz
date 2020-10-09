@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lemon.lemonbiz.manager.model.dao.ManagerDAO;
 import com.lemon.lemonbiz.member.model.dao.MemberDAO;
-import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<Dept1> selectDeptList() {
+	public List<Dept> selectDeptList() {
 		return memberDAO.selectDeptList();
 	}
 
