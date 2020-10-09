@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attend">
+  <select id="selectAttendList" resultType="attend">
+    select *
+    from 
+    	attend
+    order by
+    	key desc
+    	
+<!--     select *
+    from 
+    	attend
+    where  mem_id=#{ memId}
+    order by
+    	key desc -->
+  </select>
+  
+  <!-- 생성 출근시간 삽입 -->
+  <insert id="attendArrive" >
+  insert into 
+			attend(key,mem_id,arrive)
+		values(
+		seq_attend_key.nextval,
+		#{ memId },
+		sysdate
+		)
+  </insert>
+  
+  <update id="attendLeabe">
+  <!-- 미완성 퇴근+근무시간 삽입-->
+  update attend
+  set  leave=sysdate,
+	time=(SELECT trunc(((TRUNC(sysdate, 'MI')-arrive) * 1440)/60 ,2)
+    FROM attend
+  	where key=(select max(key)
+        from attend
+        where mem_id=#{ memId}))
+  where key=(select max(key)
+        from attend
+        where mem_id = #{memId}
+        )
+  
+  </update>
+</mapper>
