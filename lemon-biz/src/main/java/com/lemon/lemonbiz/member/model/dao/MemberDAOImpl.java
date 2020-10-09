@@ -1,10 +1,14 @@
 package com.lemon.lemonbiz.member.model.dao;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.lemon.lemonbiz.member.model.vo.Dept1;
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.member.model.vo.Rank;
 
 @Repository
 public class MemberDAOImpl implements MemberDAO {
@@ -22,4 +26,24 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("member.selectOneMember", memberId);
 	}
 	
+	@Override
+	public List<Dept1> selectDeptList() {
+		return sqlSession.selectList("member.selectDeptList");
+	}
+
+	@Override
+	public List<Rank> selectRankList() {
+		return sqlSession.selectList("member.selectRankList");
+	}
+
+	@Override
+	public int updateMember(Member member) {
+		return sqlSession.update("member.updateMember", member);
+	}
+
+	@Override
+	public int updatePassword(Member loginMember) {
+		return sqlSession.update("member.updatePassword", loginMember);
+	}
+
 }

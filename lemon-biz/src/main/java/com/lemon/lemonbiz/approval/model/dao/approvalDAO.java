@@ -2,16 +2,18 @@ package com.lemon.lemonbiz.approval.model.dao;
 
 import java.util.List;
 
-import com.lemon.lemonbiz.dept.model.vo.dept;
+
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.member.model.vo.Dept1;
+
 
 public interface approvalDAO {
 
-	List<dept> deptList();
+	List<Dept1> deptList();
 
-	List<dept> child();
+	List<Dept1> child();
 
-	List<dept> child2();
+	List<Dept1> child2();
 
 	List<Member> memberList(String node);
 

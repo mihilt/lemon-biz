@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lemon.lemonbiz.approval.model.service.approvalService;
-import com.lemon.lemonbiz.dept.model.vo.dept;
+
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.member.model.vo.Dept1;
+
 
 @Controller
 @RequestMapping("/approval")
@@ -26,11 +28,11 @@ public class ApprovalController {
 	@RequestMapping("/writeForm.html")
 	public String writeForm(Model model) {
 		
-		List<dept> dept = approvalService.deptList();
-		List<dept> child = approvalService.child();
-		List<dept> child2 = approvalService.child2();
-		
-		
+
+		List<Dept1> dept = approvalService.deptList();
+		List<Dept1> child = approvalService.child();
+		List<Dept1> child2 = approvalService.child2();
+
 		log.debug("dept = {}",dept);
 		log.debug("child = {}",child);
 		log.debug("child2 = {}",child2);
@@ -47,7 +49,7 @@ public class ApprovalController {
 								 Model model) {
 		
 		List<Member> memberList = approvalService.memberList(node);
-		
+
 		log.debug("node = {}",node);
 		log.debug("memberList={}",memberList);
 		

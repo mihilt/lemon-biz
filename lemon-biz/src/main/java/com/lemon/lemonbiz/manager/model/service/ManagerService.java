@@ -1,10 +1,20 @@
 package com.lemon.lemonbiz.manager.model.service;
 
-import java.util.List;
-import java.util.Map;
+import com.lemon.lemonbiz.member.model.vo.Dept1;
+import com.lemon.lemonbiz.member.model.vo.Rank;
 
 public interface ManagerService {
 
-	List<Map<String, Object>> selectDeptList();
+	int insertRank(Rank rank);
+
+	int updateRank(Rank rank);
+
+	int deleteRank(Rank rank);
+
+	Dept1 selectOneDept(Dept1 dept);
+
+	Dept1 selectOneRefDept(Dept1 dept);
+
+	int insertDept(Dept1 dept);
 
 }

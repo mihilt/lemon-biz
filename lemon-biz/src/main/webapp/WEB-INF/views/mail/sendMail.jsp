@@ -13,15 +13,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
- 
-<!-- Bootstrap -->
-<link href='<c:url value="/css/bootstrap.min.css" />' rel="stylesheet">
-<link href='<c:url value="/css/kfonts2.css" />' rel="stylesheet">
- 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src='<c:url value="/jquery/jquery-1.11.3.min.js" />'></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src='<c:url value="/js/bootstrap.min.js"  />'></script>
 
 	<!-- include summernote css/js : cdn --> 
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet"> 
@@ -98,7 +89,7 @@
 		</div> <!-- container div 끝 -->
 		<br />
 		
-<!-- 주. 모달 본체에 해당하는 애들은 container/wrapper로 감쌀 필요가 없으므로 /body태그의 윗 편, 즉 최 하단에 위치시켜 주어야 문제가 안 생긴다! -->
+<!-- 주. 모달 본체에 해당하는 애들은 container/wrapper로 감쌀 필요가 없으므로 /body태그의 바로 윗 편, 즉 body 태그 내부 최 하단에 위치시켜 주어야 문제가 안 생긴다! -->
 		
 	<!-- 수신인 추가 모달 -->
 		<div class="modal fade" id="addReceiverModal" role="dialog" 

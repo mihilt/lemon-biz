@@ -10,7 +10,7 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>부서 관리</strong>
+			<strong>부서 정보</strong>
 		</h4>
 		<div class="container-inner card-body">
 			<table class="table">
@@ -26,7 +26,7 @@
 					<c:forEach items="${ deptList }" var="dept">
 						<tr>
 							<td>${ dept.key }</td>
-							<td>${ dept.refName }<c:if test="${ dept.ref != null}">
+							<td>${ dept.refName }<c:if test="${ dept.ref != 0 }">
 									(${ dept.ref })
 								</c:if>
 							</td>
