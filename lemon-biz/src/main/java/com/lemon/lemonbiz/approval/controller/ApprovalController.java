@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lemon.lemonbiz.approval.model.service.approvalService;
+
+import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Dept;
+
 
 @Controller
 @RequestMapping("/approval")
@@ -24,9 +28,11 @@ public class ApprovalController {
 	@RequestMapping("/writeForm.html")
 	public String writeForm(Model model) {
 		
+
 		List<Dept> dept = approvalService.deptList();
 		List<Dept> child = approvalService.child();
 		List<Dept> child2 = approvalService.child2();
+
 		log.debug("dept = {}",dept);
 		log.debug("child = {}",child);
 		log.debug("child2 = {}",child2);
@@ -38,15 +44,18 @@ public class ApprovalController {
 		return "approval/writeForm";
 	}
 	
-	//@RequestMapping("/tree.do")
-	public String approval(Model model) {
+	@RequestMapping(value="/approvalSelect.do")
+	public String approvalSelect(@RequestParam("node") String node,
+								 Model model) {
 		
-		List<Dept> dept = approvalService.deptList();
+		List<Member> memberList = approvalService.memberList(node);
+
+		log.debug("node = {}",node);
+		log.debug("memberList={}",memberList);
 		
+		model.addAttribute("memberList",memberList);
 		
-		log.debug("dept = {}",dept);
-		
-		return "";
+		return "jsonView";
 	}
 	
 	
