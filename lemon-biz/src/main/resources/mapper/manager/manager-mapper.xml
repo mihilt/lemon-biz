@@ -12,5 +12,51 @@
 		    #{ name }
 		)
 	</insert>
+
+	<update id="updateRank">
+		update 
+			rank 
+		set 
+			name = #{ name } 
+		where 
+			key= #{ key }
+	</update>
+	
+
+	<delete id="deleteRank">
+		delete 
+			rank 
+		where 
+			key = #{ key }
+	</delete>
+	
+	<select id="selectOneDept" resultType="dept">
+		select
+			*
+		from
+			dept
+		where key = #{ key }
+	</select>
+	
+	<select id="selectOneRefDept" resultType="dept">
+	
+		select
+			*
+		from
+			dept
+		where key = #{ ref }
+		
+	</select>
+	
+	<insert id="insertDept">
+		insert into 
+		    dept 
+		values(
+		    #{key},
+		    #{ref},
+		    #{name},
+		    nvl((select dept_level from dept where key = #{ref}) + 1,1)
+		)
+	</insert>
 	
 </mapper>
