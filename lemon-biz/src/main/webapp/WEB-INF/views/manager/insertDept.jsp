@@ -17,14 +17,14 @@
 			method="post"
 			>
 			<div class="mb-1 row mx-5">
-				<input name="password" placeholder="부서 번호" name="" class="col form-control" type="password" value="" required>
+				<input name="key" placeholder="부서 번호" class="col form-control" type="text" required>
 			</div>
 			
 			<div class="mb-1 row mx-5 mb-4">
-				<input id="change_pwd" placeholder="부서명" name="" class="col form-control" type="password" value="" required>
+				<input name="name"  placeholder="부서명" class="col form-control" type="text" required>
 			</div>
 			<div class="mb-1 row mx-5">
-				<input id="change_pwd_check" placeholder="상위 부서 번호" name="" class="col form-control" type="password" value="">
+				<input name="ref"  placeholder="상위 부서 번호" class="col form-control" type="text" required>
 			</div>
 			<div class="text-center">
 				<button

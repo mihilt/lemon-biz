@@ -47,13 +47,65 @@ public class ManagerController {
 	}
 
 	@RequestMapping(value = "/insertDept.do", method = RequestMethod.GET)
-	public void insertDept() {
+	public void insertDeptGet() {
 		
 	}
 	
-	@RequestMapping(value = "/manageRank.do", method = RequestMethod.GET)
-	public void manageRank() {
+	@RequestMapping(value = "/insertDept.do", method = RequestMethod.POST)
+	public String insertDeptPost(Dept dept, RedirectAttributes redirectAttr) {
 		
+		Dept dept1 = managerService.selectOneDept(dept);
+		Dept dept2 = managerService.selectOneRefDept(dept);
+		
+		if(dept1 == null) {
+			
+			if(dept2 == null) {
+				
+				redirectAttr.addFlashAttribute("msg", "존재하는 상위 부서가 없습니다.");
+				
+				return "redirect:/manager/insertDept.do";
+				
+			}
+			
+			int result = managerService.insertDept(dept);
+			redirectAttr.addFlashAttribute("msg", "생성을 완료하였습니다.");
+			
+		} else {
+			
+			redirectAttr.addFlashAttribute("msg", "이미 존재하는 부서 번호 입니다.");
+			
+		}
+		
+		return "redirect:/manager/insertDept.do";
+		
+	}
+	
+	
+	@RequestMapping(value = "/manageRank.do", method = RequestMethod.GET)
+	public void manageRank(Model model) {
+		List<Rank> rankList = memberService.selectRankList();
+		model.addAttribute("rankList", rankList);
+		
+	}
+	
+	@RequestMapping(value = "/manageRank/update.do", method = RequestMethod.GET)
+	public String updateRank(Rank rank, RedirectAttributes redirectAttr) {
+		
+		int result = managerService.updateRank(rank);
+		
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "직급 수정을 완료하였습니다." : "직급 수정에 오류가 발생했습니다.");
+		
+		return "redirect:/manager/manageRank.do";
+	}
+	
+	@RequestMapping(value = "/manageRank/delete.do", method = RequestMethod.GET)
+	public String deleteRank(Rank rank, RedirectAttributes redirectAttr) {
+		
+		int result = managerService.deleteRank(rank);
+		
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "직급 삭제를 완료하였습니다." : "직급 삭제에 오류가 발생했습니다.");
+		
+		return "redirect:/manager/manageRank.do";
 	}
 	
 	@RequestMapping(value = "/insertRank.do", method = RequestMethod.GET)

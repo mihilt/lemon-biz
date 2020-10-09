@@ -155,7 +155,8 @@ public class MemberController {
 				
 				int result = memberService.updatePassword(loginMember);
 				
-				redirectAttr.addFlashAttribute("msg", "비밀번호 변경이 완료되었습니다.");
+				redirectAttr.addFlashAttribute("msg", (result > 0) ? "비밀번호 변경이 완료되었습니다." : "비밀변호 변경 처리 중 오류가 발생했습니다.");
+				
 				return "redirect:updatePassword.do";
 			} else {
 				redirectAttr.addFlashAttribute("msg", "현재 비밀번호가 일치하지 않습니다.");
