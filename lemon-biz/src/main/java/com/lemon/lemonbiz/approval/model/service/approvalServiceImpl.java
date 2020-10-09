@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lemon.lemonbiz.approval.model.dao.approvalDAO;
 import com.lemon.lemonbiz.dept.model.vo.dept;
+import com.lemon.lemonbiz.member.model.vo.Member;
 
 @Service
 public class approvalServiceImpl implements approvalService {
@@ -29,5 +30,10 @@ public class approvalServiceImpl implements approvalService {
 	@Override
 	public List<dept> child2() {
 		return approvalDAO.child2();
+	}
+
+	@Override
+	public List<Member> memberList(String node) {
+		return approvalDAO.memberList(node);
 	}
 }

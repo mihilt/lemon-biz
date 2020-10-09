@@ -34,10 +34,10 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" style="margin: 20px; padding: 20px; width:250px; border:1px solid lightgray;">
-      <h5>부서 선택</h5>
+      <div class="modal-body">
+      <h5>부서 선택11111111111111</h5>
         <!-- tree -->
-	<div id="approver">
+	<div id="approver" style="margin: 20px; padding: 20px; width:250px; border:1px solid lightgray;">
         <ul id="approvalSelect">
         	<c:forEach items="${dept}" var="dept">
             <li>${dept.name}
@@ -58,14 +58,29 @@
             </c:forEach>
         </ul>
     </div>
-        <!-- tree end-->
-    <div>
-    	<!-- df -->
-    
-    
-    </div>
+        <!-- tree end1-->
         
+        <!-- memberSelect form -->
+	  <div class="selectMember">
+      	<div class="row" > 
+	    	<label>성명</label>
+	    	<input type="text" id="searchN"/>
+	    	<button class="btn btn-outline-primary" id="searchNm" onclick="searchName()">검색</button>
+    	</div>
+    	<div class="row">
+    		<table>
+    			<tr>
+    				<td>부서</td>
+    				<td>성명</td>
+    				<td>직위</td>
+    				<td>사번</td>
+    			</tr>
+    		</table>
+    	</div>
       </div>
+      	<!-- memberSelect form end-->
+      
+      
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
