@@ -7,12 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lemon.lemonbiz.manager.model.service.ManagerService;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
+import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
 import lombok.extern.slf4j.Slf4j;
@@ -108,6 +108,16 @@ public class ManagerController {
 		return "redirect:/manager/manageRank.do";
 	}
 	
+	@RequestMapping(value = "manageDept/delete.do", method = RequestMethod.GET)
+	public String deleteDept(Dept dept, RedirectAttributes redirectAttr) {
+		
+		int result = managerService.deleteDept(dept);
+		
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "부서 삭제를 완료하였습니다." : "부서 삭제에 오류가 발생했습니다.");
+		
+		return "redirect:/manager/manageDept.do";
+	}
+	
 	@RequestMapping(value = "/insertRank.do", method = RequestMethod.GET)
 	public void insertRankGet() {
 		
@@ -121,6 +131,42 @@ public class ManagerController {
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "직급 생성을 완료하였습니다." : "직급 생성에 오류가 발생했습니다.");
 		
 		return "redirect:insertRank.do";
+	}
+	
+	
+	@RequestMapping(value = "/manageMember.do", method = RequestMethod.GET)
+	public void manageMember(Model model) {
+		
+		List<Member> memberList = memberService.selectMemberList();
+		
+		model.addAttribute("memberList", memberList);
+		
+	}
+	
+	@RequestMapping(value = "/manageMember/detail.do", method = RequestMethod.GET)
+	public String manageMemberDetail(Model model, Member getMember) {
+		
+		Member member = memberService.selectOneMember(getMember.getMemberId());
+		List<Dept> deptList = memberService.selectDeptList();
+		List<Rank> rankList = memberService.selectRankList();
+		
+		
+		model.addAttribute("deptList", deptList);
+		model.addAttribute("rankList", rankList);
+		model.addAttribute("member", member);
+		
+		return "forward:/WEB-INF/views/manager/memberDetail.jsp";
+		
+	}
+	
+	@RequestMapping(value = "/manageMember/detail/update.do", method = RequestMethod.GET)
+	public String manageMemberDetailUpdate(Model model, Member member, RedirectAttributes redirectAttr) {
+		
+		int result = memberService.updateMember(member);
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
+		
+		return "redirect:/manager/manageMember/detail.do?memberId="+member.getMemberId();
+		
 	}
 	
 }

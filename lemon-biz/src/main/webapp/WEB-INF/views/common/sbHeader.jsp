@@ -128,7 +128,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">사원 관리</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">사원 등록</a>
-            <a class="collapse-item" href="cards.html">사원 정보</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageMember.do">사원 정보</a>
           </div>
         </div>
       </li>

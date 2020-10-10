@@ -42,6 +42,10 @@ public class ManagerDAOImpl implements ManagerDAO{
 	public int insertDept(Dept dept) {
 		return sqlSession.insert("manager.insertDept", dept);
 	}
-	
+
+	@Override
+	public int deleteDept(Dept dept) {
+		return sqlSession.delete("manager.deleteDept", dept);
+	}
 	
 }

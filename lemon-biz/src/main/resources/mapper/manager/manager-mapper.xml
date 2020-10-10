@@ -59,4 +59,11 @@
 		)
 	</insert>
 	
+	<delete id="deleteDept">
+		delete 
+			dept 
+		where 
+			key = #{ key }
+	</delete>
+	
 </mapper>
