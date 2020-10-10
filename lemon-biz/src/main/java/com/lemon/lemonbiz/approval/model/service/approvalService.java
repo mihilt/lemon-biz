@@ -20,5 +20,7 @@ public interface approvalService {
 
 	List<Member> memberList(String node);
 
+	List<Member> selectMember(String param);
+
 	
 }
