@@ -169,4 +169,19 @@ public class ManagerController {
 		
 	}
 	
+	@RequestMapping(value = "/manageMember/delete.do", method = RequestMethod.GET)
+	public String manageMemberLeave(Model model, Member member, RedirectAttributes redirectAttr) {
+		int result = 0;
+		try {
+			result = memberService.deleteMember(member);
+		}catch(Exception e) {
+			redirectAttr.addFlashAttribute("msg", (result > 0) ? "퇴사 처리를 완료하였습니다." : "오류가 발생했습니다.");
+		}
+		
+		redirectAttr.addFlashAttribute("msg", "오류가 발생했습니다.");
+		
+		return "redirect:/manager/manageMember.do";
+		
+	}
+	
 }

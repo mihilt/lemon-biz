@@ -22,4 +22,6 @@ public interface MemberDAO {
 
 	List<Member> selectMemberList();
 
+	int deleteMember(Member member);
+
 }

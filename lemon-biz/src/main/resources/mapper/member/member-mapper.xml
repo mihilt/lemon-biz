@@ -74,4 +74,11 @@
 			member_id
 	</select>
 	
+	<delete id="deleteMember">
+		delete from
+			member 
+		where 
+			member_id = #{memberId}
+	</delete>
+	
 </mapper>
