@@ -38,4 +38,9 @@ public class approvalServiceImpl implements approvalService {
 	public List<Member> memberList(String node) {
 		return approvalDAO.memberList(node);
 	}
+
+	@Override
+	public List<Member> selectMember(String param) {
+		return approvalDAO.selectMember(param);
+	}
 }

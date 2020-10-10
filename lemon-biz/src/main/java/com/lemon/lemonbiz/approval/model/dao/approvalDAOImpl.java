@@ -36,6 +36,11 @@ public class approvalDAOImpl implements approvalDAO {
 	public List<Member> memberList(String node) {
 		return sqlSession.selectList("approval.memberList",node);
 	}
+
+	@Override
+	public List<Member> selectMember(String param) {
+		return sqlSession.selectList("approval.selectMember",param);
+	}
 	
 	
 	
