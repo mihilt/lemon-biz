@@ -123,8 +123,6 @@ public class MemberController {
 	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.GET)
 	public String update(Member member, RedirectAttributes redirectAttr, Model model) {
 		
-		System.out.println(member);
-		
 		int result = memberService.updateMember(member);
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
 		Member loginMember = memberService.selectOneMember(member.getMemberId());

@@ -20,4 +20,6 @@ public interface MemberDAO {
 
 	int updatePassword(Member loginMember);
 
+	List<Member> selectMemberList();
+
 }

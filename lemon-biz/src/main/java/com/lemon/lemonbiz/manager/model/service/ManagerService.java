@@ -17,4 +17,6 @@ public interface ManagerService {
 
 	int insertDept(Dept dept);
 
+	int deleteDept(Dept dept);
+
 }
