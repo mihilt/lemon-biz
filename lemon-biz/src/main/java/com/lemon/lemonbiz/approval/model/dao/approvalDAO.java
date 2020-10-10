@@ -17,4 +17,6 @@ public interface approvalDAO {
 
 	List<Member> memberList(String node);
 
+	List<Member> selectMember(String param);
+
 }
