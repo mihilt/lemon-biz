@@ -20,4 +20,6 @@ public interface MemberService {
 
 	int updatePassword(Member loginMember);
 
+	List<Member> selectMemberList();
+
 }

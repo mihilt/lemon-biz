@@ -17,4 +17,6 @@ public interface ManagerDAO {
 
 	int insertDept(Dept dept);
 
+	int deleteDept(Dept dept);
+
 }
