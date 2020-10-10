@@ -37,6 +37,7 @@
 										</button>
 										<a type="button" 
 										   class="btn btn-outline-danger"
+										   onclick="return confirm('정말 삭제 하시겠습니까 ?')"
 										   href="${pageContext.request.contextPath}/manager/manageRank/delete.do?key=${ rank.key }">
 										   삭제
 										</a>

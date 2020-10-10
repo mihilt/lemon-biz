@@ -42,7 +42,7 @@
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">부서 :</div>
-				<select name="deptKey" class="col-10 form-control"
+				<select disabled  name="deptKey" class="col-10 form-control"
 					id="exampleFormControlSelect1">
 					<c:forEach items="${ deptList }" var="dept">
 						<option value="${ dept.key }"
@@ -56,7 +56,7 @@
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">직급 :</div>
-				<select name="rankKey" class="col-10 form-control"
+				<select disabled name="rankKey" class="col-10 form-control"
 					id="exampleFormControlSelect1">
 					<c:forEach items="${ rankList }" var="rank">
 						<option value="${ rank.key }"

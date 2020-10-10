@@ -22,4 +22,6 @@ public interface MemberService {
 
 	List<Member> selectMemberList();
 
+	int deleteMember(Member member);
+
 }

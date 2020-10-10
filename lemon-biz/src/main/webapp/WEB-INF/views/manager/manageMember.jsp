@@ -36,8 +36,10 @@
 									href="${pageContext.request.contextPath}/manager/manageMember/detail.do?memberId=${ member.memberId }">상세보기</a>
 							</td>
 							<td>		
-								<a type="button" class="btn btn-outline-danger"
-									href="${pageContext.request.contextPath}/manager/manageMember/delete.do?memberId=${ member.memberId }">퇴사</a>
+								<a type="button" 
+								   class="btn btn-outline-danger"
+								   onclick="return confirm('정말 퇴사처리 하시겠습니까 ?')"
+								   href="${pageContext.request.contextPath}/manager/manageMember/delete.do?memberId=${ member.memberId }">퇴사</a>
 							</td>
 						</tr>
 					</c:forEach>

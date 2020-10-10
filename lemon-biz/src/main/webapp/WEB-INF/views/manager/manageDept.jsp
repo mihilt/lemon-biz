@@ -34,8 +34,10 @@
 							<td>
 								<a type="button" class="btn btn-outline-secondary"
 									href="${pageContext.request.contextPath}/manager/manageDept/update.do?key=${ dept.key }">수정</a>
-								<a type="button" class="btn btn-outline-danger"
-									href="${pageContext.request.contextPath}/manager/manageDept/delete.do?key=${ dept.key }">삭제</a>
+								<a type="button" 
+								   class="btn btn-outline-danger"
+								   onclick="return confirm('정말 삭제 하시겠습니까 ?')"
+								   href="${pageContext.request.contextPath}/manager/manageDept/delete.do?key=${ dept.key }">삭제</a>
 							</td>
 						</tr>
 					</c:forEach>

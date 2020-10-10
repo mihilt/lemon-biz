@@ -36,6 +36,8 @@ public class MemberController {
 	@RequestMapping(value = "/memberEnroll.do", method = RequestMethod.POST)
 	public String memberEnroll(RedirectAttributes redirectAttr,
 							   Member member) {
+
+		log.debug("member={}" + member);
 		
 		String rawPassword = member.getMemberId();
 		String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
