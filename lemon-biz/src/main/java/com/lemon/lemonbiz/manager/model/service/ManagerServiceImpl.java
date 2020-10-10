@@ -48,4 +48,10 @@ public class ManagerServiceImpl implements ManagerService{
 		return managerDAO.deleteDept(dept);
 	}
 
+	@Override
+	public int updateDept(Dept dept) {
+		return managerDAO.updateDept(dept);
+	}
+	
+
 }
