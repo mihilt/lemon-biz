@@ -12,9 +12,13 @@
 		<h4 id="m-title" class="card-header">
 			<strong>사원 정보</strong>
 		</h4>
-		<div class="container-inner card-body">
+		
+		
+		
+		<div class="m-5">
 			<p class = "text-danger text-center">*그룹웨어 관리자 권한을 갖고있는 사원은 붉은색으로 표시</p>
-			<table class="table">
+			<table class="table table-bordered" id="dataTable" width="100%"
+				cellspacing="0">
 				<thead>
 					<tr>
 						<th scope="col">사원 번호</th>
@@ -51,8 +55,22 @@
 				</tbody>
 			</table>
 		</div>
+		
+		
+		
+		
+		
+		
 	</div>
 </div>
 
+
+  <!-- Page level plugins -->
+  <script src="${pageContext.request.contextPath }/resources/js/jquery.dataTables.min.js"></script>
+  <script src="${pageContext.request.contextPath }/resources/js/dataTables.bootstrap4.min.js"></script>
+  <!-- Page level custom scripts -->
+  <script src="${pageContext.request.contextPath }/resources/js/datatables-demo.js"></script>
+  
+  
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp" />
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

@@ -33,6 +33,14 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         
+        <!-- dataTables -->
+        <link href="${pageContext.request.contextPath }/resources/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+		<script src="${pageContext.request.contextPath }/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+		<script src="${pageContext.request.contextPath }/resources/js/sb-admin-2.min.js"></script>
+        
+        <!-- custom css -->
+        <link href="${pageContext.request.contextPath }/resources/css/custom.css" rel="stylesheet">
+        
         <!-- addFlashAttribute message -->
         <c:if test="${ not empty msg }">
             <script>
