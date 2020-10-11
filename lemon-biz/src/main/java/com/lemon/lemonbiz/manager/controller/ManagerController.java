@@ -176,13 +176,12 @@ public class ManagerController {
 		try {
 			result = memberService.deleteMember(member);
 		}catch(Exception e) {
-			redirectAttr.addFlashAttribute("msg", (result > 0) ? "퇴사 처리를 완료하였습니다." : "오류가 발생했습니다.");
+			log.error("Exception={}"+e);
 		}
 		
-		redirectAttr.addFlashAttribute("msg", "오류가 발생했습니다.");
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "퇴사 처리를 완료하였습니다." : "오류가 발생했습니다.");
 		
 		return "redirect:/manager/manageMember.do";
-		
 	}
 	
 	@RequestMapping(value = "manageDept/update.do", method = RequestMethod.GET)
