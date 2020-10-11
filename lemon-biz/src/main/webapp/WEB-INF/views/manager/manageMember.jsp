@@ -13,8 +13,6 @@
 			<strong>사원 정보</strong>
 		</h4>
 		
-		
-		
 		<div class="m-5">
 			<p class = "text-danger text-center">*그룹웨어 관리자 권한을 갖고있는 사원은 붉은색으로 표시</p>
 			<table class="table table-bordered" id="dataTable" width="100%"
@@ -25,8 +23,8 @@
 						<th scope="col">이름</th>
 						<th scope="col">직급</th>
 						<th scope="col">부서</th>
-						<th scope="col">상세보기</th>
-						<th scope="col">퇴사</th>
+						<th scope="col"></th>
+						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -56,21 +54,11 @@
 			</table>
 		</div>
 		
-		
-		
-		
-		
-		
 	</div>
 </div>
 
 
-  <!-- Page level plugins -->
-  <script src="${pageContext.request.contextPath }/resources/js/jquery.dataTables.min.js"></script>
-  <script src="${pageContext.request.contextPath }/resources/js/dataTables.bootstrap4.min.js"></script>
-  <!-- Page level custom scripts -->
-  <script src="${pageContext.request.contextPath }/resources/js/datatables-demo.js"></script>
-  
+
   
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp" />
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
