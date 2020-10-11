@@ -36,6 +36,8 @@ public class MemberController {
 	@RequestMapping(value = "/memberEnroll.do", method = RequestMethod.POST)
 	public String memberEnroll(RedirectAttributes redirectAttr,
 							   Member member) {
+
+		log.debug("member={}" + member);
 		
 		String rawPassword = member.getMemberId();
 		String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
@@ -123,8 +125,6 @@ public class MemberController {
 	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.GET)
 	public String update(Member member, RedirectAttributes redirectAttr, Model model) {
 		
-		System.out.println(member);
-		
 		int result = memberService.updateMember(member);
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
 		Member loginMember = memberService.selectOneMember(member.getMemberId());
@@ -155,7 +155,8 @@ public class MemberController {
 				
 				int result = memberService.updatePassword(loginMember);
 				
-				redirectAttr.addFlashAttribute("msg", "비밀번호 변경이 완료되었습니다.");
+				redirectAttr.addFlashAttribute("msg", (result > 0) ? "비밀번호 변경이 완료되었습니다." : "비밀변호 변경 처리 중 오류가 발생했습니다.");
+				
 				return "redirect:updatePassword.do";
 			} else {
 				redirectAttr.addFlashAttribute("msg", "현재 비밀번호가 일치하지 않습니다.");

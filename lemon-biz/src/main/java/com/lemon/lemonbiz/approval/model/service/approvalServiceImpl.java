@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lemon.lemonbiz.approval.model.dao.approvalDAO;
+
+import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Dept;
+
 
 @Service
 public class approvalServiceImpl implements approvalService {
@@ -29,5 +32,15 @@ public class approvalServiceImpl implements approvalService {
 	@Override
 	public List<Dept> child2() {
 		return approvalDAO.child2();
+	}
+
+	@Override
+	public List<Member> memberList(String node) {
+		return approvalDAO.memberList(node);
+	}
+
+	@Override
+	public List<Member> selectMember(String param) {
+		return approvalDAO.selectMember(param);
 	}
 }

@@ -46,4 +46,14 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.update("member.updatePassword", loginMember);
 	}
 
+	@Override
+	public List<Member> selectMemberList() {
+		return sqlSession.selectList("member.selectMemberList");
+	}
+
+	@Override
+	public int deleteMember(Member member) {
+		return sqlSession.delete("member.deleteMember", member);
+	}
+
 }

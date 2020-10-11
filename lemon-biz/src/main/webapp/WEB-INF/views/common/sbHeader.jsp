@@ -111,7 +111,7 @@
 		
       <!-- Divider -->
       <hr class="sidebar-divider">
-
+<c:if test="${ loginMember.isManager eq 1 }">
       <!-- 관리자 + 톱니바퀴 -->
       <div class="sidebar-heading text-white">
       <i class="fas fa-fw fa-cog"></i>
@@ -128,7 +128,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">사원 관리</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">사원 등록</a>
-            <a class="collapse-item" href="cards.html">사원 정보</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageMember.do">사원 정보</a>
           </div>
         </div>
       </li>
@@ -173,16 +173,16 @@
         <div id="approval-manage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">전자결재 관리</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">무튼 관리</a>
-            <a class="collapse-item" href="cards.html">문서 생성</a>
-            <a class="collapse-item" href="cards.html">문서 ㅁㄴㅇ</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">무튼 관리</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">문서 생성</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">문서 어쩌구저쩌구하기</a>
           </div>
         </div>
       </li>
 
       <!-- Divider -->
       <hr class="sidebar-divider">
-	
+</c:if>	
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -369,12 +369,6 @@
 
         </nav>
         
-        <!-- Core plugin JavaScript-->
-		<script src="${pageContext.request.contextPath }/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
-		
-		<!-- Custom scripts for all pages-->
-		<script src="${pageContext.request.contextPath }/resources/js/sb-admin-2.min.js"></script>
-
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->

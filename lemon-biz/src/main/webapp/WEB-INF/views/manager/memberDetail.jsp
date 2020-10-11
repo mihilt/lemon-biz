@@ -12,10 +12,10 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>내 정보 보기</strong>
+			<strong><a href="${ pageContext.request.contextPath }/manager/manageMember.do">사원 정보</a> / 상세보기</strong>
 		</h4>
 		<form class="p-4"
-			action="${ pageContext.request.contextPath }/member/memberUpdate.do"
+			action="${ pageContext.request.contextPath }/manager/manageMember/detail/update.do"
 			method="get">
 			<div class="m-5 mx-auto" 
 				 style="
@@ -31,22 +31,22 @@
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">사번 :</div>
-				<div class="col-10 form-control bg-gray-200">${ loginMember.memberId }</div>
+				<div class="col-10 form-control bg-gray-200">${ member.memberId }</div>
 				<input type="hidden" name="memberId"
-					value="${ loginMember.memberId }" />
+					value="${ member.memberId }" />
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">이름 :</div>
 				<input name="name" class="col-10 form-control" type="text"
-					value=${ loginMember.name }>
+					value=${ member.name }>
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">부서 :</div>
-				<select disabled  name="deptKey" class="col-10 form-control"
+				<select name="deptKey" class="col-10 form-control"
 					id="exampleFormControlSelect1">
 					<c:forEach items="${ deptList }" var="dept">
 						<option value="${ dept.key }"
-							<c:if test="${ loginMember.deptKey eq dept.key }">
+							<c:if test="${ member.deptKey eq dept.key }">
 							selected
 						</c:if>>
 							${ dept.name }(${ dept.key })</option>
@@ -56,11 +56,11 @@
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">직급 :</div>
-				<select disabled name="rankKey" class="col-10 form-control"
+				<select name="rankKey" class="col-10 form-control"
 					id="exampleFormControlSelect1">
 					<c:forEach items="${ rankList }" var="rank">
 						<option value="${ rank.key }"
-							<c:if test="${ loginMember.rankKey eq rank.key }">
+							<c:if test="${ member.rankKey eq rank.key }">
 							selected
 						</c:if>>${ rank.name }</option>
 
@@ -71,13 +71,32 @@
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">전화번호 :</div>
 				<input name="telNum" class="col-10 form-control" type="text"
-					value=${ loginMember.telNum }>
+					value=${ member.telNum }>
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">주소 :</div>
 				<input name="address" class="col-10 form-control" type="text"
-					value=${ loginMember.address }>
+					value=${ member.address }>
 			</div>
+			<br />
+			<div class="mb-1 row mx-5">
+				<div class="col-2 pt-2 text-right">관리자 :</div>
+				<div class="col-10 pt-2">
+					<div class="form-check">
+					  <input class="form-check-input" type="radio" name="isManager" id="no" value="0" <c:if test="${ member.isManager eq 0 }">checked</c:if>>
+					  <label class="form-check-label" for="no">
+					    	아니오
+					  </label>
+					</div>
+					<div class="form-check">
+					  <input class="form-check-input" type="radio" name="isManager" id="yes" value="1" <c:if test="${ member.isManager eq 1 }">checked</c:if>>
+					  <label class="form-check-label" for="yes">
+					 	   네
+					  </label>
+					</div>
+				</div>
+			</div>
+			
 			<div>
 				<button
 					class="btn bg-warning text-white font-weight-bold float-right mt-3 mr-5"

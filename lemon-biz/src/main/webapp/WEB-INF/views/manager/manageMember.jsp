@@ -10,46 +10,55 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>부서 정보</strong>
+			<strong>사원 정보</strong>
 		</h4>
-		<div class="container-inner card-body">
+		
+		<div class="m-5">
+			<p class = "text-danger text-center">*그룹웨어 관리자 권한을 갖고있는 사원은 붉은색으로 표시</p>
 			<table class="table table-bordered" id="dataTable" width="100%"
 				cellspacing="0">
 				<thead>
 					<tr>
-						<th scope="col">부서 번호</th>
-						<th scope="col">상위 부서</th>
-						<th scope="col">부서명</th>
+						<th scope="col">사원 번호</th>
+						<th scope="col">이름</th>
+						<th scope="col">직급</th>
+						<th scope="col">부서</th>
 						<th scope="col"></th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${ deptList }" var="dept">
-						<tr>
-							<td>${ dept.key }</td>
-							<td>${ dept.refName }<c:if test="${ dept.ref != 0 }">
-									(${ dept.ref })
-								</c:if>
-							</td>
-							<td>${ dept.name }</td>
+					<c:forEach items="${ memberList }" var="member">
+						<tr
+							<c:if test="${ member.isManager eq 1 }">
+								class = "text-danger font-weight-bold"
+							</c:if>						
+						>
+							<td>${ member.memberId }</td>
+							<td>${ member.name }</td>
+							<td>${ member.rankName }</td>
+							<td>${ member.deptName }</td>
 							<td>
 								<a type="button" class="btn btn-outline-secondary"
-									href="${pageContext.request.contextPath}/manager/manageDept/update.do?key=${ dept.key }">수정</a>
+									href="${pageContext.request.contextPath}/manager/manageMember/detail.do?memberId=${ member.memberId }">상세보기</a>
 							</td>
-							<td>
+							<td>		
 								<a type="button" 
 								   class="btn btn-outline-danger"
-								   onclick="return confirm('정말 삭제 하시겠습니까 ?')"
-								   href="${pageContext.request.contextPath}/manager/manageDept/delete.do?key=${ dept.key }">삭제</a>
+								   onclick="return confirm('정말 퇴사처리 하시겠습니까 ?')"
+								   href="${pageContext.request.contextPath}/manager/manageMember/delete.do?memberId=${ member.memberId }">퇴사</a>
 							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 		</div>
+		
 	</div>
 </div>
 
+
+
+  
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp" />
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

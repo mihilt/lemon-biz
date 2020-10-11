@@ -49,7 +49,8 @@
 			dept_key = #{deptKey}, 
 			rank_key = #{rankKey}, 
 		    tel_num = #{telNum}, 
-		    address = #{address}
+		    address = #{address},
+		    is_manager = #{isManager}
 		where 
 			member_id = #{memberId}
 	</update>
@@ -62,5 +63,23 @@
 		where 
 			member_id = #{memberId}
 	</update>
+	
+	<select id="selectMemberList" resultType="member">
+ 		select 
+		    M.*,
+		    (select name from dept D where M.dept_key = D.key) "dept_name",
+		    (select name from rank R where M.rank_key = R.key) "rank_name"
+		from 
+		    member M
+		order by
+			rank_key
+	</select>
+	
+	<delete id="deleteMember">
+		delete from
+			member 
+		where 
+			member_id = #{memberId}
+	</delete>
 	
 </mapper>
