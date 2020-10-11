@@ -18,9 +18,11 @@
 	</h6>
 	<br />
 	<h6>
-		[]조원들 최근 것 pull한 것 같으면 member 테이블 DB에서 수정좀 하기 
+		[]조원들 최근 것 pull한 것 같으면 member 테이블 DB에서 수정좀 하기 z
 	</h6>
-	
+	<br />
+	<hr />
+	${ loginMember }
 			 
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

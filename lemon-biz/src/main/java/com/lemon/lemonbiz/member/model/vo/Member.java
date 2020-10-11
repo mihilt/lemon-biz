@@ -23,7 +23,7 @@ public class Member implements Serializable {
 	private String telNum;
 	private String address;
 	private String email;
-	private String isManager;
+	private int isManager;
 
 	private String deptName;
 	private String rankName;

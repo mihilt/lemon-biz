@@ -111,7 +111,7 @@
 		
       <!-- Divider -->
       <hr class="sidebar-divider">
-
+<c:if test="${ loginMember.isManager eq 1 }">
       <!-- 관리자 + 톱니바퀴 -->
       <div class="sidebar-heading text-white">
       <i class="fas fa-fw fa-cog"></i>
@@ -182,7 +182,7 @@
 
       <!-- Divider -->
       <hr class="sidebar-divider">
-	
+</c:if>	
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>

@@ -78,6 +78,25 @@
 				<input name="address" class="col-10 form-control" type="text"
 					value=${ member.address }>
 			</div>
+			<br />
+			<div class="mb-1 row mx-5">
+				<div class="col-2 pt-2 text-right">관리자 :</div>
+				<div class="col-10 pt-2">
+					<div class="form-check">
+					  <input class="form-check-input" type="radio" name="isManager" id="no" value="0" <c:if test="${ member.isManager eq 0 }">checked</c:if>>
+					  <label class="form-check-label" for="no">
+					    	아니오
+					  </label>
+					</div>
+					<div class="form-check">
+					  <input class="form-check-input" type="radio" name="isManager" id="yes" value="1" <c:if test="${ member.isManager eq 1 }">checked</c:if>>
+					  <label class="form-check-label" for="yes">
+					 	   네
+					  </label>
+					</div>
+				</div>
+			</div>
+			
 			<div>
 				<button
 					class="btn bg-warning text-white font-weight-bold float-right mt-3 mr-5"
