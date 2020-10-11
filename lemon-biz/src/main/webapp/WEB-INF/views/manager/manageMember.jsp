@@ -13,6 +13,7 @@
 			<strong>사원 정보</strong>
 		</h4>
 		<div class="container-inner card-body">
+			<p class = "text-danger text-center">*그룹웨어 관리자 권한을 갖고있는 사원은 붉은색으로 표시</p>
 			<table class="table">
 				<thead>
 					<tr>
@@ -26,7 +27,11 @@
 				</thead>
 				<tbody>
 					<c:forEach items="${ memberList }" var="member">
-						<tr>
+						<tr
+							<c:if test="${ member.isManager eq 1 }">
+								class = "text-danger font-weight-bold"
+							</c:if>						
+						>
 							<td>${ member.memberId }</td>
 							<td>${ member.name }</td>
 							<td>${ member.rankName }</td>

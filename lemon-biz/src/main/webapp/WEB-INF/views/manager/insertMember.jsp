@@ -14,7 +14,7 @@
 		</h4>
 		<div class="container-inner card-body">
 		
-			<h6 class="text-danger text-center mt-2 mb-4">*등록한 사원의 초기 비밀번호는 사원번호와 동일합니다</h6>
+			<h6 class="text-danger text-center mt-2 mb-4">*등록한 사원의 초기 비밀번호는 사원번호와 동일</h6>
 
 			<form class="mx-auto w-75" 
 			      method="post"
