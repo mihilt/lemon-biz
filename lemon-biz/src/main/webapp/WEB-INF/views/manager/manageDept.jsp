@@ -10,16 +10,18 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>부서 관리</strong>
+			<strong>부서 정보</strong>
 		</h4>
 		<div class="container-inner card-body">
-			<table class="table">
+			<table class="table table-bordered" id="dataTable" width="100%"
+				cellspacing="0">
 				<thead>
 					<tr>
 						<th scope="col">부서 번호</th>
 						<th scope="col">상위 부서</th>
 						<th scope="col">부서명</th>
-						<th scope="col">수정 /삭제</th>
+						<th scope="col"></th>
+						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -34,8 +36,12 @@
 							<td>
 								<a type="button" class="btn btn-outline-secondary"
 									href="${pageContext.request.contextPath}/manager/manageDept/update.do?key=${ dept.key }">수정</a>
-								<a type="button" class="btn btn-outline-danger"
-									href="${pageContext.request.contextPath}/manager/manageDept/delete.do?key=${ dept.key }">삭제</a>
+							</td>
+							<td>
+								<a type="button" 
+								   class="btn btn-outline-danger"
+								   onclick="return confirm('정말 삭제 하시겠습니까 ?')"
+								   href="${pageContext.request.contextPath}/manager/manageDept/delete.do?key=${ dept.key }">삭제</a>
 							</td>
 						</tr>
 					</c:forEach>

@@ -18,4 +18,10 @@ public interface MemberService {
 
 	int updateMember(Member member);
 
+	int updatePassword(Member loginMember);
+
+	List<Member> selectMemberList();
+
+	int deleteMember(Member member);
+
 }

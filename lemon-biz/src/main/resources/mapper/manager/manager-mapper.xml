@@ -4,4 +4,79 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="manager">
 
+	<insert id="insertRank">
+		insert into 
+			rank 
+		values(
+			seq_rank_key.nextval, 
+		    #{ name }
+		)
+	</insert>
+
+	<update id="updateRank">
+		update 
+			rank 
+		set 
+			name = #{ name } 
+		where 
+			key= #{ key }
+	</update>
+	
+
+	<delete id="deleteRank">
+		delete 
+			rank 
+		where 
+			key = #{ key }
+	</delete>
+	
+	<select id="selectOneDept" resultType="dept">
+        select
+			D.*,
+            (select name from dept M where D.ref = M.key) as "refName"
+		from
+			dept D
+		where key = #{ key }
+	</select>
+	
+	<select id="selectOneRefDept" resultType="dept">
+	
+		select
+			*
+		from
+			dept
+		where key = #{ ref }
+		
+	</select>
+	
+	<insert id="insertDept">
+		insert into 
+		    dept 
+		values(
+		    #{key},
+		    #{ref},
+		    #{name},
+		    nvl((select dept_level from dept where key = #{ref}) + 1,1)
+		)
+	</insert>
+	
+	<delete id="deleteDept">
+		delete 
+			dept 
+		where 
+			key = #{ key }
+	</delete>
+	
+	<update id="updateDept">
+		update 
+			dept 
+		set 
+			key = #{key}, 
+			ref = #{ref}, 
+			name = #{name},
+			dept_level = nvl((select dept_level from dept where key = #{ref}) + 1,1)
+		where 
+			key = #{key}
+	</update>
+	
 </mapper>

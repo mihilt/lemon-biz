@@ -51,4 +51,18 @@
 		<beans:property name="maxUploadSizePerFile" value="10485760"/>
 	</beans:bean>
 	
+	<!-- json bean 등록 -->
+	<beans:bean id="jsonView"
+				class="net.sf.json.spring.web.servlet.view.JsonView">
+			<beans:property name="contentType" value="application/json;charset=UTF-8"></beans:property>
+	</beans:bean>
+	<beans:bean id="viewResolver"
+				class="org.springframework.web.servlet.view.BeanNameViewResolver">
+			<beans:property name="order" value="1"/>
+	</beans:bean>
+	
+	
+	
+	
+	
 </beans:beans>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="calendar">
+
+	<select id="selectAllList" resultMap="calendarMap">
+		select
+			*
+		from
+			calendar
+	</select>
+	
+	<resultMap type="map" id="calendarMap">
+  		<!-- <id column="no" property="no"/> -->
+  		<result column="calendar_title" property="title"/>
+  		<result column="calendar_allday" property="allDay"/>
+  		<result column="calendar_start" property="start"/>
+  		<result column="calendar_end" property="end"/>
+  		<result column="calendar_content" property="type"/>
+  		<result column="calendar_type" property="content"/>
+  		<result column="calendar_color" property="color"/>
+  	</resultMap>
+
+	<insert id="enrollCalendar">
+		insert into 
+			calendar
+		values(
+			seq_calendar_no.nextval,
+			#{ title }, 
+			#{ allDay }, 
+			#{ startDate }, 
+			#{ endDate }, 
+			#{ type }, 
+			#{ content },
+			#{ color }
+		)
+	</insert>
+	
+	<update id="updateCalendar">
+		update
+			calendar
+		set
+			calendar_title = #{title},
+			calendar_allday = #{allDay},
+			calendar_start = #{startDate},
+			calendar_end = #{endDate},
+			calendar_content = #{type},
+			calendar_type = #{content},
+			calendar_color = #{color}
+		where
+			calendar_id = #{no}
+	</update>
+	
+	<delete id="deleteCalendar"> 
+		delete from
+			calendar
+		where 
+			calendar_id = #{no}
+	</delete>
+	
+</mapper>

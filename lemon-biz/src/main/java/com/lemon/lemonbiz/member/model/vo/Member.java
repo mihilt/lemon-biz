@@ -21,10 +21,10 @@ public class Member implements Serializable {
 	private int rankKey;
 	private String name;
 	private String telNum;
-	private String isManager;
-	private String idNum;
 	private String address;
-	private String gender;
-	private Date leaveDate;
 	private String email;
+	private int isManager;
+
+	private String deptName;
+	private String rankName;
 }
