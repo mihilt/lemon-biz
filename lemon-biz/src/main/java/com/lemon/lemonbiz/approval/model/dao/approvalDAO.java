@@ -19,4 +19,6 @@ public interface approvalDAO {
 
 	List<Member> selectMember(String param);
 
+	List<Member> joinMemberList(String param);
+
 }
