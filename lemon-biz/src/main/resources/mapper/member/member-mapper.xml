@@ -15,11 +15,71 @@
 	
 	<insert id="insertMember">
 		insert into 
-			member(member_id, password) 
+			member(member_id, password, name, dept_key, rank_key) 
 		values(
 			#{ memberId }, 
-			#{ password }
+			#{ password },
+			#{ name },
+			#{ deptKey },
+			#{ rankKey }
 		)
 	</insert>
+	
+	<select id="selectDeptList" resultType="dept">
+ 		select
+ 			D.*,(select V.name from dept V where key = D.ref) "ref_name"
+ 		from 
+ 			dept D
+        order by key
+	</select>
+	
+	<select id="selectRankList" resultType="rank">
+ 		select
+ 			*
+ 		from 
+ 			rank
+        order by key
+	</select>
+	
+	<update id="updateMember">
+		update 
+			member 
+		set 
+			name = #{name}, 
+			dept_key = #{deptKey}, 
+			rank_key = #{rankKey}, 
+		    tel_num = #{telNum}, 
+		    address = #{address},
+		    is_manager = #{isManager}
+		where 
+			member_id = #{memberId}
+	</update>
+	
+	<update id="updatePassword">
+		update 
+			member 
+		set 
+			password = #{password}
+		where 
+			member_id = #{memberId}
+	</update>
+	
+	<select id="selectMemberList" resultType="member">
+ 		select 
+		    M.*,
+		    (select name from dept D where M.dept_key = D.key) "dept_name",
+		    (select name from rank R where M.rank_key = R.key) "rank_name"
+		from 
+		    member M
+		order by
+			rank_key
+	</select>
+	
+	<delete id="deleteMember">
+		delete from
+			member 
+		where 
+			member_id = #{memberId}
+	</delete>
 	
 </mapper>

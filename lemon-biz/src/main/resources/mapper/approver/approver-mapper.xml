@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="approval">
+
+	<select id="selectDeptList" resultMap="deptMap">
+		select
+	    	*
+		from
+	    	dept
+		<where>
+	    	dept_level=1
+		</where>
+	</select>
+	
+	<select id="selectChild" resultMap="deptMap">
+		select
+			*
+		from
+			dept
+		where
+			dept_level=2
+	</select>
+	
+	<select id="selectChild2" resultMap="deptMap">
+		select
+			*
+		from
+			dept
+		where
+			dept_level=3
+	</select>
+	
+	<select id="memberList" resultMap="memberMap">
+		SELECT
+		*
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE D.NAME = #{node}
+	</select>
+	
+	<select id="selectMember" resultMap="memberMap">
+		SELECT
+		*
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE D.NAME = #{param}
+	</select>
+	
+	<select id="joinMemberList" resultMap="memberMap">
+		SELECT
+		*
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE M.NAME = #{param}
+	</select>
+	
+	
+  <resultMap type="dept" id="deptMap">
+  
+  </resultMap>
+  
+  <resultMap type="member" id="memberMap">
+  
+  </resultMap>
+
+</mapper>

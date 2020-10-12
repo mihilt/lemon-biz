@@ -19,11 +19,12 @@ public class Member implements Serializable {
 	private String password;
 	private int deptKey;
 	private int rankKey;
-	private int name;
+	private String name;
 	private String telNum;
-	private String isManager;
-	private String idNum;
 	private String address;
-	private String gender;
-	private Date leaveDate;
+	private String email;
+	private int isManager;
+
+	private String deptName;
+	private String rankName;
 }
