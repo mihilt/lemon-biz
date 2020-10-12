@@ -5,6 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
+<jsp:useBean id="now" class="java.util.Date" />
 <fmt:requestEncoding value="utf-8" /> <!-- 한글깨짐 방지  -->
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
@@ -20,10 +21,8 @@
 <div>
 	<h2>일반결제 작성</h2>
 
-	<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  결제라인 추가
-</button>
+	
+
 
 <!-- Modal -->
 <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -165,16 +164,151 @@
     </div>
   </div>
 </div>
+</div>
 	
 	<!-- Modal end -->
 	
-
+	<div class="container">
+		<div class="container-fluid">
+		<!-- 게시글 -->
+ 			<div class="col-lg-12">			
+             	<div class="card" >
+                	<div class="card-header py-3" align="center">	
+						<table class="table table text-center">
+					    <tr>
+					    	<td><strong>기안담당</strong>
+								<c:choose>
+								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
+								<c:otherwise>${ loginMember.memberName }</c:otherwise>
+								</c:choose>
+							</td>
+								
+							<td><strong>기안부서</strong>
+								<c:choose>
+								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
+								<c:otherwise>${ loginMember.deptName }</c:otherwise>
+								</c:choose>
+							</td>
+							
+							<td>
+							<strong>기안일자</strong>
+							<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
+							<c:out value="${today}"/>
+							</td>
+						</tr>
+					    </table>
+					</div>
+					<div>
+					    <!-- 결제칸 -->
+					    <input type="hidden" id="authDept1" name="authDept1" value="">
+						<input type="hidden" id="authDept2" name="authDept2" value="">
+						<input type="hidden" id="authDept3" name="authDept3" value="">
+						
+					    <table>
+						<tr><td width="50%">
+						<div class="float-center">
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+							  결제라인 추가
+							</button>
+						</div>
+						</td>
+						<td width="50%">
+						<div class="float-right">
+						<table border="1" style="display: inline-block">
+						
+						<tr>
+						<td class="tt" rowspan='3'>결재</td>
+						<td class="aa">작성자</td>
+						
+						<td id="authRank1" class="aa">
+						<c:choose>
+							<c:when test="${ empty apvReWrite.rank_name1 }"><c:if test="${ not empty apvReWrite.member_name1 }">입사대기</c:if></c:when>
+							<c:otherwise>${ apvReWrite.rank_name1 }</c:otherwise>
+						</c:choose>
+						</td>
+						
+						<td id="authRank2" class="aa">
+						<c:choose>
+							<c:when test="${ empty apvReWrite.rank_name2 }"><c:if test="${ not empty apvReWrite.member_name2 }">입사대기</c:if></c:when>
+							<c:otherwise>${ apvReWrite.rank_name2 }</c:otherwise>
+						</c:choose>
+						</td>
+						
+						<td id="authRank3" class="aa">
+						<c:choose>
+							<c:when test="${ empty apvReWrite.rank_name3 }"><c:if test="${ not empty apvReWrite.member_name3 }">입사대기</c:if></c:when>
+							<c:otherwise>${ apvReWrite.rank_name3 }</c:otherwise>
+						</c:choose>
+						</td>
+						
+						<%-- <td id="authRank1" class="aa">${ apvReWrite.rank_name1 }</td>
+						<td id="authRank2" class="aa">${ apvReWrite.rank_name2 }</td>
+						<td id="authRank3" class="aa">${ apvReWrite.rank_name3 }</td> --%>
+						</tr>
+						
+						
+						<tr>
+						
+						<td>${ sessionScope.member.member_name }</td>
+						<td id="authName1">${ apvReWrite.member_name1 }</td>
+						<td id="authName2">${ apvReWrite.member_name2 }</td>
+						<td id="authName3">${ apvReWrite.member_name3 }</td>
+						
+						</tr>
+						
+						<tr>
+						
+						<td>${ sessionScope.member.member_id }</td>
+						<td id="apv_mem1">${ apvReWrite.approval_mem1 }</td>
+						<td id="apv_mem2">${ apvReWrite.approval_mem2 }</td>
+						<td id="apv_mem3">${ apvReWrite.approval_mem3 }</td>
+						
+						</tr>
+						
+						</table>
+						</div>
+						
+						</table>
+						</div>
+					
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	
-
+	
+	
+	
+	
+	
+	
 </div>
+
+
+
 
 <script>
 /*=================================== 결제라인추가 script start ====================================*/
+	$(document).ready(function() {
+		MIN_NUM = 1;
+		MAX_NUM = 3;
+
+		for(var i = MIN_NUM; i <= MAX_NUM ; i++) {
+
+			if($(document).find('#authRank'+i+'').text().trim() != ''){
+		    	$('#rank_'+i+'').text($(opener.document).find('#authRank'+i+'').text());
+		    	$('#name_'+i+'').text($(opener.document).find('#authName'+i+'').text());
+		    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').val());
+		    	$('#memId_'+i+'').text($(opener.document).find('#apv_mem'+i+'').text());
+				$('#del_'+i+'').html('<a class="xBtn" onclick="delLine('+i+')">[ X ]</a>');
+				$('#order_'+i+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+i+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+i+')">▼</a>&nbsp;');
+				$('#'+i+'').val('exist');
+			}
+		}
+	})
+	
 	$("#appr").jstree({
 	  "plugins": ["wholerow","types","themes","html_data"],
 	  "themes" : {            
@@ -184,6 +318,7 @@
 
 	}).bind('select_node.jstree',function(e,data){
 
+		console.log(data.node.text);
 		$.ajax({
 			type: "GET",
 			url : "${pageContext.request.contextPath}/approval/approvalSelect.do",
@@ -242,10 +377,8 @@
 		}
 		
 		
- 		MIN_NUM = 1;
-		MAX_NUM = 5;
 		var trArr = $('#finalList > tr');
-		var cnt = 4; 
+		var cnt = 3; 
 		
 		
 		for(var j = MIN_NUM; j <= MAX_NUM; j++) {
@@ -253,12 +386,12 @@
 				alert('이미 추가되어있는 결제자 입니다.');
 				return;	
 			}
-			/* if(trArr[j-1].value != 'exist') {
+			if(trArr[j-1].value != 'exist') {
 				cnt--;
-			} */ 
+			} 
 		}
 		
-		if(cnt==5) {
+		if(cnt==3) {
 			alert('결제자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
 			return;
 		}
@@ -290,9 +423,10 @@
 		if(deptName == null) {
 			deptName = '발령대기';
 		}
-
+		
 		for(var i=0; i<trArr.length; i++ ) {
 
+			if($('#'+(i+1)+'').val() != 'exist'){
 			$('#memId_'+(i+1)+'').text(memberId);
 			$('#dept_'+(i+1)+'').text(deptName);
 			$('#name_'+(i+1)+'').text(memberName);
@@ -304,7 +438,31 @@
 
 			return;
 		}
+
+
 	 }
+	}
+
+	
+	function delLine(i){
+		 
+		 if($('#'+(i+1)+'').val() == 'exist'){
+			 alert('차순 결재자가 있습니다.');
+			 return;
+		 }else{
+			$('#'+i+'').val(null); 
+			$('#dept_'+i+'').text('');
+			$('#dept_'+i+'').val('');
+			$('#name_'+i+'').text('');
+			$('#rank_'+i+'').text('');
+			$('#memId_'+i+'').text('');
+			
+			$('#del_'+i+'').html('');
+			$('#order_'+i+'').html('');
+		 }
+		 
+	 }
+	 
 	 function searchName(){
 		 var searchN = $('#searchN').val();
 		 $('#searchN').val('');
@@ -360,7 +518,58 @@
 			}
 	 }
 
+	 function upBtn(i){
+		 
+			if(i == MIN_NUM){
+				return;
+			}
+			 
+			var dept = $('#dept_'+(i-1)+'').text();
+			var name = $('#name_'+(i-1)+'').text();
+			var rank = $('#rank_'+(i-1)+'').text();
+			var memId = $('#memId_'+(i-1)+'').text();
+			
+			$('#dept_'+(i-1)+'').text($('#dept_'+i+'').text());
+			$('#name_'+(i-1)+'').text($('#name_'+i+'').text());
+			$('#rank_'+(i-1)+'').text($('#rank_'+i+'').text());
+			$('#memId_'+(i-1)+'').text($('#memId_'+i+'').text());
+			
+			$('#dept_'+i+'').text(dept);
+			$('#name_'+i+'').text(name);
+			$('#rank_'+i+'').text(rank);
+			$('#memId_'+i+'').text(memId);
+			 
+		 }
+
+	 function dnBtn(i){
+
+			if(i == MAX_NUM){
+				return;
+			}
+			 
+			var dept = $('#dept_'+(i+1)+'').text();
+			var name = $('#name_'+(i+1)+'').text();
+			var rank = $('#rank_'+(i+1)+'').text();
+			var memId = $('#memId_'+(i+1)+'').text();
+			
+			$('#dept_'+(i+1)+'').text($('#dept_'+i+'').text());
+			$('#name_'+(i+1)+'').text($('#name_'+i+'').text());
+			$('#rank_'+(i+1)+'').text($('#rank_'+i+'').text());
+			$('#memId_'+(i+1)+'').text($('#memId_'+i+'').text());
+			
+			$('#dept_'+i+'').text(dept);
+			$('#name_'+i+'').text(name);
+			$('#rank_'+i+'').text(rank);
+			$('#memId_'+i+'').text(memId);
+
+	 }
 	 /*=================================== 결제라인추가 script end ====================================*/
+	 
+	 
+	 
+	 
+	 
+	 
 </script>
 
 
