@@ -49,7 +49,7 @@
 		<div class="card">
 		  <h4 id="m-title" class="card-header"><strong>메일 작성</strong></h4>
 			<div class="container-inner card-body">
-		  <form action="${pageContext.request.contextPath}/mail/mailSend" method="post">
+		  <form action="${pageContext.request.contextPath}/mail/mailForm.do" method="post">
 		  <div class="form-group row">
 		    <label for="mFrom" class="col-sm-1 col-form-label">작성자</label>
 		    <div class="col-sm-9">
@@ -120,7 +120,7 @@
 		      <div class="modal-body">
 		        <p id="multiple-ok" style="display:'inline-block'">복수 개의 파일 선택이 가능합니다.</p>
 		    <div class="add-file">
-		        <input type="file" name="add-attach1" id="add-attach1" multiple/>
+		        <input type="file" name="add-attach" id="add-attach" multiple/>
 			</div>
 		      </div>
 		      <div class="modal-footer">
@@ -205,6 +205,15 @@ $(document).ready(function() {
 		}
 	});
 
+	/* 여기서부터 파일 관련 */
+	var files = [];
+	var fileCount = 0;
+
+
+
+
+
+	
 </script>
 </html> 
 
