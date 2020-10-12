@@ -158,14 +158,24 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" onclick="apply()">저장하기</button>
       </div>
     </div>
   </div>
 </div>
 </div>
-	
+
+
+
+
+
+
+
+
+
+
+
 	<!-- Modal end -->
 	
 	<div class="container">
@@ -179,7 +189,7 @@
 					    	<td><strong>기안담당</strong>
 								<c:choose>
 								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
-								<c:otherwise>${ loginMember.memberName }</c:otherwise>
+								<c:otherwise>${ loginMember.Name }</c:otherwise>
 								</c:choose>
 							</td>
 								
@@ -199,7 +209,9 @@
 					    </table>
 					</div>
 					<div>
-					    <!-- 결제칸 -->
+					
+					
+					    <!-- ================결제칸=============== -->
 					    <input type="hidden" id="authDept1" name="authDept1" value="">
 						<input type="hidden" id="authDept2" name="authDept2" value="">
 						<input type="hidden" id="authDept3" name="authDept3" value="">
@@ -222,10 +234,7 @@
 						<td class="aa">작성자</td>
 						
 						<td id="authRank1" class="aa">
-						<c:choose>
-							<c:when test="${ empty apvReWrite.rank_name1 }"><c:if test="${ not empty apvReWrite.member_name1 }">입사대기</c:if></c:when>
-							<c:otherwise>${ apvReWrite.rank_name1 }</c:otherwise>
-						</c:choose>
+						
 						</td>
 						
 						<td id="authRank2" class="aa">
@@ -250,7 +259,7 @@
 						
 						<tr>
 						
-						<td>${ sessionScope.member.member_name }</td>
+						<td>${ loginMember.name }</td>
 						<td id="authName1">${ apvReWrite.member_name1 }</td>
 						<td id="authName2">${ apvReWrite.member_name2 }</td>
 						<td id="authName3">${ apvReWrite.member_name3 }</td>
@@ -259,7 +268,7 @@
 						
 						<tr>
 						
-						<td>${ sessionScope.member.member_id }</td>
+						<td>${ loginMember.memberId }</td>
 						<td id="apv_mem1">${ apvReWrite.approval_mem1 }</td>
 						<td id="apv_mem2">${ apvReWrite.approval_mem2 }</td>
 						<td id="apv_mem3">${ apvReWrite.approval_mem3 }</td>
@@ -271,7 +280,43 @@
 						
 						</table>
 						</div>
-					
+						<!-- ==============결제칸 끝============== -->
+						<!-- 폼 내용 -->
+						
+						<form id="sendApv" action="${ pageContext.request.contextPath }/approval" method="POST" enctype="multipart/form-data"> <!-- ============================================================================================================================================================= -->
+							<input type="hidden" id="authId1" name="approval_mem1" >
+							<input type="hidden" id="authId2" name="approval_mem2" >
+							<input type="hidden" id="authId3" name="approval_mem3" >
+							<input type="hidden" id="apvCateGo" name="approval_cate" value="1">
+							<input type="hidden" id="approval_cc" name="approval_cc" value="${ apvReWrite.approval_cc }">
+							
+							&nbsp;제목 : <input class="form-control" id="approval_title" type="text" name="approval_title" value="${ apvReWrite.approval_title }">
+							<br>
+							
+							<div>
+								<textarea id="summernote" class="form-control" name="approval_content"  cols="120" rows="18" 
+		      							  style="width:100%; resize:none" >${ apvReWrite.approval_content }</textarea> <br>
+							</div>
+							
+							
+							<label for="file">첨부:</label>
+							<input type="file" name="file" value="${ apvReWrite.approval_filepath }"/>
+							<hr>
+						                 
+						</form>
+						
+						<!-- 폼 내용 end -->
+						
+						<div class="container" align="center">
+						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
+						<button class="btn btn-outline-primary" onclick="sendApv()">제출하기</button>
+						<c:if test="${ isReturn != 1 }">
+							<button class="btn btn-outline-primary" onclick="tempchk()" >저장하기</button>
+						</c:if>
+						<div><br></div>
+						</div>
+						
+						
 					</div>
 				</div>
 			</div>
@@ -563,6 +608,26 @@
 			$('#memId_'+i+'').text(memId);
 
 	 }
+
+	function apply(){
+
+		for(var i = MIN_NUM; i <= MAX_NUM ; i++){
+			 
+			$(document).find('#authName'+i).text($('#name_'+i).text());
+			$(document).find('#authRank'+i).text($('#rank_'+i).text());
+			$(document).find('#authDept'+i).val($('#dept_'+i).text());
+			$(document).find('#authId'+i).val($('#memId_'+i).text());
+			$(document).find('#apv_mem'+i).text($('#memId_'+i).text());
+
+			 $('#exampleModal').modal('hide');
+			 			
+
+		 }
+
+	}
+
+
+	 
 	 /*=================================== 결제라인추가 script end ====================================*/
 	 
 	 
