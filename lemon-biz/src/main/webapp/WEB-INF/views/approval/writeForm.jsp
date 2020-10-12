@@ -5,24 +5,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
+<jsp:useBean id="now" class="java.util.Date" />
 <fmt:requestEncoding value="utf-8" /> <!-- 한글깨짐 방지  -->
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
 
 <style>
-
-.modal-dialog.modal-fullsize {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-.modal-content.modal-fullsize {
-  height: auto;
-  min-height: 100%;
-  border-radius: 0; 
-}
 
 
 
@@ -31,15 +20,13 @@
 
 <div>
 	<h2>일반결제 작성</h2>
+
 	
-	<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  결제라인 추가
-</button>
+
 
 <!-- Modal -->
 <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog" style="max-width: 90%;" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">결제라인 추가</h5>
@@ -79,7 +66,7 @@
         
         <!-- printList Form -->
       
-		<div class="container col-5" style="height:400px; margin: 0px; overflow-y:auto;">
+		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
     	<h5>결제자 선택</h5>
     		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
     			<div class="row" style="margin: 5px 5px"> 
@@ -124,14 +111,10 @@
     	
     	
       	<!-- selectMember Form-->
-		<div class="container col-5" style="height:400px; margin: 0px; overflow-y:auto;">
+		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
     	<h5>결제자 선택</h5>
-    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
-    			<div class="row" style="margin: 5px 5px"> 
-    			<label>성명</label>
-    			<input type="text" id="searchN"/>
-    			<button class="btn btn-outline-primary" id="searchNm" onclick="searchName()">검색</button>
-    			</div>
+    		<div id="apprst" style="margin: 5px; padding: 5px; border:1px solid lightgray; height:360px;">
+    			
     	
     			<div class="row" style="margin: 5px 5px">
 			<table>
@@ -163,13 +146,14 @@
 		    	</tbody>
     
     		</table>
-			</div>
+    			</div>
     
     		</div>
     	</div>
       	
       	
       	<!-- selectMember Form end-->
+      	
     
 
       </div>
@@ -180,14 +164,151 @@
     </div>
   </div>
 </div>
+</div>
+	
+	<!-- Modal end -->
+	
+	<div class="container">
+		<div class="container-fluid">
+		<!-- 게시글 -->
+ 			<div class="col-lg-12">			
+             	<div class="card" >
+                	<div class="card-header py-3" align="center">	
+						<table class="table table text-center">
+					    <tr>
+					    	<td><strong>기안담당</strong>
+								<c:choose>
+								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
+								<c:otherwise>${ loginMember.memberName }</c:otherwise>
+								</c:choose>
+							</td>
+								
+							<td><strong>기안부서</strong>
+								<c:choose>
+								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
+								<c:otherwise>${ loginMember.deptName }</c:otherwise>
+								</c:choose>
+							</td>
+							
+							<td>
+							<strong>기안일자</strong>
+							<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
+							<c:out value="${today}"/>
+							</td>
+						</tr>
+					    </table>
+					</div>
+					<div>
+					    <!-- 결제칸 -->
+					    <input type="hidden" id="authDept1" name="authDept1" value="">
+						<input type="hidden" id="authDept2" name="authDept2" value="">
+						<input type="hidden" id="authDept3" name="authDept3" value="">
+						
+					    <table>
+						<tr><td width="50%">
+						<div class="float-center">
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+							  결제라인 추가
+							</button>
+						</div>
+						</td>
+						<td width="50%">
+						<div class="float-right">
+						<table border="1" style="display: inline-block">
+						
+						<tr>
+						<td class="tt" rowspan='3'>결재</td>
+						<td class="aa">작성자</td>
+						
+						<td id="authRank1" class="aa">
+						<c:choose>
+							<c:when test="${ empty apvReWrite.rank_name1 }"><c:if test="${ not empty apvReWrite.member_name1 }">입사대기</c:if></c:when>
+							<c:otherwise>${ apvReWrite.rank_name1 }</c:otherwise>
+						</c:choose>
+						</td>
+						
+						<td id="authRank2" class="aa">
+						<c:choose>
+							<c:when test="${ empty apvReWrite.rank_name2 }"><c:if test="${ not empty apvReWrite.member_name2 }">입사대기</c:if></c:when>
+							<c:otherwise>${ apvReWrite.rank_name2 }</c:otherwise>
+						</c:choose>
+						</td>
+						
+						<td id="authRank3" class="aa">
+						<c:choose>
+							<c:when test="${ empty apvReWrite.rank_name3 }"><c:if test="${ not empty apvReWrite.member_name3 }">입사대기</c:if></c:when>
+							<c:otherwise>${ apvReWrite.rank_name3 }</c:otherwise>
+						</c:choose>
+						</td>
+						
+						<%-- <td id="authRank1" class="aa">${ apvReWrite.rank_name1 }</td>
+						<td id="authRank2" class="aa">${ apvReWrite.rank_name2 }</td>
+						<td id="authRank3" class="aa">${ apvReWrite.rank_name3 }</td> --%>
+						</tr>
+						
+						
+						<tr>
+						
+						<td>${ sessionScope.member.member_name }</td>
+						<td id="authName1">${ apvReWrite.member_name1 }</td>
+						<td id="authName2">${ apvReWrite.member_name2 }</td>
+						<td id="authName3">${ apvReWrite.member_name3 }</td>
+						
+						</tr>
+						
+						<tr>
+						
+						<td>${ sessionScope.member.member_id }</td>
+						<td id="apv_mem1">${ apvReWrite.approval_mem1 }</td>
+						<td id="apv_mem2">${ apvReWrite.approval_mem2 }</td>
+						<td id="apv_mem3">${ apvReWrite.approval_mem3 }</td>
+						
+						</tr>
+						
+						</table>
+						</div>
+						
+						</table>
+						</div>
+					
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	
 	
-
+	
+	
+	
+	
 </div>
 
+
+
+
 <script>
-/* tree script */
+/*=================================== 결제라인추가 script start ====================================*/
+	$(document).ready(function() {
+		MIN_NUM = 1;
+		MAX_NUM = 3;
+
+		for(var i = MIN_NUM; i <= MAX_NUM ; i++) {
+
+			if($(document).find('#authRank'+i+'').text().trim() != ''){
+		    	$('#rank_'+i+'').text($(opener.document).find('#authRank'+i+'').text());
+		    	$('#name_'+i+'').text($(opener.document).find('#authName'+i+'').text());
+		    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').val());
+		    	$('#memId_'+i+'').text($(opener.document).find('#apv_mem'+i+'').text());
+				$('#del_'+i+'').html('<a class="xBtn" onclick="delLine('+i+')">[ X ]</a>');
+				$('#order_'+i+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+i+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+i+')">▼</a>&nbsp;');
+				$('#'+i+'').val('exist');
+			}
+		}
+	})
+	
 	$("#appr").jstree({
 	  "plugins": ["wholerow","types","themes","html_data"],
 	  "themes" : {            
@@ -197,6 +318,7 @@
 
 	}).bind('select_node.jstree',function(e,data){
 
+		console.log(data.node.text);
 		$.ajax({
 			type: "GET",
 			url : "${pageContext.request.contextPath}/approval/approvalSelect.do",
@@ -207,15 +329,9 @@
 			contentType: "application/json; charset=utf-8;",
 			success : function(data) {
 
-				/* var obj = JSON.stringify(data);
-				// JSON.stringify은 json문자열을 String문자열로 변환시켜줌.
-				반대로 JSON.parse 는 json문자열로 변경시킴*/
-
 				$("#tbody").empty();
 				
 				printList(data);
-				
-				
 				return;
 					
 			},
@@ -228,14 +344,15 @@
 	function printList(data) {
 
 		for(var i in data.memberList) {
-/* 			console.log(data.memberList[1].name);
-			console.log(data.memberList); */
+ 			console.log(data.memberList[1].name);
+			console.log(data.memberList);
 			
 			if(data.memberList[i].deptName==null){
-				data.memberList[i].deptName="발령대기"
+				data.memberList[i].deptName='발령대기';
 			}
 			if(data.memberList[i].memberId==null) {
-				data.memberList[i].deptName="입사대기"}
+				data.memberList[i].deptName='입사대기';
+			}
 			
 			$('<tr></tr>').css('cursor','pointer').attr('class','memberList')
 						  .attr('onclick','selectMember("'+data.memberList[i].memberId+'")')
@@ -260,10 +377,8 @@
 		}
 		
 		
- 		MIN_NUM = 1;
-		MAX_NUM = 5;
 		var trArr = $('#finalList > tr');
-		var cnt = 4; 
+		var cnt = 3; 
 		
 		
 		for(var j = MIN_NUM; j <= MAX_NUM; j++) {
@@ -271,12 +386,12 @@
 				alert('이미 추가되어있는 결제자 입니다.');
 				return;	
 			}
-			/* if(trArr[j-1].value != 'exist') {
+			if(trArr[j-1].value != 'exist') {
 				cnt--;
-			} */ 
+			} 
 		}
 		
-		if(cnt==5) {
+		if(cnt==3) {
 			alert('결제자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
 			return;
 		}
@@ -294,7 +409,7 @@
 			},
 			success : function(data) {
 
-				var result = JSON.parse(data);
+				var result = data;
 				rankKey = result.rankKey;
 				deptName = result.deptName;
 				memberName = result.memberName;
@@ -308,9 +423,10 @@
 		if(deptName == null) {
 			deptName = '발령대기';
 		}
-
+		
 		for(var i=0; i<trArr.length; i++ ) {
 
+			if($('#'+(i+1)+'').val() != 'exist'){
 			$('#memId_'+(i+1)+'').text(memberId);
 			$('#dept_'+(i+1)+'').text(deptName);
 			$('#name_'+(i+1)+'').text(memberName);
@@ -322,12 +438,138 @@
 
 			return;
 		}
-		
-	} 
-	
 
-		
-/* tree end */
+
+	 }
+	}
+
+	
+	function delLine(i){
+		 
+		 if($('#'+(i+1)+'').val() == 'exist'){
+			 alert('차순 결재자가 있습니다.');
+			 return;
+		 }else{
+			$('#'+i+'').val(null); 
+			$('#dept_'+i+'').text('');
+			$('#dept_'+i+'').val('');
+			$('#name_'+i+'').text('');
+			$('#rank_'+i+'').text('');
+			$('#memId_'+i+'').text('');
+			
+			$('#del_'+i+'').html('');
+			$('#order_'+i+'').html('');
+		 }
+		 
+	 }
+	 
+	 function searchName(){
+		 var searchN = $('#searchN').val();
+		 $('#searchN').val('');
+		 
+		 var param = searchN;
+		 $.ajax({
+             type: 'POST',
+             url: "${ pageContext.request.contextPath }/approval/searchName.do",
+             data: {
+				param : param
+             },
+             dataType : "json",
+             success: function(data) {
+					if(data == 'error'){
+						return;
+					}
+					var obj = data.joinMemberList; 
+					//var obj = data; <-- 이렇게 해버리면 불러올때 obj[i].joinMemberList.name 하면 undifine뜸
+					//java에서 정의한 ArrayList명을 적어준다. 중요..안그럼 불러오기 까다로워짐
+					
+					$('#tbody').empty();
+					
+					MprintList(obj);
+
+					return;
+
+			},
+			error: function(){
+				return;
+			}
+		});
+	 }
+	 
+	 function MprintList(obj){
+		 	
+			for(var i in obj){
+			
+			
+			if(obj[i].deptName == null){
+				obj[i].deptName = '발령대기'
+			}
+				if(obj[i].rankKey == null){
+					obj[i].rankKey = '입사대기'	
+				}
+				$('<tr></tr>').css('cursor','pointer').attr('class','memberList')
+							  .attr('onclick','selectMember('+obj[i].memberId+')')
+							  .attr('id', obj[i].memberId).appendTo('#tbody');
+				$('<td></td>').text(obj[i].deptName).appendTo('#'+obj[i].memberId+'');
+				$('<td></td>').text(obj[i].name).appendTo('#'+obj[i].memberId+'');
+				$('<td></td>').text(obj[i].rankKey).appendTo('#'+obj[i].memberId+'');
+				$('<td></td>').text(obj[i].memberId).appendTo('#'+obj[i].memberId+'');
+				
+			}
+	 }
+
+	 function upBtn(i){
+		 
+			if(i == MIN_NUM){
+				return;
+			}
+			 
+			var dept = $('#dept_'+(i-1)+'').text();
+			var name = $('#name_'+(i-1)+'').text();
+			var rank = $('#rank_'+(i-1)+'').text();
+			var memId = $('#memId_'+(i-1)+'').text();
+			
+			$('#dept_'+(i-1)+'').text($('#dept_'+i+'').text());
+			$('#name_'+(i-1)+'').text($('#name_'+i+'').text());
+			$('#rank_'+(i-1)+'').text($('#rank_'+i+'').text());
+			$('#memId_'+(i-1)+'').text($('#memId_'+i+'').text());
+			
+			$('#dept_'+i+'').text(dept);
+			$('#name_'+i+'').text(name);
+			$('#rank_'+i+'').text(rank);
+			$('#memId_'+i+'').text(memId);
+			 
+		 }
+
+	 function dnBtn(i){
+
+			if(i == MAX_NUM){
+				return;
+			}
+			 
+			var dept = $('#dept_'+(i+1)+'').text();
+			var name = $('#name_'+(i+1)+'').text();
+			var rank = $('#rank_'+(i+1)+'').text();
+			var memId = $('#memId_'+(i+1)+'').text();
+			
+			$('#dept_'+(i+1)+'').text($('#dept_'+i+'').text());
+			$('#name_'+(i+1)+'').text($('#name_'+i+'').text());
+			$('#rank_'+(i+1)+'').text($('#rank_'+i+'').text());
+			$('#memId_'+(i+1)+'').text($('#memId_'+i+'').text());
+			
+			$('#dept_'+i+'').text(dept);
+			$('#name_'+i+'').text(name);
+			$('#rank_'+i+'').text(rank);
+			$('#memId_'+i+'').text(memId);
+
+	 }
+	 /*=================================== 결제라인추가 script end ====================================*/
+	 
+	 
+	 
+	 
+	 
+	 
 </script>
 
 

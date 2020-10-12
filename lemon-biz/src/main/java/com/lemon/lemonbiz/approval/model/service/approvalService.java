@@ -22,5 +22,7 @@ public interface approvalService {
 
 	List<Member> selectMember(String param);
 
+	List<Member> joinMemberlist(String param);
+
 	
 }

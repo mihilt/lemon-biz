@@ -19,6 +19,8 @@ import com.lemon.lemonbiz.approval.model.service.approvalService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 
+import net.sf.json.JSONObject;
+
 
 @Controller
 @RequestMapping("/approval")
@@ -64,16 +66,34 @@ public class ApprovalController {
 	}
 	
 	@RequestMapping(value="/selectMember.do",
-					method=RequestMethod.POST)
+					method=RequestMethod.POST,
+					produces = "application/json; charset=utf8")
 	@ResponseBody
-	public Map<String,Object> selectMember(@RequestParam("param") String param,
+	public Map<String, Object> selectMember(@RequestParam("param") String param,
 							   Model model) {
 		log.debug("11");
 		log.debug("param = {}",param);
 		Map<String, Object> map = new HashMap<>();
 		
 		List<Member> selectMember = approvalService.selectMember(param);
+		
 		map.put("selectMember",selectMember);
+		
+		return map;
+	}
+	
+	
+	@RequestMapping(value="/searchName.do",
+					method=RequestMethod.POST,
+					produces="application/json; charset=utf8")
+	@ResponseBody
+	public Map<String, Object> joinMemberList(@RequestParam("param") String param) {
+		
+		log.debug("param ={}", param);
+		Map<String, Object> map = new HashMap<>();
+		List<Member> joinMemberList = approvalService.joinMemberlist(param);
+		
+		map.put("joinMemberList", joinMemberList);
 		
 		return map;
 	}
