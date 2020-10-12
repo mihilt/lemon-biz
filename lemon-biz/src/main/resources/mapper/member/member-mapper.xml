@@ -49,7 +49,8 @@
 			dept_key = #{deptKey}, 
 			rank_key = #{rankKey}, 
 		    tel_num = #{telNum}, 
-		    address = #{address}
+		    address = #{address},
+		    is_manager = #{isManager}
 		where 
 			member_id = #{memberId}
 	</update>
@@ -71,7 +72,14 @@
 		from 
 		    member M
 		order by
-			member_id
+			rank_key
 	</select>
+	
+	<delete id="deleteMember">
+		delete from
+			member 
+		where 
+			member_id = #{memberId}
+	</delete>
 	
 </mapper>

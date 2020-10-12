@@ -47,7 +47,9 @@ public class ManagerController {
 	}
 
 	@RequestMapping(value = "/insertDept.do", method = RequestMethod.GET)
-	public void insertDeptGet() {
+	public void insertDeptGet(Model model) {
+		List<Dept> deptList = memberService.selectDeptList();
+		model.addAttribute("deptList", deptList);
 		
 	}
 	
@@ -150,7 +152,6 @@ public class ManagerController {
 		List<Dept> deptList = memberService.selectDeptList();
 		List<Rank> rankList = memberService.selectRankList();
 		
-		
 		model.addAttribute("deptList", deptList);
 		model.addAttribute("rankList", rankList);
 		model.addAttribute("member", member);
@@ -167,6 +168,44 @@ public class ManagerController {
 		
 		return "redirect:/manager/manageMember/detail.do?memberId="+member.getMemberId();
 		
+	}
+	
+	@RequestMapping(value = "/manageMember/delete.do", method = RequestMethod.GET)
+	public String manageMemberLeave(Model model, Member member, RedirectAttributes redirectAttr) {
+		int result = 0;
+		try {
+			result = memberService.deleteMember(member);
+		}catch(Exception e) {
+			log.error("Exception={}"+e);
+		}
+		
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "퇴사 처리를 완료하였습니다." : "오류가 발생했습니다.");
+		
+		return "redirect:/manager/manageMember.do";
+	}
+	
+	@RequestMapping(value = "manageDept/update.do", method = RequestMethod.GET)
+	public String updateDeptGet(Dept getDept, Model model) {
+		
+		Dept dept = managerService.selectOneDept(getDept);
+		List<Dept> deptList = memberService.selectDeptList();
+		
+		model.addAttribute("deptList", deptList);
+		model.addAttribute("dept", dept);
+		
+		return "forward:/WEB-INF/views/manager/updateDept.jsp";
+	}
+	
+	@RequestMapping(value = "manageDept/update.do", method = RequestMethod.POST)
+	public String updateDeptPost(Dept dept, Model model, RedirectAttributes redirectAttr) {
+		
+		log.debug("dept={}", dept);
+		
+		int result = managerService.updateDept(dept);
+		
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "부서 수정을 완료하였습니다." : "부서 수정에 오류가 발생했습니다.");
+		
+		return "redirect:/manager/manageDept/update.do?key="+dept.getKey();
 	}
 	
 }

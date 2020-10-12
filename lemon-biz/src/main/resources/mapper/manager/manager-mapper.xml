@@ -31,10 +31,11 @@
 	</delete>
 	
 	<select id="selectOneDept" resultType="dept">
-		select
-			*
+        select
+			D.*,
+            (select name from dept M where D.ref = M.key) as "refName"
 		from
-			dept
+			dept D
 		where key = #{ key }
 	</select>
 	
@@ -65,5 +66,17 @@
 		where 
 			key = #{ key }
 	</delete>
+	
+	<update id="updateDept">
+		update 
+			dept 
+		set 
+			key = #{key}, 
+			ref = #{ref}, 
+			name = #{name},
+			dept_level = nvl((select dept_level from dept where key = #{ref}) + 1,1)
+		where 
+			key = #{key}
+	</update>
 	
 </mapper>

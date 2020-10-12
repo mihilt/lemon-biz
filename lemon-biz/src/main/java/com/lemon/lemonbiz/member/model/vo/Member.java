@@ -22,9 +22,8 @@ public class Member implements Serializable {
 	private String name;
 	private String telNum;
 	private String address;
-	private Date leaveDate;
 	private String email;
-	private String isManager;
+	private int isManager;
 
 	private String deptName;
 	private String rankName;
