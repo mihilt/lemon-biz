@@ -189,6 +189,15 @@
 	        <artifactId>spring-security-test</artifactId>
 	        <version>${org.springframework.security-version}</version>		
 	    </dependency>
+
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.8</version>
+		</dependency>
+		
+
 	    
 		<!-- gmail 발송 관련 라이브러리입니다. -->
 		<dependency>
@@ -244,12 +253,7 @@
 			<version>1.0.2</version>
 		</dependency>
 		
-		<!-- httpMessageConverter 사용 ajax:json처리 -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.5</version>
-		</dependency>
+		
 
 	</dependencies>
     <build>
