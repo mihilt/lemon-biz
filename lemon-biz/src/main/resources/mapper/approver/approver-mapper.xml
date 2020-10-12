@@ -48,6 +48,14 @@
 		WHERE D.NAME = #{param}
 	</select>
 	
+	<select id="joinMemberList" resultMap="memberMap">
+		SELECT
+		*
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE M.NAME = #{param}
+	</select>
+	
 	
   <resultMap type="dept" id="deptMap">
   

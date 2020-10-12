@@ -12,18 +12,6 @@
 
 <style>
 
-.modal-dialog.modal-fullsize {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-.modal-content.modal-fullsize {
-  height: auto;
-  min-height: 100%;
-  border-radius: 0; 
-}
-
 
 
 </style>
@@ -31,7 +19,7 @@
 
 <div>
 	<h2>일반결제 작성</h2>
-	
+
 	<!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
   결제라인 추가
@@ -39,7 +27,7 @@
 
 <!-- Modal -->
 <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog" style="max-width: 90%;" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">결제라인 추가</h5>
@@ -79,7 +67,7 @@
         
         <!-- printList Form -->
       
-		<div class="container col-5" style="height:400px; margin: 0px; overflow-y:auto;">
+		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
     	<h5>결제자 선택</h5>
     		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
     			<div class="row" style="margin: 5px 5px"> 
@@ -124,14 +112,10 @@
     	
     	
       	<!-- selectMember Form-->
-		<div class="container col-5" style="height:400px; margin: 0px; overflow-y:auto;">
+		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
     	<h5>결제자 선택</h5>
-    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
-    			<div class="row" style="margin: 5px 5px"> 
-    			<label>성명</label>
-    			<input type="text" id="searchN"/>
-    			<button class="btn btn-outline-primary" id="searchNm" onclick="searchName()">검색</button>
-    			</div>
+    		<div id="apprst" style="margin: 5px; padding: 5px; border:1px solid lightgray; height:360px;">
+    			
     	
     			<div class="row" style="margin: 5px 5px">
 			<table>
@@ -163,13 +147,14 @@
 		    	</tbody>
     
     		</table>
-			</div>
+    			</div>
     
     		</div>
     	</div>
       	
       	
       	<!-- selectMember Form end-->
+      	
     
 
       </div>
@@ -181,13 +166,15 @@
   </div>
 </div>
 	
+	<!-- Modal end -->
 	
+
 	
 
 </div>
 
 <script>
-/* tree script */
+/*=================================== 결제라인추가 script start ====================================*/
 	$("#appr").jstree({
 	  "plugins": ["wholerow","types","themes","html_data"],
 	  "themes" : {            
@@ -207,15 +194,9 @@
 			contentType: "application/json; charset=utf-8;",
 			success : function(data) {
 
-				/* var obj = JSON.stringify(data);
-				// JSON.stringify은 json문자열을 String문자열로 변환시켜줌.
-				반대로 JSON.parse 는 json문자열로 변경시킴*/
-
 				$("#tbody").empty();
 				
 				printList(data);
-				
-				
 				return;
 					
 			},
@@ -228,14 +209,15 @@
 	function printList(data) {
 
 		for(var i in data.memberList) {
-/* 			console.log(data.memberList[1].name);
-			console.log(data.memberList); */
+ 			console.log(data.memberList[1].name);
+			console.log(data.memberList);
 			
 			if(data.memberList[i].deptName==null){
-				data.memberList[i].deptName="발령대기"
+				data.memberList[i].deptName='발령대기';
 			}
 			if(data.memberList[i].memberId==null) {
-				data.memberList[i].deptName="입사대기"}
+				data.memberList[i].deptName='입사대기';
+			}
 			
 			$('<tr></tr>').css('cursor','pointer').attr('class','memberList')
 						  .attr('onclick','selectMember("'+data.memberList[i].memberId+'")')
@@ -294,7 +276,7 @@
 			},
 			success : function(data) {
 
-				var result = JSON.parse(data);
+				var result = data;
 				rankKey = result.rankKey;
 				deptName = result.deptName;
 				memberName = result.memberName;
@@ -322,12 +304,63 @@
 
 			return;
 		}
-		
-	} 
-	
+	 }
+	 function searchName(){
+		 var searchN = $('#searchN').val();
+		 $('#searchN').val('');
+		 
+		 var param = searchN;
+		 $.ajax({
+             type: 'POST',
+             url: "${ pageContext.request.contextPath }/approval/searchName.do",
+             data: {
+				param : param
+             },
+             dataType : "json",
+             success: function(data) {
+					if(data == 'error'){
+						return;
+					}
+					var obj = data.joinMemberList; 
+					//var obj = data; <-- 이렇게 해버리면 불러올때 obj[i].joinMemberList.name 하면 undifine뜸
+					//java에서 정의한 ArrayList명을 적어준다. 중요..안그럼 불러오기 까다로워짐
+					
+					$('#tbody').empty();
+					
+					MprintList(obj);
 
-		
-/* tree end */
+					return;
+
+			},
+			error: function(){
+				return;
+			}
+		});
+	 }
+	 
+	 function MprintList(obj){
+		 	
+			for(var i in obj){
+			
+			
+			if(obj[i].deptName == null){
+				obj[i].deptName = '발령대기'
+			}
+				if(obj[i].rankKey == null){
+					obj[i].rankKey = '입사대기'	
+				}
+				$('<tr></tr>').css('cursor','pointer').attr('class','memberList')
+							  .attr('onclick','selectMember('+obj[i].memberId+')')
+							  .attr('id', obj[i].memberId).appendTo('#tbody');
+				$('<td></td>').text(obj[i].deptName).appendTo('#'+obj[i].memberId+'');
+				$('<td></td>').text(obj[i].name).appendTo('#'+obj[i].memberId+'');
+				$('<td></td>').text(obj[i].rankKey).appendTo('#'+obj[i].memberId+'');
+				$('<td></td>').text(obj[i].memberId).appendTo('#'+obj[i].memberId+'');
+				
+			}
+	 }
+
+	 /*=================================== 결제라인추가 script end ====================================*/
 </script>
 
 
