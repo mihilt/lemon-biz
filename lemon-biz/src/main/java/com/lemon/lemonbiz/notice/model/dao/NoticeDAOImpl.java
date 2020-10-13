@@ -16,8 +16,8 @@ public class NoticeDAOImpl implements NoticeDAO {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public List<Notice> selectNoticeList(Member loginMember) {
-		return sqlSession.selectList("notice.selectNoticeList", loginMember);
+	public List<Notice> selectNoticeUncheckedList(Member loginMember) {
+		return sqlSession.selectList("notice.selectNoticeUncheckedList", loginMember);
 	}
 
 	@Override
@@ -25,4 +25,14 @@ public class NoticeDAOImpl implements NoticeDAO {
 		return sqlSession.insert("notice.insertNotice", notice);
 	}
 
+	@Override
+	public int checkNotice(Notice notice) {
+		return sqlSession.update("notice.checkNotice", notice);
+	}
+
+	@Override
+	public List<Notice> selectNoticeList(Member loginMember) {
+		return sqlSession.selectList("notice.selectNoticeList", loginMember);
+	}
+	
 }

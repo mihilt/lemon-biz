@@ -30,7 +30,7 @@
 								</td>
 								<td>
 			                      <i class="fas ${ notice.icon } text-${notice.color}"></i>
-								  <a href="${ notice.address }">${ notice.content }</a>
+								  <a href="${pageContext.request.contextPath}${ notice.address }">${ notice.content }</a>
 								</td>
 							</tr>
 					</c:forEach>

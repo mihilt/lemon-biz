@@ -16,13 +16,23 @@ public class NoticeServiceImpl implements NoticeService {
 	private NoticeDAO noticeDAO;
 
 	@Override
-	public List<Notice> selectNoticeList(Member loginMember) {
-		return noticeDAO.selectNoticeList(loginMember);
+	public List<Notice> selectNoticeUncheckedList(Member loginMember) {
+		return noticeDAO.selectNoticeUncheckedList(loginMember);
 	}
 
 	@Override
 	public int insertNotice(Notice notice) {
 		return noticeDAO.insertNotice(notice);
+	}
+
+	@Override
+	public int checkNotice(Notice notice) {
+		return noticeDAO.checkNotice(notice);
+	}
+
+	@Override
+	public List<Notice> selectNoticeList(Member loginMember) {
+		return noticeDAO.selectNoticeList(loginMember);
 	}
 	
 }

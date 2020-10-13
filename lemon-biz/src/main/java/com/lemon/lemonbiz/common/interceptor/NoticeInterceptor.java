@@ -35,9 +35,9 @@ public class NoticeInterceptor extends HandlerInterceptorAdapter {
 		if(loginMember != null) {
 			
 			log.debug("새로운 알람 불러오기 실행\n");
-			List<Notice> noticeList = noticeService.selectNoticeList(loginMember);
+			List<Notice> noticeUncheckedList = noticeService.selectNoticeUncheckedList(loginMember);
 			
-			request.setAttribute("noticeList", noticeList);
+			request.setAttribute("noticeUncheckedList", noticeUncheckedList);
 		}
 	}
 

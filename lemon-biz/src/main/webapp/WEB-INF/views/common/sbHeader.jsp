@@ -226,13 +226,13 @@
               </div>
             </li>
 
-            <!-- Nav Item - Alerts -->
+            <!-- 알림 시작 -->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <c:if test="${ fn:length(noticeList) gt 0 }">
-                <span class="badge badge-danger badge-counter">${fn:length(noticeList) }</span>
+                <c:if test="${ fn:length(noticeUncheckedList) gt 0 }">
+                <span class="badge badge-danger badge-counter">${fn:length(noticeUncheckedList) }</span>
                 </c:if>
               </a>
               <!-- Dropdown - Alerts -->
@@ -240,9 +240,12 @@
                 <h6 class="dropdown-header">
        				알림
                 </h6>
-                <c:if test="${ fn:length(noticeList) gt 0 }">
-	               	<c:forEach items="${ noticeList }" var="notice">
-		                <a class="dropdown-item d-flex align-items-center" href="${pageContext.request.contextPath}${ notice.address }">
+                <c:if test="${ fn:length(noticeUncheckedList) gt 0 }">
+	               	<c:forEach items="${ noticeUncheckedList }" var="notice">
+		                <div class="dropdown-item d-flex align-items-center" 
+		                     <%-- href="${pageContext.request.contextPath}${ notice.address }" --%>
+           				     style="cursor: pointer;"
+		                     onclick="checkNotice(${notice.key}, '${pageContext.request.contextPath}${ notice.address }')">
 		                  <div class="mr-3">
 		                    <div class="icon-circle bg-${ notice.color }">
 		                      <i class="fas ${ notice.icon } text-white"></i>
@@ -254,12 +257,24 @@
 		                    </div>
 		                    ${ notice.content }
 		                  </div>
-		                </a>
+		                </div>
 					</c:forEach>
 				</c:if>
-				<c:if test="${ fn:length(noticeList) eq 0 }">
+				<script>
+ 					function checkNotice(key, address){
+ 						$.ajax({
+ 							url : "${ pageContext.request.contextPath }/notice/checkNotice.do?key=" + key,
+ 							method : "GET",
+ 							success : function(){
+	 							location.href=address;
+ 							}
+ 						});
+ 	 				};
+				</script>
+				<c:if test="${ fn:length(noticeUncheckedList) eq 0 }">
 					<p class="text-center font-weight-bold m-2">미확인된 알림이 없습니다.</p>
 				</c:if>
+				<!-- 알림 예제들 -->
                 <!-- <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-primary">
