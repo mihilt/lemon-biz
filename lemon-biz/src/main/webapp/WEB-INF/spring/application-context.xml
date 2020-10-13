@@ -67,6 +67,9 @@
 		  id="transactionManager">
 		  <property name="dataSource" ref="dataSource"/>
 	</bean>
+	
+	
+	
 	<!-- @Transactional 어노테이션 등록 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 

@@ -6,8 +6,6 @@
 
 <fmt:requestEncoding value="utf-8"/>
 
-<body id="page-top">
-
   <!-- Page Wrapper -->
   <div id="wrapper">
 
@@ -68,13 +66,14 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Mail</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/mail/mailSend">메일 작성</a>
-            <a class="collapse-item" href="">전체 메일</a>
-            <a class="collapse-item" href="">받은 메일함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/mail/mailList">전체 메일함</a>
+            <a class="collapse-item" href="">부서 메일함</a>
             <a class="collapse-item" href="">보낸 메일함</a>
-            <a class="collapse-item" href="">임시 보관함</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">My Mail</h6>
+            <a class="collapse-item" href="">중요 메일함 </a>
             <a class="collapse-item" href="">첨부 메일함</a>
+            <a class="collapse-item" href="">임시 보관함</a>
             <a class="collapse-item" href="">내게 쓴 메일함</a>
           </div>
         </div>
@@ -110,7 +109,7 @@
 		
       <!-- Divider -->
       <hr class="sidebar-divider">
-
+<c:if test="${ loginMember.isManager eq 1 }">
       <!-- 관리자 + 톱니바퀴 -->
       <div class="sidebar-heading text-white">
       <i class="fas fa-fw fa-cog"></i>
@@ -127,17 +126,26 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">사원 관리</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">사원 등록</a>
-            <a class="collapse-item" href="cards.html">사원 정보</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageMember.do">사원 정보</a>
           </div>
         </div>
       </li>
       
       <!-- 부서 관리 -->
       <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/manager/manageDept.do">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#dept" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-users"></i>
-          <span>부서 관리</span></a>
+          <span>부서 관리</span>
+        </a>
+        <div id="dept" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">부서 관리</h6>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertDept.do">부서 생성</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageDept.do">부서 정보</a>
+          </div>
+        </div>
       </li>
+      
       
       <!-- 직급 관리 -->
       <li class="nav-item">
@@ -148,8 +156,8 @@
         <div id="position" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">직급 관리</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">직급 생성</a>
-            <a class="collapse-item" href="cards.html">직급 정보</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertRank.do">직급 생성</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageRank.do">직급 정보</a>
           </div>
         </div>
       </li>
@@ -163,16 +171,16 @@
         <div id="approval-manage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">전자결재 관리</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">무튼 관리</a>
-            <a class="collapse-item" href="cards.html">문서 생성</a>
-            <a class="collapse-item" href="cards.html">문서 ㅁㄴㅇ</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">무튼 관리</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">문서 생성</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">문서 어쩌구저쩌구하기</a>
           </div>
         </div>
       </li>
 
       <!-- Divider -->
       <hr class="sidebar-divider">
-	
+</c:if>	
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -228,7 +236,7 @@
               <!-- Dropdown - Alerts -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
-                  Alerts Center
+       				알림
                 </h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
@@ -328,8 +336,14 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">${ loginMember.memberId }번 사원이긴 한데 나중에 이름으로</span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">${ loginMember.name }</span>
+                <div class="img-profile rounded-circle" 
+                	 style="background-size: 32px 32px;
+                	 		background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
+                	 "
+                >
+                
+                </div>
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -337,13 +351,9 @@
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   	내 정보 보기
                 </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                	메뉴 예시
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  	메뉴 예시
+                <a class="dropdown-item" href="${pageContext.request.contextPath}/member/updatePassword.do">
+                  <i class="fas fa-unlock-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                	비밀번호 변경
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -357,12 +367,6 @@
 
         </nav>
         
-        <!-- Core plugin JavaScript-->
-		<script src="${pageContext.request.contextPath }/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
-		
-		<!-- Custom scripts for all pages-->
-		<script src="${pageContext.request.contextPath }/resources/js/sb-admin-2.min.js"></script>
-
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
