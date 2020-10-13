@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.lemon.lemonbiz.calendar.model.vo.Calendar;
+import com.lemon.lemonbiz.calendar.model.vo.NewDates;
 
 @Repository
 public class CalendarDAOImpl implements CalendarDAO {
@@ -38,6 +39,12 @@ public class CalendarDAOImpl implements CalendarDAO {
 	public int deleteCalendar(int no) {
 		
 		return sqlSession.delete("calendar.deleteCalendar",no);
+	}
+
+	@Override
+	public int dragNdropCalendar(NewDates newDates) {
+		
+		return sqlSession.update("calendar.dragNdropCalendar",newDates);
 	}
 
 }

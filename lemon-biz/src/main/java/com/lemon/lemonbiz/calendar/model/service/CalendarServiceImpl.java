@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lemon.lemonbiz.calendar.model.dao.CalendarDAO;
 import com.lemon.lemonbiz.calendar.model.vo.Calendar;
+import com.lemon.lemonbiz.calendar.model.vo.NewDates;
 
 @Service
 public class CalendarServiceImpl implements CalendarService {
@@ -37,6 +38,12 @@ public class CalendarServiceImpl implements CalendarService {
 	public int deleteCalendar(int no) {
 		
 		return calendarDAO.deleteCalendar(no);
+	}
+
+	@Override
+	public int dragNdropCalendar(NewDates newDates) {
+		
+		return calendarDAO.dragNdropCalendar(newDates);
 	}
 
 }

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lemon.lemonbiz.calendar.model.service.CalendarService;
 import com.lemon.lemonbiz.calendar.model.vo.Calendar;
+import com.lemon.lemonbiz.calendar.model.vo.NewDates;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -89,6 +90,26 @@ public class CalendarController {
 			System.out.println("업데이트 실패");
 			return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);			
 		}
+	}
+	
+	@PostMapping("/dragNdropCalendar.do")
+	public ResponseEntity<?> dragNdropCalendar(@RequestBody NewDates newDates){
+		System.out.println("newDates = " + newDates);
+		
+		Map<String , Object> map = new HashMap<>();
+		
+		int result = calendarService.dragNdropCalendar(newDates);
+		
+		if(result > 0) {			
+			map.put("msg","dragNdrop업데이트 성공!");
+			System.out.println("dragNdrop 업데이트 성공");
+			return new ResponseEntity<>(map,HttpStatus.OK);			
+		} else {
+			map.put("msg","dragNdrop업데이트 실패!");
+			System.out.println("dragNdrop 업데이트 실패");
+			return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);			
+		}
+		
 	}
 	
 	@DeleteMapping("/deleteCalendar.do/{no}")
