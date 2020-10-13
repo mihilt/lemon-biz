@@ -33,7 +33,6 @@ public class ManagerController {
 		List<Dept> deptList = memberService.selectDeptList();
 		List<Rank> rankList = memberService.selectRankList();
 		
-		
 		model.addAttribute("deptList", deptList);
 		model.addAttribute("rankList", rankList);
 		

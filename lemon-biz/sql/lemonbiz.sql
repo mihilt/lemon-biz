@@ -25,6 +25,5 @@ create sequence seq_calendar_no;
 
 commit;
 
-select * from calendar;
+select * from member;
 
-drop table calendar;

@@ -18,6 +18,8 @@ import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
+import com.lemon.lemonbiz.notice.model.service.NoticeService;
+import com.lemon.lemonbiz.notice.model.vo.Notice;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +31,9 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService memberService;
+
+	@Autowired
+	private NoticeService noticeService;
 	
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
@@ -60,6 +65,20 @@ public class MemberController {
 		
 		String msg = result > 0 ? "사원 등록에 성공했습니다." : "사원 등록에 실패했습니다.";
 		redirectAttr.addFlashAttribute("msg", msg);
+		
+		//알림 등록
+		Notice notice = new Notice();
+		notice.setMemId(member.getMemberId());
+		notice.setContent("입사를 환영합니다.<br>마이페이지에 가서 추가 정보를 입력해주세요.");
+		notice.setAddress("/member/myPage.do");
+		notice.setIcon("fa-laugh-beam");
+		notice.setColor("success");
+		int noticeResult = noticeService.insertNotice(notice);
+		
+		notice.setMemId(member.getMemberId());
+		notice.setContent("입사를 환영합니다.<br>비밀번호를 변경 해주세요.");
+		notice.setAddress("/member/updatePassword.do");
+		noticeResult = noticeService.insertNotice(notice);
 		
 		return "redirect:/manager/insertMember.do";
 	}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notice">
+
+	<select id="selectNoticeUncheckedList" resultType="notice">
+ 		select 
+ 			* 
+ 		from 
+ 			notice 
+ 		where 
+ 			mem_id = #{memberId} and is_checked = 0
+ 		order by 
+ 			notice_date
+	</select>
+	
+	<insert id="insertNotice">
+		insert into 
+			notice
+		values(
+			seq_notice_key.nextval, 
+			#{memId},
+			#{content},
+			sysdate,
+			default,
+			#{address}, 
+			#{icon},
+			#{color}
+		)
+	</insert>
+	
+	<update id="checkNotice">
+	
+		update 
+			notice 
+		set 
+			is_checked = 1 
+		where 
+			key = #{key}
+		
+	</update>
+
+	<select id="selectNoticeList" resultType="notice">
+ 		select 
+ 			* 
+ 		from 
+ 			notice 
+ 		where 
+ 			mem_id = #{memberId}
+ 		order by 
+ 			notice_date
+	</select>
+	
+</mapper>
