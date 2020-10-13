@@ -141,6 +141,13 @@
 		   			<span>20/10/07</span></div>
 		   </div>
 		   	<!-- 여기까지 한 줄 -->
+		   	<br />
+		   	 <div align="center" id="btns">
+		      <input type="submit" value="메일 발송" id="send-mail" class="btn btn-success">
+		      <input type="button" value="파일 첨부" id="attach-to" class="btn btn-info" data-target="#attachModal"/>
+		      <input type="button" value="임시 저장" id="content-temp" class="btn btn-secondary"/>
+		      <input type="button" value="작성 취소" id="content-reset" class="btn btn-danger"/>
+		    </div>
 		  </form>
 
 		     	 </div>
