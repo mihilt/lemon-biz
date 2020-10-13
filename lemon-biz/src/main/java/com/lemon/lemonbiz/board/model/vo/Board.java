@@ -20,7 +20,7 @@ import lombok.ToString;
 public class Board implements Serializable{
 	
 	private  int key;
-	private String memID;
+	private String memId;
 	private int categKey;
 	private String title;
 	private String content;
