@@ -1,5 +1,7 @@
 package com.lemon.lemonbiz.common.vo;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +19,6 @@ public class Attachment {
 	private int mailKey;
 	private String originName;
 	private String reName;
+	private Date uploadDate;
+	private int downloadCnt;
 }

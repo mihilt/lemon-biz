@@ -20,9 +20,9 @@ tr[data-no]{
 <script>
 $(function(){
 	$("tr[data-no]").click(function(){
-		var no = $(this).attr("data-no");
-		console.log(no);
-		location.href = "${ pageContext.request.contextPath }/board/boardDetail.do?no=" + no;
+		var key = $(this).attr("data-no");
+		console.log(key);
+		location.href = "${ pageContext.request.contextPath }/board/boardDetail.do?key=" + key;
 	});
 });
 
@@ -35,70 +35,71 @@ function goBoardForm(){
 <section id="board-container" class="container">
 	<input type="button" value="글쓰기" id="btn-add" class="btn btn-outline-warning" onclick="goBoardForm();"/>
 	<table id="tbl-board" class="table table-striped table-hover">
-	<strong style=font-size:25px;  >전사 게시판</strong>
+	<strong style=font-size:25px;>전사 게시판</strong>
 		<tr>
 			<th>번호</th>
 			<th>제목</th>
 			<th>작성자</th>
 			<th>작성일</th>
-			<th>첨부파일</th> <!-- 첨부파일 있을 경우, /resources/images/file.png 표시 width: 16px-->
 			<th>조회수</th>
 		</tr>
 		<c:forEach items="${ list }" var="post">
 		<tr data-no="${ post.key }">
 			<td>${ post.key }</td>
-			<td>${ post.title }</td>
-			<td>${ post.memId }</td>
-			<td><fmt:formatDate value="${ post.postDate }" pattern="yyyy/MM/dd"/></td>
-			<td>
+			<td>${ post.title } 
 				<c:if test="${ post.fileCount gt 0 }">
 					<img src="${ pageContext.request.contextPath }/resources/images/file.png"
 						 style="width:16px;" />
 				</c:if>
 			</td>
+			<td>${ post.memId }</td>
+			<td><fmt:formatDate value="${ post.postDate }" pattern="yyyy/MM/dd"/></td>
 			<td>${ post.readCount }</td>
 		</tr>
 		</c:forEach>
 	</table>
-<form class="navbar-form" role="search">
-	
-            <div class="input-group">
-            <div class="input-group-btn search-panel">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    	<span id="search_concept">제목</span> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#contains">작성자</a></li>
-                      <li><a href="#its_equal">It's equal</a></li>
-                      <li><a href="#greather_than">Greather than ></a></li>
-                      <li><a href="#less_than">Less than < </a></li>
-                      <li class="divider"></li>
-                      <li><a href="#all">Anything</a></li>
-                    </ul>
-                </div>
-                <input type="text" class="form-control" placeholder="search" name="q" >
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                </div>
-            </div>
-            </form>   
-            <br>
-            <div class="container">
+<form id="form1" name="form1"  method="post">
+
+	<div class="container">
+
+	    <div class="container-fluid" align="center">
+	    
+			<input type="hidden" checked="checked" name="searchType" value="brdtitle" <c:if test="${fn:indexOf(searchVO.searchType, 'brdtitle')!=-1}">checked="checked"</c:if>/>
+			
+			<div class="group" style="align:center;">
+			
+			<select class="btn btn-outline-warning dropdown-toggle" id="condition">
+			<option name="searchType" value="brdtitle" <c:if test="${fn:indexOf(searchVO.searchType, 'brdtitle')!=-1}">checked="checked"</c:if>>제목</option>
+			<option name="searchType" value="brdmemo" <c:if test="${fn:indexOf(searchVO.searchType, 'brdmemo')!=-1}">checked="checked"</c:if>>내용</option>
+			</select>
+			
+			<input type="text" class="btn btn-outline-warning" name="searchKeyword" maxlength="50" value='<c:out value="${searchVO.searchKeyword}"/>' onkeydown="if(event.keyCode == 13) { fn_formSubmit();}">
+			<button name="btn_search" value="검색" class="btn btn-outline-warning" type="button" onclick="fn_formSubmit()"><i class="fas fa-search fa-sm"></i></button>
+		    <br>
+		     <div class="container" >
 			<div class="row">
 				<div class="col">
 					
 					<ul class="pagination">
-						<li class="page-item"><a class="page-link" href="#">Previous</a></li>
+						<!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
 						<li class="page-item"><a class="page-link" href="#">1</a></li>
 						<li class="page-item"><a class="page-link" href="#">2</a></li>
 						<li class="page-item"><a class="page-link" href="#">3</a></li>
 						<li class="page-item"><a class="page-link" href="#">4</a></li>
 						<li class="page-item"><a class="page-link" href="#">5</a></li>
-						<li class="page-item"><a class="page-link" href="#">Next</a></li>
+						<li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+						${pagebar}
 					</ul>
+					
 				</div>
 			</div>
 		</div>
+		     </div>
+		</div>
+	</div>
+	</form>	
+            <br>
+           
 </section> 
 
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
