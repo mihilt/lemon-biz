@@ -83,7 +83,7 @@
       
       <!-- 일정 관리 -->
       <li class="nav-item">
-        <a class="nav-link" href="일정관리">
+        <a class="nav-link" href="${pageContext.request.contextPath}/calendar/calendar.do">
           <i class="fas fa-fw fa-calendar-alt"></i>
           <span>일정관리</span></a>
       </li>

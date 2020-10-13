@@ -43,8 +43,6 @@
 		<script src="${pageContext.request.contextPath }/resources/js/dataTables.bootstrap4.min.js"></script>
 		<script src="${pageContext.request.contextPath }/resources/js/datatables-demo.js"></script>
   
-        
-        
         <!-- custom css -->
         <link href="${pageContext.request.contextPath }/resources/css/custom.css" rel="stylesheet">
         
