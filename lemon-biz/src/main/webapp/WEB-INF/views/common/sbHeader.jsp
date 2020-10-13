@@ -108,10 +108,10 @@
           </div>
         </div>
       </li>
-		
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
-<c:if test="${ loginMember.isManager eq 1 }">
+	<c:if test="${ loginMember.isManager eq 1 }">
       <!-- 관리자 + 톱니바퀴 -->
       <div class="sidebar-heading text-white">
       <i class="fas fa-fw fa-cog"></i>

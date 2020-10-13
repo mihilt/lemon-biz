@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.mail.model.dao.MailDAO;
 import com.lemon.lemonbiz.mail.model.vo.Mail;
+import com.lemon.lemonbiz.member.model.vo.Member;
 
 @Transactional(propagation = Propagation.REQUIRED, 
 isolation = Isolation.READ_COMMITTED,
@@ -50,18 +51,19 @@ public class MailServiceImpl implements MailService{
 		return result;
 	}
 
-	@Transactional(readOnly = true)
-	@Override
-	public Mail selectOneMail(int key) {
-
-		Mail mail = mailDAO.selectOneMail(key);
-		
-
-		List<Attachment> attachList = mailDAO.selectAttachList(key);
-		mail.setAttachList(attachList);
-		
-		return mail;
-	}
+	/*
+	 * @Transactional(readOnly = true)
+	 * 
+	 * @Override public Mail selectOneMail(int key) {
+	 * 
+	 * Mail mail = mailDAO.selectOneMail(key);
+	 * 
+	 * 
+	 * List<Attachment> attachList = mailDAO.selectAttachList(key);
+	 * mail.setAttachList(attachList);
+	 * 
+	 * return mail; }
+	 */
 
 	@Override
 	public Mail selectOneMailCollection(int key) {
@@ -74,8 +76,18 @@ public class MailServiceImpl implements MailService{
 	}
 
 	@Override
-	public List<Mail> selectMailDept(String memberId) {
-		return mailDAO.selectMailDept(memberId);
+	public List<Mail> selectMailDept(Member member) {
+		return mailDAO.selectMailDept(member);
+	}
+
+	@Override
+	public List<Mail> selectMyMail(Member loginMember) {
+		return mailDAO.selectMyMail(loginMember);
+	}
+
+	@Override
+	public List<Mail> selectStarredMail(Member loginMember) {
+		return mailDAO.selectStarredMail(loginMember);
 	}
 
 }
