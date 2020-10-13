@@ -1,3 +1,5 @@
+<%@page import="com.lemon.lemonbiz.notice.model.vo.Notice"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -6,7 +8,6 @@
 <fmt:requestEncoding value="utf-8"/>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
-
 	<h1>Main Page</h1>
 	<br />
 	<h6>
@@ -14,11 +15,18 @@
 	</h6>
 	<br />
 	<h6>
-		[]조원들 최근 것 pull한 것 같으면 member 테이블 DB에서 수정좀 하기
+		[]조원들 최근 것 pull한 것 같으면 member 테이블 DB에서 수정좀 하기z
 	</h6>
 	<br />
 	<hr />
 	${ loginMember }
-			 
+	<hr />
+	${ noticeList }
+	<hr />
+	<c:forEach items="${ noticeList }" var="notice">
+		${ notice.key } : ${ notice.content } <br />
+	</c:forEach>
+
+	
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
