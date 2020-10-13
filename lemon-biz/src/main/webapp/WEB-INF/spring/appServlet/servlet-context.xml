@@ -36,6 +36,11 @@
 			<exclude-mapping path="/member/memberLogin.do"/>
 			<beans:bean class="com.lemon.lemonbiz.common.interceptor.LoginCheckInterceptor" />
 		</interceptor>
+		<interceptor>
+			<mapping path="/**"/>
+			<exclude-mapping path="/member/memberLogin.do"/>
+			<beans:bean class="com.lemon.lemonbiz.common.interceptor.NoticeInterceptor" />
+		</interceptor>
 	</interceptors>
 	
 	<!-- aop 어노테이션 등록 처리 -->

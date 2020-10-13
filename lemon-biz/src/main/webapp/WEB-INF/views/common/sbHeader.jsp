@@ -6,8 +6,6 @@
 
 <fmt:requestEncoding value="utf-8"/>
 
-<body id="page-top">
-
   <!-- Page Wrapper -->
   <div id="wrapper">
 
@@ -238,7 +236,7 @@
               <!-- Dropdown - Alerts -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
-                  Alerts Center
+       				알림
                 </h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
