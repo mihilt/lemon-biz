@@ -20,5 +20,8 @@ public class Notice {
 	private String content;
 	private Date noticeDate;
 	private int isChecked;
+	private String address;
+	private String icon;
+	private String color;
 	
 }
