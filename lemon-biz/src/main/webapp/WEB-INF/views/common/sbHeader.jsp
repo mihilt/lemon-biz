@@ -6,8 +6,6 @@
 
 <fmt:requestEncoding value="utf-8"/>
 
-<body id="page-top">
-
   <!-- Page Wrapper -->
   <div id="wrapper">
 
