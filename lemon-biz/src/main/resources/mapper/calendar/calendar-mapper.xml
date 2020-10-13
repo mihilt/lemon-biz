@@ -52,6 +52,16 @@
 			calendar_id = #{no}
 	</update>
 	
+	<update id="dragNdropCalendar">
+		update
+			calendar
+		set
+			calendar_start = #{startDate},
+			calendar_end = #{endDate}
+		where
+			calendar_id = #{no}
+	</update>
+	
 	<delete id="deleteCalendar"> 
 		delete from
 			calendar
