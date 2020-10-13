@@ -6,7 +6,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.lemon.lemonbiz.dept.model.vo.dept;
+
+import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.member.model.vo.Dept;
+
 
 @Repository
 public class approvalDAOImpl implements approvalDAO {
@@ -15,18 +18,33 @@ public class approvalDAOImpl implements approvalDAO {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public List<dept> deptList() {
+	public List<Dept> deptList() {
 		return sqlSession.selectList("approval.selectDeptList");
 	}
 
 	@Override
-	public List<dept> child() {
+	public List<Dept> child() {
 		return sqlSession.selectList("approval.selectChild");
 	}
 
 	@Override
-	public List<dept> child2() {
+	public List<Dept> child2() {
 		return sqlSession.selectList("approval.selectChild2");
+	}
+
+	@Override
+	public List<Member> memberList(String node) {
+		return sqlSession.selectList("approval.memberList",node);
+	}
+
+	@Override
+	public List<Member> selectMember(String param) {
+		return sqlSession.selectList("approval.selectMember",param);
+	}
+
+	@Override
+	public List<Member> joinMemberList(String param) {
+		return sqlSession.selectList("approval.joinMemberList",param);
 	}
 	
 	

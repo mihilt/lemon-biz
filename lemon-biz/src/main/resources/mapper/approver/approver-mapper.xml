@@ -32,8 +32,36 @@
 			dept_level=3
 	</select>
 	
+	<select id="memberList" resultMap="memberMap">
+		SELECT
+		*
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE D.NAME = #{node}
+	</select>
+	
+	<select id="selectMember" resultMap="memberMap">
+		SELECT
+		*
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE D.NAME = #{param}
+	</select>
+	
+	<select id="joinMemberList" resultMap="memberMap">
+		SELECT
+		*
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE M.NAME = #{param}
+	</select>
+	
 	
   <resultMap type="dept" id="deptMap">
+  
+  </resultMap>
+  
+  <resultMap type="member" id="memberMap">
   
   </resultMap>
 

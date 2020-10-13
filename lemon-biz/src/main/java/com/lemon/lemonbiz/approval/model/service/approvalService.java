@@ -4,16 +4,25 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.lemon.lemonbiz.dept.model.vo.dept;
+
+import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.member.model.vo.Dept;
+
 
 
 public interface approvalService {
 
-	List<dept> deptList();
+	List<Dept> deptList();
 
-	List<dept> child();
+	List<Dept> child();
 
-	List<dept> child2();
+	List<Dept> child2();
+
+	List<Member> memberList(String node);
+
+	List<Member> selectMember(String param);
+
+	List<Member> joinMemberlist(String param);
 
 	
 }

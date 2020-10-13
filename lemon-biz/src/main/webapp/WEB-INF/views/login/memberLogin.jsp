@@ -27,12 +27,12 @@
 
 									<div class="form-group">
 										<input type="text" name="memberId"
-											class="form-control form-control-user" placeholder="사원 번호">
+											class="form-control form-control-user" placeholder="사원 번호" required>
 									</div>
 
 									<div class="form-group">
 										<input type="password" name="password"
-											class="form-control form-control-user" placeholder="비밀번호">
+											class="form-control form-control-user" placeholder="비밀번호" required>
 									</div>
 									<hr>
 									<button type="submit"
@@ -41,7 +41,6 @@
 									<button class="btn btn-danger btn-user btn-block"> 비밀번호 찾기 </button>
 								</form>
 							</div>
-							로그인 유효성검사 다시 알아봐서 잘 해보기
 						</div>
 					</div>
 				</div>
