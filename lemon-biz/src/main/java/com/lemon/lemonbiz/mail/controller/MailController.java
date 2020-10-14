@@ -13,6 +13,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,19 +99,23 @@ public class MailController {
 	    return "/mail/sendMail";
 	  }  
 	
-	@RequestMapping(value = "/mailSend", method= RequestMethod.GET)
-	public ModelAndView mailSend(Member member, @RequestParam(value = "upFile", required = false) MultipartFile[] upFiles,
-			RedirectAttributes redirectAttr, HttpServletRequest request, ModelAndView mav) 
-					throws IllegalStateException, IOException {
+	@RequestMapping(value = "/mailSend")
+	public String mailSend(Member member, 
+			/* @RequestParam(value = "upFile", required = false) MultipartFile[] upFiles, */
+			/* RedirectAttributes redirectAttr, */
+			HttpServletRequest request, Model model) 
+	/* throws IllegalStateException, IOException */
+	{
 		     									
 		// 메일 작성 시 자동으로 기입할 작성자 정보를 먼저 호출한다.
-		HttpSession session = request.getSession();
-		Member loginMember = (Member) session.getAttribute("loginMember");
-		Member myInfo = mailService.selectMyInfo(loginMember); 
-		
-		log.debug("myInfo = {}", myInfo);
-		mav.addObject("myInfo", myInfo); 
-		mav.setViewName("mail/sendMail");
+		/*
+		 * HttpSession session = request.getSession(); Member loginMember = (Member)
+		 * session.getAttribute("loginMember"); Member myInfo =
+		 * mailService.selectMyInfo(loginMember);
+		 * 
+		 * log.debug("myInfo = {}", myInfo); model.addAttribute("myInfo", myInfo);
+		 */
+		/* mav.setViewName("mail/sendMail"); */
 		
 		String mFrom = "lemonbiz.manager@gmail.com";
 		String mTo = request.getParameter("mTo"); 
@@ -128,15 +133,13 @@ public class MailController {
 		      messageHelper.setText(content); 
 		      
 		      FileSystemResource fsr = new FileSystemResource(filename);
-		      messageHelper.addAttachment("test2.txt", fsr);
+		      messageHelper.addAttachment("test.jpg", fsr);
 		     
 		      mailSender.send(message);
-		      log.debug("message = {}", message);
-		      
 		    } catch(Exception e){
 		      System.out.println(e);
 		    }
-		 	return mav;
+		 return "redirect:/mail/sendMail";
 		} 
 	}
 		/*
