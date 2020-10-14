@@ -7,6 +7,14 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
+<script>
+$(document).ready(function() {
+    $('#noticeDataTable').DataTable( {
+        "order": [[ 0, "desc" ]]
+    } );
+} );
+</script>
+
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
@@ -14,7 +22,7 @@
 		</h4>
 		
 		<div class="m-5">
-			<table class="table table-bordered" id="dataTable" width="100%"
+			<table class="table table-bordered" id="noticeDataTable" width="100%"
 							cellspacing="0">
 							<thead>
 								<tr>

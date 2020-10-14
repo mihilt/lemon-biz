@@ -56,4 +56,9 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.delete("member.deleteMember", member);
 	}
 
+	@Override
+	public List<Member> selectMemberListWithDeptKey(int deptKey) {
+		return sqlSession.selectList("member.selectMemberListWithDeptKey", deptKey);
+	}
+
 }
