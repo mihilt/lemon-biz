@@ -33,18 +33,35 @@
   		<result column="file_count" property="fileCount"/>
   	</resultMap>
   	
+	<select id="selectBoardList" resultType="board">
+	SELECT * 
+		FROM (
+			SELECT ROWNUM RN, A.* 
+				FROM (
+						SELECT * 
+						FROM post 
+						ORDER BY key DESC 
+						) A
+				)
+	WHERE RN BETWEEN #{startRnum} AND #{endRnum}
+	</select>
+	
+  	
   	<insert id="insertBoard">
   	insert into
 			post
 		values(
 			seq_post_key.nextval,
-			#{ title },
 			#{ memId },
+			 1,
+			#{ title },
 			#{ content },
+			default,
+			1,
 			default,
 			default		
 		)
-		<selectKey order="AFTER" resultType="_int" keyProperty="no">
+		<selectKey order="AFTER" resultType="_int" keyProperty="key">
 			select
 				seq_post_key.currval
 			from 
@@ -56,20 +73,41 @@
   		insert into 
 			attachment
 		values (
-			seq_attachment_no.nextval, 
+			seq_attachment_key.nextval, 
 			#{ postKey },
-			#{ originFilename },
+			null,
+			null,
+			null,
+			#{ originName },
 			#{ reName },
 			default,
 			default
 		)	
 		
   	</insert>
+  	
+  	<select id="selectOneBoard" resultType="board">
+		select
+			*
+		from
+			post
+		where 
+			key = #{ key }
+	</select>
+	
+	<select id="selectAttachList" resultType="attachment">
+		select
+			*
+		from
+			attachment
+		where 
+			post_key= #{ postKey } 
+	</select>
   
- <!--  <select id="selectOneBoardCollection" resultMap="boardCollectionMap">
+  <select id="selectOneBoardCollection" resultMap="boardCollectionMap">
  	   select
 		    P.*,
-		    A.key as "attach_no",
+		    A.key as "attach_key",
 		    A.post_key,
 		    A.origin_name,
 		    A.re_name,
@@ -80,7 +118,7 @@
 		        left join attachment A
 		            on P.key= A.post_key
 		where
-		    P.key= #{ key }
+		    P.key= #{ postKey }
   
   </select>
   
@@ -96,16 +134,65 @@
   		<result column="read_count" property="readCount"/>
   		
   		<collection property="attachList" ofType="attachment">
-  			<id column="attach_no" property="no"/>
-  			<result column="board_no" property="boardNo"/>
-  			<result column="original_filename" property="originalFilename"/>
-  			<result column="renamed_filename" property="renamedFilename"/>
+  			<id column="attach_key" property="key"/>
+  			<result column="post_key" property="postKey"/>
+  			<result column="approval_key" property="appovalKey"/>
+  			<result column="mem_id" property="memId"/>
+  			<result column="mail_key" property="mailKey"/>
+  			<result column="origin_name" property="originName"/>
+  			<result column="re_name" property="reName"/>
   			<result column="upload_date" property="uploadDate"/>
-  			<result column="download_count" property="downloadCount"/>
-  			
+  			<result column="download_cnt" property="downloadCnt"/>
   		</collection>
-  	</resultMap> -->
-  
+  	</resultMap>
+  	
+  	<select id="selectOneAttachment" resultType="attachment">
+  		select
+			*
+		from 
+			attachment
+		where
+			key = #{ key }
+  	
+  	</select>
+  	
+  	<update id="increaseReadConut">
+  		update post set
+	    read_count = read_count +1
+	    where key = #{ key }
+  	</update>
+  	
+  	<update id="updateBoard">
+  	update post set
+  		title = #{ title },
+  		content = #{ content }
+  		where key = #{ key }
+  	</update>
+  	
+  	<select id="countBoard" resultType="int">
+  		SELECT COUNT(*) FROM POST
+  	</select>
+  	
+  	<insert id="boardInsert">
+  	insert into board_comment (board_comment_no, board_comment_level, board_comment_writer, board_comment_content, board_ref, board_comment_ref, board_comment_date)
+  	 values(seq_board_comment_no.nextval, 
+  	 		#{ boardCommentLevel }, 
+  	 		#{ boardCommentWriter },
+  	 		#{ boardCommentContent },
+  	 		#{ boardRef },
+  	 		#{ boardCommentRef },
+  	 		 default)
+  	</insert>
+  	
+  	<select id="selectCommentList" resultType="BoardComment">
+	  	select BC.*
+		from board_comment BC
+		where board_ref = #{ key }
+		start with board_comment_level = 1
+		connect by board_comment_ref = prior board_comment_no
+		order siblings by board_comment_no
+  	</select>
+  	
 </mapper>
 
 

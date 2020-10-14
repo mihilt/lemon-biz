@@ -6,8 +6,6 @@
 
 <fmt:requestEncoding value="utf-8"/>
 
-<body id="page-top">
-
   <!-- Page Wrapper -->
   <div id="wrapper">
 
@@ -68,7 +66,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Mail</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/mail/mailSend">메일 작성</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/mail/mailAll">전체 메일함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/mail/mailList">전체 메일함</a>
             <a class="collapse-item" href="">부서 메일함</a>
             <a class="collapse-item" href="">보낸 메일함</a>
             <div class="collapse-divider"></div>
@@ -83,7 +81,7 @@
       
       <!-- 일정 관리 -->
       <li class="nav-item">
-        <a class="nav-link" href="일정관리">
+        <a class="nav-link" href="${pageContext.request.contextPath}/calendar/calendar.do">
           <i class="fas fa-fw fa-calendar-alt"></i>
           <span>일정관리</span></a>
       </li>
@@ -108,10 +106,10 @@
           </div>
         </div>
       </li>
-		
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
-<c:if test="${ loginMember.isManager eq 1 }">
+	<c:if test="${ loginMember.isManager eq 1 }">
       <!-- 관리자 + 톱니바퀴 -->
       <div class="sidebar-heading text-white">
       <i class="fas fa-fw fa-cog"></i>
@@ -228,19 +226,56 @@
               </div>
             </li>
 
-            <!-- Nav Item - Alerts -->
+            <!-- 알림 시작 -->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
+                <c:if test="${ fn:length(noticeUncheckedList) gt 0 }">
+                <span class="badge badge-danger badge-counter">${fn:length(noticeUncheckedList) }</span>
+                </c:if>
               </a>
               <!-- Dropdown - Alerts -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
-                  Alerts Center
+       				알림
                 </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <c:if test="${ fn:length(noticeUncheckedList) gt 0 }">
+	               	<c:forEach items="${ noticeUncheckedList }" var="notice">
+		                <div class="dropdown-item d-flex align-items-center" 
+		                     <%-- href="${pageContext.request.contextPath}${ notice.address }" --%>
+           				     style="cursor: pointer;"
+		                     onclick="checkNotice(${notice.key}, '${pageContext.request.contextPath}${ notice.address }')">
+		                  <div class="mr-3">
+		                    <div class="icon-circle bg-${ notice.color }">
+		                      <i class="fas ${ notice.icon } text-white"></i>
+		                    </div>
+		                  </div>
+		                  <div>
+		                    <div class="small text-gray-500">
+		                    	<fmt:formatDate value="${ notice.noticeDate }" pattern="yyyy.MM.dd HH:mm:ss" />
+		                    </div>
+		                    ${ notice.content }
+		                  </div>
+		                </div>
+					</c:forEach>
+				</c:if>
+				<script>
+ 					function checkNotice(key, address){
+ 						$.ajax({
+ 							url : "${ pageContext.request.contextPath }/notice/checkNotice.do?key=" + key,
+ 							method : "GET",
+ 							success : function(){
+	 							location.href=address;
+ 							}
+ 						});
+ 	 				};
+				</script>
+				<c:if test="${ fn:length(noticeUncheckedList) eq 0 }">
+					<p class="text-center font-weight-bold m-2">미확인된 알림이 없습니다.</p>
+				</c:if>
+				<!-- 알림 예제들 -->
+                <!-- <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-primary">
                       <i class="fas fa-file-alt text-white"></i>
@@ -251,6 +286,7 @@
                     <span class="font-weight-bold">A new monthly report is ready to download!</span>
                   </div>
                 </a>
+                
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-success">
@@ -262,6 +298,7 @@
                     $290.29 has been deposited into your account!
                   </div>
                 </a>
+                
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-warning">
@@ -272,19 +309,20 @@
                     <div class="small text-gray-500">December 2, 2019</div>
                     Spending Alert: We've noticed unusually high spending for your account.
                   </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                </a> -->
+                <a class="dropdown-item text-center small text-gray-500" href="${pageContext.request.contextPath}/notice/noticeList.do">모든 알림 확인하기</a>
               </div>
             </li>
-
-            <!-- Nav Item - Messages -->
+			
+			<!-- 메일 확인용인데 일단..
+            Nav Item - Messages
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
-                <!-- Counter - Messages -->
+                Counter - Messages
                 <span class="badge badge-danger badge-counter">7</span>
               </a>
-              <!-- Dropdown - Messages -->
+              Dropdown - Messages
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
                 <h6 class="dropdown-header">
                   Message Center
@@ -331,7 +369,7 @@
                 </a>
                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
               </div>
-            </li>
+            </li> -->
 
             <div class="topbar-divider d-none d-sm-block"></div>
 

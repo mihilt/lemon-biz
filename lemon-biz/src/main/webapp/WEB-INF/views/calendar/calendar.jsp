@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<fmt:requestEncoding value="utf-8"/>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -258,11 +261,45 @@
 										});
 									}
 								}
-							},
-							eventRender : function(event , element , view){
+	},
+							
+	eventRender                : 
 
-								return true;
-							},
+		function(event,element,view){
+
+			/* console.log('이벤트 호버');
+			console.log('event',event);
+			console.log('element',element);
+			console.log('view',view); */
+
+			element.popover({
+				title : $('<div />',{
+					class : 'hoverHead',
+					text  : event.title
+					}).css({
+						'background' : event.color,
+						'color' : '#000000'
+					}),
+				content : $('<div />',{
+					class : 'hoverBody'
+					})
+					.append('<p><strong>구분 : </strong>' + event.type + '</p>')
+					.append('<p><strong>시간 : </strong>' + displayDate(event) + '</p>')
+					.append('<div class="popoverContent"><strong>설명 : </strong>' + event.content + '</div>'),
+				delay : {
+					show : "800",
+					hide : "50"
+				},
+				trigger : 'hover',
+				placement : 'top',
+				html : true,
+				container : 'body'
+				
+			});
+
+			return true;
+	
+		},
 							
 	events                     : 
 
@@ -295,8 +332,54 @@
 				}
 			});
 	},
+
+	eventDragStart                : 
+		
+		function (event, jsEvent, ui, view) {
+	    	draggedEventIsAllDay = event.allDay;
+	},
+
+	eventDrop                     :
+		    
+		function(event,delta,revertFunc,jsEvent,ui,view){
+			$('.popover.fade.top').remove();
+
+			console.log("event",event);
+
+			console.log('view.type',view.type);
+
+			if(view.type === 'agendaWeek' || view.type === 'agendaDay'){
+				
+				location.reload();
+				return false;
+			}
+
+			var newDates = dargNdrop(event);
+
+			console.log('newDates',newDates);
+
+			$.ajax({
+		    	url: "${pageContext.request.contextPath}/calendar/dragNdropCalendar.do",
+		    	type: "POST",
+		        contentType : "application/json; charset=utf-8",
+				data : JSON.stringify(newDates),
+				dataType : "json",
+			 	success : function(data) {
+					console.log(data);
+					alert(data.msg);
+				 },
+				error : function(xhr, status, err) {
+					console.log("처리 실패");
+					console.log(xhr);
+					console.log(status);
+					console.log(err);
+				}
+		    });
+
+		},          
 	
-	select : function(startDate, endDate, jsEvent, view) {
+	select                        : 
+		function(startDate, endDate, jsEvent, view) {
 
 								$(".fc-body").unbind('click');
 								$(".fc-body").on('click','td',function(e) {
@@ -590,7 +673,38 @@
 				}
 			});
 		});
+
+		function displayDate(event){
+
+			var contentDate;
+
+			if(event.allDay == '0'){
+				contentDate = moment(event.startDate).format('HH:mm') + " ~ " + moment(event.endDate).format('HH:mm');
+			} else {
+				contentDate = "하루종일";
+			}
+
+			return contentDate;
+		}
+
+		function dargNdrop(event){
+
+			var newDates = {
+				no : '',
+				startDate : '',
+				endDate : ''
+			}
+
+			newDates.no = event.CALENDAR_ID;
+			newDates.startDate = moment(event.start._d).format('YYYY-MM-DD HH:mm');
+		    newDates.endDate = moment(event.end._d).format('YYYY-MM-DD HH:mm');
+
+		    return newDates;
+		}
 	</script>
 </body>
 
 </html>
+
+<jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
