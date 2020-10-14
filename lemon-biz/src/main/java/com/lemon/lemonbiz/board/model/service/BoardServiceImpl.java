@@ -116,6 +116,26 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 
+	@Override
+	public void boardDelete(int commentNo) {
+		boardDAO.boardDelete(commentNo);
+		
+	}
+
+
+	@Override
+	public void boardfrmDelete(int key) {
+		boardDAO.boardfrmDelete(key);
+	}
+
+
+	@Override
+	public void boardFileDelete(int key) {
+		boardDAO.boardFileDelete(key);
+		
+	}
+
+
 
 
 	
