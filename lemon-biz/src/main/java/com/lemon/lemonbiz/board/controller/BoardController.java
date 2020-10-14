@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -37,6 +38,7 @@ import com.lemon.lemonbiz.board.model.vo.BoardComment;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.Paging;
+import com.lemon.lemonbiz.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,7 +69,8 @@ public class BoardController {
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("startRnum", startRnum);
 		map.put("endRnum", endRnum);
-		List<Board> list = boardService.selectBoardList(map);
+		List<Map<String, Object>> list = boardService.selectBoardMapList();
+//		List<Board> list = boardService.selectBoardList(map);
 		int totalContents = boardService.countBoard();
 		
 		String url = request.getRequestURI();
@@ -151,7 +154,7 @@ public class BoardController {
 	
 	@RequestMapping("boardDetail.do")
 	public ModelAndView boardDeatil(@RequestParam("key") int key, ModelAndView mav,
-						  			HttpServletRequest request, HttpServletResponse response) {
+						  			HttpServletRequest request, HttpServletResponse response,@SessionAttribute("loginMember") Member loginMember) {
 		
 		Cookie[] cookies = request.getCookies();
 		String boardCookieVal = "";
@@ -190,7 +193,7 @@ public class BoardController {
 		Board board = boardService.selectOneBoardCollection(key,hasRead);
 		List<BoardComment> commentList = boardService.selectCommentList(key);
 		
-		log.debug("commentList = {}", commentList);
+		/* log.debug("commentList = {}", commentList); */
 		mav.addObject("board", board);
 		mav.addObject("commentList", commentList);
 		
@@ -250,10 +253,43 @@ public class BoardController {
 	
 	@RequestMapping(value="/boardInsert.do", method = RequestMethod.POST)
 	
-	public void boardInsert(@ModelAttribute BoardComment boardComment) {		
+	public String boardInsert(@ModelAttribute BoardComment boardComment ,RedirectAttributes redirectAttr) {		
+		
 		
 		boardService.boardInsert(boardComment);
-		 
- 
+		int key = boardComment.getBoardRef();
+		log.debug("boardComment = {}" ,boardComment); 
+		
+		
+		redirectAttr.addFlashAttribute("msg", "댓글 등록 성공");
+		return "redirect:/board/boardDetail.do?key="+key;
 	}
+	
+	@RequestMapping("/boardDelete.do")
+	
+	public String boardDelete(@RequestParam("key") int key,@RequestParam("boardCommentNo") int commentNo,RedirectAttributes redirectAttr) {
+		
+		boardService.boardDelete(commentNo);
+		redirectAttr.addFlashAttribute("msg", "삭제 완료!");
+		return "redirect:/board/boardDetail.do?key="+key;
+	}
+	
+	@RequestMapping("/boardfrmDelete.do")
+	
+	public String boardfrmDelete(@RequestParam("key") int key, Attachment attachment,HttpServletRequest request,RedirectAttributes redirectAttr) {
+			
+		String renamedFileName = attachment.getReName();
+		boardService.boardFileDelete(key);
+		boardService.boardfrmDelete(key);
+		
+		if(renamedFileName != null) {
+			String saveDirectory = request.getServletContext().getRealPath("/resources/upload/board");
+			File delFile = new File(saveDirectory, renamedFileName);
+			delFile.delete();
+		}
+
+		return "redirect:/board/boardList.do";
+		
+	}
+		
 }

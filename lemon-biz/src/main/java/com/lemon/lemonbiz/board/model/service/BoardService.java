@@ -31,6 +31,14 @@ public interface BoardService {
 
 	List<BoardComment> selectCommentList(int key);
 
+	void boardDelete(int commentNo);
+
+	void boardfrmDelete(int key);
+
+	void boardFileDelete(int key);
+
+
+
 
 
 	
