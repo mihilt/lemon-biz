@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.lemon.lemonbiz.common.vo.Attachment;
+import com.lemon.lemonbiz.member.model.vo.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,4 +28,7 @@ public class Mail {
 
 	private int fileCount;
 	private List<Attachment> attachList;
+	private String memberId;
+	private String deptName;
+	private List <MailReceiver> receiverList;
 }
