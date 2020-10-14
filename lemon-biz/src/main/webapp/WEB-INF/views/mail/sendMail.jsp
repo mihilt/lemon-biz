@@ -1,3 +1,4 @@
+<%@page import="com.lemon.lemonbiz.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -45,22 +46,23 @@
 </head>
 
 <body>
+
 	<div class="container">
 		<div class="card">
 		  <h4 id="m-title" class="card-header"><strong>메일 작성</strong></h4>
 			<div class="container-inner card-body">
-		  <form action="${pageContext.request.contextPath}/mail/mailForm.do" method="post">
+		  <form action="${pageContext.request.contextPath}/mail/mailSend" method="GET">
 		  <div class="form-group row">
 		    <label for="mFrom" class="col-sm-1 col-form-label">작성자</label>
 		    <div class="col-sm-9">
-		      <input type="text" readonly class="form-control" id="mFrom" value="사용자이메일@example.com" readonly>
+		      <input type="text" readonly class="form-control" id="toShow" value="${myInfo.name} (${myInfo.deptName}/${myInfo.rankName})" readonly>
+		      <input type="hidden" readonly class="form-control" id="mFrom" value="${myInfo.email}">
 		    </div>
 		  </div>
-		  
 		  <div class="form-group row">
 		    <label for="mTo" class="col-sm-1 col-form-label" id="send-to">수신자</label>
 		     <div class="col-sm-9">
-		    <input type="password" class="form-control" id="mTo" placeholder="김원식(영업부/대리), 홍기수(총무부/부장)의 형식으로 보여주기?">
+		    <input type="text" class="form-control" id="mTo" placeholder="김원식(영업부/대리), 홍기수(총무부/부장)의 형식으로 보여주기?">
 		  	</div>
 		  	<button type="button" class="btn btn-light" data-target="#addReceiverModal" id="addReceiverBtn">수신인 추가</button>
 		  </div>
@@ -134,19 +136,24 @@
 
 <script>
 
-/* summernote 호출 및 각종 설정 대입 */
 $(document).ready(function() { 	
+/* 	$('#send-mail').click(function(){
+		if ($('#summernote').summernote('isEmpty')) {
+			 alert('본문 내용을 입력해 주세요.');
+			 return false;
+		} 
+	}); */
 	$("#attach-to").click(function(){
 	    $("#attachModal").modal({backdrop: true});
 	  });
 	$("#addReceiverBtn").click(function(){
 	    $("#addReceiverModal").modal({backdrop: true});
 	  });
+
+	/* summernote 호출 및 각종 설정 대입 */
 	$('#summernote').summernote({
 		/* 여기서부터 summernote 호출 및 각종 설정 대입 */
-        placeholder: '이메일 내용을 입력 해 주세요.'+'</br></br>'+
-        			 '배고프다 마라탕 먹고싶다'+'</br>'+
-            		 '아~~~~~~~~~ 마라마라마라마라마라마라',
+        placeholder: '이메일 내용을 입력 해 주세요.',
         tabsize: 4, 
         height: 370,
         tooltip: true,
@@ -197,23 +204,10 @@ $(document).ready(function() {
 			} else {
 		}
 	});
-	
-	$('#send-mail').click(function(){
-		if ($('#summernote').summernote('isEmpty')) {
-			 alert('본문 내용을 입력해 주세요.');
-			 return false;
-		}
-	});
 
 	/* 여기서부터 파일 관련 */
 	var files = [];
 	var fileCount = 0;
-
-
-
-
-
-	
 </script>
 </html> 
 

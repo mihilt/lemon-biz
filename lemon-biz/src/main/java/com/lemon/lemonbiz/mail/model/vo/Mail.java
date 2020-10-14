@@ -30,5 +30,6 @@ public class Mail {
 	private List<Attachment> attachList;
 	private String memberId;
 	private String deptName;
+	private String rankName;
 	private List <MailReceiver> receiverList;
 }
