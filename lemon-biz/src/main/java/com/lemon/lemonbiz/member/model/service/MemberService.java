@@ -24,4 +24,6 @@ public interface MemberService {
 
 	int deleteMember(Member member);
 
+	List<Member> selectMemberListWithDeptKey(int deptKey);
+
 }

@@ -18,6 +18,8 @@ import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
+import com.lemon.lemonbiz.notice.model.service.NoticeService;
+import com.lemon.lemonbiz.notice.model.vo.Notice;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +31,9 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService memberService;
+
+	@Autowired
+	private NoticeService noticeService;
 	
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
@@ -39,27 +44,60 @@ public class MemberController {
 
 		log.debug("member={}" + member);
 		
-		String rawPassword = member.getMemberId();
-		String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
-		member.setPassword(encodedPassword);
-		
-		System.out.println(member);
-		
+		//존재하는 사원인지 검사
 		if(memberService.selectOneMember(member.getMemberId()) != null) {
 			String msg = "이미 존재하는 사원 번호 입니다.";
 			redirectAttr.addFlashAttribute("msg", msg);
 			return "redirect:/manager/insertMember.do";
 		}
 		
+		//BCryptPasswordEncoder
+		String rawPassword = member.getMemberId();
+		String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
+		member.setPassword(encodedPassword);
+		
+		//사원 등록
 		int result = 0;
+		
 		try {
+			
 			result = memberService.insertMember(member);
+			
 		} catch(Exception e) {
 			log.debug("사원 등록 실패");
 		}
 		
 		String msg = result > 0 ? "사원 등록에 성공했습니다." : "사원 등록에 실패했습니다.";
 		redirectAttr.addFlashAttribute("msg", msg);
+		
+		//개인 알림 등록
+		Notice notice = new Notice();
+		notice.setMemId(member.getMemberId());
+		notice.setContent("입사를 환영합니다.<br>마이페이지에 가서 추가 정보를 입력해주세요.");
+		notice.setAddress("/member/myPage.do");
+		notice.setIcon("fa-laugh-beam");
+		notice.setColor("success");
+		noticeService.insertNotice(notice);
+		
+		notice.setMemId(member.getMemberId());
+		notice.setContent("입사를 환영합니다.<br>비밀번호를 변경 해주세요.");
+		notice.setAddress("/member/updatePassword.do");
+		noticeService.insertNotice(notice);
+		
+		//member deptName, rankName 불러오기
+		member = memberService.selectOneMember(member.getMemberId());
+		
+		//단체 알림 등록
+		List<Member> memberList = memberService.selectMemberListWithDeptKey(member.getDeptKey());
+		Notice groupNotice = new Notice();
+		groupNotice.setContent(member.getDeptName() + " 부서에 " + member.getRankName() + " 직급의 " + member.getName() + " 사원이 추가되었습니다.");
+		groupNotice.setAddress("/notice/noticeList.do");
+		groupNotice.setIcon("fa-user-plus");
+		groupNotice.setColor("info");
+		for(Member sameDeptMember : memberList) {
+			groupNotice.setMemId(sameDeptMember.getMemberId());
+			noticeService.insertNotice(groupNotice);
+		}
 		
 		return "redirect:/manager/insertMember.do";
 	}

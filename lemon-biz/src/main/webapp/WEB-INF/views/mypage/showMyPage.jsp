@@ -34,6 +34,8 @@
 				<div class="col-10 form-control bg-gray-200">${ loginMember.memberId }</div>
 				<input type="hidden" name="memberId"
 					value="${ loginMember.memberId }" />
+				<input type="hidden" name="isManager"
+					value="${ loginMember.isManager }" />
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">이름 :</div>

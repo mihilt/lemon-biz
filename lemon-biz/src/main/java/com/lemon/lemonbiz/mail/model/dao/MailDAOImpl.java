@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.mail.model.vo.Mail;
+import com.lemon.lemonbiz.member.model.vo.Member;
 
 @Repository
 public class MailDAOImpl implements MailDAO{
@@ -36,10 +37,10 @@ public class MailDAOImpl implements MailDAO{
 		return sqlSession.insert("mail.insertAttachment", attach);
 	}
 
-	@Override
-	public Mail selectOneMail(int key) {
-		return sqlSession.selectOne("mail.selectOneMail", key);
-	}
+	/*
+	 * @Override public Mail selectOneMail(int key) { return
+	 * sqlSession.selectOne("mail.selectOneMail", key); }
+	 */
 
 	@Override
 	public List<Attachment> selectAttachList(int key) {
@@ -57,7 +58,17 @@ public class MailDAOImpl implements MailDAO{
 	}
 
 	@Override
-	public List<Mail> selectMailDept(String memberId) {
-		return sqlSession.selectList("mail.selectMailDept", memberId);
+	public List<Mail> selectMailDept(Member member) {
+		return sqlSession.selectList("mail.selectMailDept", member);
+	}
+
+	@Override
+	public List<Mail> selectMyMail(Member loginMember) {
+		return sqlSession.selectList("mail.selectMyMail", loginMember);
+	}
+
+	@Override
+	public List<Mail> selectStarredMail(Member loginMember) {
+		return sqlSession.selectList("mail.selectStarredMail", loginMember);
 	}
 }

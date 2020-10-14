@@ -14,6 +14,8 @@ import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
+import com.lemon.lemonbiz.notice.model.service.NoticeService;
+import com.lemon.lemonbiz.notice.model.vo.Notice;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,56 +29,97 @@ public class ManagerController {
 	
 	@Autowired
 	private ManagerService managerService;
+
+	@Autowired
+	private NoticeService noticeService;
 	
 	@RequestMapping(value = "/insertMember.do", method = RequestMethod.GET)
 	public void insertMember(Model model) {
-		List<Dept> deptList = memberService.selectDeptList();
-		List<Rank> rankList = memberService.selectRankList();
 		
-		
-		model.addAttribute("deptList", deptList);
-		model.addAttribute("rankList", rankList);
+		try {
+			
+			List<Dept> deptList = memberService.selectDeptList();
+			List<Rank> rankList = memberService.selectRankList();
+			
+			model.addAttribute("deptList", deptList);
+			model.addAttribute("rankList", rankList);
+			
+		} catch(Exception e) {
+			log.error("부서, 직급 리스트 조회 오류", e);
+			throw e;
+		}
+
 		
 	}
 
 	@RequestMapping(value = "/manageDept.do", method = RequestMethod.GET)
 	public void manageDept(Model model) {
-		List<Dept> deptList = memberService.selectDeptList();
 
-		model.addAttribute("deptList", deptList);
+		try {
+		
+			List<Dept> deptList = memberService.selectDeptList();
+			model.addAttribute("deptList", deptList);
+		
+		} catch(Exception e) {
+			
+			log.error("부서 리스트 조회 오류", e);
+			throw e;
+			
+		}
+		
 	}
 
 	@RequestMapping(value = "/insertDept.do", method = RequestMethod.GET)
 	public void insertDeptGet(Model model) {
-		List<Dept> deptList = memberService.selectDeptList();
-		model.addAttribute("deptList", deptList);
 		
+		try {
+			
+			List<Dept> deptList = memberService.selectDeptList();
+			model.addAttribute("deptList", deptList);
+		
+		} catch(Exception e) {
+			
+			log.error("부서 리스트 조회 오류", e);
+			throw e;
+			
+		}
+
 	}
 	
 	@RequestMapping(value = "/insertDept.do", method = RequestMethod.POST)
 	public String insertDeptPost(Dept dept, RedirectAttributes redirectAttr) {
 		
-		Dept dept1 = managerService.selectOneDept(dept);
-		Dept dept2 = managerService.selectOneRefDept(dept);
-		
-		if(dept1 == null) {
+		try {
 			
-			if(dept2 == null) {
+			Dept dept1 = managerService.selectOneDept(dept);
+			Dept dept2 = managerService.selectOneRefDept(dept);
+			
+			if(dept1 == null) {
 				
-				redirectAttr.addFlashAttribute("msg", "존재하는 상위 부서가 없습니다.");
+				if(dept2 == null) {
+					
+					redirectAttr.addFlashAttribute("msg", "존재하는 상위 부서가 없습니다.");
+					
+					return "redirect:/manager/insertDept.do";
+					
+				}
 				
-				return "redirect:/manager/insertDept.do";
+				int result = managerService.insertDept(dept);
+				redirectAttr.addFlashAttribute("msg", "생성을 완료하였습니다.");
+				
+			} else {
+				
+				redirectAttr.addFlashAttribute("msg", "이미 존재하는 부서 번호 입니다.");
 				
 			}
+		
+		} catch(Exception e) {
 			
-			int result = managerService.insertDept(dept);
-			redirectAttr.addFlashAttribute("msg", "생성을 완료하였습니다.");
-			
-		} else {
-			
-			redirectAttr.addFlashAttribute("msg", "이미 존재하는 부서 번호 입니다.");
+			log.error("부서 조회 오류", e);
+			throw e;
 			
 		}
+
 		
 		return "redirect:/manager/insertDept.do";
 		
@@ -165,6 +208,17 @@ public class ManagerController {
 		
 		int result = memberService.updateMember(member);
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
+		
+		Notice notice = new Notice();
+		notice.setMemId(member.getMemberId());
+		notice.setContent("관리자에 의해 회원 정보가 변경이 되었습니다.");
+		notice.setAddress("/member/myPage.do");
+		notice.setIcon("fa-wrench");
+		notice.setColor("secondary");
+		int noticeResult = noticeService.insertNotice(notice);
+		
+		Member loginMember = memberService.selectOneMember(member.getMemberId());
+		model.addAttribute("loginMember", loginMember);
 		
 		return "redirect:/manager/manageMember/detail.do?memberId="+member.getMemberId();
 		
