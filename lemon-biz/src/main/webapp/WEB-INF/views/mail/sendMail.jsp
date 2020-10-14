@@ -137,14 +137,14 @@
 <script>
 
 $(document).ready(function() { 	
-/*  	$('#send-mail').click(function(){
- 	 	alert("테슷흐");
+  	$('#send-mail').click(function(){
+ 	 	alert("정말로 발송하시겠습니까?");
  	 	return true;
 		if ($('#summernote').summernote('isEmpty')) {
 			 alert('본문 내용을 입력해 주세요.');
 			 return false;
 		} 
-	});  */
+	});  
 	$("#attach-to").click(function(){
 	    $("#attachModal").modal({backdrop: true});
 	  });
