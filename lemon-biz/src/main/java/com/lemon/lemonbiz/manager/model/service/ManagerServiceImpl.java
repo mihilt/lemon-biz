@@ -3,6 +3,7 @@ package com.lemon.lemonbiz.manager.model.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.manager.model.dao.ManagerDAO;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Rank;
@@ -52,6 +53,10 @@ public class ManagerServiceImpl implements ManagerService{
 	public int updateDept(Dept dept) {
 		return managerDAO.updateDept(dept);
 	}
-	
+
+	@Override
+	public int insertApprovalDoc(DocType docType) {
+		return managerDAO.insertApprovalDoc(docType);
+	}
 
 }

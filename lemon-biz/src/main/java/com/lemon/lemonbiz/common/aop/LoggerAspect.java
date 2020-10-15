@@ -20,7 +20,7 @@ public class LoggerAspect {
 		
 	}
 
-	@Around("pointcut()")
+//	@Around("pointcut()")
 	public Object aroundLogger(ProceedingJoinPoint joinPoint) 
 											throws Throwable {
 		Signature signature = joinPoint.getSignature();

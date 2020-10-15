@@ -79,4 +79,12 @@
 			key = #{key}
 	</update>
 	
+	<insert id="insertApprovalDoc">
+		insert into 
+			doc_type  
+		values ( seq_doc_type_key.nextval, 
+				 #{name}, 
+				 #{form})
+	</insert>
+	
 </mapper>

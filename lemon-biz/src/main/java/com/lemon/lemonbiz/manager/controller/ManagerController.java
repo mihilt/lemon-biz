@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.manager.model.service.ManagerService;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
@@ -262,4 +263,20 @@ public class ManagerController {
 		return "redirect:/manager/manageDept/update.do?key="+dept.getKey();
 	}
 	
+	@RequestMapping(value = "/insertApprovalDoc.do", method = RequestMethod.GET)
+	public void insertApprovalDocGet() {
+		
+	}
+
+	@RequestMapping(value = "/insertApprovalDoc.do", method = RequestMethod.POST)
+	public String insertApprovalDocPost(DocType docType, RedirectAttributes redirectAttr) {
+		
+		log.debug("docType={}", docType);
+		
+		int result = managerService.insertApprovalDoc(docType);
+		
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "전자결재 문서 생성을 완료했습니다." : "전자결재 문서 생성에 오류가 발생했습니다.");
+		
+		return "redirect:/manager/insertApprovalDoc.do";
+	}
 }

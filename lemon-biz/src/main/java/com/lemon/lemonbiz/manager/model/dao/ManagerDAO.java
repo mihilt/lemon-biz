@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.manager.model.dao;
 
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
@@ -20,5 +21,7 @@ public interface ManagerDAO {
 	int deleteDept(Dept dept);
 
 	int updateDept(Dept dept);
+
+	int insertApprovalDoc(DocType docType);
 
 }

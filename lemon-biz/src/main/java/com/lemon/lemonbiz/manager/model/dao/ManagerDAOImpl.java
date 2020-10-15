@@ -4,6 +4,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
@@ -51,6 +52,11 @@ public class ManagerDAOImpl implements ManagerDAO{
 	@Override
 	public int updateDept(Dept dept) {
 		return sqlSession.update("manager.updateDept", dept);
+	}
+
+	@Override
+	public int insertApprovalDoc(DocType docType) {
+		return sqlSession.update("manager.insertApprovalDoc", docType);
 	}
 	
 }
