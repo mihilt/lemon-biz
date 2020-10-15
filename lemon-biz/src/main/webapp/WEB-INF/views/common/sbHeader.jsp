@@ -174,7 +174,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <!-- <h6 class="collapse-header">전자결재 관리</h6> -->
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertApprovalDoc.do">전자결재 문서 생성</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">전자결재 문서 조회</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageApprovalDoc.do">전자결재 문서 조회</a>
           </div>
         </div>
       </li>

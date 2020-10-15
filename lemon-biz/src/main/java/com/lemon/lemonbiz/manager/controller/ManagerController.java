@@ -254,7 +254,7 @@ public class ManagerController {
 	@RequestMapping(value = "manageDept/update.do", method = RequestMethod.POST)
 	public String updateDeptPost(Dept dept, Model model, RedirectAttributes redirectAttr) {
 		
-		log.debug("dept={}", dept);
+//		log.debug("dept={}", dept);
 		
 		int result = managerService.updateDept(dept);
 		
@@ -271,7 +271,7 @@ public class ManagerController {
 	@RequestMapping(value = "/insertApprovalDoc.do", method = RequestMethod.POST)
 	public String insertApprovalDocPost(DocType docType, RedirectAttributes redirectAttr) {
 		
-		log.debug("docType={}", docType);
+//		log.debug("docType={}", docType);
 		
 		int result = managerService.insertApprovalDoc(docType);
 		
@@ -279,4 +279,40 @@ public class ManagerController {
 		
 		return "redirect:/manager/insertApprovalDoc.do";
 	}
+	
+	@RequestMapping(value = "/manageApprovalDoc.do", method = RequestMethod.GET)
+	public void manageApprovalDoc(Model model) {
+		List<DocType> docTypeList = managerService.selectDocTypeList();
+		model.addAttribute("docTypeList", docTypeList);
+		
+	}
+	
+	@RequestMapping(value = "/manageApprovalDoc/update.do", method = RequestMethod.GET)
+	public String manageApprovalDocUpdate(Model model, DocType docType) {
+		DocType docType_ = managerService.selectOneDocType(docType);
+		model.addAttribute("docType", docType_);
+		
+		return "forward:/WEB-INF/views/manager/updateApprovalDoc.jsp";
+	}
+
+	@RequestMapping(value = "/updateApprovalDoc.do", method = RequestMethod.POST)
+	public String updateApprovalDoc(DocType docType, RedirectAttributes redirectAttr) {
+		
+//		log.debug("docType={}", docType);
+		
+		int result = managerService.updateApprovalDoc(docType);
+		
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "전자결재 문서 수정을 완료했습니다." : "전자결재 문서 수정에 오류가 발생했습니다.");
+		
+		return "redirect:/manager/manageApprovalDoc.do";
+	}
+	
+	@RequestMapping(value = "manageApprovalDoc/delete.do", method = RequestMethod.GET)
+	public String manageApprovalDocDelete(DocType docType, RedirectAttributes redirectAttr) {
+		
+		managerService.deleteApprovalDoc(docType);
+		
+		return "redirect:/manager/manageApprovalDoc.do";
+	}
+	
 }

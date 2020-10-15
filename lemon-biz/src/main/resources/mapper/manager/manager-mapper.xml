@@ -87,4 +87,36 @@
 				 #{form})
 	</insert>
 	
+	<select id="selectDocTypeList" resultType="docType">
+ 		select
+ 			*
+ 		from 
+ 			doc_type
+        order by key
+	</select>
+	
+	<select id="selectOneDocType" resultType="docType">
+		select
+			*
+		from
+			doc_type
+		where key = #{key}
+	</select>
+	
+	<update id="updateApprovalDoc">
+		update 
+			doc_type 
+		set 
+			name = #{name}, 
+			form = #{form}
+		where 
+			key = #{key}
+	</update>
+	<delete id="deleteApprovalDoc">
+		delete 
+			doc_type 
+		where 
+			key = #{ key }
+	</delete>
+	
 </mapper>

@@ -1,5 +1,7 @@
 package com.lemon.lemonbiz.manager.model.dao;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -57,6 +59,26 @@ public class ManagerDAOImpl implements ManagerDAO{
 	@Override
 	public int insertApprovalDoc(DocType docType) {
 		return sqlSession.update("manager.insertApprovalDoc", docType);
+	}
+
+	@Override
+	public List<DocType> selectDocTypeList() {
+		return sqlSession.selectList("manager.selectDocTypeList");
+	}
+
+	@Override
+	public DocType selectOneDocType(DocType docType) {
+		return sqlSession.selectOne("manager.selectOneDocType",docType);
+	}
+
+	@Override
+	public int updateApprovalDoc(DocType docType) {
+		return sqlSession.update("manager.updateApprovalDoc",docType);
+	}
+
+	@Override
+	public int deleteApprovalDoc(DocType docType) {
+		return sqlSession.delete("manager.deleteApprovalDoc",docType);
 	}
 	
 }

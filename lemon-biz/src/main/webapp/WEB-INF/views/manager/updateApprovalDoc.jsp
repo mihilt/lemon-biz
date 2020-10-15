@@ -27,27 +27,27 @@ $(document).ready(function() {
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>전자결재 문서 생성</strong>
+			<strong>전자결재 문서 수정</strong>
 		</h4>
 		<form class="p-4 mx-auto"
-			  action="${ pageContext.request.contextPath }/manager/insertApprovalDoc.do"
+			  action="${ pageContext.request.contextPath }/manager/updateApprovalDoc.do?key=${docType.key}"
 			  method="post"
 		 	  style="width: 100%;"
 			>
 			<div class="mb-4">
 				<label>문서명</label>
-				<input name="name" class="col form-control" type="text" required>
+				<input name="name" class="col form-control" type="text" value="${docType.name}" required>
 			</div>
 			<div>
 				<label>내용</label>
 				<textarea id="summernote" name="form" class="form-control" required>
-				
+				${docType.form}
 				</textarea>
 			</div>
 			<button
 				class="btn bg-warning text-white font-weight-bold float-right mt-4"
 				type="submit">
-				문서 등록
+				문서 수정
 			</button>
 		</form>
 	</div>
