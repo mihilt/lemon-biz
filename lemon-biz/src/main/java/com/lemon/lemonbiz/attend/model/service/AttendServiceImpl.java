@@ -27,5 +27,14 @@ public class AttendServiceImpl implements AttendService {
 	public int attendLeabe(Attend attend) {
 		return attendanDAO.attendLeabe(attend);
 	}
+
+	@Override
+	public List<Attend> selectCalArrive(Attend attend) {
+		return attendanDAO.CalArrive(attend);
+	}
 	
+	@Override
+	public List<Attend> selectCalAttend(Attend attend) {
+		return attendanDAO.selectCalAttend(attend);
+	}
 }

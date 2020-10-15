@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.lemon.lemonbiz.attend.model.vo.Attend;
 
-
 @Repository
-public class AttendImpl implements AttendDAO {
+public class AttendDAOImpl implements AttendDAO {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
@@ -27,6 +26,16 @@ public class AttendImpl implements AttendDAO {
 	@Override
 	public int attendLeabe(Attend attend) {
 		return sqlSession.update("attend.attendLeabe",attend);
+	}
+
+	@Override
+	public List<Attend> CalArrive(Attend attend) {
+		return sqlSession.selectList("attend.CalArrive",attend);
+	}
+
+	@Override
+	public List<Attend> selectCalAttend(Attend attend) {
+		return sqlSession.selectList("attend.selectCalAttend",attend);
 	}
 	
 	

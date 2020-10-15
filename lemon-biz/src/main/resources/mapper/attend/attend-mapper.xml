@@ -10,12 +10,50 @@
     order by
     	key desc
     	
-<!--     select *
+<!-- 로긴 리스트만
+     select *
     from 
     	attend
     where  mem_id=#{ memId}
     order by
+    	key  
+-->
+  </select>
+  
+	<select id="selectCalAttend" resultType="attend">
+	select d.key,mem_id,arrive,leave,time,d.yyyymm
+	from attend E,(select to_char(arrive,('YYYYMMDD'))yyyymm,key
+    from attend) D
+	where E.key(+)=D.key and mem_id=#{memId}
+	order by key
+	
+	
+	<!-- select to_char(arrive,('YYYYMMDD'))yyyymm
+	from attend
+	where mem_id=#{memId}
+	order by key; -->
+	</select>
+	
+  <select id="CalArrive" resultType="attend">
+  
+select d.key,mem_id,arrive,leave,time,d.yyyymm
+from attend E,(select to_char(arrive,('YYYYMMDD'))yyyymm,key
+    from attend) D
+where E.key(+)=D.key and mem_id=#{memId}
+<!-- 	select *
+    from 
+    	attend
+    where  mem_id=#{memId}
+    order by
     	key desc -->
+  
+<!--     select to_char(arrive,('YYYYMMDD'))
+    from 
+    	attend
+    where  mem_id=#{memId}
+    order by
+    	key desc
+ -->
   </select>
   
   <!-- 생성 출근시간 삽입 -->
@@ -30,7 +68,7 @@
   </insert>
   
   <update id="attendLeabe">
-  <!-- 미완성 퇴근+근무시간 삽입-->
+  <!--  퇴근+근무시간 삽입-->
   update attend
   set  leave=sysdate,
 	time=(SELECT trunc(((TRUNC(sysdate, 'MI')-arrive) * 1440)/60 ,2)
@@ -44,4 +82,5 @@
         )
   
   </update>
+
 </mapper>

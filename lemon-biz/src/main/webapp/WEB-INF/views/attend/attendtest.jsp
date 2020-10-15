@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<fmt:requestEncoding value="utf-8"/>
+<fmt:requestEncoding value="utf-8"/><%-- 한글 깨짐 방지 --%>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="" name="title"/>
 </jsp:include>
@@ -26,11 +26,8 @@ table.calendar td{
     width: 100px;
 }
 </style>
-		<h3></h3>
-		<c:forEach items="${ list }" var="attend">
-		<!-- 안되면 여기서 켈린더 -->
-		
-		</c:forEach>
+	
+	<!-- <년월일> -->
     <div class="cal_top">
         <a href="#" id="movePrevMonth"><span id="prevMonth" class="cal_tit">&lt;</span></a>
         <span id="cal_top_year"></span>
@@ -40,7 +37,7 @@ table.calendar td{
     <div id="cal_tab" class="cal">
     </div>
  
-<script type="text/javascript">
+<script>
     
     var today = null;
     var year = null;
@@ -54,7 +51,7 @@ table.calendar td{
         drawCalendar();
         initDate();
         drawDays();
-        drawSche();
+//        drawSche();
         $("#movePrevMonth").on("click", function(){movePrevMonth();});
         $("#moveNextMonth").on("click", function(){moveNextMonth();});
     });
@@ -69,7 +66,7 @@ table.calendar td{
             for(var j=0;j<7;j++){
                 setTableHTML+='<td style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap">';
                 setTableHTML+='    <div class="cal-day"></div>';
-                setTableHTML+='    <div class="cal-schedule"></div>';
+                setTableHTML+='    <div class="cal-schedule"></div>'; //값
                 setTableHTML+='</td>';
             }
             setTableHTML+='</tr>';
@@ -96,36 +93,60 @@ table.calendar td{
         for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
             
         }
+
+
 */
     //날짜표시
-    function drawDays(){	
+    function drawDays(){
         $("#cal_top_year").text(year);
         $("#cal_top_month").text(month);
+
+
+        var yyyymm=year+""+month;
         
-        var ym=year+"/"+month;
-        
+
+		
+		
+		var memId="${loginMember.memberId}";
+		$.ajax({
+			type: "POST",
+			url : "${pageContext.request.contextPath}/attend/selectCalAttend.do",
+			dataType : "json",
+			data: {
+				memId :memId
+			},
+			dataType : "json",
+		    success: function(data) {
+		    	console.log("success");
+			},
+			error:function(request, status, error){
+			console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		});
+		
+		
+		
         for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
-            $tdDay.eq(i).text(++dayCount);  
+
+			if($tdDay.eq(i)){
+				$tdDay.eq(i).text(++dayCount);
+/* 				console.log(dayCount); */
+ 
+				
+					/* yyyymm=year+""+month+dayCount; */
+
+			}
 
 			
-             var dateMatch;
-              dateMatch = firstDay.getDay() + i -1; 
-            
-/*            var txt = "";
-          txt =jsonData[year];
-            if(txt){
-                txt = jsonData[year][month];
-                if(txt){
-                    txt = jsonData[year][month];
-                    dateMatch = firstDay.getDay() + i -1; 
-*/
-
-
-                    
+			
 			if(true/* 요일이 같다면 실행하기 */){
-			/*  근무시간 */
+				
+//	           $tdSche.eq(i).text();    값가져오면 넣기
 			}
-           	$tdSche.eq(i).text("근무 안함!");
+			
+			
+
+            	
         }
 
         for(var i=0;i<42;i+=7){
@@ -176,32 +197,32 @@ table.calendar td{
     }
     
     
-    //등록안되냐왜 밋ㅁㅁ내람람;ㅣ란ㅁ;ㅣㄹ
+    //[]test
     function setData(){
     	jsonData =
          {
             "2020":{
                 "10":{
-                    "17":"시간"
+                    "17":"dddddd"
                 }
     	,"09":{
-        	"20":"시-발"
+        	"20":"zzzz"
             	}
     	,"10":{
-        	"25":"제발1"
+        	"25":"ffff1"
             	}
     	,"10":{
-        	"15":"제발2"
+        	"15":"fffffff2"
             	}
     	,"10":{
-        	"5":"제발3"
+        	"5":"제ffff"
             	}
             }
 
         } 
     }
 
-  
+  //[]test
     function drawSche(){
         setData();
         var dateMatch = null;

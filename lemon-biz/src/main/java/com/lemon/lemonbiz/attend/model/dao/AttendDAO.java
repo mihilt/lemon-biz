@@ -12,4 +12,8 @@ public interface AttendDAO {
 
 	int attendLeabe(Attend attend);
 
+	List<Attend> CalArrive(Attend attend);
+
+	List<Attend> selectCalAttend(Attend attend);
+
 }

@@ -12,5 +12,8 @@ public interface AttendService {
 
 	int attendLeabe(Attend attend);
 
+	List<Attend> selectCalArrive(Attend attend);
+
+	List<Attend> selectCalAttend(Attend attend);
 
 }
