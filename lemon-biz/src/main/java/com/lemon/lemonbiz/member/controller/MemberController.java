@@ -77,14 +77,14 @@ public class MemberController {
 		//개인 알림 등록
 		Notice notice = new Notice();
 		notice.setMemId(member.getMemberId());
-		notice.setContent("입사를 환영합니다.<br>마이페이지에 가서 추가 정보를 입력해주세요.");
+		notice.setContent("입사를 환영합니다!<br>마이페이지서 프로필 사진 업로드와, 추가 정보를 입력해주세요.");
 		notice.setAddress("/member/myPage.do");
 		notice.setIcon("fa-laugh-beam");
 		notice.setColor("success");
 		noticeService.insertNotice(notice);
 		
 		notice.setMemId(member.getMemberId());
-		notice.setContent("입사를 환영합니다.<br>비밀번호를 변경 해주세요.");
+		notice.setContent("입사를 환영합니다!<br>비밀번호를 변경 해주세요.");
 		notice.setAddress("/member/updatePassword.do");
 		noticeService.insertNotice(notice);
 		

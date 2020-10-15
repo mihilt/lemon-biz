@@ -47,8 +47,6 @@
     				<% 
     					}
     				%>
-    				
-				 	cursor: pointer;
 				 ">
 			</div>
 			<div class="mb-1 row mx-5">
