@@ -1,3 +1,5 @@
+<%@page import="java.io.File"%>
+<%@page import="com.lemon.lemonbiz.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -379,7 +381,25 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">${ loginMember.name }</span>
                 <div class="img-profile rounded-circle" 
                 	 style="background-size: 32px 32px;
-                	 		background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
+   	 		    	<%  
+    					Member loginMember = (Member)request.getAttribute("loginMember");
+    					
+    					String saveDirectory = request.getServletContext()
+    							.getRealPath("/resources/upload/profile_images");
+    					
+    					File file = new File(saveDirectory+"/"+ loginMember.getMemberId() +".png");
+    					boolean isExist = file.exists();
+    					
+    					if(isExist){
+    				%>
+				 	background-image: url('${pageContext.request.contextPath }/resources/upload/profile_images/<%=loginMember.getMemberId()%>.png');
+    				<% 
+    					} else {
+    				%>
+				 	background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
+    				<% 
+    					}
+    				%>
                 	 "
                 >
                 
