@@ -71,4 +71,9 @@ public class MailDAOImpl implements MailDAO{
 	public List<Mail> selectStarredMail(Member loginMember) {
 		return sqlSession.selectList("mail.selectStarredMail", loginMember);
 	}
+
+	@Override
+	public Member selectMyInfo(Member loginMember) {
+		return sqlSession.selectOne("mail.selectMyInfo", loginMember);
+	}
 }

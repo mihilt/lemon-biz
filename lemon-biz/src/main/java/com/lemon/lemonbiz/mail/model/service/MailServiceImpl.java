@@ -90,4 +90,9 @@ public class MailServiceImpl implements MailService{
 		return mailDAO.selectStarredMail(loginMember);
 	}
 
+	@Override
+	public Member selectMyInfo(Member loginMember) {
+		return mailDAO.selectMyInfo(loginMember);
+	}
+
 }

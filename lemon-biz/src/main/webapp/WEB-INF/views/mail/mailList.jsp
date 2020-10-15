@@ -8,18 +8,6 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<!-- Bootstrap -->
-<link href='<c:url value="/css/bootstrap.min.css" />' rel="stylesheet">
-<link href='<c:url value="/css/kfonts2.css" />' rel="stylesheet">
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src='<c:url value="/jquery/jquery-1.11.3.min.js" />'></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src='<c:url value="/js/bootstrap.min.js" />'></script>
-
 <title>전체 메일</title>
 <style>
 	#btns{
