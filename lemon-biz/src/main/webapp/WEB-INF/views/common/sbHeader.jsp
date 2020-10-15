@@ -382,7 +382,7 @@
                 <div class="img-profile rounded-circle" 
                 	 style="background-size: 32px 32px;
    	 		    	<%  
-    					Member loginMember = (Member)request.getAttribute("loginMember");
+    					Member loginMember = (Member)session.getAttribute("loginMember");
     					
     					String saveDirectory = request.getServletContext()
     							.getRealPath("/resources/upload/profile_images");

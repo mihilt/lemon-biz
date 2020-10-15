@@ -1,3 +1,5 @@
+<%@page import="java.io.File"%>
+<%@page import="com.lemon.lemonbiz.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -25,7 +27,27 @@
 			 	    border-radius: 70%;
 			 	    border: 1px;
     				overflow: hidden;
+    				
+   	 		    	<%  
+    					Member member = (Member)request.getAttribute("member");
+    					
+    					String saveDirectory = request.getServletContext()
+    							.getRealPath("/resources/upload/profile_images");
+    					
+    					File file = new File(saveDirectory+"/"+ member.getMemberId() +".png");
+    					boolean isExist = file.exists();
+    					
+    					if(isExist){
+    				%>
+				 	background-image: url('${pageContext.request.contextPath }/resources/upload/profile_images/<%=member.getMemberId()%>.png');
+    				<% 
+    					} else {
+    				%>
 				 	background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
+    				<% 
+    					}
+    				%>
+    				
 				 	cursor: pointer;
 				 ">
 			</div>

@@ -2,7 +2,6 @@ package com.lemon.lemonbiz.member.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.lemon.lemonbiz.common.Utils;
-import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
@@ -187,7 +184,7 @@ public class MemberController {
 			int beginIndex = profileImg.getOriginalFilename().lastIndexOf('.');
 			String ext = profileImg.getOriginalFilename().substring(beginIndex);
 			
-			//2.메모리의 파일 -> 서버컴퓨터 디렉토리 저장  transferTo
+			//메모리의 파일 -> 서버컴퓨터 디렉토리 저장  transferTo
 			File dest = new File(saveDirectory, member.getMemberId()+ext);
 			profileImg.transferTo(dest);
 			
