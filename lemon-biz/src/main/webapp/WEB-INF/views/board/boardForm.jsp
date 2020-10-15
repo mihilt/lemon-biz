@@ -35,7 +35,7 @@
 						<input type="hidden" name="memId" value="${loginMember.memberId}"/>	
 					</div> 
 					<div class="custom-control custom-checkbox" >
-				<input type="checkbox" id="jb-checkbox" class="custom-control-input">
+				<input type="checkbox" id="jb-checkbox" name="isNotice" class="custom-control-input" value="0">
 				<label class="custom-control-label" for="jb-checkbox" style="float:right;"><strong>공지사항 등록</strong></label>
 			</div>
 					<div class="form-group">
@@ -74,7 +74,20 @@
 		</div>
 	</div>
 </body>
+<br><br>
 <script type="text/javascript">
+
+$(document).ready(function(){
+	 $("#jb-checkbox").click(function () {
+		 if($("input[name=isNotice]:checked") ){
+			 document.getElementById("jb-checkbox").value = "1"
+			 
+		 }
+	});
+});
+ 
+
+
 $(document).ready(function(){
 
 	$('#brdmemo').summernote({

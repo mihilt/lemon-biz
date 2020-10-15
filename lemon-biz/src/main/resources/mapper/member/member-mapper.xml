@@ -6,9 +6,11 @@
 
 	<select id="selectOneMember" resultType="member">
  		select
- 			*
+		    M.*,
+		    (select name from dept D where M.dept_key = D.key) "dept_name",
+		    (select name from rank R where M.rank_key = R.key) "rank_name"
  		from 
- 			member
+ 			member M
  		where 
  			member_id = #{ memberId }
 	</select>
@@ -81,5 +83,15 @@
 		where 
 			member_id = #{memberId}
 	</delete>
+	
+	<select id="selectMemberListWithDeptKey" resultType="member">
+	
+		select
+			*
+		from
+			member
+		where dept_key = #{deptKey}
+		
+	</select>
 	
 </mapper>

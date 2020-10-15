@@ -57,4 +57,9 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.deleteMember(member);
 	}
 
+	@Override
+	public List<Member> selectMemberListWithDeptKey(int deptKey) {
+		return memberDAO.selectMemberListWithDeptKey(deptKey);
+	}
+
 }

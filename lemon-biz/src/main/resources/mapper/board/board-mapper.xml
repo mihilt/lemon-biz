@@ -15,7 +15,7 @@
 		from
    			 post P
 		order by
-			key desc
+			is_notice desc,key desc
 
 	</select>
 	
@@ -40,7 +40,7 @@
 				FROM (
 						SELECT * 
 						FROM post 
-						ORDER BY key DESC 
+						ORDER BY is_notice DESC, key DESC 
 						) A
 				)
 	WHERE RN BETWEEN #{startRnum} AND #{endRnum}
@@ -57,7 +57,7 @@
 			#{ title },
 			#{ content },
 			default,
-			1,
+			#{ isNotice },
 			default,
 			default		
 		)
@@ -180,7 +180,12 @@
   	 		#{ boardCommentWriter },
   	 		#{ boardCommentContent },
   	 		#{ boardRef },
+  	 		<if test="boardCommentRef == 0 ">
+  	 		 null,
+  	 		</if>
+  	 		<if test=" boardCommentRef != 0">
   	 		#{ boardCommentRef },
+  	 		</if>
   	 		 default)
   	</insert>
   	
@@ -192,6 +197,25 @@
 		connect by board_comment_ref = prior board_comment_no
 		order siblings by board_comment_no
   	</select>
+  	
+  	<delete id="boardDelete">
+  		delete 
+  			from board_comment 
+  		where 
+  			board_comment_no = #{ boardCommentNo }
+  	</delete>
+  	
+  	<delete id="boardfrmDelete">
+  		delete 
+  			from post
+  		where key = #{ key }
+  	</delete>
+  	
+  	<delete id="boardFileDelete">
+  		delete 
+  		from attachment 
+  		where post_key = #{ key }
+  	</delete>
   	
 </mapper>
 

@@ -12,7 +12,7 @@
  		where 
  			mem_id = #{memberId} and is_checked = 0
  		order by 
- 			notice_date
+ 			key desc
 	</select>
 	
 	<insert id="insertNotice">
@@ -49,7 +49,7 @@
  		where 
  			mem_id = #{memberId}
  		order by 
- 			notice_date
+ 			key desc
 	</select>
 	
 </mapper>

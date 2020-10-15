@@ -92,6 +92,26 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 
+	@Override
+	public void boardDelete(int commentNo) {
+		sqlSession.delete("board.boardDelete",commentNo);
+		
+	}
+
+
+	@Override
+	public void boardfrmDelete(int key) {
+		sqlSession.delete("board.boardfrmDelete",key);
+	}
+
+
+	@Override
+	public void boardFileDelete(int key) {
+		sqlSession.delete("board.boardFileDelete",key);
+		
+	}
+
+
 
 	
 

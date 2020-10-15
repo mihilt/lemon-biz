@@ -6,6 +6,7 @@
 <fmt:requestEncoding value="utf-8"/>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 	
 
 <style>
@@ -14,6 +15,13 @@ input#btn-add{float:right; margin: 0 0 15px;}
 tr[data-no]{
 	cursor: pointer;
 	
+}
+
+td {
+
+font-family: 'Jua', sans-serif;
+font-size: 17px;
+
 }
 
 </style>
@@ -30,12 +38,14 @@ $(function(){
 function goBoardForm(){
 	location.href = "${pageContext.request.contextPath}/board/boardForm.do";
 }
+
+
 </script>
 
 <section id="board-container" class="container">
 	<input type="button" value="글쓰기" id="btn-add" class="btn btn-outline-warning" onclick="goBoardForm();"/>
 	<table id="tbl-board" class="table table-striped table-hover">
-	<strong style=font-size:25px;>전사 게시판</strong>
+	<strong style="font-size:25px; font-family: 'Jua', sans-serif;">전사 게시판</strong>
 		<tr>
 			<th>번호</th>
 			<th>제목</th>
@@ -45,16 +55,47 @@ function goBoardForm(){
 		</tr>
 		<c:forEach items="${ list }" var="post">
 		<tr data-no="${ post.key }">
+			<c:if test="${ post.isNotice eq 1 }">
+			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.jpg" 
+						 style="width:30px;" /></td>
+			</c:if>
+			<c:if test="${ post.isNotice eq 0 }">
 			<td>${ post.key }</td>
-			<td>${ post.title } 
+			</c:if>
+			
+			<c:if test="${ post.isNotice eq 1 }">
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.title } </td>
+			</c:if>
+			<c:if test="${ post.isNotice eq 0 }">
+			<td >${ post.title } 
 				<c:if test="${ post.fileCount gt 0 }">
 					<img src="${ pageContext.request.contextPath }/resources/images/file.png"
 						 style="width:16px;" />
 				</c:if>
 			</td>
+			</c:if>	
+			
+			<c:if test="${ post.isNotice eq 1 }">
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.memId }</td>
+			</c:if>
+			<c:if test="${ post.isNotice eq 0 }">
 			<td>${ post.memId }</td>
+			</c:if>
+			
+			<c:if test="${ post.isNotice eq 1 }">
+			<td style="color:red; font-weight:bold; fontsize:25px;"><fmt:formatDate value="${ post.postDate }" pattern="yyyy/MM/dd"/></td>
+			</c:if>
+			<c:if test="${ post.isNotice eq 0 }">
 			<td><fmt:formatDate value="${ post.postDate }" pattern="yyyy/MM/dd"/></td>
+			</c:if>
+			
+			<c:if test="${ post.isNotice eq 1 }">
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.readCount }</td>
+			</c:if>
+			<c:if test="${ post.isNotice eq 0 }">
 			<td>${ post.readCount }</td>
+			</c:if>
+			
 		</tr>
 		</c:forEach>
 	</table>
