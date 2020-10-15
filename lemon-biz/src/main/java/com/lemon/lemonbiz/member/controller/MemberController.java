@@ -1,6 +1,11 @@
 package com.lemon.lemonbiz.member.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.lemon.lemonbiz.manager.model.service.ManagerService;
+import com.lemon.lemonbiz.common.Utils;
+import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
@@ -160,8 +167,33 @@ public class MemberController {
 		return "forward:/WEB-INF/views/mypage/showMyPage.jsp";
 	}
 	
-	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.GET)
-	public String update(Member member, RedirectAttributes redirectAttr, Model model) {
+	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.POST)
+	public String update(Member member, 
+						 RedirectAttributes redirectAttr, 
+						 Model model,
+						 HttpServletRequest request,
+						 @RequestParam(value="profile_img",
+								 	   required=false) MultipartFile[] profileImgs) throws IllegalStateException, IOException {
+		
+		String saveDirectory = request.getServletContext()
+				.getRealPath("/resources/upload/profile_images");
+		
+		
+		for(MultipartFile profileImg : profileImgs) {
+			//파일을 선택하지 않고 전송한 경우
+			if(profileImg.isEmpty())
+				continue;
+			
+			int beginIndex = profileImg.getOriginalFilename().lastIndexOf('.');
+			String ext = profileImg.getOriginalFilename().substring(beginIndex);
+			
+			//2.메모리의 파일 -> 서버컴퓨터 디렉토리 저장  transferTo
+			File dest = new File(saveDirectory, member.getMemberId()+ext);
+			profileImg.transferTo(dest);
+			
+		}
+		
+		
 		
 		int result = memberService.updateMember(member);
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
