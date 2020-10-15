@@ -33,7 +33,7 @@
     				overflow: hidden;
     				
     				<%  
-    					Member loginMember = (Member)request.getAttribute("loginMember");
+    					Member loginMember = (Member)session.getAttribute("loginMember");
     					
     					String saveDirectory = request.getServletContext()
     							.getRealPath("/resources/upload/profile_images");
@@ -55,6 +55,8 @@
 				 	cursor: pointer;
 				 ">
 			</div>
+			<p class="text-center text-danger font-weight-bolder" 
+			   style="font-size: small;">*프로필 사진 클릭을 통해 이미지를 업로드 해주세요!</p>
 			
 			<!-- input file -->
 			<input type="file" id="myfile" name="profile_img" style="display:none;" accept="image/png">
