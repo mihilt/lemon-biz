@@ -108,6 +108,13 @@
           </div>
         </div>
       </li>
+
+      <!-- 조직도 -->
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/member/organization.do">
+          <i class="fas fa-fw fa-sitemap"></i>
+          <span>조직도</span></a>
+      </li>
       
       <!-- Divider -->
       <hr class="sidebar-divider">

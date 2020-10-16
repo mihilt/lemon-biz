@@ -106,4 +106,9 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.selectMemberListWithDeptKey(deptKey);
 	}
 
+	@Override
+	public List<Dept> hierarchicalDeptList() {
+		return memberDAO.hierarchicalDeptList();
+	}
+
 }
