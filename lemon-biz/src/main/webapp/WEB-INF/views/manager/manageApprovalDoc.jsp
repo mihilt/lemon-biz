@@ -10,7 +10,7 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>직급 정보</strong>
+			<strong>전자결재 문서 조회</strong>
 		</h4>
 		<div class="container-inner card-body">
 			<table class="table table-bordered" id="dataTable" width="100%"
