@@ -27,4 +27,6 @@ public interface MailService {
 	List<Mail> selectMyMail(Member loginMember);
 
 	List<Mail> selectStarredMail(Member loginMember);
+
+	Member selectMyInfo(Member loginMember);
 }

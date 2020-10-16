@@ -1,3 +1,5 @@
+<%@page import="java.io.File"%>
+<%@page import="com.lemon.lemonbiz.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -122,7 +124,7 @@
         </a>
         <div id="manager" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">사원 관리</h6>
+            <!-- <h6 class="collapse-header">사원 관리</h6> -->
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">사원 등록</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageMember.do">사원 정보</a>
           </div>
@@ -137,7 +139,7 @@
         </a>
         <div id="dept" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">부서 관리</h6>
+            <!-- <h6 class="collapse-header">부서 관리</h6> -->
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertDept.do">부서 생성</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageDept.do">부서 정보</a>
           </div>
@@ -153,7 +155,7 @@
         </a>
         <div id="position" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">직급 관리</h6>
+            <!-- <h6 class="collapse-header">직급 관리</h6> -->
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertRank.do">직급 생성</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageRank.do">직급 정보</a>
           </div>
@@ -168,10 +170,9 @@
         </a>
         <div id="approval-manage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">전자결재 관리</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">무튼 관리</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">문서 생성</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">문서 어쩌구저쩌구하기</a>
+            <!-- <h6 class="collapse-header">전자결재 관리</h6> -->
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertApprovalDoc.do">전자결재 문서 생성</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageApprovalDoc.do">전자결재 문서 조회</a>
           </div>
         </div>
       </li>
@@ -377,7 +378,25 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">${ loginMember.name }</span>
                 <div class="img-profile rounded-circle" 
                 	 style="background-size: 32px 32px;
-                	 		background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
+   	 		    	<%  
+    					Member loginMember = (Member)session.getAttribute("loginMember");
+    					
+    					String saveDirectory = request.getServletContext()
+    							.getRealPath("/resources/upload/profile_images");
+    					
+    					File file = new File(saveDirectory+"/"+ loginMember.getMemberId() +".png");
+    					boolean isExist = file.exists();
+    					
+    					if(isExist){
+    				%>
+				 	background-image: url('${pageContext.request.contextPath }/resources/upload/profile_images/<%=loginMember.getMemberId()%>.png');
+    				<% 
+    					} else {
+    				%>
+				 	background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
+    				<% 
+    					}
+    				%>
                 	 "
                 >
                 
