@@ -27,4 +27,6 @@ public interface MemberService {
 
 	List<Member> selectMemberListWithDeptKey(int deptKey);
 
+	List<Dept> hierarchicalDeptList();
+
 }
