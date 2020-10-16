@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lemon.lemonbiz.approval.model.vo.DocType;
@@ -16,13 +18,13 @@ import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 import com.lemon.lemonbiz.notice.model.service.NoticeService;
-import com.lemon.lemonbiz.notice.model.vo.Notice;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
 @RequestMapping("/manager")
+@SessionAttributes({"loginMember"})
 public class ManagerController {
 	
 	@Autowired
@@ -205,21 +207,21 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/manageMember/detail/update.do", method = RequestMethod.GET)
-	public String manageMemberDetailUpdate(Model model, Member member, RedirectAttributes redirectAttr) {
+	public String manageMemberDetailUpdate(Model model, 
+										   Member member, 
+										   RedirectAttributes redirectAttr,
+										   @SessionAttribute("loginMember") Member loginMember) {
 		
-		int result = memberService.updateMember(member);
+		int result = managerService.updateMember(member);
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
 		
-		Notice notice = new Notice();
-		notice.setMemId(member.getMemberId());
-		notice.setContent("관리자에 의해 회원 정보가 변경이 되었습니다.");
-		notice.setAddress("/member/myPage.do");
-		notice.setIcon("fa-wrench");
-		notice.setColor("secondary");
-		int noticeResult = noticeService.insertNotice(notice);
+		log.debug("loginMember={}", loginMember);
+		log.debug("member={}", member);
 		
-		Member loginMember = memberService.selectOneMember(member.getMemberId());
-		model.addAttribute("loginMember", loginMember);
+		if(member.getMemberId().equals(loginMember.getMemberId())) {
+			loginMember = memberService.selectOneMember(member.getMemberId());
+			model.addAttribute("loginMember", loginMember);
+		}
 		
 		return "redirect:/manager/manageMember/detail.do?memberId="+member.getMemberId();
 		

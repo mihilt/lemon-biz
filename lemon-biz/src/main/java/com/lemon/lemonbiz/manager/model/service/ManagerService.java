@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.member.model.vo.Dept;
+import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 
 public interface ManagerService {
@@ -33,5 +34,7 @@ public interface ManagerService {
 	int updateApprovalDoc(DocType docType);
 
 	int deleteApprovalDoc(DocType docType);
+
+	int updateMember(Member member);
 
 }
