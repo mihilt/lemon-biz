@@ -56,7 +56,7 @@
       </div>
       <div class="modal-body pb-5">
       	
-		<%-- <div class="m-5 mx-auto" 
+		<div id="modalProfileImg"class="m-5 mx-auto" 
 			 style="
 			 	width: 200px;
 			 	height: 200px;
@@ -64,9 +64,8 @@
 		 	    border-radius: 70%;
 		 	    border: 1px;
  				overflow: hidden;
-			 	background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
 			 ">
-		</div> --%>
+		</div>
       	
 		<div class="mb-1 row mx-5">
 			<div class="col-2 pt-2 text-right">이름 :</div>
@@ -97,23 +96,8 @@
 </div>
 
 <script>
-/* 	let result = new Array();
-	let json;
-	
-	<!-- json Object 저장 -->
-	<c:forEach items="${ memberList }" var="member">
-		json = new Object();
-		json.memberId = "${member.memberId}"
-		json.name = "${member.name}"
-		json.rankName = "${member.rankName}"
-		json.deptName = "${member.deptName}"
-		json.telNum = "${member.telNum}"
-		result.push(json);
-	</c:forEach> */
 
 	function memberInfo(memberId){
-		console.log(memberId);
-
 		$.ajax({
 			url : "${ pageContext.request.contextPath }/member/selectOneMemberAjax.do?memberId="+memberId,
 			data : {
@@ -128,7 +112,19 @@
 				$("#modalTelNum").text(data.telNum);
 				$("#modalAddress").text(data.address);
 
+				let image = new Image();
+				image.src = '${pageContext.request.contextPath }/resources/upload/profile_images/' + data.memberId + '.png';
 				
+				image.onload=function(){
+					$("#modalProfileImg").css({
+						"background-image":"url(${pageContext.request.contextPath }/resources/upload/profile_images/"+data.memberId+".png)"});
+			    }
+
+				image.onerror=function(){
+					$("#modalProfileImg").css({
+							"background-image":"url(${pageContext.request.contextPath }/resources/images/default-image.png)"});
+			    }
+
 			},
 			error : function(xhr, status, err){
 				console.log(xhr, status, err);
