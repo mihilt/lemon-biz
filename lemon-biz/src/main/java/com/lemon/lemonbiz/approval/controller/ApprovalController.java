@@ -1,8 +1,14 @@
 package com.lemon.lemonbiz.approval.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +20,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lemon.lemonbiz.approval.model.service.approvalService;
+import com.lemon.lemonbiz.approval.model.vo.appr;
+import com.lemon.lemonbiz.approval.model.vo.apprCheck;
+import com.lemon.lemonbiz.common.Utils;
+import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
-
-import net.sf.json.JSONObject;
 
 
 @Controller
@@ -31,6 +40,12 @@ public class ApprovalController {
 
 	@Autowired
 	private approvalService approvalService;
+	
+	@RequestMapping("/myApvList")
+	public String myApvList(Model model) {
+		
+		return "approval/myApvList";
+	}
 	
 	@RequestMapping("/writeForm.html")
 	public String writeForm(Model model) {
@@ -97,6 +112,158 @@ public class ApprovalController {
 		
 		return map;
 	}
+	/*
+	 * appr appr, apprCheck apprck, docType docType,
+	 */
+	@RequestMapping(value="applovalSave.do", method=RequestMethod.POST)
+	public String approvalWrite(HttpServletRequest req,
+								appr appr,
+								Model model,
+								@RequestParam (value="countVacat", required=false) String countVacat,
+								@RequestParam (value="approval_title", required=true) String title,
+								@RequestParam (value="approval_content", required=true) String semmernote,
+								@RequestParam (value="status", required=true) String status,
+								@RequestParam (value="upFile", required=false) MultipartFile upFile,
+								@RequestParam (value="approval_mem1", required=true) String authId1,
+								@RequestParam (value="approval_mem2", required=true) String authId2,
+								@RequestParam (value="approval_mem3", required=true) String authId3,
+								@RequestParam (value="process_num1", required=true) int processNum1,
+								@RequestParam (value="process_num2", required=true) int processNum2,
+								@RequestParam (value="process_num3", required=true) int processNum3
+								) 
+								throws IOException, Exception, IllegalStateException {
+		
+		
+		
+		HttpSession session = req.getSession();
+		
+		apprCheck apprck1 = new apprCheck();
+		apprCheck apprck2 = new apprCheck();
+		apprCheck apprck3 = new apprCheck();
+		
+		log.debug("appr={}",appr);
+		
+		
+		//-----------------------전자결제에 대한 속성저장
+		
+		//1. 문서번호 : 문서번호 받기위한 시퀸스 생성(String으로 받을예정)
+		String seqApprKey = approvalService.SeqApprKey();
+		log.debug("seqApprKey={}",seqApprKey);
+		appr.setKey(seqApprKey);
+		
+		//2. 문서종류번호
+		
+		//3. 사원번호 : 전자결제에 대한 사원번호 받기 
+		String memId = ((Member)session.getAttribute("loginMember")).getMemberId();
+		log.debug("memberId={}",((Member)session.getAttribute("loginMember")).getMemberId());
+		appr.setMemId(memId);
+		
+		//4. 제목 : 전자결제에 대한 제목받기(title)
+		log.debug("title={}",title);
+		appr.setTitle(title);
+		
+		//5. 내용 : 전자결제에 대한 제목받기(semmernote)
+		log.debug("semmernote={}", semmernote);
+		appr.setContent(semmernote);
+		
+		//6. 기안일자 : 전자결제에 대한 작성일자 받기(디비에서 default)
+		
+		//7. 상태 : 전자결제에 대한 상태받기(status)
+		log.debug("status={}", status);
+		appr.setStatus(status);
+		
+		//8. 파일 : 파일테이블에서 끌고올거임.(upfile) 이건 일단 셋팅이 아니라 보류함.
+		
+		
+		
+		//1. 서버컴퓨터에 업로드한 파일 저장하기
+		log.debug("upFile.name={}", upFile.getOriginalFilename());
+		log.debug("upFile.size={}", upFile.getSize());
+		
+		Attachment attach = new Attachment();
+		//1. 서버컴퓨터에 저장
+		if(upFile != null) {
+			//저장경로
+			String saveDirectory = req.getServletContext().getRealPath("/resources/upload/approval");
+			//파일을 선택하지 않고 전송한 경우
+			
+				
+			//1. 파일명(renameFilename)생성
+			String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
+			//2. 메모리의 파일 -> 서버컴퓨터 디렉토리 저장 tranferTo
+			File dest = new File(saveDirectory, renamedFilename);
+			upFile.transferTo(dest);
+			//3. attachment객체 생성
+			
+			attach.setOriginName(upFile.getOriginalFilename());
+			attach.setReName(renamedFilename);
+			attach.setApprovalkey(appr.getKey());
+			attach.setMemId(appr.getMemId());
+			//4. apprCheck 객체 생성
+			//1번 결제자
+			log.debug("authId1={}",authId1);
+			log.debug("authId2={}",authId2);
+			log.debug("authId3={}",authId3);
+			apprck1.setSeqNum(processNum1);
+			log.debug("apprck1={}",apprck1.getSeqNum());
+			apprck1.setMemId(authId1);
+			apprck1.setApprovalKey(appr.getKey());
+			apprck1.setStatus(status);
+			//2번결제자
+			apprck2.setSeqNum(processNum2);
+			log.debug("apprck2={}",apprck2.getSeqNum());
+			apprck2.setMemId(authId2);
+			apprck2.setApprovalKey(appr.getKey());
+			apprck2.setStatus(status);
+			//3번결제자
+			apprck3.setSeqNum(processNum3);
+			apprck3.setMemId(authId3);
+			apprck3.setApprovalKey(appr.getKey());
+			apprck3.setStatus(status);
+			
+			appr.setApprck1(apprck1);
+			appr.setApprck2(apprck2);
+			appr.setApprck3(apprck3);
+			log.debug("appr.getApprck1.SeqNum={}",appr.getApprck1().getSeqNum());
+			log.debug("appr.getApprck2.SeqNum={}",appr.getApprck2().getSeqNum());
+			log.debug("appr.getApprck3.SeqNum={}",appr.getApprck3().getSeqNum());
+			appr.setAttachment(attach);
+			log.debug("attach={}",attach);
+			
+		}
+		
+		//2. appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+		
+		int result = approvalService.insertSaveApproval(appr);
+		log.debug("result={}",result);
+		
+		//처리결과 msg 전달
+		
+		model.addAttribute("appr",appr);
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		model.addAttribute("attach",attach);
+		
+		
+		return "approval/myApvList";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

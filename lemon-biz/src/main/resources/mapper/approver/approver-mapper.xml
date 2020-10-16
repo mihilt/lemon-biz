@@ -42,10 +42,13 @@
 	
 	<select id="selectMember" resultMap="memberMap">
 		SELECT
-		*
+		M.*,
+        D.key,
+        D.ref,
+        D.name as deptName
 		FROM MEMBER M FULL OUTER JOIN DEPT D
 		ON M.DEPT_KEY = D.KEY
-		WHERE D.NAME = #{param}
+		WHERE M.MEMBER_ID = #{param}
 	</select>
 	
 	<select id="joinMemberList" resultMap="memberMap">
@@ -55,6 +58,84 @@
 		ON M.DEPT_KEY = D.KEY
 		WHERE M.NAME = #{param}
 	</select>
+	
+	<select id="SeqApprKey" resultType="String">
+	select seq_appr_key.nextval from dual
+	</select>
+	
+	<insert id="insertSaveApproval">
+		insert into
+			appr
+		values(
+			#{key},
+			null,
+			#{memId},
+			#{title},
+			#{content},
+			null,
+			default,
+			#{status}
+		)
+	
+	</insert>
+	
+	<insert id="insertSavaAttachment">
+		insert into
+			attachment
+		values(
+			seq_attachment_key.nextval,
+			null,
+			#{approvalkey},
+			#{memId},
+			null,
+			#{originName},
+			#{reName},
+			default,
+			default
+		)
+	</insert>
+	
+	<insert id="insertSaveApprck1">
+		insert into
+			appr_check
+		values(
+			seq_appr_check_key.nextval,
+			#{approvalKey},
+			#{memId},
+			#{seqNum},
+			null,
+			#{status},
+			null
+		)
+	</insert>
+	
+	<insert id="insertSaveApprck2">
+		insert into
+			appr_check
+		values(
+			seq_appr_check_key.nextval,
+			#{approvalKey},
+			#{memId},
+			#{seqNum},
+			null,
+			#{status},
+			null
+		)
+	</insert>
+	
+	<insert id="insertSaveApprck3">
+		insert into
+			appr_check
+		values(
+			seq_appr_check_key.nextval,
+			#{approvalKey},
+			#{memId},
+			#{seqNum},
+			null,
+			#{status},
+			null
+		)
+	</insert>
 	
 	
   <resultMap type="dept" id="deptMap">

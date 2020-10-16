@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.approval.model.vo.appr;
+import com.lemon.lemonbiz.approval.model.vo.apprCheck;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 
 
@@ -23,6 +25,12 @@ public interface approvalService {
 	List<Member> selectMember(String param);
 
 	List<Member> joinMemberlist(String param);
+
+	String SeqApprKey();
+
+	int insertSaveApproval(appr appr);
+	
+
 
 	
 }

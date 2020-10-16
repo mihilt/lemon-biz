@@ -76,7 +76,7 @@
     			</div>
     	
     			<div class="row" style="margin: 5px 5px">
-    	
+    			
 			    	<table>
 			    	
 			    	<tr>
@@ -230,7 +230,14 @@
 						<table border="1" style="display: inline-block">
 						
 						<tr>
-						<td class="tt" rowspan='3'>결재</td>
+							<td></td>
+							<td>기안자</td>
+							<td id="proNum1">1차 결제자</td>
+							<td id="proNum2">2차 결제자</td>
+							<td id="proNum3">3차 결제자</td>
+						</tr>
+						<tr>
+						<td class="tt" rowspan='4'>결재</td>
 						<td class="aa">작성자</td>
 						
 						<td id="authRank1" class="aa">
@@ -283,14 +290,18 @@
 						<!-- ==============결제칸 끝============== -->
 						<!-- 폼 내용 -->
 						
-						<form id="sendApv" action="${ pageContext.request.contextPath }/approval" method="POST" enctype="multipart/form-data"> <!-- ============================================================================================================================================================= -->
-							<input type="hidden" id="authId1" name="approval_mem1" >
-							<input type="hidden" id="authId2" name="approval_mem2" >
-							<input type="hidden" id="authId3" name="approval_mem3" >
-							<input type="hidden" id="apvCateGo" name="approval_cate" value="1">
-							<input type="hidden" id="approval_cc" name="approval_cc" value="${ apvReWrite.approval_cc }">
+						
+						<!-- 임시저장 -->
+						<form id="sendApv" action="${ pageContext.request.contextPath }/approval/applovalSave.do" method="POST" enctype="multipart/form-data">
+							<input type="hidden" id="authId1" name="approval_mem1" />
+							<input type="hidden" id="authId2" name="approval_mem2" />
+							<input type="hidden" id="authId3" name="approval_mem3" />
+							<input type="hidden" id="processNum1" name="process_num1">
+							<input type="hidden" id="processNum2" name="process_num2">
+							<input type="hidden" id="processNum3" name="process_num3">
+							<input type="hidden" id="status" name="status" value="t"/>
 							
-							&nbsp;제목 : <input class="form-control" id="approval_title" type="text" name="approval_title" value="${ apvReWrite.approval_title }">
+							&nbsp;제목 : <input class="form-control" id="title" type="text" name="approval_title" value="${ apvReWrite.approval_title }">
 							<br>
 							
 							<div>
@@ -300,9 +311,9 @@
 							
 							
 							<label for="file">첨부:</label>
-							<input type="file" name="file" value="${ apvReWrite.approval_filepath }"/>
+							<input type="file" name="upFile" id="upFile" value="${ apvReWrite.approval_filepath }"/>
 							<hr>
-						                 
+						               
 						</form>
 						
 						<!-- 폼 내용 end -->
@@ -316,14 +327,38 @@
 						<div><br></div>
 						</div>
 						
-						
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	
-	
+	<div class="modal" id="comment">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">임시저장</h5>
+					<button type="button" class="btn btn-outline-primary" data-dismiss="modal">&times;</button>
+				</div>
+
+					<div class="form-group">
+						<div class="modal-body">
+							<h5>
+								<label>임시저장 태그를 달아주세요.</label>
+							</h5>
+							<input class="form-control" name="apv_comment" type="text" id="apv_comment" value="${ apvReWrite.approval_cc }"/>
+						</div>
+						<div class="modal-footer float-right">
+							<button class="btn btn-outline-primary" type="submit" onclick="tempStore()" >저장</button>
+						</div>
+						<div class="float-left" style="padding: 0 0 0 20px">
+							<label>임시저장의 경우 파일은 저장되지 않습니다.</label><br>
+							<label>최종 제출시 파일을 입력해주세요.</label>
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
 	
 	
 	
@@ -337,6 +372,10 @@
 <script>
 /*=================================== 결제라인추가 script start ====================================*/
 	$(document).ready(function() {
+		$('#proNum1').val(1);
+		$('#proNum2').val(2);
+		$('#proNum3').val(3);
+		
 		MIN_NUM = 1;
 		MAX_NUM = 3;
 
@@ -454,28 +493,31 @@
 			},
 			success : function(data) {
 
-				var result = data;
-				rankKey = result.rankKey;
-				deptName = result.deptName;
-				memberName = result.memberName;
+				var result = data.selectMember;
 				
-			}
-		});
-
+				rankKey = result[0].rankKey;
+				deptName = result[0].deptName;
+				memberName = result[0].name;
+				console.log(memberName);
+				console.log(deptName);
+				
 		if(rankKey == null) {
 			rankKey = '입사대기';
 		}
 		if(deptName == null) {
 			deptName = '발령대기';
 		}
+		if(memberName == null) {
+			memberName= '오류';
+		}
 		
 		for(var i=0; i<trArr.length; i++ ) {
 
 			if($('#'+(i+1)+'').val() != 'exist'){
-			$('#memId_'+(i+1)+'').text(memberId);
-			$('#dept_'+(i+1)+'').text(deptName);
-			$('#name_'+(i+1)+'').text(memberName);
-			$('#rank_'+(i+1)+'').text(rankKey);
+			$('#memId_'+(i+1)).text(memberId);
+			$('#dept_'+(i+1)).text(deptName);
+			$('#name_'+(i+1)).text(memberName);
+			$('#rank_'+(i+1)).text(rankKey);
 
 			$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
 			$('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
@@ -486,6 +528,9 @@
 
 
 	 }
+			}
+		});
+
 	}
 
 	
@@ -612,25 +657,82 @@
 	function apply(){
 
 		for(var i = MIN_NUM; i <= MAX_NUM ; i++){
-			 
+ 
 			$(document).find('#authName'+i).text($('#name_'+i).text());
 			$(document).find('#authRank'+i).text($('#rank_'+i).text());
 			$(document).find('#authDept'+i).val($('#dept_'+i).text());
 			$(document).find('#authId'+i).val($('#memId_'+i).text());
 			$(document).find('#apv_mem'+i).text($('#memId_'+i).text());
-
-			 $('#exampleModal').modal('hide');
+			
+			$('#exampleModal').modal('hide');
 			 			
 
 		 }
 
 	}
+	/*=================================== 결제라인추가 script end ====================================*/
+	
+	/* ======================================폼 제출관련 script start=================================== */
+	function tempchk() {
 
+		console.log("11");
+		console.log($('#authId1').val());
+		console.log($('#authId2').val());
+		console.log($('#authId3').val());
+		console.log($('#proNum1').val());
+		console.log($('#proNum2').val());
+		console.log($('#proNum3').val());
+		console.log($('#title').val());
+		console.log($('#summernote').val());
+		console.log($('#apvCateGo').val());
+		console.log($('#apv_comment').val());
 
-	 
-	 /*=================================== 결제라인추가 script end ====================================*/
-	 
-	 
+		if(($('#title').val()).trim() == ''){
+			alert('제목을 입력해주세요')
+			return;
+		}
+		if(($('#summernote').val()).trim() == ''){
+			alert('내용을 입력해주세요')
+			return;
+		}
+
+		$('#comment').modal();
+	}
+
+	function tempStore() {
+		
+		/* if('${mem1}' != null){
+			$('#authId1').val(${mem1});
+		}
+		if('${mem2}' != null){
+			$('#authId2').val(${mem1});
+		}
+		if('${mem3}' != null){
+			$('#authId3').val(${mem1});
+		}
+		*/
+		
+		for(var i = 1 ; i <=3 ; i++){
+			$('#authId'+i+'').val($('#apv_mem'+i+'').text());	
+		} 
+		for(var i = 1 ; i <=3 ; i++) {
+			$("#processNum"+i).val($('#proNum'+i).val());
+		}
+	
+		$('#sendApv').submit();
+		
+		/* $('#apvCateGo').val(1);
+		if($('#apvCateGo').val() == ''){
+		$('#apvCateGo').val(${ apvReWrite.approval_cate });
+		} */
+		
+	}
+	
+	
+	
+	
+		 
+	/* ======================================폼 제출관련 script end=================================== */	 
 	 
 	 
 	 
