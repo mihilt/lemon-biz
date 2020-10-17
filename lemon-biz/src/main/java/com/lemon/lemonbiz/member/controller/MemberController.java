@@ -63,7 +63,6 @@ public class MemberController {
 		int result = 0;
 		
 		try {
-			Notice notice = new Notice();
 			result = memberService.insertMember(member);
 			
 		} catch(Exception e) {

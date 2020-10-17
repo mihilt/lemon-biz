@@ -27,7 +27,7 @@ $(document).ready(function() {
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>전자결재 문서 생성</strong>
+			<strong>전자결재 양식 생성</strong>
 		</h4>
 		<form class="p-4 mx-auto"
 			  action="${ pageContext.request.contextPath }/manager/insertApprovalDoc.do"
@@ -35,7 +35,7 @@ $(document).ready(function() {
 		 	  style="width: 100%;"
 			>
 			<div class="mb-4">
-				<label>문서명</label>
+				<label>제목</label>
 				<input name="name" class="col form-control" type="text" required>
 			</div>
 			<div>
@@ -47,7 +47,7 @@ $(document).ready(function() {
 			<button
 				class="btn bg-warning text-white font-weight-bold float-right mt-4"
 				type="submit">
-				문서 등록
+				양식 등록
 			</button>
 		</form>
 	</div>
