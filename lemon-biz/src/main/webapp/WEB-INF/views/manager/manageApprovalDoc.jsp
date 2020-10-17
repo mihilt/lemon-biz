@@ -10,14 +10,15 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong>전자결재 문서 조회</strong>
+			<strong>전자결재 양식 조회</strong>
 		</h4>
 		<div class="container-inner card-body">
 			<table class="table table-bordered" id="dataTable" width="100%"
 				cellspacing="0">
 				<thead>
 					<tr>
-						<th scope="col">문서명</th>
+						<th scope="col">제목</th>
+						<th scope="col"></th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -28,12 +29,14 @@
 									${ docType.name }
 								</td>
 
-								<td>
+								<td style="width: 8%"">
 									<a type="button" 
 									   class="btn btn-outline-secondary"
 									   href="${pageContext.request.contextPath}/manager/manageApprovalDoc/update.do?key=${ docType.key }">
 									   수정
 									</a>
+								</td>
+								<td style="width: 8%">
 									<a type="button" 
 									   class="btn btn-outline-danger"
 									   onclick="return confirm('정말 삭제 하시겠습니까 ?')"

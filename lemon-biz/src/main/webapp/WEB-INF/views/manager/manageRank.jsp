@@ -19,6 +19,7 @@
 					<tr>
 						<th scope="col">직급명</th>
 						<th scope="col"></th>
+						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -31,11 +32,13 @@
 										<input name="name" class="form-control" value="${ rank.name }">
 									</td>
 	
-									<td>
+									<td style="width: 8%">
 										<button type="submit"
 										   class="btn btn-outline-secondary">
 											수정
 										</button>
+									</td>
+									<td style="width: 8%">
 										<a type="button" 
 										   class="btn btn-outline-danger"
 										   onclick="return confirm('정말 삭제 하시겠습니까 ?')"

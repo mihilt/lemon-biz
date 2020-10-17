@@ -8,7 +8,7 @@
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
 <div class="container">
-	<div class="card m-2">
+	<div class="card my-5">
 		<h4 id="m-title" class="card-header">
 			<strong>조직도</strong>
 		</h4>
