@@ -64,6 +64,24 @@
 		ORDER BY MAIL_DATE DESC
 	</select>
 	
+ 	<select id="selectMyInfo" resultMap="myInfo">
+		SELECT M.MEMBER_ID, M.EMAIL, M.NAME, 
+			   D.NAME AS "DEPT_NAME", R.NAME AS "RANK_NAME"
+		FROM MEMBER M JOIN DEPT D
+		            ON M.DEPT_KEY = D.KEY
+		            JOIN RANK R
+		            ON M.RANK_KEY = R.KEY
+		WHERE M.MEMBER_ID = #{memberId}
+	</select>
+	
+	<resultMap type="member" id="myInfo">
+  		<id column="member_id" property="memberId"/>
+		<result column="email" property="email"/>
+		<result column="name" property="name"/>
+		<result column="dept_name" property="deptName"/>
+		<result column="rank_name" property="rankName"/>
+	</resultMap>
+	
 	<resultMap type="mail" id="listDept">
   		<id column="key" property="key"/>
   		<result column="mem_id" property="memId"/>

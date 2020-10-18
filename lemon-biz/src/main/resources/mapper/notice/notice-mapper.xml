@@ -52,4 +52,20 @@
  			key desc
 	</select>
 	
+	<insert id="insertNoticeList" parameterType="notice">
+		insert into notice(key, mem_id, content, notice_date,is_checked, address,icon,color)
+		select seq_notice_key.nextval, A.* from(
+		<foreach item="item" collection="list" separator="union all " >
+			select  
+				#{item.memId} as mem_id,
+				#{item.content} as content,
+				sysdate as notice_date,
+				0 as is_checked,
+				#{item.address} as address, 
+				#{item.icon} as icon,
+				#{item.color} as color
+			from dual
+		</foreach>) A
+	</insert>
+	
 </mapper>

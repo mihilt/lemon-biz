@@ -61,4 +61,9 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectList("member.selectMemberListWithDeptKey", deptKey);
 	}
 
+	@Override
+	public List<Dept> hierarchicalDeptList() {
+		return sqlSession.selectList("member.hierarchicalDeptList");
+	}
+
 }

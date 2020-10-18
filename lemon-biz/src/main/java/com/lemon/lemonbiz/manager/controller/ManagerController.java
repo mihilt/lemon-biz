@@ -7,21 +7,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.manager.model.service.ManagerService;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
 import com.lemon.lemonbiz.notice.model.service.NoticeService;
-import com.lemon.lemonbiz.notice.model.vo.Notice;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
 @RequestMapping("/manager")
+@SessionAttributes({"loginMember"})
 public class ManagerController {
 	
 	@Autowired
@@ -204,21 +207,21 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/manageMember/detail/update.do", method = RequestMethod.GET)
-	public String manageMemberDetailUpdate(Model model, Member member, RedirectAttributes redirectAttr) {
+	public String manageMemberDetailUpdate(Model model, 
+										   Member member, 
+										   RedirectAttributes redirectAttr,
+										   @SessionAttribute("loginMember") Member loginMember) {
 		
-		int result = memberService.updateMember(member);
+		int result = managerService.updateMember(member);
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
 		
-		Notice notice = new Notice();
-		notice.setMemId(member.getMemberId());
-		notice.setContent("관리자에 의해 회원 정보가 변경이 되었습니다.");
-		notice.setAddress("/member/myPage.do");
-		notice.setIcon("fa-wrench");
-		notice.setColor("secondary");
-		int noticeResult = noticeService.insertNotice(notice);
+		log.debug("loginMember={}", loginMember);
+		log.debug("member={}", member);
 		
-		Member loginMember = memberService.selectOneMember(member.getMemberId());
-		model.addAttribute("loginMember", loginMember);
+		if(member.getMemberId().equals(loginMember.getMemberId())) {
+			loginMember = memberService.selectOneMember(member.getMemberId());
+			model.addAttribute("loginMember", loginMember);
+		}
 		
 		return "redirect:/manager/manageMember/detail.do?memberId="+member.getMemberId();
 		
@@ -253,13 +256,65 @@ public class ManagerController {
 	@RequestMapping(value = "manageDept/update.do", method = RequestMethod.POST)
 	public String updateDeptPost(Dept dept, Model model, RedirectAttributes redirectAttr) {
 		
-		log.debug("dept={}", dept);
+//		log.debug("dept={}", dept);
 		
 		int result = managerService.updateDept(dept);
 		
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "부서 수정을 완료하였습니다." : "부서 수정에 오류가 발생했습니다.");
 		
 		return "redirect:/manager/manageDept/update.do?key="+dept.getKey();
+	}
+	
+	@RequestMapping(value = "/insertApprovalDoc.do", method = RequestMethod.GET)
+	public void insertApprovalDocGet() {
+		
+	}
+
+	@RequestMapping(value = "/insertApprovalDoc.do", method = RequestMethod.POST)
+	public String insertApprovalDocPost(DocType docType, RedirectAttributes redirectAttr) {
+		
+//		log.debug("docType={}", docType);
+		
+		int result = managerService.insertApprovalDoc(docType);
+		
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "전자결재 양식 생성을 완료했습니다." : "전자결재 양식 생성에 오류가 발생했습니다.");
+		
+		return "redirect:/manager/insertApprovalDoc.do";
+	}
+	
+	@RequestMapping(value = "/manageApprovalDoc.do", method = RequestMethod.GET)
+	public void manageApprovalDoc(Model model) {
+		List<DocType> docTypeList = managerService.selectDocTypeList();
+		model.addAttribute("docTypeList", docTypeList);
+		
+	}
+	
+	@RequestMapping(value = "/manageApprovalDoc/update.do", method = RequestMethod.GET)
+	public String manageApprovalDocUpdate(Model model, DocType docType) {
+		DocType docType_ = managerService.selectOneDocType(docType);
+		model.addAttribute("docType", docType_);
+		
+		return "forward:/WEB-INF/views/manager/updateApprovalDoc.jsp";
+	}
+
+	@RequestMapping(value = "/updateApprovalDoc.do", method = RequestMethod.POST)
+	public String updateApprovalDoc(DocType docType, RedirectAttributes redirectAttr) {
+		
+//		log.debug("docType={}", docType);
+		
+		int result = managerService.updateApprovalDoc(docType);
+		
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "전자결재 문서 수정을 완료했습니다." : "전자결재 문서 수정에 오류가 발생했습니다.");
+		
+		return "redirect:/manager/manageApprovalDoc.do";
+	}
+	
+	@RequestMapping(value = "manageApprovalDoc/delete.do", method = RequestMethod.GET)
+	public String manageApprovalDocDelete(DocType docType, RedirectAttributes redirectAttr) {
+		
+		managerService.deleteApprovalDoc(docType);
+		
+		return "redirect:/manager/manageApprovalDoc.do";
 	}
 	
 }

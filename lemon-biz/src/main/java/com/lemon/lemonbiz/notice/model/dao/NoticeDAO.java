@@ -15,4 +15,6 @@ public interface NoticeDAO {
 
 	List<Notice> selectNoticeList(Member loginMember);
 
+	int insertNoticeList(List<Notice> groupNoticeList);
+
 }
