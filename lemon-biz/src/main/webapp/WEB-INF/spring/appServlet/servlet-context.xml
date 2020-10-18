@@ -26,7 +26,7 @@
 	<context:component-scan base-package="com.lemon.lemonbiz" />
 	
 	<!-- interceptor -->
-	<!-- <interceptors>
+    <interceptors>
 		<interceptor>
 			<mapping path="/**"/>
 			<beans:bean class="com.lemon.lemonbiz.common.interceptor.LoggerInterceptor"/>

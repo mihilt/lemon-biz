@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.taglibs.standard.lang.jstl.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,19 +15,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.lemon.lemonbiz.approval.model.service.approvalService;
+import com.lemon.lemonbiz.member.controller.MemberController;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.sun.org.slf4j.internal.LoggerFactory;
 
-import net.sf.json.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @Controller
 @RequestMapping("/approval")
 @SessionAttributes({"loginMember"})
 public class ApprovalController {
 	
-	private static Logger log = LoggerFactory.getLogger(ApprovalController.class);
-
 	@Autowired
 	private approvalService approvalService;
 	
