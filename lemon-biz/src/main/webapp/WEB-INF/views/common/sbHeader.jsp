@@ -341,9 +341,7 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">${ loginMember.name }</span>
                 <div class="img-profile rounded-circle" 
                 	 style="background-size: 32px 32px;
-                	 		background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');
-                	 "
-                >
+                	 		background-image: url('${pageContext.request.contextPath }/resources/images/default-image.png');">
                 
                 </div>
               </a>

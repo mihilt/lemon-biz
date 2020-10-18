@@ -17,9 +17,9 @@ public class CalendarServiceImpl implements CalendarService {
 	
 
 	@Override
-	public List<Calendar> selectAllList() {
+	public List<Calendar> selectAllList(String memberId) {
 		
-		return calendarDAO.selectAllList();
+		return calendarDAO.selectAllList(memberId);
 	}
 
 	@Override
