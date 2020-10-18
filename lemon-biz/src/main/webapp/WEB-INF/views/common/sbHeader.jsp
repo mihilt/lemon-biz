@@ -408,7 +408,7 @@
     				%>
                 	 "
                 >
-                
+                  
                 </div>
               </a>
               <!-- Dropdown - User Information -->

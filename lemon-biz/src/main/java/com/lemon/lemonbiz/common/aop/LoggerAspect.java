@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoggerAspect {
 
-	@Pointcut("execution(* com.lemon.lemonbiz..*(..))")
+//	@Pointcut("execution(* com.lemon.lemonbiz..*(..))")
 	public void pointcut() {
 		
 	}
