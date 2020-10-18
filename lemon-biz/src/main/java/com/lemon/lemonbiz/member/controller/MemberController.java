@@ -1,6 +1,11 @@
 package com.lemon.lemonbiz.member.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.lemon.lemonbiz.manager.model.service.ManagerService;
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
+import com.lemon.lemonbiz.notice.model.vo.Notice;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +37,7 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService memberService;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
@@ -39,21 +47,24 @@ public class MemberController {
 
 		log.debug("member={}" + member);
 		
-		String rawPassword = member.getMemberId();
-		String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
-		member.setPassword(encodedPassword);
-		
-		System.out.println(member);
-		
+		//존재하는 사원인지 검사
 		if(memberService.selectOneMember(member.getMemberId()) != null) {
 			String msg = "이미 존재하는 사원 번호 입니다.";
 			redirectAttr.addFlashAttribute("msg", msg);
 			return "redirect:/manager/insertMember.do";
 		}
 		
+		//BCryptPasswordEncoder
+		String rawPassword = member.getMemberId();
+		String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
+		member.setPassword(encodedPassword);
+		
+		//사원 등록
 		int result = 0;
+		
 		try {
 			result = memberService.insertMember(member);
+			
 		} catch(Exception e) {
 			log.debug("사원 등록 실패");
 		}
@@ -122,8 +133,33 @@ public class MemberController {
 		return "forward:/WEB-INF/views/mypage/showMyPage.jsp";
 	}
 	
-	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.GET)
-	public String update(Member member, RedirectAttributes redirectAttr, Model model) {
+	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.POST)
+	public String update(Member member, 
+						 RedirectAttributes redirectAttr, 
+						 Model model,
+						 HttpServletRequest request,
+						 @RequestParam(value="profile_img",
+								 	   required=false) MultipartFile[] profileImgs) throws IllegalStateException, IOException {
+		
+		String saveDirectory = request.getServletContext()
+				.getRealPath("/resources/upload/profile_images");
+		
+		
+		for(MultipartFile profileImg : profileImgs) {
+			//파일을 선택하지 않고 전송한 경우
+			if(profileImg.isEmpty())
+				continue;
+			
+			int beginIndex = profileImg.getOriginalFilename().lastIndexOf('.');
+			String ext = profileImg.getOriginalFilename().substring(beginIndex);
+			
+			//메모리의 파일 -> 서버컴퓨터 디렉토리 저장  transferTo
+			File dest = new File(saveDirectory, member.getMemberId()+ext);
+			profileImg.transferTo(dest);
+			
+		}
+		
+		
 		
 		int result = memberService.updateMember(member);
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
@@ -168,6 +204,33 @@ public class MemberController {
 		}
 		
 	}
+	
+	@RequestMapping(value = "organization.do", method = RequestMethod.GET)
+	public void organization(Model model) {
+		List<Dept> hierarchicalDeptList = memberService.hierarchicalDeptList();
+		List<Member> memberList = memberService.selectMemberList();
 
-
+		model.addAttribute("hierarchicalDeptList", hierarchicalDeptList);
+		model.addAttribute("memberList", memberList);
+		
+	}
+	
+	
+	@RequestMapping(value = "selectOneMemberAjax.do", method = RequestMethod.GET)
+	public void selectOneMemberAjax(@RequestParam("memberId") String memberId,
+									HttpServletResponse response) {
+		Member member = memberService.selectOneMember(memberId);
+		
+		response.setContentType("application/json; charset=utf-8");
+		
+		Gson gson = new Gson();
+		try {
+			gson.toJson(member, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 }

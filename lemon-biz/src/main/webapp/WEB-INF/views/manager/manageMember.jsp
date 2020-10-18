@@ -38,11 +38,11 @@
 							<td>${ member.name }</td>
 							<td>${ member.rankName }</td>
 							<td>${ member.deptName }</td>
-							<td>
+							<td style="width: 10%">
 								<a type="button" class="btn btn-outline-secondary"
 									href="${pageContext.request.contextPath}/manager/manageMember/detail.do?memberId=${ member.memberId }">상세보기</a>
 							</td>
-							<td>		
+							<td style="width: 8%">		
 								<a type="button" 
 								   class="btn btn-outline-danger"
 								   onclick="return confirm('정말 퇴사처리 하시겠습니까 ?')"

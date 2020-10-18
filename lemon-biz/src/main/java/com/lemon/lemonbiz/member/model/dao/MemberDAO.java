@@ -24,4 +24,8 @@ public interface MemberDAO {
 
 	int deleteMember(Member member);
 
+	List<Member> selectMemberListWithDeptKey(int deptKey);
+
+	List<Dept> hierarchicalDeptList();
+
 }

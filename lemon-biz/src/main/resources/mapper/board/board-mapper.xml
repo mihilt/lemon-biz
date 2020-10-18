@@ -4,22 +4,17 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board">
 	<select id="selectBoardMapList" resultMap="boardMap">
-		select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        post_key = P.key) file_count
-		from
-   			 post P
-		order by
-			key desc
-
+		select * 
+        	from ( select rownum as rnum, v.* 
+        			from ( select(select count(*) 
+        						from attachment 
+        							where post_key = P.key)file_count,P.*
+        		from post P 
+        			where categ_key=1 
+        				order by is_notice desc,key desc)v)v
+        			where rnum between #{startRnum} and #{endRnum}
 	</select>
-	
-	
+
 	<resultMap type="map" id="boardMap">
   		<id column="key" property="key"/>
   		<result column="mem_id" property="memId"/>
@@ -30,21 +25,48 @@
   		<result column="is_notice" property="isNotice"/>
   		<result column="is_deleted" property="isDeleted"/>
   		<result column="read_count" property="readCount"/>
+  		<result column="dept_key" property="deptKey"/>
   		<result column="file_count" property="fileCount"/>
+  		<result column="startRnum" property="startRnum"/>
+  		<result column="endRnum" property="endRnum"/>
+  		<result column="cPage" property="cPage"/>
+  		<result column="numPerPage" property="numPerPage"/>
   	</resultMap>
+  	
+	<select id="selectBoardList" resultType="board">
+	 select
+    		rownum  ,P.*,
+			    (select 
+			        count(*)
+			    from 
+			        attachment
+			    where
+		        post_key = P.key) file_count
+		from
+   			 (select * from post 
+   		where categ_key=1
+		order by
+		is_notice desc,key desc)P
+	WHERE RN BETWEEN #{startRnum} AND #{endRnum}
+	</select>
+	
   	
   	<insert id="insertBoard">
   	insert into
 			post
 		values(
 			seq_post_key.nextval,
+			#{ name },
+			 1,
 			#{ title },
-			#{ memId },
 			#{ content },
 			default,
-			default		
+			#{ isNotice },
+			default,
+			default,
+			null	
 		)
-		<selectKey order="AFTER" resultType="_int" keyProperty="no">
+		<selectKey order="AFTER" resultType="_int" keyProperty="key">
 			select
 				seq_post_key.currval
 			from 
@@ -56,20 +78,41 @@
   		insert into 
 			attachment
 		values (
-			seq_attachment_no.nextval, 
+			seq_attachment_key.nextval, 
 			#{ postKey },
-			#{ originFilename },
+			null,
+			null,
+			null,
+			#{ originName },
 			#{ reName },
 			default,
 			default
 		)	
 		
   	</insert>
+  	
+  	<select id="selectOneBoard" resultType="board">
+		select
+			*
+		from
+			post
+		where 
+			key = #{ key }
+	</select>
+	
+	<select id="selectAttachList" resultType="attachment">
+		select
+			*
+		from
+			attachment
+		where 
+			post_key= #{ postKey } 
+	</select>
   
- <!--  <select id="selectOneBoardCollection" resultMap="boardCollectionMap">
+  <select id="selectOneBoardCollection" resultMap="boardCollectionMap">
  	   select
 		    P.*,
-		    A.key as "attach_no",
+		    A.key as "attach_key",
 		    A.post_key,
 		    A.origin_name,
 		    A.re_name,
@@ -80,7 +123,7 @@
 		        left join attachment A
 		            on P.key= A.post_key
 		where
-		    P.key= #{ key }
+		    P.key= #{ postKey }
   
   </select>
   
@@ -96,16 +139,293 @@
   		<result column="read_count" property="readCount"/>
   		
   		<collection property="attachList" ofType="attachment">
-  			<id column="attach_no" property="no"/>
-  			<result column="board_no" property="boardNo"/>
-  			<result column="original_filename" property="originalFilename"/>
-  			<result column="renamed_filename" property="renamedFilename"/>
+  			<id column="attach_key" property="key"/>
+  			<result column="post_key" property="postKey"/>
+  			<result column="approval_key" property="appovalKey"/>
+  			<result column="mem_id" property="memId"/>
+  			<result column="mail_key" property="mailKey"/>
+  			<result column="origin_name" property="originName"/>
+  			<result column="re_name" property="reName"/>
   			<result column="upload_date" property="uploadDate"/>
-  			<result column="download_count" property="downloadCount"/>
-  			
+  			<result column="download_cnt" property="downloadCnt"/>
   		</collection>
-  	</resultMap> -->
-  
+  	</resultMap>
+  	
+  	<select id="selectOneAttachment" resultType="attachment">
+  		select
+			*
+		from 
+			attachment
+		where
+			key = #{ key }
+  	
+  	</select>
+  	
+  	<update id="increaseReadConut">
+  		update post set
+	    read_count = read_count +1
+	    where key = #{ key }
+  	</update>
+  	
+  	<update id="updateBoard">
+  	update post set
+  		title = #{ title },
+  		content = #{ content }
+  		where key = #{ key }
+  	</update>
+  	
+  	<select id="countBoard" resultType="_int">
+  		SELECT COUNT(*) as "cnt" FROM POST where categ_key=1
+  	</select>
+  	
+  	<insert id="boardInsert">
+  	insert into board_comment (board_comment_no, board_comment_level, board_comment_writer, board_comment_content, board_ref, board_comment_ref, board_comment_date)
+  	 values(seq_board_comment_no.nextval, 
+  	 		#{ boardCommentLevel }, 
+  	 		#{ boardCommentWriter },
+  	 		#{ boardCommentContent },
+  	 		#{ boardRef },
+  	 		<if test="boardCommentRef == 0 ">
+  	 		 null,
+  	 		</if>
+  	 		<if test=" boardCommentRef != 0">
+  	 		#{ boardCommentRef },
+  	 		</if>
+  	 		 default)
+  	</insert>
+  	
+  	<select id="selectCommentList" resultType="BoardComment">
+	  	select BC.*
+		from board_comment BC
+		where board_ref = #{ key }
+		start with board_comment_level = 1
+		connect by board_comment_ref = prior board_comment_no
+		order siblings by board_comment_no
+  	</select>
+  	
+  	<delete id="boardDelete">
+  		delete 
+  			from board_comment 
+  		where 
+  			board_comment_no = #{ boardCommentNo }
+  	</delete>
+  	
+  	<delete id="boardfrmDelete">
+  		delete 
+  			from post
+  		where key = #{ key }
+  	</delete>
+  	
+  	<delete id="boardFileDelete">
+  		delete 
+  		from attachment 
+  		where post_key = #{ key }
+  	</delete>
+  	
+  	<select id="selectTeamBoardMapList" resultMap="boardTeam">
+  	select
+    		P.*,
+			    (select 
+			        count(*)
+			    from 
+			        attachment
+			    where
+		        post_key = P.key) file_count
+		from
+   			 post P
+   		where categ_key=2  and  dept_key = #{ deptKey } 
+		order by
+			is_notice desc,key desc
+  	</select>
+  	
+  	<resultMap type="map" id="boardTeam">
+  		<id column="key" property="key"/>
+  		<result column="mem_id" property="memId"/>
+  		<result column="categ_key" property="categKey"/>
+  		<result column="title" property="title"/>
+  		<result column="content" property="content"/>
+  		<result column="post_date" property="postDate"/>
+  		<result column="is_notice" property="isNotice"/>
+  		<result column="is_deleted" property="isDeleted"/>
+  		<result column="read_count" property="readCount"/>
+  		<result column="dept_key" property="deptKey"/>
+  		<result column="file_count" property="fileCount"/>
+  	</resultMap>
+  	
+  	<insert id="insertTeamBoard">
+  		insert into
+			post
+		values(
+			seq_post_key.nextval,
+			#{ name },
+			 2,
+			#{ title },
+			#{ content },
+			default,
+			#{ isNotice },
+			default,
+			default,
+			#{ deptKey }	
+		)	
+		<selectKey order="AFTER" resultType="_int" keyProperty="key">
+			select
+				seq_post_key.currval
+			from 
+				dual
+		</selectKey>
+  	</insert>
+  	
+  	<select id="boardSearch" resultType="board">
+  	 select
+    		P.*,
+			    (select 
+			        count(*)
+			    from 
+			        attachment
+			    where
+		        post_key = P.key) file_count
+		from
+   			 post P
+   		where categ_key=1 and 
+        mem_id like '%'||#{ searchKeyword }||'%'
+         order by is_notice desc ,key desc
+  	</select>
+  	
+  	<select id="selectMaList" resultMap="boardMa">
+  	select * 
+        	from ( select rownum as rnum, v.* 
+        			from ( select(select count(*) 
+        						from attachment 
+        							where post_key = P.key)file_count,P.*
+        		from post P 
+        			where categ_key=3 
+        				order by is_notice desc,key desc)v)v
+        			where rnum between #{startRnum} and #{endRnum}
+  	</select>
+  	<resultMap type="map" id="boardMa">
+  		<id column="key" property="key"/>
+  		<result column="mem_id" property="memId"/>
+  		<result column="categ_key" property="categKey"/>
+  		<result column="title" property="title"/>
+  		<result column="content" property="content"/>
+  		<result column="post_date" property="postDate"/>
+  		<result column="is_notice" property="isNotice"/>
+  		<result column="is_deleted" property="isDeleted"/>
+  		<result column="read_count" property="readCount"/>
+  		<result column="dept_key" property="deptKey"/>
+  		<result column="file_count" property="fileCount"/>
+  		<result column="startRnum" property="startRnum"/>
+  		<result column="endRnum" property="endRnum"/>
+  		<result column="cPage" property="cPage"/>
+  		<result column="numPerPage" property="numPerPage"/>
+  	</resultMap>
+  	
+  	<insert id="insertMaBoard">
+  	insert into
+			post
+		values(
+			seq_post_key.nextval,
+			#{ name },
+			 3,
+			#{ title },
+			#{ content },
+			default,
+			1,
+			default,
+			default,
+			null	
+		)
+		<selectKey order="AFTER" resultType="_int" keyProperty="key">
+			select
+				seq_post_key.currval
+			from 
+				dual
+		</selectKey>
+  	</insert>
+  	
+  	<select id="boardtitleSearch" resultType="board">
+  	select
+    		P.*,
+			    (select 
+			        count(*)
+			    from 
+			        attachment
+			    where
+		        post_key = P.key) file_count
+		from
+   			 post P
+   		where categ_key=1 and 
+        title like '%'||#{ searchKeyword }||'%'
+         order by is_notice desc ,key desc
+  	</select>
+  	
+  	<select id="boardTeamSearch" resultType="board">
+  	select
+    		P.*,
+			    (select 
+			        count(*)
+			    from 
+			        attachment
+			    where
+		        post_key = P.key) file_count
+		from
+   			 post P
+   		where categ_key=2
+        and mem_id like '%'||#{ searchKeyword }||'%' and dept_key = #{ deptKey }  
+         order by is_notice desc ,key desc
+  	</select>
+  	
+  	<select id="boardTeamSearch2" resultType="board">
+  	select
+    		P.*,
+			    (select 
+			        count(*)
+			    from 
+			        attachment
+			    where
+		        post_key = P.key) file_count
+		from
+   			 post P
+   		where categ_key=2
+        and title like '%'||#{ searchKeyword }||'%' and dept_key = #{ deptKey }  
+         order by is_notice desc ,key desc
+  	</select>
+  	
+  	<select id="boardMSearch" resultType="board">
+  	select
+    		P.*,
+			    (select 
+			        count(*)
+			    from 
+			        attachment
+			    where
+		        post_key = P.key) file_count
+		from
+   			 post P
+   		where categ_key=3
+        and title like '%'||#{ searchKeyword }||'%'  
+         order by is_notice desc ,key desc
+  	</select>
+  	
+  	<select id="boardMSearch2" resultType="board">
+  	select
+    		P.*,
+			    (select 
+			        count(*)
+			    from 
+			        attachment
+			    where
+		        post_key = P.key) file_count
+		from
+   			 post P
+   		where categ_key=3
+        and mem_id like '%'||#{ searchKeyword }||'%'  
+         order by is_notice desc ,key desc
+  	</select>
+  	<select id="countBoard3" resultType="_int">
+  	SELECT COUNT(*) as "cnt" FROM POST where categ_key=3
+  	</select>
+  	
 </mapper>
 
 

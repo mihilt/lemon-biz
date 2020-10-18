@@ -33,11 +33,11 @@
 								</c:if>
 							</td>
 							<td>${ dept.name }</td>
-							<td>
+							<td style="width: 8%">
 								<a type="button" class="btn btn-outline-secondary"
 									href="${pageContext.request.contextPath}/manager/manageDept/update.do?key=${ dept.key }">수정</a>
 							</td>
-							<td>
+							<td style="width: 8%">
 								<a type="button" 
 								   class="btn btn-outline-danger"
 								   onclick="return confirm('정말 삭제 하시겠습니까 ?')"

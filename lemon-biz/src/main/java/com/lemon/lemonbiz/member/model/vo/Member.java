@@ -1,7 +1,6 @@
 package com.lemon.lemonbiz.member.model.vo;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +22,11 @@ public class Member implements Serializable {
 	private String telNum;
 	private String address;
 	private String email;
+	private String emailPwd;
 	private int isManager;
 
 	private String deptName;
 	private String rankName;
+	private String loginMember;
+	private String searchKeyword;
 }
