@@ -1,5 +1,7 @@
+
 package com.lemon.lemonbiz.board.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
@@ -14,6 +16,7 @@ import com.lemon.lemonbiz.board.model.dao.BoardDAO;
 import com.lemon.lemonbiz.board.model.vo.Board;
 import com.lemon.lemonbiz.board.model.vo.BoardComment;
 import com.lemon.lemonbiz.common.vo.Attachment;
+import com.lemon.lemonbiz.member.model.vo.Member;
 
 @Transactional(propagation = Propagation.REQUIRED, 
 			   isolation = Isolation.READ_COMMITTED,
@@ -25,8 +28,8 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDAO boardDAO;
 
 	@Override
-	public List<Map<String, Object>> selectBoardMapList() {
-		return boardDAO.selectBoardMapList();
+	public List<Map<String, Object>> selectBoardMapList(int cPage, int numPerPage, Map<String, Object> map) {
+		return boardDAO.selectBoardMapList(cPage,numPerPage,map);
 	}
 	
 	
@@ -92,8 +95,8 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public int updateBoard(Board board,int key) {
-		return boardDAO.updateBoard(board,key);
+	public int updateBoard(Board board) {
+		return boardDAO.updateBoard(board);
 	}
 
 
@@ -136,6 +139,102 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 
+	@Override
+	public List<Map<String, Object>> selectTeamBoardMapList(Member loginMember) {
+		return boardDAO.selectTeamBoardMapList(loginMember);
+	}
+
+
+	@Override
+	public int insertTeamBoard(Board board) {
+		
+		int result = 0;
+		//1. board insert
+		result = boardDAO.insertTeamBoard(board);
+		
+		//2. attachment insert
+		if(board.getAttachList() != null) {
+			
+			for(Attachment attach : board.getAttachList()) {
+				//생성된 boardNo값 대입하기
+				attach.setPostKey(board.getKey());
+				result = boardDAO.insertAttachment(attach);
+			}
+			
+		}			
+		return result;
+	}
+
+
+	@Override
+	public List<Board> boardSearch(String searchKeyword) {
+		return boardDAO.boardSearch(searchKeyword);
+	}
+
+
+	@Override
+	public List<Map<String, Object>> selectMaList(int cPage, int numPerPage, Map<String, Object> map) {
+		return boardDAO.selectMaList(cPage,numPerPage,map);
+	}
+
+
+	@Override
+	public int insertMaBoard(Board board) {
+
+		int result = 0;
+		//1. board insert
+		result = boardDAO.insertMaBoard(board);
+		
+		//2. attachment insert
+		if(board.getAttachList() != null) {
+			
+			for(Attachment attach : board.getAttachList()) {
+				//생성된 boardNo값 대입하기
+				attach.setPostKey(board.getKey());
+				result = boardDAO.insertAttachment(attach);
+			}
+			
+		}			
+		return result;
+	}
+
+
+	@Override
+	public List<Board> boardtitleSearch(String searchKeyword) {
+		return boardDAO.boardtitleSearch(searchKeyword);
+	}
+
+
+	@Override
+	public List<Board> boardTeamSearch(Member loginMember) {
+		return boardDAO.boardTeamSearch(loginMember);
+	}
+
+
+	@Override
+	public List<Board> boardTeamSearch2(Member loginMember) {
+		return boardDAO.boardTeamSearch2(loginMember);
+	}
+
+
+	@Override
+	public List<Board> boardMSearch(String searchKeyword) {
+		return boardDAO.boardMSearch(searchKeyword);
+	}
+
+
+	@Override
+	public List<Board> boardMSearch2(String searchKeyword) {
+		return boardDAO.boardMSearch2(searchKeyword);
+	}
+
+
+	@Override
+	public int countBoard3() {
+		return boardDAO.countBoard3();
+	}
+	
+	
 
 
 	

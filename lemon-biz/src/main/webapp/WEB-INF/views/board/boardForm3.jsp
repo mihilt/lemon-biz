@@ -26,43 +26,25 @@
 		<div class="row content">
 			<div class="col-sm text-left">
 				<br>
-				<h2>게시글 작성</h2>
+				<h2>게시글 수정</h2>
 
-				<form id="boardFrm" name="boardFrm" action="${pageContext.request.contextPath}/board/boardEnroll2.do" 
+				<form id="boardFrm" name="boardFrm" action="${pageContext.request.contextPath}/board/boardupdatesucces.do?key=${ board.key }" 
 					  method="post" enctype="multipart/form-data">
 					 <input type="hidden" name="deptKey" value="${ loginMember.deptKey }" />
 					<div class="form-group">
 						<input type="hidden" name="memId" value="${loginMember.memberId}"/>	
-						<input type="hidden" name="name" value="${loginMember.name}"/>
 					</div> 
 					<div class="custom-control custom-checkbox" >
 				<input type="checkbox" id="jb-checkbox" name="isNotice" class="custom-control-input" value="0">
 				<label class="custom-control-label" for="jb-checkbox" style="float:right;"><strong>공지사항 등록</strong></label>
 			</div>
-					<div class="form-group">
-						<label for="title">제목:</label> <input placeholder="Enter Title" type="text" class="form-control" id="title" name="title">
-					</div>
-					<div class="input-group mb-3" style="padding:0px;">
-		  <div class="input-group-prepend" style="padding:0px;">
-		    <span class="input-group-text">첨부파일1</span>
-		  </div>
-		  <div class="custom-file">
-		    <input type="file" class="custom-file-input" name="upFile" id="upFile" >
-		    <label class="custom-file-label" for="upFile1">파일을 선택하세요</label>
-		  </div>
-		</div>
-		<div class="input-group mb-3" style="padding:0px;">
-		  <div class="input-group-prepend" style="padding:0px;">
-		    <span class="input-group-text">첨부파일2</span>
-		  </div>
-		  <div class="custom-file">
-		    <input type="file" class="custom-file-input" name="upFile" id="upFile" >
-		    <label class="custom-file-label" for="upFile2">파일을 선택하세요</label>
-		  </div>
-		</div>
+			<div class="form-group">
+				<label for="title">제목:</label> <input value="${board.title}" type="text" class="form-control" id="title" name="title">
+			</div>
+			 
 			<div class="form-group">
 				<label for="content">내용:</label>
-				<textarea id="brdmemo" class="form-control" name="content" rows="10"></textarea> 
+				<textarea id="brdmemo" class="form-control" name="content" rows="10" >${ board.content }</textarea> 
 			</div>
 			<div align="center">
 

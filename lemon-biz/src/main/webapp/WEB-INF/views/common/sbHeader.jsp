@@ -27,7 +27,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="${pageContext.request.contextPath}/board/boardMaList.do">
           <i class="fas fa-fw fa-exclamation"></i>
           <span>공지사항</span></a>
       </li>

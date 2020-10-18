@@ -26,19 +26,16 @@
 		<div class="row content">
 			<div class="col-sm text-left">
 				<br>
-				<h2>게시글 작성</h2>
+				<h2>공지사항 작성</h2>
 
-				<form id="boardFrm" name="boardFrm" action="${pageContext.request.contextPath}/board/boardEnroll2.do" 
-					  method="post" enctype="multipart/form-data">
-					 <input type="hidden" name="deptKey" value="${ loginMember.deptKey }" />
+				<form id="boardFrm" name="boardFrm" action="${pageContext.request.contextPath}/board/boardEnroll3.do" 
+					  method="post" enctype="multipart/form-data"
+				action="${pageContext.request.contextPath}/board/boardEnroll.do" method="post">
 					<div class="form-group">
 						<input type="hidden" name="memId" value="${loginMember.memberId}"/>	
-						<input type="hidden" name="name" value="${loginMember.name}"/>
+						<input type="hidden" name="name" value="${loginMember.name}"/>	
 					</div> 
-					<div class="custom-control custom-checkbox" >
-				<input type="checkbox" id="jb-checkbox" name="isNotice" class="custom-control-input" value="0">
-				<label class="custom-control-label" for="jb-checkbox" style="float:right;"><strong>공지사항 등록</strong></label>
-			</div>
+					
 					<div class="form-group">
 						<label for="title">제목:</label> <input placeholder="Enter Title" type="text" class="form-control" id="title" name="title">
 					</div>
@@ -67,7 +64,7 @@
 			<div align="center">
 
 					<a href="#"	class="btn btn-outline-warning" onclick="fn_formSubmit()">작성 완료</a>
-					<a href="${pageContext.request.contextPath}/board/boardList.do" class="btn btn-outline-warning">취소</a> 
+					<a href="${pageContext.request.contextPath}/board/boardMaList.do" class="btn btn-outline-warning">취소</a> 
 			</div>
 		</form>
 				<br>
@@ -76,19 +73,7 @@
 	</div>
 </body>
 <br><br>
-<script type="text/javascript">
-
-$(document).ready(function(){
-	 $("#jb-checkbox").click(function () {
-		 if($("input[name=isNotice]:checked") ){
-			 document.getElementById("jb-checkbox").value = "1"
-			 
-		 }
-	});
-});
- 
-
-
+<script type="text/javascript"> 
 $(document).ready(function(){
 
 	$('#brdmemo').summernote({

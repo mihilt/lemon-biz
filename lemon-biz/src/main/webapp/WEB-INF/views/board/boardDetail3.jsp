@@ -50,9 +50,9 @@
 				</c:forEach>
 				</div><br>
 				<div class="container">
-				<a class="btn btn-outline-warning" href="${ pageContext.request.contextPath }/board/boardList.do">돌아가기</a>
+				<a class="btn btn-outline-warning" href="${ pageContext.request.contextPath }/board/boardMaList.do">돌아가기</a>
 				<c:if test="${loginMember.name eq board.memId or loginMember.isManager eq 1}">
-					<a class="btn btn-outline-warning" onclick="deleteBoard('${ board.key}')" href="boardfrmDelete.do?key=<c:out value="${board.key}"/>">삭제</a>
+					<a class="btn btn-outline-warning" onclick="deleteBoard('${ board.key}')" href="boardfrmDelete3.do?key=<c:out value="${board.key}"/>">삭제</a>
 					<a class="btn btn-outline-warning" onclick="updateBoard('${ board.key }')" href="boardUpdate.do?key=<c:out value="${board.key}"/>">수정</a>
 				</c:if>
 				</div>

@@ -100,17 +100,25 @@ function goBoardForm(){
 		</tr>
 		</c:forEach>
 	</table>
+<form id="form1" name="form1"  method="post">
 
 	<div class="container">
 
-	   <div class="search-container" align="center">
+	    <div class="container-fluid" align="center">
 
+			
 		<div class="group" style="align:center;">
 			<select class="btn btn-outline-warning dropdown-toggle" id="searchType">
-				<option value="title">제목</option>
-				<option value="memberName">작성자</option>
+				<option value="title" <c:if test="${fn:indexOf(searchVO.searchType, 'brdtitle')!=-1}">checked="checked"</c:if>>제목</option>
+				<option value="memberName" <c:if test="${fn:indexOf(searchVO.searchType, 'brdmemo')!=-1}">checked="checked"</c:if>>작성자</option>
 			</select>
-		
+		<div id="search-title" class="search-type">
+            <form action="${ pageContext.request.contextPath }/board/boardSearch2.do">
+                <input type="hidden" name="searchType" value="title"/>
+                <input type="text" class="btn btn-outline-warning" name="searchKeyword"/>
+                <button type="submit" class="btn btn-outline-warning"><i class="fas fa-search fa-sm"></i></button>			
+            </form>	
+        </div>
         <div id="search-memberName" class="search-type">
             <form action="${ pageContext.request.contextPath }/board/boardSearch.do">
                 <input type="hidden" name="searchType" value="memberName"/>
@@ -118,28 +126,32 @@ function goBoardForm(){
                 <button type="submit" class="btn btn-outline-warning"><i class="fas fa-search fa-sm"></i></button>			
             </form>	
         </div>
-        <div id="search-title" class="search-type">
-            <form action="${ pageContext.request.contextPath }/board/boardSearch2.do">
-                <input type="hidden" name="searchType" value="title"/>
-                <input type="text" class="btn btn-outline-warning" name="searchKeyword"/>
-                <button type="submit" class="btn btn-outline-warning"><i class="fas fa-search fa-sm"></i></button>			
-            </form>           
-        </div>
 	</div>
 			
 			
 		    <br>
-	
-				<div class="text-center">	
-					<ul style="justify-content: center;" class="pagination">
-						${pagebar }
-						
+		     <div class="container" >
+			<div class="row">
+				<div class="col">
+					
+					<ul class="pagination">
+						<!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+						<li class="page-item"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item"><a class="page-link" href="#">4</a></li>
+						<li class="page-item"><a class="page-link" href="#">5</a></li>
+						<li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+						${pagebar}
 					</ul>
-			
+					
+				</div>
+			</div>
 		</div>
 		     </div>
 		</div>
-
+	
+	</form>	
             <br>
            
 </section> 
@@ -147,7 +159,6 @@ function goBoardForm(){
 div#search-title {display: inline-block;}
 div#search-memberName{display:none;}
 </style>
-
 <script>
 $(function(){
 	$("#searchType").change(function(){
@@ -158,8 +169,6 @@ $(function(){
 						 .css("display", "inline-block");
 	});
 });
-
 </script>
-
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
