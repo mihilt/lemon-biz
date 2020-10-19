@@ -114,6 +114,13 @@
           <span>조직도</span></a>
       </li>
       
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/room">
+          <i class="fas fa-fw fa-room"></i>
+          <span>채팅방</span></a>
+      </li>
+      
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
 	<c:if test="${ loginMember.isManager eq 1 }">
@@ -183,7 +190,7 @@
           </div>
         </div>
       </li>
-
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
 </c:if>	
