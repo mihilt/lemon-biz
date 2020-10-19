@@ -66,4 +66,4 @@
         </c:if>
     
     </head>
-    <body>
+    <body id="body">
