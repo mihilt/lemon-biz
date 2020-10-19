@@ -40,7 +40,7 @@ div.infoVal{display:inline-block; width: 20%; height: 85%;color:#fff; margin: 8p
 	 </form>
 	 		<div id="lastarrive" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="yyyyMMdd"/></div>
 	<div>
-		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="attendtest();">월별 근태기록</button>
+		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="attendtest();">월별 근태</button>
 		<button id="btn-leabe" class="btn btn-outline-warning" type="button" onclick="attendLeabe();">퇴근</button>&nbsp;
 	 	<button id="btn-arrive" class="btn btn-outline-warning" type="button" onclick="attendArrive();">출근</button>
 	</div>
