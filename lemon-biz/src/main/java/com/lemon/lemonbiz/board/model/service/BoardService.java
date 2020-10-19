@@ -61,6 +61,8 @@ public interface BoardService {
 
 	int countBoard3();
 
+	String selectTeamName(Member loginMember);
+
 	
 
 	

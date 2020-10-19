@@ -381,6 +381,7 @@ public class BoardController {
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("startRnum", startRnum);
 		map.put("endRnum", endRnum);
+		String name = boardService.selectTeamName(loginMember);
 		List<Map<String, Object>> list = boardService.selectTeamBoardMapList(loginMember);
 		/* log.debug("loginMember = {}",loginMember); */
 		int totalContents = boardService.countBoard();
@@ -390,6 +391,8 @@ public class BoardController {
 		
 		log.debug("list = {}", list);
 		mav.addObject("list", list);
+		mav.addObject("name",name);
+		log.debug("name22 = {}",name);
 		mav.addObject("pagebar",pageBar);
 		
 		mav.setViewName("board/boardTeamList");
