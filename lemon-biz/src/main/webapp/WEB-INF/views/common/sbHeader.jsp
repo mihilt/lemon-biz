@@ -116,7 +116,7 @@
       
       <li class="nav-item">
         <a class="nav-link" href="${pageContext.request.contextPath}/room">
-          <i class="fas fa-fw fa-room"></i>
+          <i class="fas fa-comments"></i>
           <span>채팅방</span></a>
       </li>
       
