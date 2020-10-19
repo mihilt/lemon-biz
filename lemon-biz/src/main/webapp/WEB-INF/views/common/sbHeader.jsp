@@ -119,8 +119,7 @@
           <i class="fas fa-comments"></i>
           <span>채팅방</span></a>
       </li>
-      
-      
+
       <!-- Divider -->
       <hr class="sidebar-divider">
 	<c:if test="${ loginMember.isManager eq 1 }">

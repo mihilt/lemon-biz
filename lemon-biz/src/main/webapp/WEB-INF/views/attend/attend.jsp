@@ -75,6 +75,7 @@ div.infoVal{display:inline-block; width: 20%; height: 85%;color:#fff; margin: 8p
 var lastarrive=$("#lastarrive").text();
 today = new Date();
 month = today.getMonth()+1;
+
 if(month < 10){month = "0"+month;}
 /* var todayTime =today.getHours()+"";
 console.log(todayTime); */
@@ -85,24 +86,23 @@ function attendArrive(){
 	if(lastarrive==today){
 		alert("이미 출근상태입니다.");
 	}else{
-	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendArrive.do")
-	.attr("method", "POST")
-	.submit();
+		$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendArrive.do")
+		.attr("method", "POST")
+		.submit();
 	}
 }
 
 //퇴근
 function attendLeabe(){
 	var lastTime ='${lastAttend.time}';
-	if(lastTime=='0.0' && false){
-	console.log('퇴근가능');
+	var last_1 =Number(lastarrive)+1;
+	if(lastTime=='0.0'&& last_1>=today){
+	 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeabe.do")
+		.attr("method", "POST")
+		.submit();
 	}else{
-		console.log("꼼수 노 노");
+		alert("출근후 퇴근이 가능합니다.");
 	}
-/* 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeabe.do")
-	.attr("method", "POST")
-	.submit();
-	console.log(); */
 }
 
 //test

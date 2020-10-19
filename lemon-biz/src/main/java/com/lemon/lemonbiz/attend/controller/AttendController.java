@@ -38,7 +38,7 @@ public class AttendController {
 			
 			List<Attend> list = attendService.selectAttendList(attend);
 			Attend attendInfo =attendService.selectAttendInfo(attend);
-//			Attend lastAttend = attendService.selectLastOne(attend);
+			Attend lastAttend = attendService.selectLastOne(attend);
 			log.debug("list2값="+attendInfo);
 			
 			
@@ -46,10 +46,10 @@ public class AttendController {
 			model.addAttribute("sumArr",attendInfo.getKey());
 			model.addAttribute("sumTime",attendInfo.getMemId());
 			model.addAttribute("avgTime",attendInfo.getTime());
-//			model.addAttribute("lastAttend", lastAttend);
+			model.addAttribute("lastAttend", lastAttend);
 			
 			//Fri Oct 09 2020 19:53:37 GMT+0900 (대한민국 표준시)
-//			log.debug("lastAttend="+ lastAttend);
+			log.debug("lastAttend="+ lastAttend);
 			return "attend/attend";
 		}
 
@@ -94,13 +94,11 @@ public class AttendController {
 		//test호출
 		@RequestMapping("/attendtest.do")
 		public String attendtest(/* Model model, Attend attend*/) {
-		/*
-		 * 
-		 * 
-		 */
+
 		return "attend/attendtest";
 		}
-
+		
+		//캘린더 값 삽입
 		@ResponseBody
 		@RequestMapping("/selectCalAttend.do") 
 		public List<Attend> selectCalAttend(Attend attend ,
