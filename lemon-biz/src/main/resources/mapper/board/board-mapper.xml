@@ -224,7 +224,7 @@
   	
   	<select id="selectTeamBoardMapList" resultMap="boardTeam">
   	select
-    		P.*,
+    		P.*,D.*,
 			    (select 
 			        count(*)
 			    from 
@@ -232,10 +232,10 @@
 			    where
 		        post_key = P.key) file_count
 		from
-   			 post P
-   		where categ_key=2  and  dept_key = #{ deptKey } 
+   			 post P left join dept D on P.dept_key = D.key
+   		where P.categ_key=2  and  P.dept_key = #{deptKey}
 		order by
-			is_notice desc,key desc
+			P.is_notice desc,P.key desc
   	</select>
   	
   	<resultMap type="map" id="boardTeam">
@@ -249,6 +249,7 @@
   		<result column="is_deleted" property="isDeleted"/>
   		<result column="read_count" property="readCount"/>
   		<result column="dept_key" property="deptKey"/>
+  		<result column="name" property="name"/>
   		<result column="file_count" property="fileCount"/>
   	</resultMap>
   	
@@ -426,6 +427,10 @@
   	SELECT COUNT(*) as "cnt" FROM POST where categ_key=3
   	</select>
   	
+  	<select id="selectTeamName" resultType="string">
+  	select distinct D.name from post P left join dept D on P.dept_key = D.key where P.categ_key=2  and  P.dept_key = #{deptKey}
+  	</select>
+  
 </mapper>
 
 

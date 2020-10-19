@@ -65,6 +65,8 @@ public interface BoardDAO {
 
 	int countBoard3();
 
+	String selectTeamName(Member loginMember);
+
 	
 
 	

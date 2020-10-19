@@ -192,6 +192,12 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 
+	@Override
+	public String selectTeamName(Member loginMember) {
+		return sqlSession.selectOne("board.selectTeamName",loginMember);
+	}
+
+
 
 
 }

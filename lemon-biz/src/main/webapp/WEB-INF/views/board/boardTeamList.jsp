@@ -39,24 +39,10 @@ div#search-memberName{display:none;}
 	</c:if>
 	<table id="tbl-board" class="table table-striped table-hover">
 	<strong style="font-size:25px; font-family: 'Jua', sans-serif;">
-		
-		<!-- 부서게시판 deptKey로 지정 -->
-		<c:if test="${ loginMember.deptKey eq 0 }"> 부서코드 지정받고 이용해주세요</c:if>
-		<c:if test="${ loginMember.deptKey eq 102 }"> 경영관리본부 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 103 }"> 영업본부 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 104 }"> 개발본부 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 201 }"> 인사팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 202 }"> 총무팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 203 }"> 사업기획팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 204 }"> 홍보팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 301 }"> 영업1팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 302 }"> 영업2팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 303 }"> 영업3팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 401 }"> 솔루션개발1팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 402 }"> 솔루션개발2팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 403 }"> SI 1팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 404 }"> SI 2팀 게시판</c:if>
-		<c:if test="${ loginMember.deptKey eq 405 }"> 유지보수팀 게시판</c:if>
+	<c:choose>
+		<c:when test="${name eq null }">부서코드를 부여받으세요</c:when>
+	<c:otherwise>${ name }</c:otherwise>  
+	</c:choose>
 	</strong>
 		<tr>
 			<th>번호</th>
@@ -72,7 +58,7 @@ div#search-memberName{display:none;}
 						 style="width:30px;" /></td>
 			</c:if>
 			<c:if test="${ post.isNotice eq 0 }">
-			<td>${ post.key }</td>
+			<td></td>
 			</c:if>
 			
 			<c:if test="${ post.isNotice eq 1 }">

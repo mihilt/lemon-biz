@@ -233,6 +233,12 @@ public class BoardServiceImpl implements BoardService {
 	public int countBoard3() {
 		return boardDAO.countBoard3();
 	}
+
+
+	@Override
+	public String selectTeamName(Member loginMember) {
+		return boardDAO.selectTeamName(loginMember);
+	}
 	
 	
 
