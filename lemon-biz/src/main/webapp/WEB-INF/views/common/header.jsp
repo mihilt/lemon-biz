@@ -45,7 +45,6 @@
         <link href="${pageContext.request.contextPath }/resources/css/custom.css" rel="stylesheet">
         
         <!-- calendar -->
- 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/vendor/css/fullcalendar.min.css" />
 		<link rel="stylesheet" href='${pageContext.request.contextPath}/resources/vendor/css/select2.min.css' />
         <link rel="stylesheet" href='${pageContext.request.contextPath}/resources/vendor/css/bootstrap-datetimepicker.min.css' />

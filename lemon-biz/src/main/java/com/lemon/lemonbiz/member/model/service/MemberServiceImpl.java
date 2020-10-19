@@ -57,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
 		// member deptName, rankName 불러오기
 		member = memberService.selectOneMember(member.getMemberId());
 
-		// 단체 알림 등록
+		// 같은 부서 단체 알림 등록
 		List<Member> memberList = memberService.selectMemberListWithDeptKey(member.getDeptKey());
 		List<Notice> groupNoticeList = new ArrayList<Notice>();
 		
@@ -70,11 +70,8 @@ public class MemberServiceImpl implements MemberService {
 			groupNotice.setIcon("fa-user-plus");
 			groupNotice.setColor("info");
 			groupNotice.setMemId(sameDeptMember.getMemberId());
-			System.out.println(groupNotice);
-			
 			groupNoticeList.add(groupNotice);
 		}
-		System.out.println(groupNoticeList);
 		
 		noticeService.insertNoticeList(groupNoticeList);
 
