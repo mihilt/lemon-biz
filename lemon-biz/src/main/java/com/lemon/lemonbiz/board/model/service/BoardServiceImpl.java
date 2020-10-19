@@ -1,9 +1,8 @@
 
 package com.lemon.lemonbiz.board.model.service;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,10 @@ import com.lemon.lemonbiz.board.model.dao.BoardDAO;
 import com.lemon.lemonbiz.board.model.vo.Board;
 import com.lemon.lemonbiz.board.model.vo.BoardComment;
 import com.lemon.lemonbiz.common.vo.Attachment;
+import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.notice.model.service.NoticeService;
+import com.lemon.lemonbiz.notice.model.vo.Notice;
 
 @Transactional(propagation = Propagation.REQUIRED, 
 			   isolation = Isolation.READ_COMMITTED,
@@ -26,6 +28,12 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private BoardDAO boardDAO;
+	
+	@Autowired
+	private MemberService memberService;
+	
+	@Autowired
+	private NoticeService noticeService;
 
 	@Override
 	public List<Map<String, Object>> selectBoardMapList(int cPage, int numPerPage, Map<String, Object> map) {
@@ -194,7 +202,26 @@ public class BoardServiceImpl implements BoardService {
 				result = boardDAO.insertAttachment(attach);
 			}
 			
-		}			
+		}
+		
+		// 전체 회원 단체 알림 등록
+		List<Member> memberList = memberService.selectMemberList();
+		List<Notice> groupNoticeList = new ArrayList<Notice>();
+		
+		
+		for (Member sameDeptMember : memberList) {
+			Notice groupNotice = new Notice();
+			groupNotice.setContent("새로운 공지사항 " + "\"" + board.getTitle() + "\"" + " 등록되었습니다.");
+			groupNotice.setAddress("/board/boardMaList.do");
+			groupNotice.setIcon("fa-exclamation");
+			groupNotice.setColor("danger");
+			groupNotice.setMemId(sameDeptMember.getMemberId());
+			
+			groupNoticeList.add(groupNotice);
+		}
+		
+		noticeService.insertNoticeList(groupNoticeList);
+		
 		return result;
 	}
 
