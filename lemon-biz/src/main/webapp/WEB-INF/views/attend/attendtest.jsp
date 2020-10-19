@@ -8,37 +8,40 @@
 	<jsp:param value="" name="title"/>
 </jsp:include>
 <style type="text/css">
-.cal_top{
+div.cal_top{
     text-align: center;
     font-size: 30px;
 }
-.cal{
+a.cal_tit{
+color:orange;
+}
+div.cal{
     text-align: center; 
 }
 table.calendar{
-    border: 1px solid black;
+    border: 1px solid orange;
     display: inline-table;
     text-align: left;
 }
 table.calendar td{
     vertical-align: top;
-    border: 1px solid skyblue;
+    border: 1px solid orange;
     width: 100px;
 }
 </style>
-	
+	<h1 id="h1-sumTime"></h1>
 	<!-- <년월일> -->
-    <div class="cal_top">
-        <a href="#" id="movePrevMonth"><span id="prevMonth" class="cal_tit">&lt;</span></a>
-        <span id="cal_top_year"></span>
-        <span id="cal_top_month"></span>
-        <a href="#" id="moveNextMonth"><span id="nextMonth" class="cal_tit">&gt;</span></a>
+    <div class="cal_top m-2 ">
+        <a href="#" id="movePrevMonth"><span id="prevMonth" class="cal_tit ">&lt;</span></a>
+        <span id="cal_top_year" class="sp_cal_top text-warning"></span>
+        <span id="cal_top_month" class="sp_cal_top text-warning"></span>
+        <a href="#" id="moveNextMonth"><span id="nextMonth" class="cal_tit ">&gt;</span></a>
+        <button id="btn-attendList" class="btn btn-outline-warning" type="button" onclick="attendList();">뒤로가기</button>
     </div>
     <div id="cal_tab" class="cal">
     </div>
- 
 <script>
-    
+
     var today = null;
     var year = null;
     var month = null;
@@ -51,12 +54,12 @@ table.calendar td{
         drawCalendar();
         initDate();
         drawDays();
-//        drawSche();
         $("#movePrevMonth").on("click", function(){movePrevMonth();});
         $("#moveNextMonth").on("click", function(){moveNextMonth();});
+        
     });
-    
-    //캘린더형식 
+
+    //페이지요청
     function drawCalendar(){
         var setTableHTML = "";
         setTableHTML+='<table class="calendar">';
@@ -66,7 +69,7 @@ table.calendar td{
             for(var j=0;j<7;j++){
                 setTableHTML+='<td style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap">';
                 setTableHTML+='    <div class="cal-day"></div>';
-                setTableHTML+='    <div class="cal-schedule"></div>'; //값
+                setTableHTML+='    <div class="cal-schedule alert-warning"></div>'; //값
                 setTableHTML+='</td>';
             }
             setTableHTML+='</tr>';
@@ -87,7 +90,7 @@ table.calendar td{
         firstDay = new Date(year,month-1,1);
         lastDay = new Date(year,month,0);
     }
-/*
+/*		나중에지울것
  setData();
         var dateMatch = null;
         for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
@@ -96,58 +99,74 @@ table.calendar td{
 
 
 */
-    //날짜표시
+    //일한시간 출력 +날짜표시
     function drawDays(){
         $("#cal_top_year").text(year);
         $("#cal_top_month").text(month);
-
+        var calattend =null;
 
         var yyyymm=year+""+month;
-        
-
-		
-		
 		var memId="${loginMember.memberId}";
 		$.ajax({
 			type: "POST",
 			url : "${pageContext.request.contextPath}/attend/selectCalAttend.do",
 			dataType : "json",
 			data: {
-				memId :memId
+				memId :memId,
+				yyyymm :yyyymm
 			},
 			dataType : "json",
 		    success: function(data) {
-		    	console.log("success");
+			    calattend =data;
+		    	console.log(calattend);
+		    	var j=0;
+		    	var maxcal =calattend.length;
+		    	for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
+					
+					if($tdDay.eq(i)){
+						$tdDay.eq(i).text(++dayCount);
+		 
+						if(dayCount<10){
+							var daycon="0"+dayCount;
+							yyyymm=year+""+month+daycon;
+							}
+						else
+						yyyymm=year+""+month+dayCount;
+		 	 			if(j<maxcal && calattend[j].yyyymm==yyyymm){
+						$tdSche.eq(i).text(calattend[j].time+"시간");
+						j++;
+		 	 			}
+					}
+		        }
 			},
 			error:function(request, status, error){
 			console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		});
-		
-		
-		
-        for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
-
+        /* for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
+			var j=0;
 			if($tdDay.eq(i)){
 				$tdDay.eq(i).text(++dayCount);
-/* 				console.log(dayCount); */
+ 				console.log(dayCount);
  
-				
-					/* yyyymm=year+""+month+dayCount; */
 
+				if(dayCount<10){
+					var daycon="0"+dayCount;
+					yyyymm=year+""+month+daycon;
+					}
+				yyyymm=year+""+month+dayCount;
+
+	 			if(calattend[j].yyyymm==yyyymm){
+			 	console.log(calattend[0].yyyymm); 
+				j++;
+	 			
+	 	}           $tdSche.eq(i).text(calattend.time); 
 			}
 
-			
-			
-			if(true/* 요일이 같다면 실행하기 */){
-				
-//	           $tdSche.eq(i).text();    값가져오면 넣기
-			}
-			
-			
+			 
 
             	
-        }
+        } */
 
         for(var i=0;i<42;i+=7){
             $tdDay.eq(i).css("color","red");
@@ -193,11 +212,14 @@ table.calendar td{
         firstDay = new Date(year,month-1,1);
         lastDay = new Date(year,month,0);
         drawDays();
-        drawSche();
+    }
+    function attendList(){
+    	location.href = "${pageContext.request.contextPath}/attend/attend.do";
     }
     
     
-    //[]test
+  /*   망한거 나중에 지울거
+    []test
     function setData(){
     	jsonData =
          {
@@ -234,14 +256,14 @@ table.calendar td{
                 if(txt){
                     txt = jsonData[year][month][i];
                     dateMatch = firstDay.getDay() + i -1;
-/*                     $tdSche.eq(dateMatch).text(txt); */
+                    $tdSche.eq(dateMatch).text(txt); 
                 }
             }
-/*      alert(txt);   
-      alert(i);		*/
+    alert(txt);   
+      alert(i);		
         }
           
-    }
+    } */
 
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

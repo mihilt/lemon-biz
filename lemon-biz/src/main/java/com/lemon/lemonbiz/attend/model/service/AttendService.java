@@ -6,14 +6,17 @@ import com.lemon.lemonbiz.attend.model.vo.Attend;
 
 public interface AttendService {
 
-	List<Attend> selectAttendList();
+	List<Attend> selectAttendList(Attend attend);
+
+	Attend selectLastOne(Attend attend);
 
 	int attendArrive(Attend attend);
 
 	int attendLeabe(Attend attend);
 
-	List<Attend> selectCalArrive(Attend attend);
-
 	List<Attend> selectCalAttend(Attend attend);
+
+	Attend selectAttendInfo(Attend attend);
+
 
 }

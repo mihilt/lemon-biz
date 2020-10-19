@@ -19,8 +19,8 @@ public class AttendDAOImpl implements AttendDAO {
 	}
 
 	@Override
-	public List<Attend> selectAttendList() {
-		return sqlSession.selectList("attend.selectAttendList");
+	public List<Attend> selectAttendList(Attend attend) {
+		return sqlSession.selectList("attend.selectAttendList",attend);
 	}
 
 	@Override
@@ -29,13 +29,18 @@ public class AttendDAOImpl implements AttendDAO {
 	}
 
 	@Override
-	public List<Attend> CalArrive(Attend attend) {
-		return sqlSession.selectList("attend.CalArrive",attend);
+	public List<Attend> selectCalAttend(Attend attend) {
+		return sqlSession.selectList("attend.selectCalAttend",attend);
+	}
+	
+	@Override
+	public Attend selectLastOne(Attend attend) {
+		return sqlSession.selectOne("attend.selectLastOne",attend);
 	}
 
 	@Override
-	public List<Attend> selectCalAttend(Attend attend) {
-		return sqlSession.selectList("attend.selectCalAttend",attend);
+	public Attend selectAttendInfo(Attend attend) {
+		return sqlSession.selectOne("attend.selectAttendInfo",attend);
 	}
 	
 	
