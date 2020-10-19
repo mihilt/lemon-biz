@@ -18,9 +18,9 @@ public class CalendarDAOImpl implements CalendarDAO {
 
 
 	@Override
-	public List<Calendar> selectAllList() {
+	public List<Calendar> selectAllList(String memberId) {
 	
-		return sqlSession.selectList("calendar.selectAllList");
+		return sqlSession.selectList("calendar.selectAllList",memberId);
 	}
 
 	@Override

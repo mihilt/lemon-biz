@@ -16,17 +16,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lemon.lemonbiz.calendar.model.service.CalendarService;
 import com.lemon.lemonbiz.calendar.model.vo.Calendar;
 import com.lemon.lemonbiz.calendar.model.vo.NewDates;
+import com.lemon.lemonbiz.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/calendar")
-@Slf4j
 public class CalendarController {
 	
 	@Autowired
@@ -40,10 +41,12 @@ public class CalendarController {
 	}
 	
 	@RequestMapping(value="/selectAllList.do")
-	@ResponseBody
-	public List <Calendar> selectAllList(HttpServletResponse response){
+	
+	public @ResponseBody List<Calendar> selectAllList(HttpServletResponse response,@SessionAttribute("loginMember") Member loginMember){
 		
-		List<Calendar> list = calendarService.selectAllList();
+		System.out.println("loginMember" + loginMember);
+		String memberId = loginMember.getMemberId();
+		List<Calendar> list = calendarService.selectAllList(memberId);
 		
 		System.out.println("list = " + list);
 		System.out.println("list불러오기 성공");
