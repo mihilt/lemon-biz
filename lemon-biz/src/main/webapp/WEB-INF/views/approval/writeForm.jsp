@@ -241,22 +241,17 @@
 						<td class="aa">작성자</td>
 						
 						<td id="authRank1" class="aa">
-						
+						${ apprck1.rankName }
 						</td>
 						
 						<td id="authRank2" class="aa">
-						<c:choose>
-							<c:when test="${ empty apvReWrite.rank_name2 }"><c:if test="${ not empty apvReWrite.member_name2 }">입사대기</c:if></c:when>
-							<c:otherwise>${ apvReWrite.rank_name2 }</c:otherwise>
-						</c:choose>
+						${ apprck2.rankName }
 						</td>
 						
 						<td id="authRank3" class="aa">
-						<c:choose>
-							<c:when test="${ empty apvReWrite.rank_name3 }"><c:if test="${ not empty apvReWrite.member_name3 }">입사대기</c:if></c:when>
-							<c:otherwise>${ apvReWrite.rank_name3 }</c:otherwise>
-						</c:choose>
+						${ apprck3.rankName }
 						</td>
+						
 						
 						<%-- <td id="authRank1" class="aa">${ apvReWrite.rank_name1 }</td>
 						<td id="authRank2" class="aa">${ apvReWrite.rank_name2 }</td>
@@ -267,19 +262,19 @@
 						<tr>
 						
 						<td>${ loginMember.name }</td>
-						<td id="authName1">${ apvReWrite.member_name1 }</td>
-						<td id="authName2">${ apvReWrite.member_name2 }</td>
-						<td id="authName3">${ apvReWrite.member_name3 }</td>
+						<td id="authName1">${ apprck1.ckName }</td>
+						<td id="authName2">${ apprck2.ckName }</td>
+						<td id="authName3">${ apprck3.ckName }</td>
 						
 						</tr>
 						
 						<tr>
 						
 						<td>${ loginMember.memberId }</td>
-						<td id="apv_mem1">${ apvReWrite.approval_mem1 }</td>
-						<td id="apv_mem2">${ apvReWrite.approval_mem2 }</td>
-						<td id="apv_mem3">${ apvReWrite.approval_mem3 }</td>
-						
+						<td id="apv_mem1">${ apprck1.memId }</td>
+						<td id="apv_mem2">${ apprck2.memId }</td>
+						<td id="apv_mem3">${ apprck3.memId }</td>
+	
 						</tr>
 						
 						</table>
@@ -291,7 +286,7 @@
 						<!-- 폼 내용 -->
 						
 						
-						<!-- 임시저장 -->
+						
 						<form id="sendApv" action="${ pageContext.request.contextPath }/approval/applovalSave.do" method="POST" enctype="multipart/form-data">
 							<input type="hidden" id="authId1" name="approval_mem1" />
 							<input type="hidden" id="authId2" name="approval_mem2" />
@@ -301,17 +296,17 @@
 							<input type="hidden" id="processNum3" name="process_num3">
 							<input type="hidden" id="status" name="status" value="t"/>
 							
-							&nbsp;제목 : <input class="form-control" id="title" type="text" name="approval_title" value="${ apvReWrite.approval_title }">
+							&nbsp;제목 : <input class="form-control" id="title" type="text" name="approval_title" value="${ appr.title }">
 							<br>
 							
 							<div>
 								<textarea id="summernote" class="form-control" name="approval_content"  cols="120" rows="18" 
-		      							  style="width:100%; resize:none" >${ apvReWrite.approval_content }</textarea> <br>
+		      							  style="width:100%; resize:none" >${ appr.content }</textarea> <br>
 							</div>
 							
 							
-							<label for="file">첨부:</label>
-							<input type="file" name="upFile" id="upFile" value="${ apvReWrite.approval_filepath }"/>
+							<label for="file">첨부: </label> <br>
+							<input type="file" name="upFile" id="upFile" value=""/>
 							<hr>
 						               
 						</form>
@@ -321,9 +316,8 @@
 						<div class="container" align="center">
 						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
 						<button class="btn btn-outline-primary" onclick="sendApv()">제출하기</button>
-						<c:if test="${ isReturn != 1 }">
-							<button class="btn btn-outline-primary" onclick="tempchk()" >저장하기</button>
-						</c:if>
+						<button class="btn btn-outline-primary" onclick="tempchk()">저장하기</button>
+						
 						<div><br></div>
 						</div>
 						
@@ -343,17 +337,12 @@
 
 					<div class="form-group">
 						<div class="modal-body">
-							<h5>
-								<label>임시저장 태그를 달아주세요.</label>
-							</h5>
-							<input class="form-control" name="apv_comment" type="text" id="apv_comment" value="${ apvReWrite.approval_cc }"/>
+
+							<label>임시저장함으로 제출문서가 이동합니다.</label><br>
+							
 						</div>
 						<div class="modal-footer float-right">
 							<button class="btn btn-outline-primary" type="submit" onclick="tempStore()" >저장</button>
-						</div>
-						<div class="float-left" style="padding: 0 0 0 20px">
-							<label>임시저장의 경우 파일은 저장되지 않습니다.</label><br>
-							<label>최종 제출시 파일을 입력해주세요.</label>
 						</div>
 					</div>
 			</div>
@@ -726,6 +715,49 @@
 		$('#apvCateGo').val(${ apvReWrite.approval_cate });
 		} */
 		
+	}
+
+	function sendApv() {
+
+		if(($('#title').val()).trim() == ''){
+			alert('제목을 입력해주세요')
+			return;
+		}
+		if(($('#summernote').val()).trim() == ''){
+			alert('내용을 입력해주세요')
+			return;
+		}
+		if(${ not empty appr.key }){
+			$('<input></input>').attr('type','hidden').attr('value',${ appr.key }).attr('status','p').appendTo('#sendApv');
+		}
+
+		for(var i = 1 ; i <=3 ; i++){
+			$('#authId'+i+'').val($('#apv_mem'+i+'').text());	
+		} 
+		for(var i = 1 ; i <=3 ; i++) {
+			$("#processNum"+i).val($('#proNum'+i).val());
+		}
+
+
+		
+		
+		var status = $('#status');
+		status.attr('value','p');
+
+		$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/updateApproval.do").attr('method', 'POST').attr('id','updateApproval').appendTo('#body');
+		$('<input></input>').attr('type','hidden').attr('value',#authId1.val()).attr('name','updatdAuthId1').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',#authId2.val()).attr('name','updatdAuthId2').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',#authId3.val()).attr('name','updatdAuthId3').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',#processNum1.val()).attr('name','updateProcessNum1').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',#processNum2.val()).attr('name','updateProcessNum2').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',#processNum3.val()).attr('name','updateProcessNum3').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',#status.val()).attr('name','updateStatus').appendTo('#updateApproval');
+		
+		
+		
+		$('#sendApv').submit();
+	
+
 	}
 	
 	

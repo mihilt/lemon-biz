@@ -34,4 +34,8 @@ public class appr {
 	private apprCheck apprck2;
 	private apprCheck apprck3;
 	
+	private String docName;
+	private String name;
+	
+	
 }

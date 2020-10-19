@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.approval.model.vo.appr;
 import com.lemon.lemonbiz.approval.model.vo.apprCheck;
+import com.lemon.lemonbiz.approval.model.vo.approval;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 
@@ -79,6 +80,27 @@ public class approvalDAOImpl implements approvalDAO {
 	public int insertSaveApprck3(apprCheck apprck3) {
 		return sqlSession.insert("approval.insertSaveApprck3",apprck3);
 	}
+
+	@Override
+	public List<appr> approvalList(String memberId) {
+		return sqlSession.selectList("approval.approvalList",memberId);
+	}
+
+	@Override
+	public appr reWriteAppr(String key) {
+		return sqlSession.selectOne("approval.reWriteAppr",key);
+	}
+
+	@Override
+	public List<apprCheck> reWriteApprck(String key) {
+		return sqlSession.selectList("approval.reWriteApprck",key);
+	}
+
+	@Override
+	public Attachment reWriteAttach(String key) {
+		return sqlSession.selectOne("approval.reWriteAttach",key);
+	}
+
 
 	
 

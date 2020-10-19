@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.lemon.lemonbiz.approval.model.dao.approvalDAO;
 import com.lemon.lemonbiz.approval.model.vo.appr;
 import com.lemon.lemonbiz.approval.model.vo.apprCheck;
+import com.lemon.lemonbiz.approval.model.vo.approval;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
@@ -92,6 +93,27 @@ public class approvalServiceImpl implements approvalService {
 		
 		return result;
 	}
+
+	@Override
+	public List<appr> ApprovalList(String memberId) {
+		return approvalDAO.approvalList(memberId);
+	}
+
+	@Override
+	public appr reWriteAppr(String key) {
+		return approvalDAO.reWriteAppr(key);
+	}
+
+	@Override
+	public List<apprCheck> reWriteApprck(String key) {
+		return approvalDAO.reWriteApprck(key);
+	}
+
+	@Override
+	public Attachment reWriteAttach(String key) {
+		return approvalDAO.reWriteAttach(key);
+	}
+
 
 
 

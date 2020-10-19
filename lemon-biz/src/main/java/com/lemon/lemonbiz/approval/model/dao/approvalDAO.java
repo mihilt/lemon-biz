@@ -6,6 +6,7 @@ import java.util.List;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.approval.model.vo.appr;
 import com.lemon.lemonbiz.approval.model.vo.apprCheck;
+import com.lemon.lemonbiz.approval.model.vo.approval;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 
@@ -35,6 +36,15 @@ public interface approvalDAO {
 	int insertSaveApprck2(apprCheck apprck2);
 
 	int insertSaveApprck3(apprCheck apprck3);
+
+	List<appr> approvalList(String memberId);
+
+	appr reWriteAppr(String key);
+
+	List<apprCheck> reWriteApprck(String key);
+
+	Attachment reWriteAttach(String key);
+
 
 
 	

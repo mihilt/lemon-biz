@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,10 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lemon.lemonbiz.approval.model.service.approvalService;
 import com.lemon.lemonbiz.approval.model.vo.appr;
 import com.lemon.lemonbiz.approval.model.vo.apprCheck;
+import com.lemon.lemonbiz.approval.model.vo.approval;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
+import com.lemon.lemonbiz.common.vo.PagingInfo;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
+
+
 
 
 @Controller
@@ -42,7 +47,25 @@ public class ApprovalController {
 	private approvalService approvalService;
 	
 	@RequestMapping("/myApvList")
-	public String myApvList(Model model) {
+	public String myApvList(HttpServletRequest req, 
+							Model model,
+							@ModelAttribute("loginMember") Member loginMember,
+							@RequestParam(value="page") int page) {
+		
+		HttpSession session = req.getSession(); 
+		
+		List<appr> apprList = new ArrayList<>();
+		try {
+			apprList = approvalService.ApprovalList(loginMember.getMemberId());
+			
+			model.addAttribute("apvList",apprList);
+			model.addAttribute("auth", 0);
+			model.addAttribute("pageInfo",paging(page,apprList));
+			model.addAttribute("toSearch", "approval/myApvList");
+			
+		} catch(Exception e) {
+			
+		}
 		
 		return "approval/myApvList";
 	}
@@ -130,10 +153,24 @@ public class ApprovalController {
 								@RequestParam (value="process_num1", required=true) int processNum1,
 								@RequestParam (value="process_num2", required=true) int processNum2,
 								@RequestParam (value="process_num3", required=true) int processNum3
-								) 
+								)
 								throws IOException, Exception, IllegalStateException {
 		
 		
+		
+		System.out.println(appr.getKey());
+		System.out.println(appr.getKey());
+		System.out.println(appr.getKey());
+		System.out.println(appr.getKey());
+		System.out.println(appr.getKey());
+		System.out.println(appr.getKey());
+		System.out.println(appr.getKey());
+		System.out.println(appr.getKey());		
+		System.out.println(status);
+		System.out.println(status);
+		System.out.println(status);
+		System.out.println(status);
+		System.out.println(status);
 		
 		HttpSession session = req.getSession();
 		
@@ -183,6 +220,7 @@ public class ApprovalController {
 		Attachment attach = new Attachment();
 		//1. 서버컴퓨터에 저장
 		if(upFile != null) {
+			
 			//저장경로
 			String saveDirectory = req.getServletContext().getRealPath("/resources/upload/approval");
 			//파일을 선택하지 않고 전송한 경우
@@ -246,7 +284,46 @@ public class ApprovalController {
 		model.addAttribute("attach",attach);
 		
 		
-		return "approval/myApvList";
+		return "redirect:/approval/myApvList?page=1";
+	}
+	
+	
+	
+	
+	
+	@RequestMapping(value="/reWrite.do", method=RequestMethod.POST)
+	public String reWrite(Model model,
+						  @RequestParam(value="approval_id") String key) {
+		
+		
+		appr appr = approvalService.reWriteAppr(key);
+		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		Attachment attach = approvalService.reWriteAttach(key);
+		
+		apprCheck apprck1 = new apprCheck();
+		apprCheck apprck2 = new apprCheck();
+		apprCheck apprck3 = new apprCheck();
+		
+		apprck1 = apprchList.get(0);
+		apprck2 = apprchList.get(1);
+		apprck3 = apprchList.get(2);
+		log.debug("apprchList={}",apprchList);
+		log.debug("apprck1={}",apprck1);
+		log.debug("apprck2={}",apprck2);
+		log.debug("apprck3={}",apprck3);
+		
+		
+		model.addAttribute("appr",appr);
+		
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
+		model.addAttribute("attach",attach);
+		
+		
+		
+		return "approval/writeForm";
 	}
 	
 	
@@ -260,8 +337,48 @@ public class ApprovalController {
 	
 	
 	
-	
-	
+	public PagingInfo paging(int page, List<appr> appr) {
+		
+		int countList = 10; //페이지당 게시물 수
+		int countPage = 10; //페이지 수
+		int totalCount = 0;
+		try {
+			totalCount = appr.size(); // 총 게시물 수
+		}catch(Exception e) {
+			System.out.println("게시물 없음");
+		}
+		int totalPage = totalCount / countList; // 총 페이지 수;
+		if(totalCount%countList>0) { totalPage++; }
+		if(totalPage < page) { page = totalPage; }
+		
+		int startPage = ((page-1)  / countPage ) * countPage + 1; 
+		int endPage = startPage + countPage - 1;
+		if (endPage > totalPage) { endPage = totalPage; }
+		
+		//==========================================================
+		
+		int startNum = (page-1) * countList +1;
+		int endNum = page * countList;
+		
+		//ArrayList<BoardBean> boardList = boardListService.getboardlist(startNum , endNum);
+		
+		PagingInfo pageInfo = new PagingInfo();
+		pageInfo.setPage(page);
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+		pageInfo.setTotalPage(totalPage);
+		pageInfo.setCountList(countList);
+		if(totalCount != 0) {
+			startNum--;
+			endNum--;
+		}
+		pageInfo.setStartNum(startNum);
+		pageInfo.setEndNum(endNum);
+		pageInfo.setTotalCount(totalCount);
+		
+		return pageInfo;
+		
+	}
 	
 	
 	

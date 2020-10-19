@@ -137,6 +137,59 @@
 		)
 	</insert>
 	
+	<select id="approvalList" resultMap="apprMap">
+		select
+			P.*,
+			M.name,
+			D.name as docName
+		from
+			appr P 
+			left outer join member M on P.mem_id = M.member_id 
+			left outer join doc_type D on P.type_key = D.key
+		where
+			P.mem_id = #{memberId}
+			
+	</select>
+	
+	<select id="reWriteAppr" resultMap="apprMap">
+		select
+			*
+		from
+			appr
+		where
+			key = #{key}	
+	</select>
+	
+	<select id="reWriteApprck" resultMap="apprckMap">
+		select
+		    A.*,
+		    R.name as rankName,
+		    M.name as ckName
+		from
+		    appr_check A
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
+		where
+		    A.approval_key = #{key}
+	</select>
+	
+	<select id="reWriteAttach" resultMap="attachMap">
+		select
+			*
+		from
+			attachment
+		where
+			approval_key = #{key}
+	</select>
+	
+	
+  
+  <resultMap type="Attachment" id="attachMap"></resultMap>
+  <resultMap type="apprCheck" id="apprckMap"></resultMap>
+  
+  <resultMap type="appr" id="apprMap">
+  
+  </resultMap>	
 	
   <resultMap type="dept" id="deptMap">
   
