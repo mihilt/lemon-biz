@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
@@ -60,7 +63,6 @@ public class MemberController {
 		int result = 0;
 		
 		try {
-			Notice notice = new Notice();
 			result = memberService.insertMember(member);
 			
 		} catch(Exception e) {
@@ -202,6 +204,33 @@ public class MemberController {
 		}
 		
 	}
+	
+	@RequestMapping(value = "organization.do", method = RequestMethod.GET)
+	public void organization(Model model) {
+		List<Dept> hierarchicalDeptList = memberService.hierarchicalDeptList();
+		List<Member> memberList = memberService.selectMemberList();
 
-
+		model.addAttribute("hierarchicalDeptList", hierarchicalDeptList);
+		model.addAttribute("memberList", memberList);
+		
+	}
+	
+	
+	@RequestMapping(value = "selectOneMemberAjax.do", method = RequestMethod.GET)
+	public void selectOneMemberAjax(@RequestParam("memberId") String memberId,
+									HttpServletResponse response) {
+		Member member = memberService.selectOneMember(memberId);
+		
+		response.setContentType("application/json; charset=utf-8");
+		
+		Gson gson = new Gson();
+		try {
+			gson.toJson(member, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 }

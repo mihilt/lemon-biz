@@ -16,6 +16,7 @@ import lombok.ToString;
 public class Calendar implements Serializable {
 
 	private int no;
+	private String memberId;
 	private String title;
 	private String allDay;
 	private String startDate;

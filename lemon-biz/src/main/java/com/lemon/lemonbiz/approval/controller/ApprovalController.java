@@ -10,8 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,23 +24,21 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lemon.lemonbiz.approval.model.service.approvalService;
 import com.lemon.lemonbiz.approval.model.vo.appr;
 import com.lemon.lemonbiz.approval.model.vo.apprCheck;
-import com.lemon.lemonbiz.approval.model.vo.approval;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.PagingInfo;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 
+import lombok.extern.slf4j.Slf4j;
 
 
-
+@Slf4j
 @Controller
 @RequestMapping("/approval")
 @SessionAttributes({"loginMember"})
 public class ApprovalController {
 	
-	private static Logger log = LoggerFactory.getLogger(ApprovalController.class);
-
 	@Autowired
 	private approvalService approvalService;
 	

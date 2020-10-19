@@ -9,7 +9,7 @@ public interface CalendarService {
 
 	int enrollCalendar(Calendar calendar);
 
-	List<Calendar> selectAllList();
+	List<Calendar> selectAllList(String memberId);
 
 	int updateCalendar(Calendar calendar);
 

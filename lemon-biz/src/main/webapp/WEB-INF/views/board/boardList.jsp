@@ -42,12 +42,13 @@ function goBoardForm(){
 
 </script>
 
+
 <section id="board-container" class="container">
 	<input type="button" value="글쓰기" id="btn-add" class="btn btn-outline-warning" onclick="goBoardForm();"/>
 	<table id="tbl-board" class="table table-striped table-hover">
 	<strong style="font-size:25px; font-family: 'Jua', sans-serif;">전사 게시판</strong>
 		<tr>
-			<th>번호</th>
+			<th>공지</th>
 			<th>제목</th>
 			<th>작성자</th>
 			<th>작성일</th>
@@ -60,7 +61,7 @@ function goBoardForm(){
 						 style="width:30px;" /></td>
 			</c:if>
 			<c:if test="${ post.isNotice eq 0 }">
-			<td>${ post.key }</td>
+			<td></td>
 			</c:if>
 			
 			<c:if test="${ post.isNotice eq 1 }">
@@ -99,49 +100,66 @@ function goBoardForm(){
 		</tr>
 		</c:forEach>
 	</table>
-<form id="form1" name="form1"  method="post">
 
 	<div class="container">
 
-	    <div class="container-fluid" align="center">
-	    
-			<input type="hidden" checked="checked" name="searchType" value="brdtitle" <c:if test="${fn:indexOf(searchVO.searchType, 'brdtitle')!=-1}">checked="checked"</c:if>/>
-			
-			<div class="group" style="align:center;">
-			
-			<select class="btn btn-outline-warning dropdown-toggle" id="condition">
-			<option name="searchType" value="brdtitle" <c:if test="${fn:indexOf(searchVO.searchType, 'brdtitle')!=-1}">checked="checked"</c:if>>제목</option>
-			<option name="searchType" value="brdmemo" <c:if test="${fn:indexOf(searchVO.searchType, 'brdmemo')!=-1}">checked="checked"</c:if>>내용</option>
+	   <div class="search-container" align="center">
+
+		<div class="group" style="align:center;">
+			<select class="btn btn-outline-warning dropdown-toggle" id="searchType">
+				<option value="title">제목</option>
+				<option value="memberName">작성자</option>
 			</select>
+		
+        <div id="search-memberName" class="search-type">
+            <form action="${ pageContext.request.contextPath }/board/boardSearch.do">
+                <input type="hidden" name="searchType" value="memberName"/>
+                <input type="text" class="btn btn-outline-warning" name="searchKeyword"/>
+                <button type="submit" class="btn btn-outline-warning"><i class="fas fa-search fa-sm"></i></button>			
+            </form>	
+        </div>
+        <div id="search-title" class="search-type">
+            <form action="${ pageContext.request.contextPath }/board/boardSearch2.do">
+                <input type="hidden" name="searchType" value="title"/>
+                <input type="text" class="btn btn-outline-warning" name="searchKeyword"/>
+                <button type="submit" class="btn btn-outline-warning"><i class="fas fa-search fa-sm"></i></button>			
+            </form>           
+        </div>
+	</div>
 			
-			<input type="text" class="btn btn-outline-warning" name="searchKeyword" maxlength="50" value='<c:out value="${searchVO.searchKeyword}"/>' onkeydown="if(event.keyCode == 13) { fn_formSubmit();}">
-			<button name="btn_search" value="검색" class="btn btn-outline-warning" type="button" onclick="fn_formSubmit()"><i class="fas fa-search fa-sm"></i></button>
+			
 		    <br>
-		     <div class="container" >
-			<div class="row">
-				<div class="col">
-					
-					<ul class="pagination">
-						<!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#">4</a></li>
-						<li class="page-item"><a class="page-link" href="#">5</a></li>
-						<li class="page-item"><a class="page-link" href="#">Next</a></li> -->
-						${pagebar}
+	
+				<div class="text-center">	
+					<ul style="justify-content: center;" class="pagination">
+						${pagebar }
+						
 					</ul>
-					
-				</div>
-			</div>
+			
 		</div>
 		     </div>
 		</div>
-	</div>
-	</form>	
+
             <br>
            
 </section> 
+<style>
+div#search-title {display: inline-block;}
+div#search-memberName{display:none;}
+</style>
+
+<script>
+$(function(){
+	$("#searchType").change(function(){
+		console.log($(this).val());
+		var type = $(this).val();
+		$(".search-type").hide()
+						 .filter("#search-" + type)
+						 .css("display", "inline-block");
+	});
+});
+
+</script>
 
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -27,7 +27,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="${pageContext.request.contextPath}/board/boardMaList.do">
           <i class="fas fa-fw fa-exclamation"></i>
           <span>공지사항</span></a>
       </li>
@@ -106,6 +106,13 @@
           </div>
         </div>
       </li>
+
+      <!-- 조직도 -->
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/member/organization.do">
+          <i class="fas fa-fw fa-sitemap"></i>
+          <span>조직도</span></a>
+      </li>
       
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -171,8 +178,8 @@
         <div id="approval-manage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <!-- <h6 class="collapse-header">전자결재 관리</h6> -->
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertApprovalDoc.do">전자결재 문서 생성</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageApprovalDoc.do">전자결재 문서 조회</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertApprovalDoc.do">전자결재 양식 생성</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageApprovalDoc.do">전자결재 양식 조회</a>
           </div>
         </div>
       </li>
@@ -399,7 +406,7 @@
     				%>
                 	 "
                 >
-                
+                  
                 </div>
               </a>
               <!-- Dropdown - User Information -->

@@ -22,23 +22,24 @@ public class Paging {
 		int pageEnd = pageStart + pageBarSize - 1;
 		int pageNo = pageStart;
 		
+	
 		//이전 
 		if(pageNo == 1) {
 			
 		}
 		else {
-			pageBar.append("<a href='" + url + "cPage=" + (pageNo - 1) + "'>이전</a>\n");
+			pageBar.append("<li class='page-item'><a class='page-link' href='" + url + "cPage=" + (pageNo - 1) + "'>이전</a></li>");
 		}
 		
 		//PageNo
 		while(pageNo <= pageEnd && pageNo <= totalPage) {
 			//현재페이지인 경우
 			if(pageNo == cPage) {
-				pageBar.append("<span class='cPage'>" + pageNo + "</span>\n");
+				pageBar.append("<li class='page-item'><span class='page-link'>" + pageNo + "</span></li>");
 			}
 			//현재페이지가 아닌 경우
 			else {
-				pageBar.append("<a href='" + url + "cPage=" + pageNo + "'>" + pageNo + "</a>\n");
+				pageBar.append("<li class='page-item'><a class='page-link' href='" + url + "cPage=" + pageNo + "'>" + pageNo + "</a></li>");
 			}
 			pageNo++;
 		}
@@ -47,9 +48,9 @@ public class Paging {
 			
 		}
 		else {
-			pageBar.append("<a href='" + url + "cPage=" + pageNo + "'>다음</a>\n");
+			pageBar.append("<li class='page-item'><a class='page-link' href='" + url + "cPage=" + pageNo + "'>다음</a></li>");
 		}
-		
+
 		return pageBar.toString();
 	}
 }

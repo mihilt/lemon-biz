@@ -15,4 +15,6 @@ public interface NoticeService {
 
 	List<Notice> selectNoticeList(Member loginMember);
 
+	int insertNoticeList(List<Notice> groupNoticeList);
+
 }

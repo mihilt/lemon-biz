@@ -2,6 +2,7 @@ package com.lemon.lemonbiz.board.controller;
 
 
 import java.io.File;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,41 +57,36 @@ public class BoardController {
 	private ResourceLoader resourceLoader;
 	
 	@RequestMapping("/boardList.do")
-	public ModelAndView boardList(ModelAndView mav,HttpServletRequest request) {
+	public ModelAndView boardList(ModelAndView mav,HttpServletRequest request,@SessionAttribute("loginMember") Member loginMember) {
 
-		int numPerPage = 10;
+		int numPerPage = 3;
 		int cPage = 1;
-		int startRnum = (cPage-1) * numPerPage + 1;
-		int endRnum = cPage * numPerPage;
+		
 		try {
 			cPage = Integer.parseInt(request.getParameter("cPage"));
 		} catch (NumberFormatException e) {
 			
 		}
-		Map<String,Object> map = new HashMap<String, Object>();
-		map.put("startRnum", startRnum);
-		map.put("endRnum", endRnum);
-		List<Map<String, Object>> list = boardService.selectBoardMapList();
-//		List<Board> list = boardService.selectBoardList(map);
 		int totalContents = boardService.countBoard();
-		
+		/* log.debug("totalContents = {} ",totalContents); */
 		String url = request.getRequestURI();
+		/* log.debug("url = {} " , url); */
 		String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
+		Map<String,Object> map = new HashMap<String, Object>();
+	
 		
-		log.debug("list = {}", list);
+		List<Map<String, Object>> list = boardService.selectBoardMapList(cPage,numPerPage,map);
 		mav.addObject("list", list);
-		mav.addObject("pagebar",pageBar);
-		
+		mav.addObject("pagebar",pageBar);		
 		mav.setViewName("board/boardList");
 		return mav;
 	}
 	
-	@RequestMapping("/selectList.do")
-	public ResponseEntity<?> selectList(){
-		List<Map<String, Object>> list = boardService.selectBoardMapList();
-		return new ResponseEntity<>(list, HttpStatus.OK);  
-	}
-	
+	/*
+	 * @RequestMapping("/selectList.do") public ResponseEntity<?> selectList(){
+	 * List<Map<String, Object>> list = boardService.selectBoardMapList(); return
+	 * new ResponseEntity<>(list, HttpStatus.OK); }
+	 */
 	
 	@RequestMapping("/boardForm.do")
 	public void boardForm() {
@@ -98,7 +95,7 @@ public class BoardController {
 	
 	@RequestMapping(value = "/boardEnroll.do",
 			method = RequestMethod.POST)
-	public String boardEnroll(Board board, 
+	public String boardEnroll(Board board,@RequestParam("name") String name, 
 						  @RequestParam(value = "upFile",
 								  	    required = false) MultipartFile[] upFiles,
 						  RedirectAttributes redirectAttr,
@@ -139,7 +136,7 @@ public class BoardController {
 	
 	log.debug("attachList = {}", attachList);
 	board.setAttachList(attachList);
-	
+	board.setName(name);
 	
 	//2. Board, Attachment객체 DB에 저장하기
 	int result = boardService.insertBoard(board);
@@ -202,6 +199,56 @@ public class BoardController {
 		return mav;
 	}
 	
+	@RequestMapping("boardDetail2.do")
+	public ModelAndView boardDeatil2(@RequestParam("key") int key, ModelAndView mav,
+						  			HttpServletRequest request, HttpServletResponse response,@SessionAttribute("loginMember") Member loginMember) {
+		
+		Cookie[] cookies = request.getCookies();
+		String boardCookieVal = "";
+		boolean hasRead = false;//현재 요청(브라우져)에서 이 게시글을 이미 읽었는가 여부
+		
+		if(cookies != null) {
+			for(Cookie c : cookies) {
+				String name = c.getName();
+				String value = c.getValue();
+				
+				if("boardCookie".equals(name)) {
+					boardCookieVal = value;
+//					System.out.println(name + " = " + value);
+					
+					//이번 게시글 읽음 여부
+					if(value.contains("[" + key + "]")) {
+						hasRead = true;
+						break;
+					}
+					
+				}
+			}
+		}
+		
+		//게시글을 읽지 않은 경우
+		if(hasRead == false) {
+			Cookie boardCookie = new Cookie("boardCookie",
+											boardCookieVal + "[" + key + "]");
+			boardCookie.setMaxAge(365*24*60*60);//영속쿠키
+			// /mvc/board/view
+			boardCookie.setPath(request.getContextPath() + "/board/");
+			response.addCookie(boardCookie);
+		}
+		
+		//collection 이용 join
+		Board board = boardService.selectOneBoardCollection(key,hasRead);
+		List<BoardComment> commentList = boardService.selectCommentList(key);
+		
+		/* log.debug("commentList = {}", commentList); */
+		mav.addObject("board", board);
+		mav.addObject("commentList", commentList);
+		
+		mav.setViewName("board/boardDetail2");
+		
+		return mav;
+	}
+	
 	@RequestMapping(value = "/fileDownload.do")
 	@ResponseBody
 	public Resource fileDownload(@RequestParam("key") int key,
@@ -245,9 +292,18 @@ public class BoardController {
 
 		Board board = boardService.selectOneBoardCollection(key);
 		mav.addObject("board", board);
-	    boardService.updateBoard(board,key);
-	    mav.setViewName("board/boardForm2");
+	  
+	    mav.setViewName("board/boardForm3");
  
+	    return mav; 
+	}
+	@RequestMapping("/boardupdatesucces.do")
+	public ModelAndView boardupdatesucces(@ModelAttribute Board board,@RequestParam("key") int key ,ModelAndView mav) {
+		
+		board.setKey(key);
+		boardService.updateBoard(board);
+		mav.addObject("board", board);
+	    mav.setViewName("redirect:/board/boardDetail.do?key="+key);
 	    return mav; 
 	}
 	
@@ -291,5 +347,324 @@ public class BoardController {
 		return "redirect:/board/boardList.do";
 		
 	}
+	
+	@RequestMapping("/boardfrmDelete2.do")
+	
+	public String boardfrmDelete2(@RequestParam("key") int key, Attachment attachment,HttpServletRequest request,RedirectAttributes redirectAttr) {
+			
+		String renamedFileName = attachment.getReName();
+		boardService.boardFileDelete(key);
+		boardService.boardfrmDelete(key);
 		
+		if(renamedFileName != null) {
+			String saveDirectory = request.getServletContext().getRealPath("/resources/upload/board");
+			File delFile = new File(saveDirectory, renamedFileName);
+			delFile.delete();
+		}
+
+		return "redirect:/board/boardTeamList.do";
+		
+	}
+	
+	@RequestMapping("/boardTeamList.do")
+	public ModelAndView boardTeamList(ModelAndView mav,HttpServletRequest request,@SessionAttribute("loginMember") Member loginMember) {
+
+		int numPerPage = 10;
+		int cPage = 1;
+		int startRnum = (cPage-1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		try {
+			cPage = Integer.parseInt(request.getParameter("cPage"));
+		} catch (NumberFormatException e) {
+			
+		}
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		String name = boardService.selectTeamName(loginMember);
+		List<Map<String, Object>> list = boardService.selectTeamBoardMapList(loginMember);
+		/* log.debug("loginMember = {}",loginMember); */
+		int totalContents = boardService.countBoard();
+		
+		String url = request.getRequestURI();
+		String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
+		
+		log.debug("list = {}", list);
+		mav.addObject("list", list);
+		mav.addObject("name",name);
+		log.debug("name22 = {}",name);
+		mav.addObject("pagebar",pageBar);
+		
+		mav.setViewName("board/boardTeamList");
+		return mav;
+	}
+	@RequestMapping("/boardForm2.do")
+	public void boardForm2() {
+
+	}
+	
+	@RequestMapping(value = "/boardEnroll2.do",
+			method = RequestMethod.POST)
+	public String boardEnroll2(Board board,@RequestParam("deptKey") int deptKey,
+						  @RequestParam(value = "upFile",
+								  	    required = false) MultipartFile[] upFiles,
+						  RedirectAttributes redirectAttr,
+						  HttpServletRequest request,@SessionAttribute("loginMember") Member loginMember) 
+								  throws IllegalStateException, IOException {
+
+		
+	//1. 서버컴퓨터에 업로드한 파일 저장하기
+	List<Attachment> attachList = new ArrayList<>();
+	
+	//저장경로
+	String saveDirectory = request.getServletContext()
+								  .getRealPath("/resources/upload/board");
+	
+	for(MultipartFile upFile : upFiles) {
+		//파일을 선택하지 않고 전송한 경우
+		if(upFile.isEmpty())
+			continue;
+		
+		//1.파일명(renameFilename) 생성
+		String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
+		
+		//2.메모리의 파일 -> 서버컴퓨터 디렉토리 저장  transferTo
+		File dest = new File(saveDirectory, renamedFilename);
+		upFile.transferTo(dest);
+		
+		//3.attachment객체 생성
+		Attachment attach = new Attachment();
+		attach.setOriginName(upFile.getOriginalFilename());
+		attach.setReName(renamedFilename);
+		attachList.add(attach);
+		
+	}
+	
+	log.debug("attachList = {}", attachList);
+	board.setAttachList(attachList);
+	board.setDeptKey(deptKey);
+	//2. Board, Attachment객체 DB에 저장하기
+	int result = boardService.insertTeamBoard(board);
+	
+	//3. 처리결과 msg 전달
+	redirectAttr.addFlashAttribute("msg", "게시글 등록 성공");
+	
+	
+	return "redirect:/board/boardTeamList.do";
+	}
+	
+	@RequestMapping("/boardSearch.do")
+	public String boardSearch(@RequestParam("searchKeyword")String searchKeyword,
+									Model model) {
+	
+		List<Board> list = boardService.boardSearch(searchKeyword);
+		log.debug("list ={}" , list);
+		model.addAttribute("list", list);
+		return "board/boardFindNList";
+	}
+	
+	@RequestMapping("/boardMaList.do")
+	public ModelAndView boardMaList(ModelAndView mav,HttpServletRequest request,@SessionAttribute("loginMember") Member loginMember) {
+
+		int numPerPage = 3;
+		int cPage = 1;
+		
+		try {
+			cPage = Integer.parseInt(request.getParameter("cPage"));
+		} catch (NumberFormatException e) {
+			
+		}
+		int totalContents = boardService.countBoard3();
+		/* log.debug("totalContents = {} ",totalContents); */
+		String url = request.getRequestURI();
+		/* log.debug("url = {} " , url); */
+		String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
+		Map<String,Object> map = new HashMap<String, Object>();
+	
+		List<Map<String, Object>> list = boardService.selectMaList(cPage,numPerPage,map);
+		mav.addObject("list", list);
+		mav.addObject("pagebar",pageBar);		
+		
+		mav.setViewName("board/boardManager");
+		return mav;
+	}
+	@RequestMapping("/boardFormMa.do")
+		public void boardFormMa() {
+
+	}
+	
+	@RequestMapping(value = "/boardEnroll3.do",
+			method = RequestMethod.POST)
+	public String boardEnroll3(Board board,@RequestParam("name") String name, 
+						  @RequestParam(value = "upFile",
+								  	    required = false) MultipartFile[] upFiles,
+						  RedirectAttributes redirectAttr,
+						  HttpServletRequest request) 
+								  throws IllegalStateException, IOException {
+	log.debug("board = {}", board);
+	
+	
+	//1. 서버컴퓨터에 업로드한 파일 저장하기
+	List<Attachment> attachList = new ArrayList<>();
+	
+	//저장경로
+	String saveDirectory = request.getServletContext()
+								  .getRealPath("/resources/upload/board");
+	
+	for(MultipartFile upFile : upFiles) {
+		//파일을 선택하지 않고 전송한 경우
+		if(upFile.isEmpty())
+			continue;
+		
+		//1.파일명(renameFilename) 생성
+		String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
+		
+		//2.메모리의 파일 -> 서버컴퓨터 디렉토리 저장  transferTo
+		File dest = new File(saveDirectory, renamedFilename);
+		upFile.transferTo(dest);
+		
+		//3.attachment객체 생성
+		Attachment attach = new Attachment();
+		attach.setOriginName(upFile.getOriginalFilename());
+		attach.setReName(renamedFilename);
+		attachList.add(attach);
+		
+	//		log.debug("upFile.name = {}", upFile.getOriginalFilename());
+	//		log.debug("upFile.size = {}", upFile.getSize());
+		
+	}
+	
+	log.debug("attachList = {}", attachList);
+	board.setAttachList(attachList);
+	board.setName(name);
+	
+	//2. Board, Attachment객체 DB에 저장하기
+	int result = boardService.insertMaBoard(board);
+	
+	//3. 처리결과 msg 전달
+	redirectAttr.addFlashAttribute("msg", "게시글 등록 성공");
+	
+	
+	return "redirect:/board/boardMaList.do";
+	}
+	
+	@RequestMapping("/boardDetail3.do")
+	public ModelAndView boardDetail3(@RequestParam("key") int key, ModelAndView mav,
+  			HttpServletRequest request, HttpServletResponse response,@SessionAttribute("loginMember") Member loginMember) {
+
+	Cookie[] cookies = request.getCookies();
+	String boardCookieVal = "";
+	boolean hasRead = false;//현재 요청(브라우져)에서 이 게시글을 이미 읽었는가 여부
+	
+	if(cookies != null) {
+	for(Cookie c : cookies) {
+	String name = c.getName();
+	String value = c.getValue();
+	
+	if("boardCookie".equals(name)) {
+	boardCookieVal = value;
+	//System.out.println(name + " = " + value);
+	
+	//이번 게시글 읽음 여부
+	if(value.contains("[" + key + "]")) {
+	hasRead = true;
+	break;
+	}
+	
+	}
+	}
+	}
+	
+	//게시글을 읽지 않은 경우
+	if(hasRead == false) {
+	Cookie boardCookie = new Cookie("boardCookie",
+						boardCookieVal + "[" + key + "]");
+	boardCookie.setMaxAge(365*24*60*60);//영속쿠키
+	// /mvc/board/view
+	boardCookie.setPath(request.getContextPath() + "/board/");
+	response.addCookie(boardCookie);
+	}
+	
+	//collection 이용 join
+	Board board = boardService.selectOneBoardCollection(key,hasRead);
+	List<BoardComment> commentList = boardService.selectCommentList(key);
+	
+	/* log.debug("commentList = {}", commentList); */
+	mav.addObject("board", board);
+	mav.addObject("commentList", commentList);
+	
+	mav.setViewName("board/boardDetail3");
+	
+	return mav;
+	}
+	
+	@RequestMapping("boardfrmDelete3.do")
+	public String boardfrmDelete3(@RequestParam("key") int key, Attachment attachment,HttpServletRequest request,RedirectAttributes redirectAttr) {
+		
+		String renamedFileName = attachment.getReName();
+		boardService.boardFileDelete(key);
+		boardService.boardfrmDelete(key);
+		
+		if(renamedFileName != null) {
+			String saveDirectory = request.getServletContext().getRealPath("/resources/upload/board");
+			File delFile = new File(saveDirectory, renamedFileName);
+			delFile.delete();
+		}
+
+		return "redirect:/board/boardMaList.do";
+		
+	}
+	
+	@RequestMapping("/boardSearch2.do")
+	public String boardSearch2(@RequestParam("searchKeyword")String searchKeyword,
+								Model model) {
+
+		List<Board> list = boardService.boardtitleSearch(searchKeyword);
+		log.debug("list ={}" , list);
+		model.addAttribute("list", list);
+		return "board/boardFindNList";
+	}
+	
+	@RequestMapping("/boardTeamSearch.do")
+	public String boardTeamSearch(Board board,@RequestParam("searchKeyword")String searchKeyword,
+			Model model,@SessionAttribute("loginMember") Member loginMember) {
+		
+		loginMember.setSearchKeyword(searchKeyword);
+		List<Board> list = boardService.boardTeamSearch(loginMember);
+		 log.debug("loginMember = {}",loginMember); 
+		model.addAttribute("list", list);
+		return "board/boardFindTList";
+	}
+	
+	@RequestMapping("/boardTeamSearch2.do")
+	public String boardTeamSearch2(Board board,@RequestParam("searchKeyword")String searchKeyword,
+			Model model,@SessionAttribute("loginMember") Member loginMember) {
+		
+		loginMember.setSearchKeyword(searchKeyword);
+		List<Board> list = boardService.boardTeamSearch2(loginMember);
+		 log.debug("loginMember = {}",loginMember); 
+		model.addAttribute("list", list);
+		return "board/boardFindTList";
+	}
+	
+	@RequestMapping("/boardMSearch.do")
+	public String boardMSearch(@RequestParam("searchKeyword")String searchKeyword,
+								Model model) {
+
+		List<Board> list = boardService.boardMSearch(searchKeyword);
+		log.debug("list ={}" , list);
+		model.addAttribute("list", list);
+		return "board/boardFindMList";
+	}
+	
+	@RequestMapping("/boardMSearch2.do")
+	public String boardMSearch2(@RequestParam("searchKeyword")String searchKeyword,
+								Model model) {
+
+		List<Board> list = boardService.boardMSearch2(searchKeyword);
+		log.debug("list ={}" , list);
+		model.addAttribute("list", list);
+		return "board/boardFindMList";
+	}
+	
 }

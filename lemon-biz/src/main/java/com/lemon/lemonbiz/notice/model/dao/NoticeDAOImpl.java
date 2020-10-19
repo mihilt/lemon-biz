@@ -34,5 +34,10 @@ public class NoticeDAOImpl implements NoticeDAO {
 	public List<Notice> selectNoticeList(Member loginMember) {
 		return sqlSession.selectList("notice.selectNoticeList", loginMember);
 	}
+
+	@Override
+	public int insertNoticeList(List<Notice> groupNoticeList) {
+		return sqlSession.insert("notice.insertNoticeList", groupNoticeList);
+	}
 	
 }

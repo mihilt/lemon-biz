@@ -277,7 +277,7 @@ public class ManagerController {
 		
 		int result = managerService.insertApprovalDoc(docType);
 		
-		redirectAttr.addFlashAttribute("msg", (result > 0) ? "전자결재 문서 생성을 완료했습니다." : "전자결재 문서 생성에 오류가 발생했습니다.");
+		redirectAttr.addFlashAttribute("msg", (result > 0) ? "전자결재 양식 생성을 완료했습니다." : "전자결재 양식 생성에 오류가 발생했습니다.");
 		
 		return "redirect:/manager/insertApprovalDoc.do";
 	}

@@ -1,6 +1,10 @@
 package com.lemon.lemonbiz.member.model.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lemon.lemonbiz.member.controller.MemberController;
 import com.lemon.lemonbiz.member.model.dao.MemberDAO;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
@@ -15,8 +20,10 @@ import com.lemon.lemonbiz.member.model.vo.Rank;
 import com.lemon.lemonbiz.notice.model.service.NoticeService;
 import com.lemon.lemonbiz.notice.model.vo.Notice;
 
-@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -50,18 +57,23 @@ public class MemberServiceImpl implements MemberService {
 		// member deptName, rankName 불러오기
 		member = memberService.selectOneMember(member.getMemberId());
 
-		// 단체 알림 등록
+		// 같은 부서 단체 알림 등록
 		List<Member> memberList = memberService.selectMemberListWithDeptKey(member.getDeptKey());
-		Notice groupNotice = new Notice();
-		groupNotice.setContent(
-				member.getDeptName() + " 부서에 " + member.getRankName() + " 직급의 " + member.getName() + " 사원이 추가되었습니다.");
-		groupNotice.setAddress("/notice/noticeList.do");
-		groupNotice.setIcon("fa-user-plus");
-		groupNotice.setColor("info");
+		List<Notice> groupNoticeList = new ArrayList<Notice>();
+		
+		
 		for (Member sameDeptMember : memberList) {
+			Notice groupNotice = new Notice();
+			groupNotice.setContent(
+					member.getDeptName() + " 부서에 " + member.getRankName() + " 직급의 " + member.getName() + " 사원이 추가되었습니다.");
+			groupNotice.setAddress("/notice/noticeList.do");
+			groupNotice.setIcon("fa-user-plus");
+			groupNotice.setColor("info");
 			groupNotice.setMemId(sameDeptMember.getMemberId());
-			noticeService.insertNotice(groupNotice);
+			groupNoticeList.add(groupNotice);
 		}
+		
+		noticeService.insertNoticeList(groupNoticeList);
 
 		return insertMemberResult;
 	}
@@ -104,6 +116,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<Member> selectMemberListWithDeptKey(int deptKey) {
 		return memberDAO.selectMemberListWithDeptKey(deptKey);
+	}
+
+	@Override
+	public List<Dept> hierarchicalDeptList() {
+		return memberDAO.hierarchicalDeptList();
 	}
 
 }

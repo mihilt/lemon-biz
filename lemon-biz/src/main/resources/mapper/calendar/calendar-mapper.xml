@@ -9,6 +9,9 @@
 			*
 		from
 			calendar
+		<where>
+			calendar_member_id = #{ memberId }
+		</where>
 	</select>
 	
 	<resultMap type="map" id="calendarMap">
@@ -17,8 +20,8 @@
   		<result column="calendar_allday" property="allDay"/>
   		<result column="calendar_start" property="start"/>
   		<result column="calendar_end" property="end"/>
-  		<result column="calendar_content" property="type"/>
-  		<result column="calendar_type" property="content"/>
+  		<result column="calendar_content" property="content"/>
+  		<result column="calendar_type" property="type"/>
   		<result column="calendar_color" property="color"/>
   	</resultMap>
 
@@ -27,12 +30,13 @@
 			calendar
 		values(
 			seq_calendar_no.nextval,
+			#{ memberId },
 			#{ title }, 
 			#{ allDay }, 
 			#{ startDate }, 
 			#{ endDate }, 
-			#{ type }, 
 			#{ content },
+			#{ type }, 
 			#{ color }
 		)
 	</insert>
@@ -45,8 +49,8 @@
 			calendar_allday = #{allDay},
 			calendar_start = #{startDate},
 			calendar_end = #{endDate},
-			calendar_content = #{type},
-			calendar_type = #{content},
+			calendar_content = #{content},
+			calendar_type = #{type},
 			calendar_color = #{color}
 		where
 			calendar_id = #{no}
