@@ -88,7 +88,7 @@
       
       <!-- 근태 관리 -->
       <li class="nav-item">
-        <a class="nav-link" href="근태관리">
+        <a class="nav-link" href="${pageContext.request.contextPath}/attend/attend.do">
           <i class="fas fa-fw fa-building"></i>
           <span>근태관리</span></a>
       </li>
