@@ -89,15 +89,7 @@ table.calendar td{
         firstDay = new Date(year,month-1,1);
         lastDay = new Date(year,month,0);
     }
-/*		나중에지울것
- setData();
-        var dateMatch = null;
-        for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
-            
-        }
 
-
-*/
     //일한시간 출력 +날짜표시
     function drawDays(){
         $("#cal_top_year").text(year);
@@ -142,30 +134,6 @@ table.calendar td{
 			console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		});
-        /* for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
-			var j=0;
-			if($tdDay.eq(i)){
-				$tdDay.eq(i).text(++dayCount);
- 				console.log(dayCount);
- 
-
-				if(dayCount<10){
-					var daycon="0"+dayCount;
-					yyyymm=year+""+month+daycon;
-					}
-				yyyymm=year+""+month+dayCount;
-
-	 			if(calattend[j].yyyymm==yyyymm){
-			 	console.log(calattend[0].yyyymm); 
-				j++;
-	 			
-	 	}           $tdSche.eq(i).text(calattend.time); 
-			}
-
-			 
-
-            	
-        } */
 
         for(var i=0;i<42;i+=7){
             $tdDay.eq(i).css("color","red");
@@ -216,53 +184,6 @@ table.calendar td{
     	location.href = "${pageContext.request.contextPath}/attend/attend.do";
     }
     
-    
-  /*   망한거 나중에 지울거
-    []test
-    function setData(){
-    	jsonData =
-         {
-            "2020":{
-                "10":{
-                    "17":"dddddd"
-                }
-    	,"09":{
-        	"20":"zzzz"
-            	}
-    	,"10":{
-        	"25":"ffff1"
-            	}
-    	,"10":{
-        	"15":"fffffff2"
-            	}
-    	,"10":{
-        	"5":"제ffff"
-            	}
-            }
-
-        } 
-    }
-
-  //[]test
-    function drawSche(){
-        setData();
-        var dateMatch = null;
-        for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
-            var txt = "";
-            txt =jsonData[year];
-            if(txt){
-                txt = jsonData[year][month]; 		
-                if(txt){
-                    txt = jsonData[year][month][i];
-                    dateMatch = firstDay.getDay() + i -1;
-                    $tdSche.eq(dateMatch).text(txt); 
-                }
-            }
-    alert(txt);   
-      alert(i);		
-        }
-          
-    } */
 
 </script>
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
