@@ -1,5 +1,5 @@
 select * from calendar;
-
+select * from member;
 commit;
 
 drop table calendar;

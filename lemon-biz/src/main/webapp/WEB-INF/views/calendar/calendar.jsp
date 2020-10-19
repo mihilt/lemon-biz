@@ -353,6 +353,7 @@
 	    				 	success : function(data) {
 	    						console.log(data);
 	    						alert(data.msg);
+	    						$('#calendar').fullCalendar('refetchEvents');
 	    					 },
 	    					error : function(xhr, status, err) {
 	    						console.log("처리 실패");
@@ -533,6 +534,7 @@
 										success : function(data) {
 											console.log(data);
 											alert(data.msg);
+											$('#calendar').fullCalendar('refetchEvents');
 										},
 										error : function(xhr, status, err) {
 											console.log("처리 실패");
@@ -630,6 +632,7 @@
 					 success : function(data) {
 						console.log(data);
 						alert(data.msg);
+						$('#calendar').fullCalendar('refetchEvents');
 					 },
 					 error : function(xhr, status, err) {
 						console.log("처리 실패");
@@ -646,6 +649,7 @@
 			
 			
 			$('#deleteEvent').unbind();
+			$("#calendar").fullCalendar('removeEvents', $(this).data('id'));
 			eventModal.modal('hide');
 
 			console.log($(this).data('id'));
@@ -658,6 +662,7 @@
 				success: function(response){
 					console.log(response);
 					alert(response.msg);
+					$('#calendar').fullCalendar('refetchEvents');
 				},
 				error : function(xhr,status,err){
 					console.log("처리 실패");
