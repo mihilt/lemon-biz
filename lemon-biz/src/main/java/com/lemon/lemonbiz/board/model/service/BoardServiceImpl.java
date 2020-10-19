@@ -200,8 +200,8 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public List<Board> boardtitleSearch(String searchKeyword) {
-		return boardDAO.boardtitleSearch(searchKeyword);
+	public List<Map<String, Object>> boardtitleSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		return boardDAO.boardtitleSearch(searchKeyword,cPage,numPerPage,map);
 	}
 
 

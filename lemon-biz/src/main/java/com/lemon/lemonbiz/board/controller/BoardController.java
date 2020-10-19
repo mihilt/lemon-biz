@@ -617,11 +617,27 @@ public class BoardController {
 	
 	@RequestMapping("/boardSearch2.do")
 	public String boardSearch2(@RequestParam("searchKeyword")String searchKeyword,
-								Model model) {
+								Model model,HttpServletRequest request) {
 
-		List<Board> list = boardService.boardtitleSearch(searchKeyword);
+		int numPerPage = 3;
+		int cPage = 1;
+		
+		try {
+			cPage = Integer.parseInt(request.getParameter("cPage"));
+		} catch (NumberFormatException e) {
+			
+		}
+		int totalContents = boardService.countBoard();
+		/* log.debug("totalContents = {} ",totalContents); */
+		String url = request.getRequestURI();
+		/* log.debug("url = {} " , url); */
+		String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
+		Map<String,Object> map = new HashMap<String, Object>();
+	
+		List<Map<String, Object>> list = boardService.boardtitleSearch(searchKeyword,cPage,numPerPage,map);
 		log.debug("list ={}" , list);
 		model.addAttribute("list", list);
+		model.addAttribute("pagebar",pageBar);		
 		return "board/boardFindNList";
 	}
 	

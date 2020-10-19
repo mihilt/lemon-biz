@@ -157,8 +157,15 @@ public class BoardDAOImpl implements BoardDAO {
 
 
 	@Override
-	public List<Board> boardtitleSearch(String searchKeyword) {
-		return sqlSession.selectList("board.boardtitleSearch",searchKeyword);
+	public List<Map<String, Object>> boardtitleSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		int startRnum = (cPage-1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("searchKeyword",searchKeyword);
+		return sqlSession.selectList("board.boardtitleSearch",map);
 	}
 
 

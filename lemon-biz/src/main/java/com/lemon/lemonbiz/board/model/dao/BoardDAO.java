@@ -53,7 +53,7 @@ public interface BoardDAO {
 
 	int insertMaBoard(Board board);
 
-	List<Board> boardtitleSearch(String searchKeyword);
+	List<Map<String, Object>> boardtitleSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map);
 
 	List<Board> boardTeamSearch(Member loginMember);
 

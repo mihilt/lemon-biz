@@ -345,19 +345,15 @@
   	</insert>
   	
   	<select id="boardtitleSearch" resultType="board">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        post_key = P.key) file_count
-		from
-   			 post P
-   		where categ_key=1 and 
-        title like '%'||#{ searchKeyword }||'%'
-         order by is_notice desc ,key desc
+  	 select * 
+        	from ( select rownum as rnum, v.* 
+        			from ( select(select count(*) 
+        						from attachment 
+        							where post_key = P.key)file_count,P.*
+        		from post P 
+        			where categ_key=1  and title like '%'||#{ searchKeyword }||'%'
+        				order by is_notice desc,key desc)v)v
+        			where rnum between #{startRnum} and #{endRnum}
   	</select>
   	
   	<select id="boardTeamSearch" resultType="board">
@@ -428,7 +424,8 @@
   	</select>
   	
   	<select id="selectTeamName" resultType="string">
-  	select distinct D.name from post P left join dept D on P.dept_key = D.key where P.categ_key=2  and  P.dept_key = #{deptKey}
+  	select name from dept where key = #{deptKey}
+  	<!-- select distinct D.name from post P left join dept D on P.dept_key = D.key where P.categ_key=2  and  P.dept_key = #{deptKey} -->
   	</select>
   
 </mapper>
