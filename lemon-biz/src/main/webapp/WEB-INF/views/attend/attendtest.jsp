@@ -4,9 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8"/><%-- 한글 깨짐 방지 --%>
-<jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value="" name="title"/>
-</jsp:include>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 <style type="text/css">
 div.cal_top{
     text-align: center;
@@ -266,4 +265,5 @@ table.calendar td{
     } */
 
 </script>
+<jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

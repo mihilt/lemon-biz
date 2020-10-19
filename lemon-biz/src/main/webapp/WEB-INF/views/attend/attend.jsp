@@ -4,9 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8"/>
-<jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value="" name="title"/>
-</jsp:include>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 <style>
 /*글쓰기버튼*/
 button#btn-leabe{float:right; margin:0 15px;}
@@ -113,4 +112,5 @@ function attendtest(){
 	.submit(); 
 }
 </script>
+<jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
