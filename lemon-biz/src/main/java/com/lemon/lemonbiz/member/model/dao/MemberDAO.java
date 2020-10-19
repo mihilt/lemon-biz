@@ -26,4 +26,6 @@ public interface MemberDAO {
 
 	List<Member> selectMemberListWithDeptKey(int deptKey);
 
+	List<Dept> hierarchicalDeptList();
+
 }

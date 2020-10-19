@@ -34,5 +34,10 @@ public class NoticeServiceImpl implements NoticeService {
 	public List<Notice> selectNoticeList(Member loginMember) {
 		return noticeDAO.selectNoticeList(loginMember);
 	}
+
+	@Override
+	public int insertNoticeList(List<Notice> groupNoticeList) {
+		return noticeDAO.insertNoticeList(groupNoticeList);
+	}
 	
 }

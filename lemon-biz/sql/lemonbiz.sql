@@ -1,5 +1,5 @@
 select * from calendar;
-
+select * from member;
 commit;
 
 drop table calendar;
@@ -8,7 +8,7 @@ drop sequence seq_calendar_no;
 
 create table calendar(
     calendar_id number,
-    --calendar_member_id varchar2(20),
+    calendar_member_id varchar2(20),
     calendar_title varchar2(100) not null,
     calendar_allday char(1) default '0',
     calendar_start varchar2(100) not null,

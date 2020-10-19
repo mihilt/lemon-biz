@@ -15,12 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoggerAspect {
 
-	@Pointcut("execution(* com.lemon.lemonbiz..*(..))")
+//	@Pointcut("execution(* com.lemon.lemonbiz..*(..))")
 	public void pointcut() {
 		
 	}
 
-	@Around("pointcut()")
+//	@Around("pointcut()")
 	public Object aroundLogger(ProceedingJoinPoint joinPoint) 
 											throws Throwable {
 		Signature signature = joinPoint.getSignature();

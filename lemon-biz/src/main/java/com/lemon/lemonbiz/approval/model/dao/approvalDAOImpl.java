@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 
 
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.approval.model.vo.appr;
+import com.lemon.lemonbiz.approval.model.vo.apprCheck;
+import com.lemon.lemonbiz.approval.model.vo.approval;
+import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 
 
@@ -46,6 +50,60 @@ public class approvalDAOImpl implements approvalDAO {
 	public List<Member> joinMemberList(String param) {
 		return sqlSession.selectList("approval.joinMemberList",param);
 	}
+
+	@Override
+	public String SeqApprKey() {
+		return sqlSession.selectOne("approval.SeqApprKey");
+	}
+
+	@Override
+	public int insertSaveApproval(appr appr) {
+		return sqlSession.insert("approval.insertSaveApproval",appr);
+	}
+
+	@Override
+	public int insertSaveAttachment(Attachment attach) {
+		return sqlSession.insert("approval.insertSavaAttachment",attach);
+	}
+
+	@Override
+	public int insertSaveApprck1(apprCheck apprck1) {
+		return sqlSession.insert("approval.insertSaveApprck1",apprck1);
+	}
+
+	@Override
+	public int insertSaveApprck2(apprCheck apprck2) {
+		return sqlSession.insert("approval.insertSaveApprck2",apprck2);
+	}
+
+	@Override
+	public int insertSaveApprck3(apprCheck apprck3) {
+		return sqlSession.insert("approval.insertSaveApprck3",apprck3);
+	}
+
+	@Override
+	public List<appr> approvalList(String memberId) {
+		return sqlSession.selectList("approval.approvalList",memberId);
+	}
+
+	@Override
+	public appr reWriteAppr(String key) {
+		return sqlSession.selectOne("approval.reWriteAppr",key);
+	}
+
+	@Override
+	public List<apprCheck> reWriteApprck(String key) {
+		return sqlSession.selectList("approval.reWriteApprck",key);
+	}
+
+	@Override
+	public Attachment reWriteAttach(String key) {
+		return sqlSession.selectOne("approval.reWriteAttach",key);
+	}
+
+
+	
+
 	
 	
 	

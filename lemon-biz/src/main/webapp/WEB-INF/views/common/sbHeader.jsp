@@ -27,7 +27,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="${pageContext.request.contextPath}/board/boardMaList.do">
           <i class="fas fa-fw fa-exclamation"></i>
           <span>공지사항</span></a>
       </li>
@@ -46,9 +46,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Approval</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/approval/writeForm.html">일반결재</a>
-            <a class="collapse-item" href="">근태/휴가결재</a>
-            <a class="collapse-item" href="">지출결재</a>
-            <a class="collapse-item" href="">임시저장함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/approval/myApvList?page=1">임시저장함</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">My Approval</h6>
             <a class="collapse-item" href="">내문서함</a>
@@ -108,6 +106,20 @@
           </div>
         </div>
       </li>
+
+      <!-- 조직도 -->
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/member/organization.do">
+          <i class="fas fa-fw fa-sitemap"></i>
+          <span>조직도</span></a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/room">
+          <i class="fas fa-comments"></i>
+          <span>채팅방</span></a>
+      </li>
+      
       
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -126,7 +138,7 @@
         </a>
         <div id="manager" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">사원 관리</h6>
+            <!-- <h6 class="collapse-header">사원 관리</h6> -->
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertMember.do">사원 등록</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageMember.do">사원 정보</a>
           </div>
@@ -141,7 +153,7 @@
         </a>
         <div id="dept" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">부서 관리</h6>
+            <!-- <h6 class="collapse-header">부서 관리</h6> -->
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertDept.do">부서 생성</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageDept.do">부서 정보</a>
           </div>
@@ -157,7 +169,7 @@
         </a>
         <div id="position" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">직급 관리</h6>
+            <!-- <h6 class="collapse-header">직급 관리</h6> -->
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertRank.do">직급 생성</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageRank.do">직급 정보</a>
           </div>
@@ -172,14 +184,13 @@
         </a>
         <div id="approval-manage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">전자결재 관리</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">무튼 관리</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">문서 생성</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/ㅋㅋ.do">문서 어쩌구저쩌구하기</a>
+            <!-- <h6 class="collapse-header">전자결재 관리</h6> -->
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/insertApprovalDoc.do">전자결재 양식 생성</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/manageApprovalDoc.do">전자결재 양식 조회</a>
           </div>
         </div>
       </li>
-
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
 </c:if>	
@@ -402,7 +413,7 @@
     				%>
                 	 "
                 >
-                
+                  
                 </div>
               </a>
               <!-- Dropdown - User Information -->

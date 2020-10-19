@@ -19,32 +19,35 @@
 					<tr>
 						<th scope="col">직급명</th>
 						<th scope="col"></th>
+						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${ rankList }" var="rank">
-						<form method="get"
-							  action="${pageContext.request.contextPath}/manager/manageRank/update.do">
-							<input name="key" type="hidden" value="${ rank.key }">
-							<tr>
-								<td>
-									<input name="name" class="form-control" value="${ rank.name }">
-								</td>
-
-								<td>
-									<button type="submit"
-									   class="btn btn-outline-secondary">
-										수정
-									</button>
-									<a type="button" 
-									   class="btn btn-outline-danger"
-									   onclick="return confirm('정말 삭제 하시겠습니까 ?')"
-									   href="${pageContext.request.contextPath}/manager/manageRank/delete.do?key=${ rank.key }">
-									   삭제
-									</a>
-								</td>
-							</tr>
-						</form>
+						<tr>
+							<form method="get"
+								  action="${pageContext.request.contextPath}/manager/manageRank/update.do">
+								<input name="key" type="hidden" value="${ rank.key }">
+									<td>
+										<input name="name" class="form-control" value="${ rank.name }">
+									</td>
+	
+									<td style="width: 8%">
+										<button type="submit"
+										   class="btn btn-outline-secondary">
+											수정
+										</button>
+									</td>
+									<td style="width: 8%">
+										<a type="button" 
+										   class="btn btn-outline-danger"
+										   onclick="return confirm('정말 삭제 하시겠습니까 ?')"
+										   href="${pageContext.request.contextPath}/manager/manageRank/delete.do?key=${ rank.key }">
+										   삭제
+										</a>
+									</td>
+							</form>
+						</tr>
 					</c:forEach>
 				</tbody>
 			</table>

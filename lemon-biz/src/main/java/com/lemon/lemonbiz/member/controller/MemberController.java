@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,11 +19,12 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.member.model.vo.Rank;
-import com.lemon.lemonbiz.notice.model.service.NoticeService;
 import com.lemon.lemonbiz.notice.model.vo.Notice;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +38,6 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 
-	@Autowired
-	private NoticeService noticeService;
-	
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
@@ -64,7 +63,6 @@ public class MemberController {
 		int result = 0;
 		
 		try {
-			
 			result = memberService.insertMember(member);
 			
 		} catch(Exception e) {
@@ -73,35 +71,6 @@ public class MemberController {
 		
 		String msg = result > 0 ? "사원 등록에 성공했습니다." : "사원 등록에 실패했습니다.";
 		redirectAttr.addFlashAttribute("msg", msg);
-		
-		//개인 알림 등록
-		Notice notice = new Notice();
-		notice.setMemId(member.getMemberId());
-		notice.setContent("입사를 환영합니다!<br>마이페이지서 프로필 사진 업로드와, 추가 정보를 입력해주세요.");
-		notice.setAddress("/member/myPage.do");
-		notice.setIcon("fa-laugh-beam");
-		notice.setColor("success");
-		noticeService.insertNotice(notice);
-		
-		notice.setMemId(member.getMemberId());
-		notice.setContent("입사를 환영합니다!<br>비밀번호를 변경 해주세요.");
-		notice.setAddress("/member/updatePassword.do");
-		noticeService.insertNotice(notice);
-		
-		//member deptName, rankName 불러오기
-		member = memberService.selectOneMember(member.getMemberId());
-		
-		//단체 알림 등록
-		List<Member> memberList = memberService.selectMemberListWithDeptKey(member.getDeptKey());
-		Notice groupNotice = new Notice();
-		groupNotice.setContent(member.getDeptName() + " 부서에 " + member.getRankName() + " 직급의 " + member.getName() + " 사원이 추가되었습니다.");
-		groupNotice.setAddress("/notice/noticeList.do");
-		groupNotice.setIcon("fa-user-plus");
-		groupNotice.setColor("info");
-		for(Member sameDeptMember : memberList) {
-			groupNotice.setMemId(sameDeptMember.getMemberId());
-			noticeService.insertNotice(groupNotice);
-		}
 		
 		return "redirect:/manager/insertMember.do";
 	}
@@ -235,6 +204,33 @@ public class MemberController {
 		}
 		
 	}
+	
+	@RequestMapping(value = "organization.do", method = RequestMethod.GET)
+	public void organization(Model model) {
+		List<Dept> hierarchicalDeptList = memberService.hierarchicalDeptList();
+		List<Member> memberList = memberService.selectMemberList();
 
-
+		model.addAttribute("hierarchicalDeptList", hierarchicalDeptList);
+		model.addAttribute("memberList", memberList);
+		
+	}
+	
+	
+	@RequestMapping(value = "selectOneMemberAjax.do", method = RequestMethod.GET)
+	public void selectOneMemberAjax(@RequestParam("memberId") String memberId,
+									HttpServletResponse response) {
+		Member member = memberService.selectOneMember(memberId);
+		
+		response.setContentType("application/json; charset=utf-8");
+		
+		Gson gson = new Gson();
+		try {
+			gson.toJson(member, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 }

@@ -27,4 +27,6 @@ public class Member implements Serializable {
 
 	private String deptName;
 	private String rankName;
+	private String loginMember;
+	private String searchKeyword;
 }

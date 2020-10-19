@@ -94,4 +94,19 @@
 		
 	</select>
 	
+	<select id="hierarchicalDeptList" resultType="dept">
+	
+		select 
+			D.*
+		from 
+			dept D
+		start with 
+			dept_level = 1
+		connect by 
+			ref = prior key
+		order siblings by 
+			key
+			
+	</select>
+	
 </mapper>
