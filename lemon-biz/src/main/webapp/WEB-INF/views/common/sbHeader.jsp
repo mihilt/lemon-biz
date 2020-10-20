@@ -46,9 +46,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Approval</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/approval/writeForm.html">일반결재</a>
-            <a class="collapse-item" href="">근태/휴가결재</a>
-            <a class="collapse-item" href="">지출결재</a>
-            <a class="collapse-item" href="">임시저장함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/approval/myApvList?page=1">임시저장함</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">My Approval</h6>
             <a class="collapse-item" href="">내문서함</a>
@@ -90,7 +88,7 @@
       
       <!-- 근태 관리 -->
       <li class="nav-item">
-        <a class="nav-link" href="근태관리">
+        <a class="nav-link" href="${pageContext.request.contextPath}/attend/attend.do">
           <i class="fas fa-fw fa-building"></i>
           <span>근태관리</span></a>
       </li>
@@ -116,6 +114,12 @@
           <span>조직도</span></a>
       </li>
       
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/room">
+          <i class="fas fa-comments"></i>
+          <span>채팅방</span></a>
+      </li>
+
       <!-- Divider -->
       <hr class="sidebar-divider">
 	<c:if test="${ loginMember.isManager eq 1 }">
@@ -185,7 +189,7 @@
           </div>
         </div>
       </li>
-
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
 </c:if>	

@@ -42,10 +42,13 @@
 	
 	<select id="selectMember" resultMap="memberMap">
 		SELECT
-		*
+		M.*,
+        D.key,
+        D.ref,
+        D.name as deptName
 		FROM MEMBER M FULL OUTER JOIN DEPT D
 		ON M.DEPT_KEY = D.KEY
-		WHERE D.NAME = #{param}
+		WHERE M.MEMBER_ID = #{param}
 	</select>
 	
 	<select id="joinMemberList" resultMap="memberMap">
@@ -56,6 +59,137 @@
 		WHERE M.NAME = #{param}
 	</select>
 	
+	<select id="SeqApprKey" resultType="String">
+	select seq_appr_key.nextval from dual
+	</select>
+	
+	<insert id="insertSaveApproval">
+		insert into
+			appr
+		values(
+			#{key},
+			null,
+			#{memId},
+			#{title},
+			#{content},
+			null,
+			default,
+			#{status}
+		)
+	
+	</insert>
+	
+	<insert id="insertSavaAttachment">
+		insert into
+			attachment
+		values(
+			seq_attachment_key.nextval,
+			null,
+			#{approvalkey},
+			#{memId},
+			null,
+			#{originName},
+			#{reName},
+			default,
+			default
+		)
+	</insert>
+	
+	<insert id="insertSaveApprck1">
+		insert into
+			appr_check
+		values(
+			seq_appr_check_key.nextval,
+			#{approvalKey},
+			#{memId},
+			#{seqNum},
+			null,
+			#{status},
+			null
+		)
+	</insert>
+	
+	<insert id="insertSaveApprck2">
+		insert into
+			appr_check
+		values(
+			seq_appr_check_key.nextval,
+			#{approvalKey},
+			#{memId},
+			#{seqNum},
+			null,
+			#{status},
+			null
+		)
+	</insert>
+	
+	<insert id="insertSaveApprck3">
+		insert into
+			appr_check
+		values(
+			seq_appr_check_key.nextval,
+			#{approvalKey},
+			#{memId},
+			#{seqNum},
+			null,
+			#{status},
+			null
+		)
+	</insert>
+	
+	<select id="approvalList" resultMap="apprMap">
+		select
+			P.*,
+			M.name,
+			D.name as docName
+		from
+			appr P 
+			left outer join member M on P.mem_id = M.member_id 
+			left outer join doc_type D on P.type_key = D.key
+		where
+			P.mem_id = #{memberId}
+			
+	</select>
+	
+	<select id="reWriteAppr" resultMap="apprMap">
+		select
+			*
+		from
+			appr
+		where
+			key = #{key}	
+	</select>
+	
+	<select id="reWriteApprck" resultMap="apprckMap">
+		select
+		    A.*,
+		    R.name as rankName,
+		    M.name as ckName
+		from
+		    appr_check A
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
+		where
+		    A.approval_key = #{key}
+	</select>
+	
+	<select id="reWriteAttach" resultMap="attachMap">
+		select
+			*
+		from
+			attachment
+		where
+			approval_key = #{key}
+	</select>
+	
+	
+  
+  <resultMap type="Attachment" id="attachMap"></resultMap>
+  <resultMap type="apprCheck" id="apprckMap"></resultMap>
+  
+  <resultMap type="appr" id="apprMap">
+  
+  </resultMap>	
 	
   <resultMap type="dept" id="deptMap">
   
