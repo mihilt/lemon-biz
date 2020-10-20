@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @SessionAttributes({ "loginMember" })
 @Slf4j
 public class MailController {
-
+// 123
 	@Autowired
 	private JavaMailSender mailSender;
 
