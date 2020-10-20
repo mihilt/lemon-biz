@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MailController {
 
-	// new commit test
+	// new commit test22
 	@Autowired
 	private JavaMailSender mailSender;
 
