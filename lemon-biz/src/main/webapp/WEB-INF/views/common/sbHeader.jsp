@@ -88,7 +88,7 @@
       
       <!-- 근태 관리 -->
       <li class="nav-item">
-        <a class="nav-link" href="근태관리">
+        <a class="nav-link" href="${pageContext.request.contextPath}/attend/attend.do">
           <i class="fas fa-fw fa-building"></i>
           <span>근태관리</span></a>
       </li>
@@ -119,8 +119,7 @@
           <i class="fas fa-comments"></i>
           <span>채팅방</span></a>
       </li>
-      
-      
+
       <!-- Divider -->
       <hr class="sidebar-divider">
 	<c:if test="${ loginMember.isManager eq 1 }">
