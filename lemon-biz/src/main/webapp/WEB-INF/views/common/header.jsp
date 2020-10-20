@@ -57,6 +57,9 @@
 		<script src="${pageContext.request.contextPath}/resources/vendor/js/select2.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/vendor/js/bootstrap-datetimepicker.min.js"></script>	
 		<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+		
+		<!-- chart -->
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	
         <!-- addFlashAttribute message -->
         <c:if test="${ not empty msg }">

@@ -27,3 +27,15 @@ commit;
 
 select * from member;
 
+create table cost(
+    member_id varchar2(20) not null,
+    transportation_costs number,
+    fitment number,
+    business_costs number,
+    meal_costs number,
+    gas_costs number,
+    expenditure_date varchar2(100) not null
+);
+
+select * from cost;
+
