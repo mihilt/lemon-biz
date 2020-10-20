@@ -33,8 +33,8 @@
 		<div id="wrapper">
 			<div id="loading"></div>
 			<div id="calendar"></div>
-			</div>
-	
+		</div>
+		
 		<div class="modal fade" id="eventModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
@@ -97,12 +97,7 @@
 										<option value="카테고리4">카테고리4</option>
 									</select>	
 								</c:if>
-								<!-- <select class="inputModal" type="text" name="edit-type" id="edit-type">
-									<option value="카테고리1">카테고리1</option>
-									<option value="카테고리2">카테고리2</option>
-									<option value="카테고리3">카테고리3</option>
-									<option value="카테고리4">카테고리4</option>
-								</select> -->
+								
 							</div>
 						</div>
 						<div class="row">

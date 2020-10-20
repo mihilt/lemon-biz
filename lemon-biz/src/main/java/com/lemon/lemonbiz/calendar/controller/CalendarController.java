@@ -41,7 +41,6 @@ public class CalendarController {
 	}
 	
 	@RequestMapping(value="/selectAllList.do")
-	
 	public @ResponseBody List<Calendar> selectAllList(HttpServletResponse response,@SessionAttribute("loginMember") Member loginMember){
 		
 		System.out.println("loginMember" + loginMember);
