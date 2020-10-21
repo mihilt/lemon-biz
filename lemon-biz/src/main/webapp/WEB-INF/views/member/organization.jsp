@@ -62,8 +62,9 @@
 			 	height: 200px;
 			 	background-size: 200px 200px;
 		 	    border-radius: 70%;
-		 	    border: 1px;
- 				overflow: hidden;
+		 	    border:solid 2px;
+		 	    border-color: #d1d3e2;
+   				overflow: hidden;
 			 ">
 		</div>
       	

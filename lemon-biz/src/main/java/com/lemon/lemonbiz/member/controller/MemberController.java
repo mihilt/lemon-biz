@@ -232,5 +232,10 @@ public class MemberController {
 		
 	}
 	
+	@RequestMapping(value = "memberForgotPassword.do", method = RequestMethod.GET)
+	public String memberForgotPassword() {
+		return "forward:/WEB-INF/views/login/memberForgotPassword.jsp";
+	}
+	
 	
 }

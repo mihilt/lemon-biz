@@ -30,11 +30,14 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 //		log.debug(request.getContextPath() + "/member/memberLogin.do");
 		
 		if(reqUrl.equals(request.getContextPath() + "/member/memberLogin.do") || 
-				reqUrl.equals(request.getContextPath()+"/"))
+				reqUrl.equals(request.getContextPath()+"/member/memberForgotPassword.do")||
+				reqUrl.equals(request.getContextPath()+"/")||
+				reqUrl.contains("/resources/")
+				)
 			return true;
 		
 		if(loginMember == null) {
-			
+//			log.debug("ha..={}", reqUrl);
 			response.sendRedirect(request.getContextPath() + "/member/memberLogin.do");
 			return false;
 		}

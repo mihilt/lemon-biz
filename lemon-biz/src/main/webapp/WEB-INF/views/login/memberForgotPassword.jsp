@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -20,34 +20,32 @@
 						<div class="col-lg-6">
 							<div class="p-5">
 								<div class="text-center">
-									<h1 class="h4 text-gray-900 mb-4">Lemon Biz</h1>
+									<h1 class="h4 text-gray-900 mb-2">비밀번호를 잊으셨나요?</h1>
+									<p class="mb-4">사원 번호와, 등록했던 이메일 주소를 입력해주세요.</p>
 								</div>
-								<form class="user" method="post"
-									action="${pageContext.request.contextPath}/member/memberLogin.do">
-
+								<form class="user">
 									<div class="form-group">
-										<input type="text" name="memberId"
-											class="form-control form-control-user" placeholder="사원 번호" required>
+										<input type="text" class="mb-2 form-control form-control-user"
+											id="exampleInputEmail" aria-describedby="emailHelp"
+											placeholder="사원 번호"> <input type="email"
+											class="form-control form-control-user" id="exampleInputEmail"
+											aria-describedby="emailHelp" placeholder="이메일 주소">
 									</div>
-
-									<div class="form-group">
-										<input type="password" name="password"
-											class="form-control form-control-user" placeholder="비밀번호" required>
-									</div>
-									<hr>
-									<button type="submit"
-										class="btn btn-primary btn-user btn-block">로그인</button>
-									<hr>
-									<a href="${pageContext.request.contextPath}/member/memberForgotPassword.do" class="text-white btn btn-danger btn-user btn-block"> 비밀번호 찾기 </a>
+									<a href="login.html" class="btn btn-primary btn-user btn-block">
+										비밀번호 초기화 </a>
 								</form>
+								<hr>
+								<div class="text-center">
+									<a class="small" href="#">로그인 화면으로 돌아가기</a>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
 
-</body>
-</html>
+		</div>
+
+	</div>
+
+</div>
