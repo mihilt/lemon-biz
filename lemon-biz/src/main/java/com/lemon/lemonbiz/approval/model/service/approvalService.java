@@ -40,6 +40,10 @@ public interface approvalService {
 
 	Attachment reWriteAttach(String key);
 
+	int updateApproval(appr appr);
+
+	int insertApproval(appr appr);
+
 	
 
 
