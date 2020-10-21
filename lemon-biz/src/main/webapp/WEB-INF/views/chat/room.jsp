@@ -27,6 +27,7 @@
 
 	</style>
 
+
 <script type="text/javascript">
 	var ws;
 	window.onload = function(){
@@ -42,9 +43,11 @@
 	}
 	
 	function createRoom(){
-		$("#createRoom").click(function(){
-			var msg = {	roomName : $('#roomName').val(),
-						creator : ${loginMember.getMemberId()} };
+		$('#createRoom').on("click", function() {
+			
+			var creator = "${ loginMember.getMemberId() }";
+			
+			var msg = { creator : creator , roomName : $('#roomName').val() };
 
 			commonAjax('${pageContext.request.contextPath}/createRoom', msg, 'post', function(result){
 				createChatingRoom(result);
@@ -94,7 +97,7 @@
 				var roomNumber = d.roomNumber;
 				var creator = d.creator;
 				
-				if(creator == ${ loginMember.getMemberId() }){
+				if(creator == "${ loginMember.getMemberId() }"){
 					tag += "<tr>"+
 								"<td>"+(idx+1)+"</td>"+
 								"<td>"+"<p class='float-left ml-5'>"+ rn +"</P>"+"</td>"+

@@ -11,19 +11,30 @@
 
 		<!-- 일자 클릭시 메뉴오픈 -->
 		<div class="dropdown-menu" id="contextMenu">
+		<c:if test="${ loginMember.isManager eq 1 }">
+		  <a class="dropdown-item" href="#">카테고리1</a>
+		  <a class="dropdown-item" href="#">카테고리2</a>
+		  <a class="dropdown-item" href="#">카테고리3</a>
+		  <a class="dropdown-item" href="#">카테고리4</a>
+		  <a class="dropdown-item" href="#">회사일정</a>
+		  <div class="dropdown-divider"></div>
+		  <a class="dropdown-item" href="#" data-role="close">Close</a>	
+		</c:if>
+		<c:if test="${ loginMember.isManager eq 0 }">
 		  <a class="dropdown-item" href="#">카테고리1</a>
 		  <a class="dropdown-item" href="#">카테고리2</a>
 		  <a class="dropdown-item" href="#">카테고리3</a>
 		  <a class="dropdown-item" href="#">카테고리4</a>
 		  <div class="dropdown-divider"></div>
-		  <a class="dropdown-item" href="#" data-role="close">Close</a>
+		  <a class="dropdown-item" href="#" data-role="close">Close</a>	
+		</c:if>
 		</div>
 
 		<div id="wrapper">
 			<div id="loading"></div>
 			<div id="calendar"></div>
-			</div>
-	
+		</div>
+		
 		<div class="modal fade" id="eventModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
@@ -66,18 +77,32 @@
 						</div>
 						<div class="row">
 							<div class="col-12">
-								<label class="col-4" for="edit-type">구분</label> 
-								<select class="inputModal" type="text" name="edit-type" id="edit-type">
-									<option value="카테고리1">카테고리1</option>
-									<option value="카테고리2">카테고리2</option>
-									<option value="카테고리3">카테고리3</option>
-									<option value="카테고리4">카테고리4</option>
-								</select>
+								<label class="col-4" for="edit-type">구분</label>
+								
+								<c:if test="${ loginMember.isManager eq 1 }">
+									<select class="inputModal" type="text" name="edit-type" id="edit-type">
+										<option value="카테고리1">카테고리1</option>
+										<option value="카테고리2">카테고리2</option>
+										<option value="카테고리3">카테고리3</option>
+										<option value="카테고리4">카테고리4</option>
+										<option value="회사일정">회사일정</option>
+									</select>	
+								</c:if>
+						
+								<c:if test="${ loginMember.isManager eq 0 }">
+									<select class="inputModal" type="text" name="edit-type" id="edit-type">
+										<option value="카테고리1">카테고리1</option>
+										<option value="카테고리2">카테고리2</option>
+										<option value="카테고리3">카테고리3</option>
+										<option value="카테고리4">카테고리4</option>
+									</select>	
+								</c:if>
+								
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-12">
-								<label class="col-4" for="edit-color">색상</label> 
+								<label class="col-4" for="edit-color">색상</label>
 								<select class="inputModal" name="color" id="edit-color">
 									<option value="#007bff" class="text-primary">파랑색</option>
 									<option value="#6c757d" class="text-secondary">회색</option>
@@ -127,18 +152,19 @@
 							<option value="카테고리2">카테고리2</option>
 							<option value="카테고리3">카테고리3</option>
 							<option value="카테고리4">카테고리4</option>
+							<option value="회사일정">회사일정</option>
 						</select>
 					</div>
 				</div>
 			</div>
 		</div>
 	<!-- /.filter panel -->
-		
+	
 	</div>
 	<style>
 		#modal-content{
 			width: 80%;
-		}		
+		}
 	</style>
 
 	<script>
@@ -146,7 +172,7 @@
 	    var activeInactiveWeekends = true;
 
 	    var calendar = $('#calendar').fullCalendar({
-
+		  
 	      locale                    : 'ko',    
 	      timezone                  : "local", 
 	      nextDayThreshold          : "09:00:00",
@@ -279,7 +305,7 @@
 									} 
 									
 	    							return array;
-	    						});
+	    						 });
 
 		    					console.log("fixedDate",fixedDate);
 	    						
@@ -322,6 +348,7 @@
 	    				 	success : function(data) {
 	    						console.log(data);
 	    						alert(data.msg);
+	    						$('#calendar').fullCalendar('refetchEvents');
 	    					 },
 	    					error : function(xhr, status, err) {
 	    						console.log("처리 실패");
@@ -439,12 +466,20 @@
 			modifyBtnContainer.hide();
 			eventModal.modal('show');
 
+			/* 카테고리별 아이디 대입 */
+			var selectId;
+			if(editType.val() == '회사일정'){
+				selectId = '';
+			}else{
+				selectId = userId.val();
+			}
+
 			//새로운 일정 저장버튼 클릭
 			$('#save-event').unbind();
 			$('#save-event').on('click',function() {
 
 								var eventData = {
-									memberId : userId.val(),
+									memberId : selectId,
 									title : editTitle.val(),
 									startDate : editStart.val(),
 									endDate : editEnd.val(),
@@ -453,8 +488,7 @@
 									color : editColor.val(),
 									allDay : editAllDay.is(':checked') ? '1' : '0'
 								};
-
-								
+		
 								console.log(eventData);
 
 								if (eventData.start > eventData.end) {
@@ -495,6 +529,7 @@
 										success : function(data) {
 											console.log(data);
 											alert(data.msg);
+											$('#calendar').fullCalendar('refetchEvents');
 										},
 										error : function(xhr, status, err) {
 											console.log("처리 실패");
@@ -592,6 +627,7 @@
 					 success : function(data) {
 						console.log(data);
 						alert(data.msg);
+						$('#calendar').fullCalendar('refetchEvents');
 					 },
 					 error : function(xhr, status, err) {
 						console.log("처리 실패");
@@ -608,6 +644,7 @@
 			
 			
 			$('#deleteEvent').unbind();
+			$("#calendar").fullCalendar('removeEvents', $(this).data('id'));
 			eventModal.modal('hide');
 
 			console.log($(this).data('id'));
@@ -620,6 +657,7 @@
 				success: function(response){
 					console.log(response);
 					alert(response.msg);
+					$('#calendar').fullCalendar('refetchEvents');
 				},
 				error : function(xhr,status,err){
 					console.log("처리 실패");

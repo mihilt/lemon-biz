@@ -59,7 +59,7 @@ function goBoardForm(){
 		<c:forEach items="${ list }" var="post">
 		<tr data-no="${ post.key }">
 			
-			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.jpg" 
+			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.png" 
 						 style="width:30px;" /></td>
 
 			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.title } </td>

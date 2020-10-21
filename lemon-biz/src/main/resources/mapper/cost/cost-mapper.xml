@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cost">
+
+	<select id="selectAllCost" resultMap="costMap">
+		select
+			*
+		from
+			cost
+		<where>
+			member_id = #{ memberId }
+		</where>
+	</select>
+	
+	<resultMap type="map" id="costMap">
+  		<result column="transportation_costs" property="transportationCosts"/>
+  		<result column="fitment" property="fitment"/>
+  		<result column="business_costs" property="businessCosts"/>
+  		<result column="meal_costs" property="mealCosts"/>
+  		<result column="gas_costs" property="gasCosts"/>
+  		<result column="expenditure_date" property="expenditureDate"/>
+  	</resultMap>
+
+	<insert id="enrollCost">
+		insert into 
+			cost
+		values(
+			#{ memberId },
+			#{ transportationCosts }, 
+			#{ fitment }, 
+			#{ businessCosts }, 
+			#{ mealCosts }, 
+			#{ gasCosts }, 
+			#{ expenditureDate }
+		)
+	</insert>
+	
+</mapper>

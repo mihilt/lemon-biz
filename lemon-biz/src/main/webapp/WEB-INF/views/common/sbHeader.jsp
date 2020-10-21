@@ -88,7 +88,7 @@
       
       <!-- 근태 관리 -->
       <li class="nav-item">
-        <a class="nav-link" href="근태관리">
+        <a class="nav-link" href="${pageContext.request.contextPath}/attend/attend.do">
           <i class="fas fa-fw fa-building"></i>
           <span>근태관리</span></a>
       </li>
@@ -114,6 +114,12 @@
           <span>조직도</span></a>
       </li>
       
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/room">
+          <i class="fas fa-fw fa-comments"></i>
+          <span>채팅방</span></a>
+      </li>
+
       <!-- Divider -->
       <hr class="sidebar-divider">
 	<c:if test="${ loginMember.isManager eq 1 }">
@@ -183,7 +189,7 @@
           </div>
         </div>
       </li>
-
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
 </c:if>	
@@ -384,7 +390,11 @@
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">${ loginMember.name }</span>
                 <div class="img-profile rounded-circle" 
-                	 style="background-size: 32px 32px;
+                	 style="
+					 border:solid 1px;
+					 border-color: #d1d3e2;
+                	 
+                	 background-size: 32px 32px;
    	 		    	<%  
     					Member loginMember = (Member)session.getAttribute("loginMember");
     					

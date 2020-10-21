@@ -25,7 +25,8 @@
 				 	height: 200px;
 				 	background-size: 200px 200px;
 			 	    border-radius: 70%;
-			 	    border: 1px;
+			 	    border:solid 2px;
+			 	    border-color: #d1d3e2;
     				overflow: hidden;
     				
    	 		    	<%  
@@ -100,6 +101,13 @@
 			</div>
 			<br />
 			<div class="mb-1 row mx-5">
+				<div class="col-2 pt-2 text-right">이메일 :</div>
+				<div class="col-10 form-control bg-gray-200">${ loginMember.email }</div>
+			</div>
+			<input type="hidden" name="email" value="${ loginMember.email }" />
+			<input type="hidden" name="emailPwd" value="${ loginMember.emailPwd }" />
+			<br />
+			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">관리자 :</div>
 				<div class="col-10 pt-2">
 					<div class="form-check">
@@ -116,7 +124,6 @@
 					</div>
 				</div>
 			</div>
-			
 			<div>
 				<button
 					class="btn bg-warning text-white font-weight-bold float-right mt-3 mr-5"

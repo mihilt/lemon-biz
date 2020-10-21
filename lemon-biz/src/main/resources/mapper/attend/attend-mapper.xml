@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!--내 근태정보-->
+<mapper namespace="attend">
+  <select id="selectAttendList" resultType="attend">
+    select *
+	from attend
+	where mem_id=#{memId}
+	order by key desc
+  </select>
+  
+   <!--출근-->
+  <insert id="attendArrive" >
+  insert into 
+			attend(key,mem_id,arrive)
+		values(
+		seq_attend_key.nextval,
+		#{ memId },
+		sysdate
+		)
+  </insert>
+
+  <update id="attendLeabe">
+  <!--퇴근-->
+  update attend
+  set  leave=sysdate,
+	time=(SELECT trunc(((TRUNC(sysdate, 'MI')-arrive) * 1440)/60 ,2)
+    FROM attend
+  	where key=(select max(key)
+        from attend
+        where mem_id=#{ memId}))
+  where key=(select max(key)
+        from attend
+        where mem_id = #{memId}
+        )
+  
+  </update>
+  
+    <!-- 마지막근태기록 -->
+  <select id="selectLastOne" resultType="attend">
+    select *
+	from attend 
+	where mem_id=#{memId}
+        and key= (select max(key) from attend )
+	order by key desc
+  </select>
+  
+  <!--  -->
+    <select id="selectAttendInfo" resultType="attend">
+   	select count(*)key,round(sum(time))memId,round(avg(time),2)time
+	from attend
+	where mem_id=#{memId}
+  	</select>
+  
+  
+	<select id="selectCalAttend" resultType="attend">
+
+	select d.key,mem_id,arrive,leave,time,d.yyyymm
+	from attend E,(select to_char(arrive,('YYYYMMDD'))yyyymm,key
+    from attend
+    where mem_id=#{memId}) D
+	where E.key(+)=D.key and D.yyyymm like #{yyyymm}
+	order by key
+<!--
+ 	select d.key,mem_id,arrive,leave,time,d.yyyymm
+	from attend E,(select to_char(arrive,('YYYYMMDD'))yyyymm,key
+    from attend) D
+	where E.key(+)=D.key and mem_id=#{memId}
+	order by key 
+ -->
+	</select>
+
+</mapper>

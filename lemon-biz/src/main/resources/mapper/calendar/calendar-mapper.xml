@@ -10,6 +10,8 @@
 		from
 			calendar
 		<where>
+			calendar_member_id is null
+		or
 			calendar_member_id = #{ memberId }
 		</where>
 	</select>
@@ -24,8 +26,8 @@
   		<result column="calendar_type" property="type"/>
   		<result column="calendar_color" property="color"/>
   	</resultMap>
-
-	<insert id="enrollCalendar">
+  	
+  	<insert id="enrollCalendar">
 		insert into 
 			calendar
 		values(
@@ -72,5 +74,6 @@
 		where 
 			calendar_id = #{no}
 	</delete>
+	
 	
 </mapper>
