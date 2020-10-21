@@ -23,20 +23,22 @@
 									<h1 class="h4 text-gray-900 mb-2">비밀번호를 잊으셨나요?</h1>
 									<p class="mb-4">사원 번호와, 등록했던 이메일 주소를 입력해주세요.</p>
 								</div>
-								<form class="user">
+								<form class="user" method="post"
+									action="${pageContext.request.contextPath}/member/memberForgotPassword.do">
 									<div class="form-group">
-										<input type="text" class="mb-2 form-control form-control-user"
+										<input type="text" name="memberId" class="mb-2 form-control form-control-user"
 											id="exampleInputEmail" aria-describedby="emailHelp"
-											placeholder="사원 번호"> <input type="email"
-											class="form-control form-control-user" id="exampleInputEmail"
-											aria-describedby="emailHelp" placeholder="이메일 주소">
+											placeholder="사원 번호" required> 
+										<input type="email"
+											class="form-control form-control-user" name="email"  id="exampleInputEmail"
+											aria-describedby="emailHelp" placeholder="이메일 주소" required>
 									</div>
-									<a href="login.html" class="btn btn-primary btn-user btn-block">
-										비밀번호 초기화 </a>
+									<button type="submit" href="login.html" class="btn btn-primary btn-user btn-block">
+										비밀번호 찾기 </button>
 								</form>
 								<hr>
 								<div class="text-center">
-									<a class="small" href="#">로그인 화면으로 돌아가기</a>
+									<a class="small" href="${pageContext.request.contextPath}/member/memberLogin.do">로그인 화면으로 돌아가기</a>
 								</div>
 							</div>
 						</div>
