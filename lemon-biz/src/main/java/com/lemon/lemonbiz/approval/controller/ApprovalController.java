@@ -42,7 +42,31 @@ public class ApprovalController {
 	@Autowired
 	private approvalService approvalService;
 	
-	@RequestMapping("/myApvList")
+	
+	
+	@RequestMapping(value="/myApprovalList")
+	public String myApprovalList(@ModelAttribute("loginMember") Member loginMember,
+								 @RequestParam(value="page") int page,
+								 
+								 Model model) {
+		List<appr> apprList = new ArrayList<>();
+		apprList = approvalService.ApprovalList(loginMember.getMemberId());
+		
+		
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("auth", 0);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/myApprovalList");
+		
+		
+		
+		
+		
+		return "approval/myApprovalList";
+	}
+	
+	
+	@RequestMapping(value="/myApvList")
 	public String myApvList(HttpServletRequest req, 
 							Model model,
 							@ModelAttribute("loginMember") Member loginMember,
@@ -66,7 +90,7 @@ public class ApprovalController {
 		return "approval/myApvList";
 	}
 	
-	@RequestMapping("/writeForm.html")
+	@RequestMapping(value="/writeForm.do")
 	public String writeForm(Model model) {
 		
 
@@ -81,6 +105,9 @@ public class ApprovalController {
 		model.addAttribute("dept",dept);
 		model.addAttribute("child",child);
 		model.addAttribute("child2",child2);
+
+		
+		
 		
 		return "approval/writeForm";
 	}
@@ -131,42 +158,168 @@ public class ApprovalController {
 		
 		return map;
 	}
-	/*
-	 * appr appr, apprCheck apprck, docType docType,
-	 */
+	//updateApproval.do
 	@RequestMapping(value="applovalSave.do", method=RequestMethod.POST)
-	public String approvalWrite(HttpServletRequest req,
-								appr appr,
+	public String updateApproval(HttpServletRequest req,
 								Model model,
-								@RequestParam (value="countVacat", required=false) String countVacat,
-								@RequestParam (value="approval_title", required=true) String title,
-								@RequestParam (value="approval_content", required=true) String semmernote,
-								@RequestParam (value="status", required=true) String status,
-								@RequestParam (value="upFile", required=false) MultipartFile upFile,
-								@RequestParam (value="approval_mem1", required=true) String authId1,
-								@RequestParam (value="approval_mem2", required=true) String authId2,
-								@RequestParam (value="approval_mem3", required=true) String authId3,
-								@RequestParam (value="process_num1", required=true) int processNum1,
-								@RequestParam (value="process_num2", required=true) int processNum2,
-								@RequestParam (value="process_num3", required=true) int processNum3
+								appr appr,
+								@RequestParam (value="updateTitle", required=true) String title,
+								@RequestParam (value="updateContent", required=true) String semmernote,
+								@RequestParam (value="updateStatus", required=true) String status,
+								@RequestParam (value="updatdAuthId1", required=true) String authId1,
+								@RequestParam (value="updatdAuthId2", required=true) String authId2,
+								@RequestParam (value="updatdAuthId3", required=true) String authId3,
+								@RequestParam (value="updateProcessNum1", required=true) int processNum1,
+								@RequestParam (value="updateProcessNum2", required=true) int processNum2,
+								@RequestParam (value="updateProcessNum3", required=true) int processNum3,
+								@RequestParam (value="updateApprovalKey", required=true) String approvalKey
 								)
 								throws IOException, Exception, IllegalStateException {
 		
 		
+		HttpSession session = req.getSession();
+//		int updateApprckKey11 = Integer.valueOf(updateApprckKey1); 
+//		int updateApprckKey22 = Integer.valueOf(updateApprckKey2); 
+//		int updateApprckKey33 = Integer.valueOf(updateApprckKey3); 
 		
-		System.out.println(appr.getKey());
-		System.out.println(appr.getKey());
-		System.out.println(appr.getKey());
-		System.out.println(appr.getKey());
-		System.out.println(appr.getKey());
-		System.out.println(appr.getKey());
-		System.out.println(appr.getKey());
-		System.out.println(appr.getKey());		
-		System.out.println(status);
-		System.out.println(status);
-		System.out.println(status);
-		System.out.println(status);
-		System.out.println(status);
+		//======================================공통 속성들====================================
+		
+		//2. 문서종류
+		
+		//3. 사원번호 : 전자결제에 대한 사원번호 받기
+		String memId = ((Member)session.getAttribute("loginMember")).getMemberId();
+		appr.setMemId(memId);
+		
+		//4. 제목 : 전자결제에 대한 제목받기(title)
+		appr.setTitle(title);
+		
+		//5. 내용 : 전자결제에 대한 제목받기(semmernote)
+		log.debug("semmernote={}", semmernote);
+		appr.setContent(semmernote);
+		
+		//6. 기안일자 : 전자결제에 대한 작성일자 받기(디비에서 default)
+		
+		//7. 상태 : 전자결제에 대한 상태받기(status)
+		log.debug("status={}", status);
+		appr.setStatus(status);
+		
+		apprCheck apprck1 = new apprCheck();
+		apprCheck apprck2 = new apprCheck();
+		apprCheck apprck3 = new apprCheck();
+		
+		//8. apprCheck 객체 생성
+		//1번 결제자
+		log.debug("authId1={}",authId1);
+		log.debug("authId2={}",authId2);
+		log.debug("authId3={}",authId3);
+		apprck1.setSeqNum(processNum1);
+		log.debug("apprck1={}",apprck1.getSeqNum());
+		apprck1.setMemId(authId1);
+		apprck1.setStatus(status);
+		//2번결제자
+		apprck2.setSeqNum(processNum2);
+		log.debug("apprck2={}",apprck2.getSeqNum());
+		apprck2.setMemId(authId2);
+		apprck2.setStatus(status);
+		//3번결제자
+		apprck3.setSeqNum(processNum3);
+		apprck3.setMemId(authId3);
+		apprck3.setStatus(status);	
+		
+		
+		
+		//======================================공통 속성들 end====================================
+		
+		
+		
+		//문서번호 : 처음 제출 시 문서번호 받기위한 시퀸스 생성 후 insert, key(seq)생성 필수(행이 존재하지 않기때문에 새로 만들어야함)
+		//approvalKey(임시저장에서 넘어온 key값, key값이 존재하면 행이 존재한다는것임) 
+		log.debug("approvalKey={}",approvalKey);
+		if(approvalKey.equals("")) {
+			
+			String seqApprKey = approvalService.SeqApprKey();
+			appr.setKey(seqApprKey);
+			apprck1.setApprovalKey(appr.getKey());
+			apprck2.setApprovalKey(appr.getKey());
+			apprck3.setApprovalKey(appr.getKey());
+			
+			//이미 행이 있을 경우 appr_check 에 대한 key값 이 이미 있기때문에 분기에서 없으면 설정해주지 않고 appr에 바로 set함 
+			appr.setApprck1(apprck1);
+			appr.setApprck2(apprck2);
+			appr.setApprck3(apprck3);
+			
+			//appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			int result = approvalService.insertApproval(appr);
+			log.debug("result={}",result);
+			
+		}else {
+			//임시저장 후 제출의 경우 문서번호가 이미 존재하기 때문에 update
+			appr.setKey(approvalKey);
+			
+			log.debug("approvalKey={}",approvalKey);
+			
+			//appr_check 도 행이 이미 존재하기 때문에 jsp에서 apprCheck.key값을 받아와서 update처리.
+			
+			List<apprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
+			
+			log.debug("approvalchange={}",apprchList.get(0).getKey());
+			log.debug("approvalchange={}",apprchList.get(1).getKey());
+			log.debug("approvalchange={}",apprchList.get(2).getKey());
+			log.debug("apprchmemid={}",apprck1.getMemId());
+			log.debug("apprchmemid={}",apprck2.getMemId());
+			log.debug("apprchmemid={}",apprck3.getMemId());
+			log.debug("apprchSeqNum={}",apprck1.getSeqNum());
+			log.debug("apprchSeqNum={}",apprck2.getSeqNum());
+			log.debug("apprchSeqNum={}",apprck3.getSeqNum());
+			
+			
+			apprck1.setKey(apprchList.get(0).getKey());
+			apprck2.setKey(apprchList.get(1).getKey());
+			apprck3.setKey(apprchList.get(2).getKey());
+			
+			appr.setApprck1(apprck1);
+			appr.setApprck2(apprck2);
+			appr.setApprck3(apprck3);
+			
+			// appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			int result = approvalService.updateApproval(appr);
+			log.debug("result={}",result);
+		}
+		
+		
+		model.addAttribute("appr",appr);
+		
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
+		
+		return "redirect:/approval/myApvList?page=1";
+	}
+	
+	
+	/*
+	 * appr appr, apprCheck apprck, docType docType,  applovalSave.do
+	 */
+	@RequestMapping(value="updateApproval.do", method=RequestMethod.POST)
+	public String approvalWrite(HttpServletRequest req,
+								Model model,
+								appr appr,
+								@RequestParam (value="approval_title", required=true) String title,
+								@RequestParam (value="approval_content", required=true) String semmernote,
+								@RequestParam (value="status", required=true) String status,
+								@RequestParam (value="approval_mem1", required=true) String authId1,
+								@RequestParam (value="approval_mem2", required=true) String authId2,
+								@RequestParam (value="approval_mem3", required=true) String authId3,
+								@RequestParam (value="upFile", required=false) MultipartFile upFile,
+								@RequestParam (value="process_num1", required=true) int processNum1,
+								@RequestParam (value="process_num2", required=true) int processNum2,
+								@RequestParam (value="process_num3", required=true) int processNum3,
+								@RequestParam (value="updateApprovalKey", required=true) String approvalKey
+								)
+								throws IOException, Exception, IllegalStateException {
+		
+		
 		
 		HttpSession session = req.getSession();
 		
@@ -174,21 +327,15 @@ public class ApprovalController {
 		apprCheck apprck2 = new apprCheck();
 		apprCheck apprck3 = new apprCheck();
 		
-		log.debug("appr={}",appr);
 		
 		
 		//-----------------------전자결제에 대한 속성저장
 		
-		//1. 문서번호 : 문서번호 받기위한 시퀸스 생성(String으로 받을예정)
-		String seqApprKey = approvalService.SeqApprKey();
-		log.debug("seqApprKey={}",seqApprKey);
-		appr.setKey(seqApprKey);
 		
 		//2. 문서종류번호
 		
 		//3. 사원번호 : 전자결제에 대한 사원번호 받기 
 		String memId = ((Member)session.getAttribute("loginMember")).getMemberId();
-		log.debug("memberId={}",((Member)session.getAttribute("loginMember")).getMemberId());
 		appr.setMemId(memId);
 		
 		//4. 제목 : 전자결제에 대한 제목받기(title)
@@ -205,17 +352,37 @@ public class ApprovalController {
 		log.debug("status={}", status);
 		appr.setStatus(status);
 		
-		//8. 파일 : 파일테이블에서 끌고올거임.(upfile) 이건 일단 셋팅이 아니라 보류함.
+		//8. apprCheck 객체 생성
+		//1번 결제자
+		log.debug("authId1={}",authId1);
+		log.debug("authId2={}",authId2);
+		log.debug("authId3={}",authId3);
+		apprck1.setSeqNum(processNum1);
+		apprck1.setMemId(authId1);
+		apprck1.setStatus(status);
+		//2번결제자
+		apprck2.setSeqNum(processNum2);
+		apprck2.setMemId(authId2);
+		apprck2.setStatus(status);
+		//3번결제자
+		apprck3.setSeqNum(processNum3);
+		apprck3.setMemId(authId3);
+		apprck3.setStatus(status);
 		
-		
-		
-		//1. 서버컴퓨터에 업로드한 파일 저장하기
-		log.debug("upFile.name={}", upFile.getOriginalFilename());
-		log.debug("upFile.size={}", upFile.getSize());
-		
+		//9. attachment객체 생성
 		Attachment attach = new Attachment();
-		//1. 서버컴퓨터에 저장
+		//파일이 있는지 없는지 확인후 객체에 속성값 저장
+		
+		
+		
 		if(upFile != null) {
+			
+			//8-1.파일 : 저장할 파일이 존재할 경우 attachment에 속성저장하기 (upfile)
+			// 서버컴퓨터에 업로드한 파일 저장 확인
+			log.debug("upFile.name={}", upFile.getOriginalFilename());
+			log.debug("upFile.size={}", upFile.getSize());
+			
+			//1. 서버컴퓨터에 저장
 			
 			//저장경로
 			String saveDirectory = req.getServletContext().getRealPath("/resources/upload/approval");
@@ -231,45 +398,71 @@ public class ApprovalController {
 			
 			attach.setOriginName(upFile.getOriginalFilename());
 			attach.setReName(renamedFilename);
-			attach.setApprovalkey(appr.getKey());
+			
 			attach.setMemId(appr.getMemId());
-			//4. apprCheck 객체 생성
-			//1번 결제자
-			log.debug("authId1={}",authId1);
-			log.debug("authId2={}",authId2);
-			log.debug("authId3={}",authId3);
-			apprck1.setSeqNum(processNum1);
-			log.debug("apprck1={}",apprck1.getSeqNum());
-			apprck1.setMemId(authId1);
+			
+			log.debug("appr={}",appr);
+		}
+		
+		
+		//2. appr(전자결제), apprch(전자결제승인) 객체 db에 저장
+		
+		log.debug("approvalKey={}",approvalKey);
+		log.debug("approvalKey={}",approvalKey);
+		log.debug("approvalKey={}",approvalKey);
+		log.debug("approvalKey={}",approvalKey);
+		log.debug("approvalKey={}",approvalKey);
+		log.debug("approvalKey={}",approvalKey);
+		System.out.println("머지이거=["+approvalKey+"];;"); //머지이거=[];; 이렇게 나오는데 왜 else로 빠지는거야 시;발
+		if(approvalKey.equals("")) {
+			System.out.println("------------------------------");
+			
+			log.debug("approvalKey={}",approvalKey);
+			log.debug("approvalKey={}",approvalKey);
+			log.debug("approvalKey={}",approvalKey);
+			String seqApprKey = approvalService.SeqApprKey();
+			appr.setKey(seqApprKey);
 			apprck1.setApprovalKey(appr.getKey());
-			apprck1.setStatus(status);
-			//2번결제자
-			apprck2.setSeqNum(processNum2);
-			log.debug("apprck2={}",apprck2.getSeqNum());
-			apprck2.setMemId(authId2);
 			apprck2.setApprovalKey(appr.getKey());
-			apprck2.setStatus(status);
-			//3번결제자
-			apprck3.setSeqNum(processNum3);
-			apprck3.setMemId(authId3);
 			apprck3.setApprovalKey(appr.getKey());
-			apprck3.setStatus(status);
+			attach.setApprovalkey(appr.getKey());
+			appr.setAttachment(attach);
+			
+			//이미 행이 있을 경우 appr_check 에 대한 key값 이 이미 있기때문에 분기에서 없으면 설정해주지 않고 appr에 바로 set함 
+			appr.setApprck1(apprck1);
+			appr.setApprck2(apprck2);
+			appr.setApprck3(apprck3);
+			
+			//appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			int result = approvalService.insertApproval(appr);
+			log.debug("result={}",result);
+			
+		}else{
+			//임시저장 후 임시저장의 경우 문서번호가 이미 존재하기 때문에 update
+			appr.setKey(approvalKey);
+			
+			log.debug("approvalKey={}",approvalKey);
+			
+			//appr_check 도 행이 이미 존재하기 때문에 jsp에서 apprCheck.key값을 받아와서 update처리.
+			
+			List<apprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
+			
+			
+			apprck1.setKey(apprchList.get(0).getKey());
+			apprck2.setKey(apprchList.get(1).getKey());
+			apprck3.setKey(apprchList.get(2).getKey());
+			attach.setApprovalkey(appr.getKey());
+			appr.setAttachment(attach);
 			
 			appr.setApprck1(apprck1);
 			appr.setApprck2(apprck2);
 			appr.setApprck3(apprck3);
-			log.debug("appr.getApprck1.SeqNum={}",appr.getApprck1().getSeqNum());
-			log.debug("appr.getApprck2.SeqNum={}",appr.getApprck2().getSeqNum());
-			log.debug("appr.getApprck3.SeqNum={}",appr.getApprck3().getSeqNum());
-			appr.setAttachment(attach);
-			log.debug("attach={}",attach);
 			
+			// appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			int result = approvalService.updateApproval(appr);
+			log.debug("result={}",result);
 		}
 		
-		//2. appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
-		
-		int result = approvalService.insertSaveApproval(appr);
-		log.debug("result={}",result);
 		
 		//처리결과 msg 전달
 		
@@ -280,7 +473,9 @@ public class ApprovalController {
 		model.addAttribute("attach",attach);
 		
 		
-		return "redirect:/approval/myApvList?page=1";
+		
+		
+		return "redirect:/approval/myApprovalList?page=1";
 	}
 	
 	
@@ -307,9 +502,23 @@ public class ApprovalController {
 		log.debug("apprck1={}",apprck1);
 		log.debug("apprck2={}",apprck2);
 		log.debug("apprck3={}",apprck3);
+		log.debug("appr={}",appr);
+		
+		List<Dept> dept = approvalService.deptList();
+		List<Dept> child = approvalService.child();
+		List<Dept> child2 = approvalService.child2();
+
+		log.debug("dept = {}",dept);
+		log.debug("child = {}",child);
+		log.debug("child2 = {}",child2);
+		
+		model.addAttribute("dept",dept);
+		model.addAttribute("child",child);
+		model.addAttribute("child2",child2);
 		
 		
 		model.addAttribute("appr",appr);
+		
 		
 		model.addAttribute("apprck1",apprck1);
 		model.addAttribute("apprck2",apprck2);
@@ -322,7 +531,37 @@ public class ApprovalController {
 		return "approval/writeForm";
 	}
 	
-	
+	@RequestMapping(value="/myApprovalDetail", method=RequestMethod.GET)
+	public String myApprovalDetail(Model model,
+								   @RequestParam(value="apprKey") String key) {
+		
+		
+		appr appr = approvalService.reWriteAppr(key);
+		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		Attachment attach = approvalService.reWriteAttach(key);
+		
+		
+		
+		apprCheck apprck1 = new apprCheck();
+		apprCheck apprck2 = new apprCheck();
+		apprCheck apprck3 = new apprCheck();
+		
+		apprck1 = apprchList.get(0);
+		apprck2 = apprchList.get(1);
+		apprck3 = apprchList.get(2);
+		
+		
+		model.addAttribute("appr",appr);
+		
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
+		model.addAttribute("attach",attach);
+		
+		
+		return "approval/myApprovalDetail";
+	}
 	
 	
 	

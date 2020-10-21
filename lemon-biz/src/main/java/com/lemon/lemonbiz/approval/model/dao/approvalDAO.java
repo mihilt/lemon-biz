@@ -45,6 +45,16 @@ public interface approvalDAO {
 
 	Attachment reWriteAttach(String key);
 
+	int updateApproval(appr appr);
+
+	int insertApproval(appr appr);
+
+	int updateApprck1(apprCheck apprck1);
+
+	int updateApprck2(apprCheck apprck2);
+
+	int updateApprck3(apprCheck apprck3);
+
 
 
 	
