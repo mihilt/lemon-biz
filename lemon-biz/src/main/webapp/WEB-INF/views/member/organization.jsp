@@ -88,6 +88,11 @@
 			<div class="col-2 pt-2 text-right">주소 :</div>
 			<div id="modalAddress" class="col-10 form-control"></div>
 		</div>
+		<br />
+		<div class="mb-1 row mx-5">
+			<div class="col-2 pt-2 text-right">이메일 :</div>
+			<div id="modalEmail" class="col-10 form-control"></div>
+		</div>
 
 
       </div>
@@ -111,6 +116,7 @@
 				$("#modalRankName").text(data.rankName);
 				$("#modalTelNum").text(data.telNum);
 				$("#modalAddress").text(data.address);
+				$("#modalEmail").text(data.email);
 
 				let image = new Image();
 				image.src = '${pageContext.request.contextPath }/resources/upload/profile_images/' + data.memberId + '.png';

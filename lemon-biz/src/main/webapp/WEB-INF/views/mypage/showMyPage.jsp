@@ -68,6 +68,8 @@
 					value="${ loginMember.memberId }" />
 				<input type="hidden" name="isManager"
 					value="${ loginMember.isManager }" />
+				<input type="hidden" name="deptKey" value="${ loginMember.deptKey }" />
+				<input type="hidden" name="rankKey" value="${ loginMember.rankKey }" />
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">이름 :</div>
@@ -111,6 +113,17 @@
 				<div class="col-2 pt-2 text-right">주소 :</div>
 				<input name="address" class="col-10 form-control" type="text"
 					value=${ loginMember.address }>
+			</div>
+			<br />
+			<div class="mb-1 row mx-5">
+				<div class="col-2 pt-2 text-right">이메일 :</div>
+				<input name="email" class="col-10 form-control" type="email"
+					value=${ loginMember.email }>
+			</div>
+			<div class="mb-1 row mx-5">
+				<div class="col-2 pt-2 text-right">이메일 비밀번호 :</div>
+				<input name="emailPwd" class="col-10 form-control" type="password"
+					value=${ loginMember.emailPwd }>
 			</div>
 			<div>
 				<button
