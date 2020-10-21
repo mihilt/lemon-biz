@@ -289,7 +289,7 @@ public class MemberController {
 			return "redirect:memberForgotPassword.do";
 		}
 
-		return "redirect:memberForgotPassword.do";
+		return "redirect:/member/memberLogin.do";
 	}
 
 }
