@@ -34,7 +34,7 @@
 											aria-describedby="emailHelp" placeholder="이메일 주소" required>
 									</div>
 									<button type="submit" href="login.html" class="btn btn-primary btn-user btn-block">
-										비밀번호 찾기 </button>
+										비밀번호 초기화 </button>
 								</form>
 								<hr>
 								<div class="text-center">

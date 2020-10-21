@@ -24,17 +24,17 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 		HttpSession session = request.getSession();
 		Member loginMember = (Member)session.getAttribute("loginMember");
 		
-		String reqUrl = request.getRequestURI().toString();
+//		String reqUrl = request.getRequestURI().toString();
 		
 //		log.debug(reqUrl);
 //		log.debug(request.getContextPath() + "/member/memberLogin.do");
 		
-		if(reqUrl.equals(request.getContextPath() + "/member/memberLogin.do") || 
-				reqUrl.equals(request.getContextPath()+"/member/memberForgotPassword.do")||
-				reqUrl.equals(request.getContextPath()+"/")||
-				reqUrl.contains("/resources/")
-				)
-			return true;
+//		if(reqUrl.equals(request.getContextPath() + "/member/memberLogin.do") || 
+//				reqUrl.equals(request.getContextPath()+"/member/memberForgotPassword.do")||
+//				reqUrl.equals(request.getContextPath()+"/")||
+//				reqUrl.contains("/resources/")
+//				)
+//			return true;
 		
 		if(loginMember == null) {
 //			log.debug("ha..={}", reqUrl);
