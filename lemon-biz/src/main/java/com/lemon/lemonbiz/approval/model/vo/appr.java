@@ -39,5 +39,13 @@ public class appr {
 	private String docName;
 	private String name;
 	
+	private String ckKey;
+	private String ckApprovalKey;
+	private String ckMemId;
+	private int ckSeqNum;
+	private String ckCheckDate;
+	private String ckStatus;
+	private String ckOpinion;
+	
 	
 }

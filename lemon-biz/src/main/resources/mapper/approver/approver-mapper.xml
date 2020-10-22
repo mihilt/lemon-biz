@@ -235,6 +235,51 @@
 		)
 	</insert>
 	
+	<select id="apprckList" resultMap="apprckMap">
+		select
+			*
+		from
+			appr_check
+		where
+			mem_id = #{memberId}
+	</select>
+	
+	<select id="apprAndCkList" resultMap="apprMap">
+		select
+		    A.*,
+		    C.key as ckKey,
+		    C.approval_key as ckApprovalKey,
+		    C.mem_id as ckMemId,
+		    C.seq_num as ckSeqNum,
+		    C.check_date as ckCheckDate,
+		    C.status as ckStatus,
+		    C.opinion as ckOpinion
+		from
+		    appr A
+		        left outer join appr_check C on A.key = C.approval_key
+		where
+		    C.mem_id = #{memberId}
+	</select>
+	
+	<select id="apprckDetail" resultMap="apprMap">
+		
+		select
+		    A.*,
+		    C.key as ckKey,
+		    C.approval_key as ckApprovalKey,
+		    C.mem_id as ckMemId,
+		    C.seq_num as ckSeqNum,
+		    C.check_date as ckCheckDate,
+		    C.status as ckStatus,
+		    C.opinion as ckOpinion
+		from
+		    appr A
+		        left outer join appr_check C on A.key = C.approval_key
+		where
+		    C.key = #{ckKey}
+		
+	</select>
+	
 	
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
