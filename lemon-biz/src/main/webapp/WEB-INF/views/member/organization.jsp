@@ -28,8 +28,8 @@
 							<c:if test="${ dept.key eq member.deptKey }">
 								<span 
 									onclick="memberInfo('${member.memberId}');"
+									class="badge badge-secondary"
 									style="
-										text-decoration: underline;
 										cursor: pointer;
 									"
 								>${member.name}</span>

@@ -39,5 +39,10 @@ public class NoticeServiceImpl implements NoticeService {
 	public int insertNoticeList(List<Notice> groupNoticeList) {
 		return noticeDAO.insertNoticeList(groupNoticeList);
 	}
+
+	@Override
+	public int deleteNotice(Notice notice) {
+		return noticeDAO.deleteNotice(notice);
+	}
 	
 }
