@@ -11,26 +11,23 @@
 button#btn-leabe{float:right; margin:0 15px;}
 button#btn-arrive{float:right; margin: 0 0 15px;}
 div#attendInfo{width: 100%; height: 100px; text-align: center;  margin-top: 20px;}
-div.infoVal{display:inline-block; width: 20%; height: 85%;color:#fff; margin: 8px; background-color: #FB0; border-radius: 35px 35px 35px 0px;"}
+div.infoVal{display:inline-block; width: 24%; height: 85%;color:#fff; margin: 8px; background-color: #FB0; border-radius: 35px 35px 35px 0px;"}
+tr[data-no]{cursor: pointer;}
 </style>
 
 <section id="attend-container" class="container">
 	<div id="attendInfo">
 		<div class="infoVal ">
 			<h6 class="h6Info ">총근무일</h6>
-			<p>${sumArr}</p>
+			<p>&nbsp;${sumArr}일</p>
 		</div>
 		<div class="infoVal">
 			<h6 class="h6Info">총시간</h6>
-			<p>${sumTime}</p>
+			<p>&nbsp;${sumTime}</p>
 		</div>
 		<div class="infoVal">
 			<h6 class="h6Info">평균시간</h6>
-			<p>${avgTime}</p>
-		</div>
-		<div class="infoVal">
-			<h6 class="h6Info">빈공간</h6>
-			<p>빈공간</p>
+			<p>&nbsp;${avgTime}</p>
 		</div>
 	</div>
 		
@@ -40,8 +37,8 @@ div.infoVal{display:inline-block; width: 20%; height: 85%;color:#fff; margin: 8p
 	 </form>
 	 		<div id="lastarrive" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="yyyyMMdd"/></div>
 	<div>
-		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="attendtest();">월별 근태</button>
-		<button id="btn-leabe" class="btn btn-outline-warning" type="button" onclick="attendLeabe();">퇴근</button>&nbsp;
+		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="attendCal();">월별 근태</button>
+		<button id="btn-leabe" class="btn btn-outline-warning" type="button" onclick="attendLeabe();">퇴근</button>
 	 	<button id="btn-arrive" class="btn btn-outline-warning" type="button" onclick="attendArrive();">출근</button>
 	</div>
 
@@ -49,27 +46,37 @@ div.infoVal{display:inline-block; width: 20%; height: 85%;color:#fff; margin: 8p
 	<thead class="bg-warning">
 
 		<tr>
-			<th>날짜</th>
+			<th>요일</th>
+			<th>일자</th>
 			<th>출근시간</th>
 			<th>퇴근시간</th>
 			<th>근무시간</th>
-			<th>확인용 </th>
+
 		</tr>
 			</thead>
 		<c:forEach items="${ list }" var="attend">
 
+		<c:if test="${attend.leave ne null}">
 		<thead class="alert-warning">
+		</c:if>
+		<c:if test="${attend.leave eq null}">
+		<thead class="alert-danger">
+		</c:if>
 		<tr data-no="${ attend.key }">
-		<td><fmt:formatDate value="${ attend.arrive }" pattern="yyyy/MM/dd"/></td>
+			<td><fmt:formatDate value="${ attend.arrive }" pattern="E"/></td>
+			<td><fmt:formatDate value="${ attend.arrive }" pattern="yyyy/MM/dd"/></td>
 			<td><fmt:formatDate value="${ attend.arrive }" pattern="HH:mm"/></td>
 			<td><fmt:formatDate value="${ attend.leave }" pattern="HH:mm"/></td>
 			<td>${ attend.time }</td>
-			<td>[${ attend.memId }] &nbsp; key=[${ attend.key }]</td>
+
 		</tr>
 			</thead>
-
+			
 		</c:forEach>
 	</table>
+	<div class="text-center">	
+				<ul style="justify-content: center;" class="pagination">${pagebar}</ul>
+		</div>
 </section>
 <script>
 var lastarrive=$("#lastarrive").text();
@@ -84,7 +91,7 @@ today=today.getFullYear()+""+month+today.getDate();
 //출근
 function attendArrive(){
 	if(lastarrive==today){
-		alert("이미 출근상태입니다.");
+		alert("이미 출근되었습니다.");
 	}else{
 		$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendArrive.do")
 		.attr("method", "POST")
@@ -96,21 +103,22 @@ function attendArrive(){
 function attendLeabe(){
 	var lastTime ='${lastAttend.time}';
 	var last_1 =Number(lastarrive)+1;
-	if(lastTime=='0.0'&& last_1>=today){
+	if(lastTime=='0.0'&& last_1>=Number(today)){
 	 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeabe.do")
 		.attr("method", "POST")
 		.submit();
 	}else{
 		alert("출근후 퇴근이 가능합니다.");
-	}
+	} 
 }
 
 //test
-function attendtest(){
-	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendtest.do")
+function attendCal(){
+	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendCal.do")
 	.attr("method", "POST")
 	.submit(); 
 }
+
 </script>
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
