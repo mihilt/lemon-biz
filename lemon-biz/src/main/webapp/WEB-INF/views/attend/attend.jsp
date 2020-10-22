@@ -30,12 +30,12 @@ tr[data-no]{cursor: pointer;}
 			<p>&nbsp;${avgTime}</p>
 		</div>
 	</div>
-		
  	 <form id="form1" class="form-inline" method="post"
 		action="<%-- ${pageContext.request.contextPath }/attend/attendLeabe.do --%>" >
 		<input type="hidden" value="전달할값1" class="form-control col-sm-5" name="value1" required/>&nbsp;
 	 </form>
 	 		<div id="lastarrive" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="yyyyMMdd"/></div>
+	 		<div id="lastLeave" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="HH"/></div>
 	<div>
 		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="attendCal();">월별 근태</button>
 		<button id="btn-leabe" class="btn btn-outline-warning" type="button" onclick="attendLeabe();">퇴근</button>
@@ -101,15 +101,31 @@ function attendArrive(){
 
 //퇴근
 function attendLeabe(){
+
+	var lastLeave=$("#lastLeave").text();
+	time = new Date().getHours();
+	time+=24;
 	var lastTime ='${lastAttend.time}';
-	var last_1 =Number(lastarrive)+1;
-	if(lastTime=='0.0'&& last_1>=Number(today)){
+	var last_1 =Number(lastarrive);
+	
+	 if(lastTime=='0.0'&& last_1==Number(today)){			//퇴근하지않았거나 오늘퇴근이라면
 	 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeabe.do")
 		.attr("method", "POST")
 		.submit();
+		
+	}else if(++last_1==Number(today)){				//야근일시 24시간전에 퇴근가능
+
+		time=time-Number(lastLeave);
+		if(time<=24){
+		$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeabe.do")
+		.attr("method", "POST")
+		.submit();
+		}else{
+			alert("퇴근시간이 지났습니다.");
+		}
 	}else{
 		alert("출근후 퇴근이 가능합니다.");
-	} 
+	}   
 }
 
 //test

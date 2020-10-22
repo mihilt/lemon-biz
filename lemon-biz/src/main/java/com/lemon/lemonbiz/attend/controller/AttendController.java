@@ -141,7 +141,6 @@ public class AttendController {
 			try {
 				cPage = Integer.parseInt(request.getParameter("cPage"));
 			} catch (NumberFormatException e) {
-				
 			}
 		}
 		//캘린더 데이터값
