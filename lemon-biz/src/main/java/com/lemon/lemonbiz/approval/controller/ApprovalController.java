@@ -43,6 +43,23 @@ public class ApprovalController {
 	private approvalService approvalService;
 	
 	
+	@RequestMapping(value="/requestApprovalList")
+	public String requestApprovalList(@ModelAttribute("loginMember") Member loginMember,
+									  @RequestParam(value="page") int page,
+									  Model model) {
+		
+		
+		List<appr> apprList = new ArrayList<>();
+		apprList = approvalService.apprAndCkList(loginMember.getMemberId());
+		
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("auth", 0);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/requestApprovalList");
+		
+		return "approval/requestApprovalList";
+	}
+	
 	
 	@RequestMapping(value="/myApprovalList")
 	public String myApprovalList(@ModelAttribute("loginMember") Member loginMember,
@@ -57,9 +74,6 @@ public class ApprovalController {
 		model.addAttribute("auth", 0);
 		model.addAttribute("pageInfo",paging(page,apprList));
 		model.addAttribute("toSearch", "approval/myApprovalList");
-		
-		
-		
 		
 		
 		return "approval/myApprovalList";
@@ -563,7 +577,35 @@ public class ApprovalController {
 		return "approval/myApprovalDetail";
 	}
 	
+	@RequestMapping(value="/reauestApprovalDetail.do")
 	
+	public String myApprovalDetail(Model model,
+								   @RequestParam(value="apprKey") String key,
+								   @RequestParam(value="ckKey") int ckKey) {
+			
+		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		Attachment attach = approvalService.reWriteAttach(key);
+		
+		appr appr = approvalService.apprckDetail(ckKey);
+		apprCheck apprck1 = new apprCheck();
+		apprCheck apprck2 = new apprCheck();
+		apprCheck apprck3 = new apprCheck();
+		
+		apprck1 = apprchList.get(0);
+		apprck2 = apprchList.get(1);
+		apprck3 = apprchList.get(2);
+		
+		model.addAttribute("appr",appr);
+		
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
+		model.addAttribute("attach",attach);
+		
+		
+		return "approval/reauestApprovalDetail";
+	}
 	
 	
 	

@@ -189,7 +189,7 @@
 					    	<td><strong>기안담당</strong>
 								<c:choose>
 								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
-								<c:otherwise>${ loginMember.Name }</c:otherwise>
+								<c:otherwise>${ loginMember.name }</c:otherwise>
 								</c:choose>
 							</td>
 								

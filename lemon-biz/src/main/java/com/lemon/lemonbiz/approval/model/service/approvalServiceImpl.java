@@ -165,6 +165,21 @@ public class approvalServiceImpl implements approvalService {
 		
 	}
 
+	@Override
+	public List<apprCheck> apprckList(String memberId) {
+		return approvalDAO.apprckList(memberId);
+	}
+
+	@Override
+	public List<appr> apprAndCkList(String memberId) {
+		return approvalDAO.apprAndCkList(memberId);
+	}
+
+	@Override
+	public appr apprckDetail(int ckKey) {
+		return approvalDAO.apprckDetail(ckKey);
+	}
+
 
 
 

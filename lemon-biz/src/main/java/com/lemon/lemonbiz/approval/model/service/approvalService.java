@@ -44,6 +44,12 @@ public interface approvalService {
 
 	int insertApproval(appr appr);
 
+	List<apprCheck> apprckList(String memberId);
+
+	List<appr> apprAndCkList(String memberId);
+
+	appr apprckDetail(int ckKey);
+
 	
 
 

@@ -126,6 +126,21 @@ public class approvalDAOImpl implements approvalDAO {
 	public int updateApprck3(apprCheck apprck3) {
 		return sqlSession.update("approval.updateApprck3",apprck3);
 	}
+
+	@Override
+	public List<apprCheck> apprckList(String memberId) {
+		return sqlSession.selectList("approval.apprckList",memberId);
+	}
+
+	@Override
+	public List<appr> apprAndCkList(String memberId) {
+		return sqlSession.selectList("approval.apprAndCkList",memberId);
+	}
+
+	@Override
+	public appr apprckDetail(int ckKey) {
+		return sqlSession.selectOne("approval.apprckDetail",ckKey);
+	}
 	
 	
 	

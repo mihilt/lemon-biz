@@ -55,6 +55,12 @@ public interface approvalDAO {
 
 	int updateApprck3(apprCheck apprck3);
 
+	List<apprCheck> apprckList(String memberId);
+
+	List<appr> apprAndCkList(String memberId);
+
+	appr apprckDetail(int ckKey);
+
 
 
 	
