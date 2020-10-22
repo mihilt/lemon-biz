@@ -17,4 +17,7 @@ public interface NoticeDAO {
 
 	int insertNoticeList(List<Notice> groupNoticeList);
 
+	int deleteNotice(Notice notice);
+
+
 }

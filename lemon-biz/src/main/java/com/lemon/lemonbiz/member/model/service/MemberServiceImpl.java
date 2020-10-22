@@ -123,4 +123,17 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.hierarchicalDeptList();
 	}
 
+	@Override
+	public int updatePasswordWithEmail(Member member) {
+		Notice notice = new Notice();
+		notice.setMemId(member.getMemberId());
+		notice.setContent("비빌번호 초기화가 이루어졌습니다. 비밀번호를 재설정 해주시기 바랍니다.");
+		notice.setAddress("/member/updatePassword.do");
+		notice.setIcon("fa-unlock-alt");
+		notice.setColor("warning");
+		noticeService.insertNotice(notice);
+		
+		return memberDAO.updatePassword(member);
+	}
+
 }

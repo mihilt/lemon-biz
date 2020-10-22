@@ -68,4 +68,10 @@
 		</foreach>) A
 	</insert>
 	
+	<delete id="deleteNotice">
+		delete 
+			notice
+		where 
+			key = #{ key }
+	</delete>
 </mapper>

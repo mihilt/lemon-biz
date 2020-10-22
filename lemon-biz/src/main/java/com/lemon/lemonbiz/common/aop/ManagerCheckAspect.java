@@ -24,12 +24,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ManagerCheckAspect {
 
-//	@Pointcut("execution(* com.lemon.lemonbiz.manager..*(..))")
+	@Pointcut("execution(* com.lemon.lemonbiz.manager..*(..))")
 	public void pointcut() {
 		
 	}
 	
-//	@Before("pointcut()")
+	@Before("pointcut()")
 	public void beforeCheck(JoinPoint joinPoint) throws Throwable  {
 		log.debug("manager 기능에 접근");
 		

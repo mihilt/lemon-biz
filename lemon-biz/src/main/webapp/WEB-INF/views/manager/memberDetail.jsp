@@ -102,10 +102,10 @@
 			<br />
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">이메일 :</div>
-				<div class="col-10 form-control bg-gray-200">${ loginMember.email }</div>
+				<div class="col-10 form-control bg-gray-200">${ member.email }</div>
 			</div>
-			<input type="hidden" name="email" value="${ loginMember.email }" />
-			<input type="hidden" name="emailPwd" value="${ loginMember.emailPwd }" />
+			<input type="hidden" name="email" value="${ member.email }" />
+			<input type="hidden" name="emailPwd" value="${ member.emailPwd }" />
 			<br />
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">관리자 :</div>
