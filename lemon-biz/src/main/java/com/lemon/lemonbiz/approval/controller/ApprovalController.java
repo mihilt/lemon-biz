@@ -611,7 +611,7 @@ public class ApprovalController {
 	
 	
 	
-	public 
+	
 	
 	
 	public PagingInfo paging(int page, List<appr> appr) {
