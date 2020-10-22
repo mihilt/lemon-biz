@@ -264,7 +264,7 @@ public class MemberController {
 			realMember.setPassword(encodedPassword);
 			
 			//변경 service
-			int result = memberService.updatePassword(realMember);
+			int result = memberService.updatePasswordWithEmail(realMember);
 			String msg = result > 0 ? "사원 비밀번호 초기화를 성공하였습니다. 메일 확인을 해주세요." : "사원 비밀번호 초기화를 실패했습니다.";
 			redirectAttr.addFlashAttribute("msg", msg);
 			
