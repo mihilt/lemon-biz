@@ -28,7 +28,6 @@ table.calendar td{
     width: 100px;
 }
 </style>
-	<h1 id="h1-sumTime"></h1>
 	<!-- <년월일> -->
     <div class="cal_top m-2 ">
         <a href="#" id="movePrevMonth"><span id="prevMonth" class="cal_tit ">&lt;</span></a>
@@ -144,7 +143,7 @@ table.calendar td{
 
     }
     
-    //이건잘됨
+	//페이징
     function movePrevMonth(){
         month--;
         if(month<=0){
