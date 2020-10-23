@@ -41,10 +41,8 @@ tr[data-no]{cursor: pointer;}
 		<button id="btn-leabe" class="btn btn-outline-warning" type="button" onclick="attendLeabe();">퇴근</button>
 	 	<button id="btn-arrive" class="btn btn-outline-warning" type="button" onclick="attendArrive();">출근</button>
 	</div>
-
 	<table id="tbl-attend" class="table ">
 	<thead class="bg-warning">
-
 		<tr>
 			<th>요일</th>
 			<th>일자</th>
@@ -55,7 +53,6 @@ tr[data-no]{cursor: pointer;}
 		</tr>
 			</thead>
 		<c:forEach items="${ list }" var="attend">
-
 		<c:if test="${attend.leave ne null}">
 		<thead class="alert-warning">
 		</c:if>
