@@ -69,14 +69,14 @@ public class AttendController {
 			}
 			int totalContents;
 			try {
-				totalContents= lastAttend.getKey();
+				totalContents= attendInfo.getKey();
 			}catch(Exception e){
 				totalContents=0;
 			}
 			log.debug("totalContents = {} ",totalContents);
 			String url = request.getRequestURI();
 			log.debug("url = {} " , url);
-			String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
+			String pageBar = Paging.attendPageHtml(cPage, numPerPage, totalContents, url);
 			Map<String,Object> map = new HashMap<String, Object>();
 		
 			String memId =attend.getMemId();
