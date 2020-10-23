@@ -35,8 +35,8 @@
 		
 		<interceptor>
 			<mapping path="/**"/>
-			<exclude-mapping path="/board/boardInsert.do"/>
 			
+			<exclude-mapping path="/board/boardInsert.do"/>
 			<exclude-mapping path="/member/memberLogin.do"/>
 			<exclude-mapping path="/member/memberForgotPassword.do"/>
 			<exclude-mapping path="/"/>
@@ -46,7 +46,10 @@
 
 		<interceptor>
 			<mapping path="/**"/>
+			
 			<exclude-mapping path="/member/memberLogin.do"/>
+			<exclude-mapping path="/member/memberForgotPassword.do"/>
+			<exclude-mapping path="/resources/**" />
 			<beans:bean class="com.lemon.lemonbiz.common.interceptor.NoticeInterceptor" />
 		</interceptor>
 	</interceptors>
