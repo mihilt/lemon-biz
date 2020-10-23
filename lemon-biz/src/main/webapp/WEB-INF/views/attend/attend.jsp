@@ -51,7 +51,7 @@ tr[data-no]{cursor: pointer;}
 			<th>출근시간</th>
 			<th>퇴근시간</th>
 			<th>근무시간</th>
-
+			<th>번호</th>
 		</tr>
 			</thead>
 		<c:forEach items="${ list }" var="attend">
@@ -68,10 +68,8 @@ tr[data-no]{cursor: pointer;}
 			<td><fmt:formatDate value="${ attend.arrive }" pattern="HH:mm"/></td>
 			<td><fmt:formatDate value="${ attend.leave }" pattern="HH:mm"/></td>
 			<td>${ attend.time }</td>
-
+			<td>${ attend.key }</td>
 		</tr>
-			</thead>
-			
 		</c:forEach>
 	</table>
 	<div class="text-center">	
@@ -80,12 +78,9 @@ tr[data-no]{cursor: pointer;}
 </section>
 <script>
 var lastarrive=$("#lastarrive").text();
-today = new Date();
-month = today.getMonth()+1;
-
-if(month < 10){month = "0"+month;}
-/* var todayTime =today.getHours()+"";
-console.log(todayTime); */
+var today = new Date();
+var month = today.getMonth()+1;
+if(month < 10) {month = "0"+month;}
 today=today.getFullYear()+""+month+today.getDate();
 
 //출근
@@ -98,7 +93,6 @@ function attendArrive(){
 		.submit();
 	}
 }
-
 //퇴근
 function attendLeabe(){
 
@@ -112,7 +106,6 @@ function attendLeabe(){
 	 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeabe.do")
 		.attr("method", "POST")
 		.submit();
-		
 	}else if(++last_1==Number(today)){				//야근일시 24시간전에 퇴근가능
 
 		time=time-Number(lastLeave);
@@ -128,13 +121,13 @@ function attendLeabe(){
 	}   
 }
 
-//test
+
+//Cal 호출
 function attendCal(){
 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendCal.do")
 	.attr("method", "POST")
 	.submit(); 
 }
-
 </script>
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
