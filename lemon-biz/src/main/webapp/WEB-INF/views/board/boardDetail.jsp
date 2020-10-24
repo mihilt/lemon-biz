@@ -27,13 +27,22 @@
 
 		<!-- 게시글 -->
  	<div class="col-lg-12">
- 			<form action="${pageContext.request.contextPath}/board"	method="post" name="board">
+ 			
+              <input type="hidden" name="key" value="${board.key }" />
+              <input type="hidden" name="id" value="${loginMember.memberId}" />
               <div class="card" >
                 <div class="card-header py-3">
-                  <div align="right">작성일 :<strong class="m-0 font-weight-bold text-warning"> <fmt:formatDate  value="${ board.postDate }" pattern="yyyy/MM/dd"/><br></strong>작성자  : <strong class="m-0 font-weight-bold text-warning">${board.memId}</strong>	&nbsp; 조회수 : <strong class="m-0 font-weight-bold text-warning">${ board.readCount }</strong></div>
+                  <div align="right">작성일 :<strong class="m-0 font-weight-bold text-warning"> <fmt:formatDate  value="${ board.postDate }" pattern="yyyy/MM/dd"/><br></strong>작성자  : <strong class="m-0 font-weight-bold text-warning">${board.name}</strong>	&nbsp; 조회수 : <strong class="m-0 font-weight-bold text-warning">${ board.readCount }</strong></div>
                 </div>
                 <div class="card-body text-center">
-                  <div align="left"><strong>제목 : ${board.title}</strong></div>
+                  <div align="left"><strong>제목 : ${board.title}</strong>
+                  <button style="float: right;" class="w3-button w3-black w3-round" id="rec_update">
+						<i class="fa fa-heart" style="font-size:16px;color:red"></i>
+						&nbsp;<span class="rec_count"></span>
+					</button> 
+
+					
+                  </div>
                   <hr>
                   <div class="form-group" align="left">
                    <div style="height:300px; overflow:auto;" align=left>${ board.content }</div> 
@@ -51,15 +60,17 @@
 				</div><br>
 				<div class="container">
 				<a class="btn btn-outline-warning" href="${ pageContext.request.contextPath }/board/boardList.do">돌아가기</a>
-				<c:if test="${loginMember.name eq board.memId or loginMember.isManager eq 1}">
+				<c:if test="${loginMember.name eq board.name or loginMember.isManager eq 1}">
 					<a class="btn btn-outline-warning" onclick="deleteBoard('${ board.key}')" href="boardfrmDelete.do?key=<c:out value="${board.key}"/>">삭제</a>
 					<a class="btn btn-outline-warning" onclick="updateBoard('${ board.key }')" href="boardUpdate.do?key=<c:out value="${board.key}"/>">수정</a>
 				</c:if>
+			
+					
 				</div>
                 </div>
               </div>
-			</form>
             </div>
+            
 				<br>
 				
 	
@@ -86,7 +97,7 @@
 		 			<tr class="level1">
 					<td>
 						<sub class="comment-writer">
-							${ BoardComment.boardCommentWriter }
+							${ BoardComment.name }
 						</sub>
 						<sub class="comment-date">
 							<fmt:formatDate value="${ BoardComment.boardCommentDate }" pattern="yyyy/MM/dd"/>
@@ -107,7 +118,7 @@
 				<tr class="level2">
 					<td>
 						<sub class="comment-writer">
-							${ BoardComment.boardCommentWriter }
+							${ BoardComment.name }
 						</sub>
 						<sub class="comment-date">
 							<fmt:formatDate value="${ BoardComment.boardCommentDate }" pattern="yyyy/MM/dd"/>
@@ -234,7 +245,53 @@ $("[name=boardCommentFrm]").submit(function(){
 
 });
 
+	/*  추천 */
+	
+    $(function(){
+		// 추천버튼 클릭시(추천 추가 또는 추천 제거)
+		$("#rec_update").click(function(){	
+			var path ='${ pageContext.request.contextPath }/board/RecUpdate.do';
+			var id = '${loginMember.memberId}';
+			var msg = '${obj.msg}';
+			 $.ajax({
+				url : path,
+                type : "POST",
+                dataType: "json",
+                data : {
+                    key: ${board.key},
+                    id
+                },
+                success: function () {
+          
+                   
+			       recCount(); 
+                },
+               
+			})
+		})
+    })
+		// 게시글 추천수
+	    function recCount() {
+		     console.log("작성완료");
+				var path2 ='${ pageContext.request.contextPath }/board/RecCount.do';
+				var key = '${board.key}';
+			$.ajax({
+				url: path2,
+                type: "POST",
+                data: {
+                    key
+                },
+                success: function (count) {
+                	$(".rec_count").html(count);
+                },
+                
+			});
+	    };
+	    recCount(); // 처음 시작했을 때 실행되도록 해당 함수 호출
+
+	
 </script>
+
 </html>
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

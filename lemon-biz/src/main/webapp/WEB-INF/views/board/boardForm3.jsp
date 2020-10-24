@@ -40,7 +40,34 @@
 			</div>
 			<div class="form-group">
 				<label for="title">제목:</label> <input value="${board.title}" type="text" class="form-control" id="title" name="title">
-			</div>
+			</div><hr>
+			
+			<div class="input-group mb-3" style="padding:0px;">
+		  <div class="input-group-prepend" style="padding:0px;">
+		    <span class="input-group-text">첨부파일</span>
+		  </div>
+		  <div class="custom-file">
+		    <input type="file" class="custom-file-input" name="upFile1" id="upFile1" >
+		    <label class="custom-file-label" for="upFile1">${ Oname1 }</label>
+		  </div>
+		  <c:if test="${ Oname1 != null } ">
+		  <input type="checkbox" name="delFile" id="delFile" />
+		  <label for="delFile">파일삭제</label>
+		  </c:if>
+		</div>
+		<div class="input-group mb-3" style="padding:0px;">
+		  <div class="input-group-prepend" style="padding:0px;">
+		    <span class="input-group-text">첨부파일</span>
+		  </div>
+		  <div class="custom-file">
+		    <input type="file" class="custom-file-input" name="upFile2" id="upFile2" >
+		    <label class="custom-file-label" for="upFile2">${ Oname2 }</label>
+		  </div>
+		  <c:if test="${ Oname2 != null } ">
+		  <input type="checkbox" name="delFile" id="delFile" />
+		  <label for="delFile">파일삭제</label>
+		  </c:if>
+		</div>
 			 
 			<div class="form-group">
 				<label for="content">내용:</label>

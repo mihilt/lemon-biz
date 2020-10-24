@@ -88,10 +88,10 @@ font-size: 17px;
 			</c:if>	
 			
 			<c:if test="${ post.isNotice eq 1 }">
-			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.memId }</td>
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.name1 }</td>
 			</c:if>
 			<c:if test="${ post.isNotice eq 0 }">
-			<td>${ post.memId }</td>
+			<td>${ post.name1 }</td>
 			</c:if>
 			
 			<c:if test="${ post.isNotice eq 1 }">

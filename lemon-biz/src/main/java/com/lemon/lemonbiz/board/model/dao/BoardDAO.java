@@ -47,25 +47,49 @@ public interface BoardDAO {
 
 	int insertTeamBoard(Board board);
 
-	List<Board> boardSearch(String searchKeyword);
+	List<Map<String, Object>> boardSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map);
 
 	List<Map<String, Object>> selectMaList(int cPage, int numPerPage, Map<String, Object> map);
 
 	int insertMaBoard(Board board);
 
-	List<Board> boardtitleSearch(String searchKeyword);
+	List<Map<String, Object>> boardtitleSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map);
 
 	List<Board> boardTeamSearch(Member loginMember);
 
 	List<Board> boardTeamSearch2(Member loginMember);
 
-	List<Board> boardMSearch(String searchKeyword);
+	List<Map<String, Object>> boardMSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map);
 
-	List<Board> boardMSearch2(String searchKeyword);
+	List<Map<String, Object>> boardMSearch2(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map);
 
 	int countBoard3();
 
 	String selectTeamName(Member loginMember);
+
+	int countTitleBoard(String searchKeyword);
+
+	int countNameBoard(String searchKeyword);
+
+	int countTitleBoard3(String searchKeyword);
+
+	int countNameBoard3(String searchKeyword);
+
+	List<Attachment> SelectBoardOne(int key);
+
+	void updateAttachment(int boardKey);
+
+	void updateAttachment2(int boardKey2);
+
+	int updateFile(Attachment attach);
+
+	int recCheck(Map<String, Object> map);
+
+	void recUpdate(Map<String, Object> map);
+
+	void recDelete(Map<String, Object> map);
+
+	int RecCount(int key);
 
 	
 

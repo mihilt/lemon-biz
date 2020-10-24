@@ -103,8 +103,23 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public int updateBoard(Board board) {
-		return boardDAO.updateBoard(board);
+	public int updateBoard(Board board, List<Attachment> oldBoard) {
+		int result = 0;
+		
+		result = boardDAO.updateBoard(board);
+		
+		
+		
+		  if(board.getAttachList() != null) {
+		  
+		  for(Attachment attach : board.getAttachList()) {
+			 attach.setPostKey(board.getKey());
+		  result = boardDAO.updateFile(attach);
+		  }
+		  } 
+		  
+		return result;
+		
 	}
 
 
@@ -164,7 +179,7 @@ public class BoardServiceImpl implements BoardService {
 		if(board.getAttachList() != null) {
 			
 			for(Attachment attach : board.getAttachList()) {
-				//생성된 boardNo값 대입하기
+				
 				attach.setPostKey(board.getKey());
 				result = boardDAO.insertAttachment(attach);
 			}
@@ -175,8 +190,8 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public List<Board> boardSearch(String searchKeyword) {
-		return boardDAO.boardSearch(searchKeyword);
+	public List<Map<String, Object>> boardSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		return boardDAO.boardSearch(searchKeyword,cPage,numPerPage,map);
 	}
 
 
@@ -227,8 +242,8 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public List<Board> boardtitleSearch(String searchKeyword) {
-		return boardDAO.boardtitleSearch(searchKeyword);
+	public List<Map<String, Object>> boardtitleSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		return boardDAO.boardtitleSearch(searchKeyword,cPage,numPerPage,map);
 	}
 
 
@@ -245,14 +260,14 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public List<Board> boardMSearch(String searchKeyword) {
-		return boardDAO.boardMSearch(searchKeyword);
+	public List<Map<String, Object>> boardMSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		return boardDAO.boardMSearch(searchKeyword,cPage,numPerPage,map);
 	}
 
 
 	@Override
-	public List<Board> boardMSearch2(String searchKeyword) {
-		return boardDAO.boardMSearch2(searchKeyword);
+	public List<Map<String, Object>> boardMSearch2(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		return boardDAO.boardMSearch2(searchKeyword,cPage,numPerPage,map);
 	}
 
 
@@ -265,6 +280,75 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public String selectTeamName(Member loginMember) {
 		return boardDAO.selectTeamName(loginMember);
+	}
+
+
+	@Override
+	public int countTitleBoard(String searchKeyword) {
+		return boardDAO.countTitleBoard(searchKeyword);
+	}
+
+
+	@Override
+	public int countNameBoard(String searchKeyword) {
+		return boardDAO.countNameBoard(searchKeyword);
+	}
+
+
+	@Override
+	public int countTitleBoard3(String searchKeyword) {
+		return boardDAO.countTitleBoard3(searchKeyword);
+	}
+
+
+	@Override
+	public int countNameBoard3(String searchKeyword) {
+		return boardDAO.countNameBoard3(searchKeyword);
+	}
+
+
+	@Override
+	public List<Attachment> SelectBoardOne(int key) {
+		return boardDAO.SelectBoardOne(key);
+	}
+
+
+	@Override
+	public void updateAttachment(int boardKey) {
+		boardDAO.updateAttachment(boardKey);
+	}
+
+
+	@Override
+	public void updateAttachment2(int boardKey2) {
+		boardDAO.updateAttachment2(boardKey2);
+		
+	}
+
+
+	@Override
+	public int recCheck(Map<String, Object> map) {
+		return boardDAO.recCheck(map);
+	}
+
+
+	@Override
+	public void recUpdate(Map<String, Object> map) {
+		boardDAO.recUpdate(map);
+		
+	}
+
+
+	@Override
+	public void recDelete(Map<String, Object> map) {
+		boardDAO.recDelete(map);
+		
+	}
+
+
+	@Override
+	public int RecCount(int key) {
+		return boardDAO.RecCount(key);
 	}
 	
 	
