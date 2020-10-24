@@ -22,4 +22,5 @@ public class BoardComment implements Serializable{
 	private int boardRef;
 	private int boardCommentRef;
 	private Date boardCommentDate;
+	private String name;
 }

@@ -48,7 +48,8 @@ div#search-memberName{display:none;}
 			<th>번호</th>
 			<th>제목</th>
 			<th>작성자</th>
-			<th>작성일</th>
+			<th>작성일</th>			
+			<th>추천</th>
 			<th>조회수</th>
 		</tr>
 		<c:forEach items="${ list }" var="post">
@@ -74,10 +75,10 @@ div#search-memberName{display:none;}
 			</c:if>	
 			
 			<c:if test="${ post.isNotice eq 1 }">
-			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.memId }</td>
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.name1 }</td>
 			</c:if>
 			<c:if test="${ post.isNotice eq 0 }">
-			<td>${ post.memId }</td>
+			<td>${ post.name1 }</td>
 			</c:if>
 			
 			<c:if test="${ post.isNotice eq 1 }">
@@ -85,6 +86,13 @@ div#search-memberName{display:none;}
 			</c:if>
 			<c:if test="${ post.isNotice eq 0 }">
 			<td><fmt:formatDate value="${ post.postDate }" pattern="yyyy/MM/dd"/></td>
+			</c:if>
+			
+			<c:if test="${ post.isNotice eq 1 }">
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.count }</td>
+			</c:if>
+			<c:if test="${ post.isNotice eq 0 }">
+			<td>${ post.count }</td>
 			</c:if>
 			
 			<c:if test="${ post.isNotice eq 1 }">

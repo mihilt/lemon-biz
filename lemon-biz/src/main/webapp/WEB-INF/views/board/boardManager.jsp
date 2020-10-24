@@ -54,6 +54,7 @@ function goBoardForm(){
 			<th>제목</th>
 			<th>작성자</th>
 			<th>작성일</th>
+			<th>추천</th>
 			<th>조회수</th>
 		</tr>
 		<c:forEach items="${ list }" var="post">
@@ -67,7 +68,7 @@ function goBoardForm(){
 			
 			
 			
-			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.memId }</td>
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.name }</td>
 			
 			
 			
@@ -76,6 +77,8 @@ function goBoardForm(){
 			
 			
 			
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.count }</td>
+	
 			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.readCount }</td>
 			
 			

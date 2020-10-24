@@ -33,7 +33,6 @@
 					 <input type="hidden" name="deptKey" value="${ loginMember.deptKey }" />
 					<div class="form-group">
 						<input type="hidden" name="memId" value="${loginMember.memberId}"/>	
-						<input type="hidden" name="name" value="${loginMember.name}"/>
 					</div> 
 					<div class="custom-control custom-checkbox" >
 				<input type="checkbox" id="jb-checkbox" name="isNotice" class="custom-control-input" value="0">
