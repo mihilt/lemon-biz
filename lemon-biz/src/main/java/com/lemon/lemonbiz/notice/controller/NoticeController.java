@@ -48,4 +48,12 @@ public class NoticeController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "noticeList/delete.do", method = RequestMethod.GET)
+	public String delete(Notice notice) {
+		
+		int result = noticeService.deleteNotice(notice);
+		
+		return "redirect:/notice/noticeList.do";
+	}
+	
 }

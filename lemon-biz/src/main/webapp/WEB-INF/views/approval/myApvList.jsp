@@ -11,7 +11,7 @@
 
 
 	<div class="container-fluid">
-    							<h2>결재함</h2>
+    							<h2>임시저장함</h2>
     			
 	<table class="table table-hover text-center">
 <colgroup>
@@ -36,7 +36,7 @@
 	
 	<c:if test="${ pageInfo.totalCount != 0 }">
 	<c:forEach var="item" items="${ apvList }" begin="${ pageInfo.startNum }" end="${ pageInfo.endNum }">
-	
+	<c:if test="${ item.status == 't'}">
 		<tr onclick="reWrite(${item.key})" style="cursor: pointer;">
 			<td>${ item.memId }</td>
 			<td><a >${ item.title }</a></td>
@@ -45,7 +45,7 @@
 			<td>${ item.docName }</td>
 			
 		</tr>
-	
+	</c:if>
 	</c:forEach>
 	</c:if>
 	

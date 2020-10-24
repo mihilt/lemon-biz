@@ -27,20 +27,29 @@
 	
 	<!-- interceptor -->
     <interceptors>
-		<interceptor>
+		
+		<!-- <interceptor>
 			<mapping path="/**"/>
 			<beans:bean class="com.lemon.lemonbiz.common.interceptor.LoggerInterceptor"/>
-		</interceptor>
+		</interceptor> -->
+		
 		<interceptor>
 			<mapping path="/**"/>
+			
 			<exclude-mapping path="/board/boardInsert.do"/>
 			<exclude-mapping path="/member/memberLogin.do"/>
+			<exclude-mapping path="/member/memberForgotPassword.do"/>
+			<exclude-mapping path="/"/>
+			<exclude-mapping path="/resources/**" />
 			<beans:bean class="com.lemon.lemonbiz.common.interceptor.LoginCheckInterceptor" />
 		</interceptor>
 
 		<interceptor>
 			<mapping path="/**"/>
+			
 			<exclude-mapping path="/member/memberLogin.do"/>
+			<exclude-mapping path="/member/memberForgotPassword.do"/>
+			<exclude-mapping path="/resources/**" />
 			<beans:bean class="com.lemon.lemonbiz.common.interceptor.NoticeInterceptor" />
 		</interceptor>
 	</interceptors>
@@ -68,5 +77,7 @@
 				class="org.springframework.web.servlet.view.BeanNameViewResolver">
 			<beans:property name="order" value="1"/>
 	</beans:bean>
+	
+	
 	
 </beans:beans>

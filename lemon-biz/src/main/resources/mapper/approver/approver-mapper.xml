@@ -104,7 +104,7 @@
 			#{memId},
 			#{seqNum},
 			null,
-			#{status},
+			null,
 			null
 		)
 	</insert>
@@ -118,7 +118,7 @@
 			#{memId},
 			#{seqNum},
 			null,
-			#{status},
+			null,
 			null
 		)
 	</insert>
@@ -132,7 +132,7 @@
 			#{memId},
 			#{seqNum},
 			null,
-			#{status},
+			null,
 			null
 		)
 	</insert>
@@ -171,6 +171,7 @@
 		        full outer join rank R on M.rank_key = R.key
 		where
 		    A.approval_key = #{key}
+		order by seq_num desc
 	</select>
 	
 	<select id="reWriteAttach" resultMap="attachMap">
@@ -180,6 +181,103 @@
 			attachment
 		where
 			approval_key = #{key}
+	</select>
+	
+	<update id="updateApproval">
+		update
+			appr
+		set
+			type_key = null, mem_id = #{memId}, title = #{title}, content = #{content},
+			draft_date = default, write_date = default, status=#{status}
+		where
+			key = #{key}
+	</update>
+	
+	<update id="updateApprck1">
+		update
+			appr_check
+		set
+			seq_num = #{seqNum}, mem_id = #{memId}
+		where
+			key=#{key}
+	</update>
+	
+	<update id="updateApprck2">
+		update
+			appr_check
+		set
+			seq_num = #{seqNum}, mem_id = #{memId}
+		where
+			key=#{key}
+	</update>
+	
+	<update id="updateApprck3">
+		update
+			appr_check
+		set
+			seq_num = #{seqNum}, mem_id = #{memId}
+		where
+			key=#{key}
+	</update>
+	
+	<insert id="insertApproval">
+		insert into
+			appr
+		values(
+			#{key},
+			null,
+			#{memId},
+			#{title},
+			#{content},
+			default,
+			default,
+			#{status}
+		)
+	</insert>
+	
+	<select id="apprckList" resultMap="apprckMap">
+		select
+			*
+		from
+			appr_check
+		where
+			mem_id = #{memberId}
+	</select>
+	
+	<select id="apprAndCkList" resultMap="apprMap">
+		select
+		    A.*,
+		    C.key as ckKey,
+		    C.approval_key as ckApprovalKey,
+		    C.mem_id as ckMemId,
+		    C.seq_num as ckSeqNum,
+		    C.check_date as ckCheckDate,
+		    C.status as ckStatus,
+		    C.opinion as ckOpinion
+		from
+		    appr A
+		        left outer join appr_check C on A.key = C.approval_key
+		where
+		    C.mem_id = #{memberId}
+	</select>
+	
+	<select id="apprckDetail" resultMap="apprMap">
+		
+		select
+		    A.*,
+		    C.key as ckKey,
+		    C.approval_key as ckApprovalKey,
+		    C.mem_id as ckMemId,
+		    C.seq_num as ckSeqNum,
+		    C.check_date as ckCheckDate,
+		    C.status as ckStatus,
+		    C.opinion as ckOpinion
+		from
+		    appr A
+		        left outer join appr_check C on A.key = C.approval_key
+		where
+		    C.key = #{ckKey}
+		
 	</select>
 	
 	

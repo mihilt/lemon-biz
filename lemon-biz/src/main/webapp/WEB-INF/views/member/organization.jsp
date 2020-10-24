@@ -28,8 +28,8 @@
 							<c:if test="${ dept.key eq member.deptKey }">
 								<span 
 									onclick="memberInfo('${member.memberId}');"
+									class="badge badge-secondary"
 									style="
-										text-decoration: underline;
 										cursor: pointer;
 									"
 								>${member.name}</span>
@@ -62,8 +62,9 @@
 			 	height: 200px;
 			 	background-size: 200px 200px;
 		 	    border-radius: 70%;
-		 	    border: 1px;
- 				overflow: hidden;
+		 	    border:solid 2px;
+		 	    border-color: #d1d3e2;
+   				overflow: hidden;
 			 ">
 		</div>
       	
@@ -88,6 +89,11 @@
 			<div class="col-2 pt-2 text-right">주소 :</div>
 			<div id="modalAddress" class="col-10 form-control"></div>
 		</div>
+		<br />
+		<div class="mb-1 row mx-5">
+			<div class="col-2 pt-2 text-right">이메일 :</div>
+			<div id="modalEmail" class="col-10 form-control"></div>
+		</div>
 
 
       </div>
@@ -95,48 +101,6 @@
   </div>
 </div>
 
-<script>
-
-	function memberInfo(memberId){
-		$.ajax({
-			url : "${ pageContext.request.contextPath }/member/selectOneMemberAjax.do?memberId="+memberId,
-			data : {
-
-			},
-			dataType : "json",
-			success : function(data){
-				console.log(data);
-				$("#modalMemberName").text(data.name);
-				$("#modalDeptName").text(data.deptName);
-				$("#modalRankName").text(data.rankName);
-				$("#modalTelNum").text(data.telNum);
-				$("#modalAddress").text(data.address);
-
-				let image = new Image();
-				image.src = '${pageContext.request.contextPath }/resources/upload/profile_images/' + data.memberId + '.png';
-				
-				image.onload=function(){
-					$("#modalProfileImg").css({
-						"background-image":"url(${pageContext.request.contextPath }/resources/upload/profile_images/"+data.memberId+".png)"});
-			    }
-
-				image.onerror=function(){
-					$("#modalProfileImg").css({
-							"background-image":"url(${pageContext.request.contextPath }/resources/images/default-image.png)"});
-			    }
-
-			},
-			error : function(xhr, status, err){
-				console.log(xhr, status, err);
-			},
-			complete : function(){
-				$('#exampleModal').modal('show')
-			}
-			
-		});
-	}
-	
-</script>
-
+<jsp:include page="/WEB-INF/views/common/showMemberInfo.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

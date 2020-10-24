@@ -40,6 +40,16 @@ public interface approvalService {
 
 	Attachment reWriteAttach(String key);
 
+	int updateApproval(appr appr);
+
+	int insertApproval(appr appr);
+
+	List<apprCheck> apprckList(String memberId);
+
+	List<appr> apprAndCkList(String memberId);
+
+	appr apprckDetail(int ckKey);
+
 	
 
 

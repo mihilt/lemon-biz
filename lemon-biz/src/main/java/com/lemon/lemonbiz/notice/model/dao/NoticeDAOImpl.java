@@ -39,5 +39,9 @@ public class NoticeDAOImpl implements NoticeDAO {
 	public int insertNoticeList(List<Notice> groupNoticeList) {
 		return sqlSession.insert("notice.insertNoticeList", groupNoticeList);
 	}
-	
+
+	@Override
+	public int deleteNotice(Notice notice) {
+		return sqlSession.delete("notice.deleteNotice", notice);
+	}
 }

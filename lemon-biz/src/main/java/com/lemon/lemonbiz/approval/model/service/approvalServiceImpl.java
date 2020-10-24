@@ -64,31 +64,20 @@ public class approvalServiceImpl implements approvalService {
 		//1. approval insert
 		result = approvalDAO.insertSaveApproval(appr);
 		
-		//2. attachment insert
-		if(appr.getAttachment() != null) {
-			Attachment attach = appr.getAttachment();
-			result = approvalDAO.insertSaveAttachment(attach);
-		}
-			
-			apprCheck apprck1 = appr.getApprck1();
-			result = approvalDAO.insertSaveApprck1(apprck1);
-			System.out.println(apprck1.getSeqNum());
-			System.out.println(apprck1.getSeqNum());
-			System.out.println(apprck1.getSeqNum());
-			System.out.println(apprck1.getSeqNum());
-			System.out.println(apprck1.getSeqNum());
+		//2. attachment insert	
+		apprCheck apprck1 = appr.getApprck1();
+		result = approvalDAO.insertSaveApprck1(apprck1);
+		System.out.println(apprck1.getSeqNum());
 		
-			apprCheck apprck2 = appr.getApprck2();
-			result = approvalDAO.insertSaveApprck2(apprck2);
-			System.out.println(apprck2.getSeqNum());
-			System.out.println(apprck2.getSeqNum());
-			System.out.println(apprck2.getSeqNum());
-			System.out.println(apprck2.getSeqNum());
-			System.out.println(apprck2.getSeqNum());
-			System.out.println(apprck2.getSeqNum());
+	
+		apprCheck apprck2 = appr.getApprck2();
+		result = approvalDAO.insertSaveApprck2(apprck2);
+		System.out.println(apprck2.getSeqNum());
 		
-			apprCheck apprck3 = appr.getApprck3();
-			result = approvalDAO.insertSaveApprck3(apprck3);
+	
+		apprCheck apprck3 = appr.getApprck3();
+		result = approvalDAO.insertSaveApprck3(apprck3);
+		System.out.println(apprck3.getSeqNum());
 		
 		
 		return result;
@@ -112,6 +101,83 @@ public class approvalServiceImpl implements approvalService {
 	@Override
 	public Attachment reWriteAttach(String key) {
 		return approvalDAO.reWriteAttach(key);
+	}
+
+	@Override
+	public int updateApproval(appr appr) {
+		
+		int result = 0;
+		result = approvalDAO.updateApproval(appr);
+		
+		apprCheck apprck1 = appr.getApprck1();
+		result = approvalDAO.updateApprck1(apprck1);
+		System.out.println(apprck1.getSeqNum());
+		
+	
+		apprCheck apprck2 = appr.getApprck2();
+		result = approvalDAO.updateApprck2(apprck2);
+		System.out.println(apprck2.getSeqNum());
+		
+	
+		apprCheck apprck3 = appr.getApprck3();
+		result = approvalDAO.updateApprck3(apprck3);
+		System.out.println(apprck3.getSeqNum());
+		
+		//3. attachment insert
+		if(appr.getAttachment() != null) {
+			Attachment attach = appr.getAttachment();
+			result = approvalDAO.insertSaveAttachment(attach);
+		}
+		
+		
+		return result;
+	}
+
+	@Override
+	public int insertApproval(appr appr) {
+		
+		int result = 0;
+		//1. approval insert
+		result = approvalDAO.insertApproval(appr);
+		
+		//2. apprckeck insert
+		apprCheck apprck1 = appr.getApprck1();
+		result = approvalDAO.insertSaveApprck1(apprck1);
+		System.out.println(apprck1.getSeqNum());
+		
+	
+		apprCheck apprck2 = appr.getApprck2();
+		result = approvalDAO.insertSaveApprck2(apprck2);
+		System.out.println(apprck2.getSeqNum());
+		
+	
+		apprCheck apprck3 = appr.getApprck3();
+		result = approvalDAO.insertSaveApprck3(apprck3);
+		System.out.println(apprck3.getSeqNum());
+		
+		//3. attachment insert
+		if(appr.getAttachment() != null) {
+			Attachment attach = appr.getAttachment();
+			result = approvalDAO.insertSaveAttachment(attach);
+		}
+		
+		return result;
+		
+	}
+
+	@Override
+	public List<apprCheck> apprckList(String memberId) {
+		return approvalDAO.apprckList(memberId);
+	}
+
+	@Override
+	public List<appr> apprAndCkList(String memberId) {
+		return approvalDAO.apprAndCkList(memberId);
+	}
+
+	@Override
+	public appr apprckDetail(int ckKey) {
+		return approvalDAO.apprckDetail(ckKey);
 	}
 
 

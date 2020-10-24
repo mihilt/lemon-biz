@@ -38,7 +38,7 @@
 									<button type="submit"
 										class="btn btn-primary btn-user btn-block">로그인</button>
 									<hr>
-									<button class="btn btn-danger btn-user btn-block"> 비밀번호 찾기 </button>
+									<a href="${pageContext.request.contextPath}/member/memberForgotPassword.do" class="text-white btn btn-danger btn-user btn-block"> 비밀번호 찾기 </a>
 								</form>
 							</div>
 						</div>

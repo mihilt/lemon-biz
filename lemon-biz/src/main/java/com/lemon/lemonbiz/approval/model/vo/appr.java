@@ -10,12 +10,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class appr {
 
 	private String Key;
@@ -36,6 +38,14 @@ public class appr {
 	
 	private String docName;
 	private String name;
+	
+	private String ckKey;
+	private String ckApprovalKey;
+	private String ckMemId;
+	private int ckSeqNum;
+	private String ckCheckDate;
+	private String ckStatus;
+	private String ckOpinion;
 	
 	
 }

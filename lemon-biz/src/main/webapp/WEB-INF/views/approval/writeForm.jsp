@@ -189,7 +189,7 @@
 					    	<td><strong>기안담당</strong>
 								<c:choose>
 								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
-								<c:otherwise>${ loginMember.Name }</c:otherwise>
+								<c:otherwise>${ loginMember.name }</c:otherwise>
 								</c:choose>
 							</td>
 								
@@ -287,14 +287,15 @@
 						
 						
 						
-						<form id="sendApv" action="${ pageContext.request.contextPath }/approval/applovalSave.do" method="POST" enctype="multipart/form-data">
+						<form id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
 							<input type="hidden" id="authId1" name="approval_mem1" />
 							<input type="hidden" id="authId2" name="approval_mem2" />
 							<input type="hidden" id="authId3" name="approval_mem3" />
 							<input type="hidden" id="processNum1" name="process_num1">
 							<input type="hidden" id="processNum2" name="process_num2">
 							<input type="hidden" id="processNum3" name="process_num3">
-							<input type="hidden" id="status" name="status" value="t"/>
+							<input type="hidden" id="status" name="status" value="p"/>
+							
 							
 							&nbsp;제목 : <input class="form-control" id="title" type="text" name="approval_title" value="${ appr.title }">
 							<br>
@@ -306,7 +307,7 @@
 							
 							
 							<label for="file">첨부: </label> <br>
-							<input type="file" name="upFile" id="upFile" value=""/>
+							<input type="file" name="upFile" id="upFile"/>
 							<hr>
 						               
 						</form>
@@ -315,8 +316,8 @@
 						
 						<div class="container" align="center">
 						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
-						<button class="btn btn-outline-primary" onclick="sendApv()">제출하기</button>
-						<button class="btn btn-outline-primary" onclick="tempchk()">저장하기</button>
+						<button class="btn btn-outline-primary" onclick="updateApproval()">저장하기</button>
+						<button class="btn btn-outline-primary" onclick="tempchk()">제출하기</button>
 						
 						<div><br></div>
 						</div>
@@ -331,14 +332,14 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">임시저장</h5>
+					<h5 class="modal-title">알림</h5>
 					<button type="button" class="btn btn-outline-primary" data-dismiss="modal">&times;</button>
 				</div>
 
 					<div class="form-group">
 						<div class="modal-body">
 
-							<label>임시저장함으로 제출문서가 이동합니다.</label><br>
+							<label>문서가 제출되었습니다. .</label><br>
 							
 						</div>
 						<div class="modal-footer float-right">
@@ -371,10 +372,10 @@
 		for(var i = MIN_NUM; i <= MAX_NUM ; i++) {
 
 			if($(document).find('#authRank'+i+'').text().trim() != ''){
-		    	$('#rank_'+i+'').text($(opener.document).find('#authRank'+i+'').text());
-		    	$('#name_'+i+'').text($(opener.document).find('#authName'+i+'').text());
-		    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').val());
-		    	$('#memId_'+i+'').text($(opener.document).find('#apv_mem'+i+'').text());
+		    	$('#rank_'+i+'').text($(document).find('#authRank'+i+'').text());
+		    	$('#name_'+i+'').text($(document).find('#authName'+i+'').text());
+		    	$('#dept_'+i+'').text($(document).find('#authDept'+i+'').val());
+		    	$('#memId_'+i+'').text($(document).find('#apv_mem'+i+'').text());
 				$('#del_'+i+'').html('<a class="xBtn" onclick="delLine('+i+')">[ X ]</a>');
 				$('#order_'+i+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+i+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+i+')">▼</a>&nbsp;');
 				$('#'+i+'').val('exist');
@@ -413,6 +414,7 @@
 			}
 		})
 	});
+	
 
 	function printList(data) {
 
@@ -707,6 +709,7 @@
 		for(var i = 1 ; i <=3 ; i++) {
 			$("#processNum"+i).val($('#proNum'+i).val());
 		}
+		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','updateApprovalKey').appendTo('#sendApv');
 	
 		$('#sendApv').submit();
 		
@@ -717,7 +720,7 @@
 		
 	}
 
-	function sendApv() {
+	function updateApproval() {
 
 		if(($('#title').val()).trim() == ''){
 			alert('제목을 입력해주세요')
@@ -726,9 +729,6 @@
 		if(($('#summernote').val()).trim() == ''){
 			alert('내용을 입력해주세요')
 			return;
-		}
-		if(${ not empty appr.key }){
-			$('<input></input>').attr('type','hidden').attr('value',${ appr.key }).attr('status','p').appendTo('#sendApv');
 		}
 
 		for(var i = 1 ; i <=3 ; i++){
@@ -742,20 +742,33 @@
 		
 		
 		var status = $('#status');
-		status.attr('value','p');
-
-		$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/updateApproval.do").attr('method', 'POST').attr('id','updateApproval').appendTo('#body');
-		$('<input></input>').attr('type','hidden').attr('value',#authId1.val()).attr('name','updatdAuthId1').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#authId2.val()).attr('name','updatdAuthId2').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#authId3.val()).attr('name','updatdAuthId3').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#processNum1.val()).attr('name','updateProcessNum1').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#processNum2.val()).attr('name','updateProcessNum2').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#processNum3.val()).attr('name','updateProcessNum3').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#status.val()).attr('name','updateStatus').appendTo('#updateApproval');
+		status.attr('value','t');
+		
+		
+		var authId11 = $('#authId1').val();
+		
+		console.log(authId11);
+		
+																																			
+		$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/applovalSave.do").attr('method', 'POST').attr('id','updateApproval').attr('enctype','multipart/form-data').appendTo('#body');
+		$('<input></input>').attr('type','hidden').attr('value',$('#authId1').val()).attr('name','updatdAuthId1').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#authId2').val()).attr('name','updatdAuthId2').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#authId3').val()).attr('name','updatdAuthId3').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#processNum1').val()).attr('name','updateProcessNum1').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#processNum2').val()).attr('name','updateProcessNum2').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#processNum3').val()).attr('name','updateProcessNum3').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#status').val()).attr('name','updateStatus').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#title').val()).attr('name','updateTitle').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#summernote').val()).attr('name','updateContent').appendTo('#updateApproval');
+		
+		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','updateApprovalKey').appendTo('#updateApproval');
 		
 		
 		
-		$('#sendApv').submit();
+		console.dir($('#updateApproval'));
+		
+		
+		$('#updateApproval').submit();
 	
 
 	}

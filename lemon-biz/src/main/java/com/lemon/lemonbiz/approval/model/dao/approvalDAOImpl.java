@@ -95,15 +95,55 @@ public class approvalDAOImpl implements approvalDAO {
 	public List<apprCheck> reWriteApprck(String key) {
 		return sqlSession.selectList("approval.reWriteApprck",key);
 	}
-
+	
 	@Override
 	public Attachment reWriteAttach(String key) {
 		return sqlSession.selectOne("approval.reWriteAttach",key);
 	}
-
-
 	
 
+	@Override
+	public int insertApproval(appr appr) {
+		return sqlSession.insert("approval.insertApproval",appr);
+	}
+	
+	@Override
+	public int updateApproval(appr appr) {
+		return sqlSession.update("approval.updateApproval",appr);
+	}
+
+	@Override
+	public int updateApprck1(apprCheck apprck1) {
+		return sqlSession.update("approval.updateApprck1",apprck1);
+	}
+
+	@Override
+	public int updateApprck2(apprCheck apprck2) {
+		return sqlSession.update("approval.updateApprck2",apprck2);
+	}
+
+	@Override
+	public int updateApprck3(apprCheck apprck3) {
+		return sqlSession.update("approval.updateApprck3",apprck3);
+	}
+
+	@Override
+	public List<apprCheck> apprckList(String memberId) {
+		return sqlSession.selectList("approval.apprckList",memberId);
+	}
+
+	@Override
+	public List<appr> apprAndCkList(String memberId) {
+		return sqlSession.selectList("approval.apprAndCkList",memberId);
+	}
+
+	@Override
+	public appr apprckDetail(int ckKey) {
+		return sqlSession.selectOne("approval.apprckDetail",ckKey);
+	}
+	
+	
+	
 	
 	
 	

@@ -13,6 +13,7 @@
         
     	<!-- sb-admin-2 css -->
 		<link href="${pageContext.request.contextPath }/resources/css/sb-admin-2.min.css" rel="stylesheet">
+		
         
         <!-- jquery -->
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -40,7 +41,7 @@
 		<script src="${pageContext.request.contextPath }/resources/js/jquery.dataTables.min.js"></script>
 		<script src="${pageContext.request.contextPath }/resources/js/dataTables.bootstrap4.min.js"></script>
 		<script src="${pageContext.request.contextPath }/resources/js/datatables-demo.js"></script>
-  
+
         <!-- custom css -->
         <link href="${pageContext.request.contextPath }/resources/css/custom.css" rel="stylesheet">
         
@@ -57,6 +58,9 @@
 		<script src="${pageContext.request.contextPath}/resources/vendor/js/select2.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/vendor/js/bootstrap-datetimepicker.min.js"></script>	
 		<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+		
+		<!-- chart -->
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	
         <!-- addFlashAttribute message -->
         <c:if test="${ not empty msg }">
