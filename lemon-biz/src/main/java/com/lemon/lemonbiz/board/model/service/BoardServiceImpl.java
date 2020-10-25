@@ -131,6 +131,30 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void boardInsert(BoardComment boardComment) {
+		/* 덧글 작성시 게시글 작성자에게 알림 등록 */
+		Board board = boardDAO.selectOneBoard(boardComment.getBoardRef());
+		
+		Notice notice = new Notice();
+		notice.setMemId(board.getMemId());
+		notice.setContent("\""+board.getTitle()+"\""+" 게시글에 새로운 덧글이 등록되었습니다.");
+		notice.setAddress("/board/boardDetail.do?key="+board.getKey());
+		notice.setIcon("fa-comment-dots");
+		notice.setColor("success");
+		noticeService.insertNotice(notice);
+		
+		if(boardComment.getBoardCommentLevel()==2) {
+			BoardComment boardcomment = boardDAO.selectOneBoardComment(boardComment.getBoardCommentRef());
+			
+			notice = new Notice();
+			notice.setMemId(boardcomment.getBoardCommentWriter());
+			notice.setContent("작성하신 댓글에 새로운 답글이 등록되었습니다.");
+			notice.setAddress("/board/boardDetail.do?key="+board.getKey());
+			notice.setIcon("fa-comments");
+			notice.setColor("success");
+			noticeService.insertNotice(notice);
+			
+		}
+		
 		boardDAO.boardInsert(boardComment);
 		
 	}

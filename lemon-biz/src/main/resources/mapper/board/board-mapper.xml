@@ -478,6 +478,11 @@
   	<select id="RecCount" parameterType="int" resultType="int">
   	select count(*) from good where post_key = #{ key }
   	</select>
+  	
+  	<!-- 덧글 한개 조회 -->
+  	<select id="selectOneBoardComment" resultType="BoardComment">
+  		select * from board_comment where board_comment_no = #{ key }
+  	</select>
 </mapper>
 
 

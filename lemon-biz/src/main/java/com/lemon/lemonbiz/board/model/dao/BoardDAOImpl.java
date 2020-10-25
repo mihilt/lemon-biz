@@ -306,6 +306,12 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 
+	@Override
+	public BoardComment selectOneBoardComment(int key) {
+		return sqlSession.selectOne("selectOneBoardComment", key);
+	}
+
+
 
 
 }
