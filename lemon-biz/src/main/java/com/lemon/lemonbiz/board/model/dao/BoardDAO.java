@@ -91,6 +91,8 @@ public interface BoardDAO {
 
 	int RecCount(int key);
 
+	BoardComment selectOneBoardComment(int boardCommentRef);
+
 	
 
 	
