@@ -71,6 +71,15 @@ public interface approvalDAO {
 
 	List<Appr> myApprovalList(String memberId);
 
+	int backAppr(String apprKey);
+
+	int returnApprck(Map<String, String> map);
+
+	int returnApproval(Map<String, String> map);
+	
+	List<Appr> returnApprList(String memberId);
+
+
 	
 
 

@@ -53,6 +53,23 @@ public class ApprovalController {
 	private ResourceLoader resourceLoader;
 	
 	
+	@RequestMapping(value="/returnApprovalList")
+	public String returnApprovalList(@ModelAttribute("loginMember") Member loginMember,
+									 @RequestParam(value="page") int page,
+									 Model model) {
+		
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.returnApprList(loginMember.getMemberId());
+		
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("auth", 0);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/requestApprovalList");
+		
+		
+		return "approval/returnApprovalList";
+	}
+	
 	@RequestMapping(value="/requestApprovalList")
 	public String requestApprovalList(@ModelAttribute("loginMember") Member loginMember,
 									  @RequestParam(value="page") int page,
@@ -684,13 +701,41 @@ public class ApprovalController {
 			int result = approvalService.changeApprck(apprck.getKey());
 		}
 		else {
-			int result = approvalService.backApprck(apprck.getKey());
+			int result = approvalService.backApprck(apprck.getKey(),apprKey);
 		}
 		
 		red.addFlashAttribute("msg", "승인이 완료되었습니다.");
 		return "redirect:/approval/requestApprovalList?page=1";
 		
 	}
+	
+	@RequestMapping(value="/returnApprove.do", method=RequestMethod.POST)
+	public String returnApprove(@ModelAttribute("loginMember") Member loginMember,
+								Model model,
+								@RequestParam("opinion") String opinion,
+								@RequestParam("returnApprKey") String key,
+								RedirectAttributes red) {
+		
+		
+		String memberId = loginMember.getMemberId();
+		Map<String, String> map = new HashMap<>();
+		map.put("apprKey",key);
+		map.put("opinion",opinion);
+		map.put("memberId",memberId);
+		
+		System.out.println(opinion);
+		System.out.println(opinion);
+		System.out.println(opinion);
+		System.out.println(opinion);
+		int result = approvalService.returnApprove(map);
+		
+		System.out.println("dddddddddddddddddddddddddd");
+		red.addFlashAttribute("msg", "반려되었습니다.");
+		
+		return "redirect:/approval/requestApprovalList?page=1";
+	}
+	
+	
 	
 	
 	

@@ -57,9 +57,13 @@ public interface approvalService {
 
 	int changeApprck(int key);
 
-	int backApprck(int key);
+	int backApprck(int key, String apprKey);
 
 	List<Appr> myApprovalList(String memberId);
+
+	int returnApprove(Map<String, String> map);
+
+	List<Appr> returnApprList(String memberId);
 
 	
 

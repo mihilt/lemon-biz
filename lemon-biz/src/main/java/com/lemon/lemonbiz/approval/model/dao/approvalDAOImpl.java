@@ -168,6 +168,27 @@ public class approvalDAOImpl implements approvalDAO {
 		return sqlSession.selectList("approval.myApprovalList",memberId);
 	}
 
+	@Override
+	public int backAppr(String apprKey) {
+		return sqlSession.update("approval.backAppr",apprKey);
+	}
+
+	@Override
+	public int returnApprck(Map<String, String> map) {
+		return sqlSession.update("approval.returnApprck",map);
+	}
+
+	@Override
+	public int returnApproval(Map<String, String> map) {
+		return sqlSession.update("approval.returnApproval",map);
+	}
+	
+	@Override
+	public List<Appr> returnApprList(String memberId) {
+		return sqlSession.selectList("approval.returnApprList",memberId);
+	}
+
+
 	
 	
 	

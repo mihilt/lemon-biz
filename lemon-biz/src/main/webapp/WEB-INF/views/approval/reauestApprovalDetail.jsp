@@ -190,7 +190,7 @@
 						
 						<div class="container" align="center">
 						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
-						<button class="btn btn-outline-primary" onclick="updateApproval()">반려하기</button>
+						<button class="btn btn-outline-primary" data-toggle="modal" data-target="#returnA">반려하기</button>
 						<button class="btn btn-outline-primary" onclick="approve()">승인하기</button>
 						<div><br></div>
 						</div>
@@ -209,7 +209,30 @@
 				</div>
 			</div>
 		</div>
-	
+		
+	<div class="modal" id="returnA">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">반려사유</h5>
+					<button type="button" class="btn btn-outline-primary" data-dismiss="modal">&times;</button>
+				</div>
+
+					<div class="form-group">
+						<div class="modal-body">
+
+							<textarea id="returnResult" class="form-control" name="approval_content"  cols="40" rows="9" 
+		      							  style="width:100%; resize:none">
+							</textarea>
+							
+						</div>
+						<div class="modal-footer float-right">
+							<button class="btn btn-outline-primary" type="submit" onclick="returnApprove()" >반려</button>
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
 
 
 <script>
@@ -222,6 +245,15 @@ function approve() {
 
 	$('#approve').submit();
 	
+}
+
+function returnApprove() {
+
+	$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/returnApprove.do").attr('method', 'POST').attr('id','returnApprovalForm').appendTo('#body');
+	$('<input></input>').attr('type','hidden').attr('value',$('#returnResult').val()).attr('name','opinion').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','returnApprKey').appendTo('#returnApprovalForm');
+	
+	$('#returnApprovalForm').submit();
 }
 
 

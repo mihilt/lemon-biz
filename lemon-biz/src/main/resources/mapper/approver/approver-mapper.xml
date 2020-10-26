@@ -164,7 +164,7 @@
 			left outer join member M on P.mem_id = M.member_id 
 			left outer join doc_type D on P.type_key = D.key
 		where
-			P.mem_id = #{memberId} and p.status = 'p'
+			P.mem_id = #{memberId} and P.status = 'p'
 		order by
 			P.key desc
 	
@@ -346,11 +346,52 @@
 		update
 			appr_check
 		set
-			check_date = default , status = 'f'
+			check_date = default , status = 't'
 		where
 			key=#{key}
 	
 	</update>
+	
+	<update id="backAppr">
+		update
+			appr
+		set
+			status = 'a'
+		where
+			key=#{apprKey}
+	</update>
+	
+	<update id="returnApprck">
+		
+		update
+			appr_check
+		set
+			check_date = default, status = 'f', opinion = #{opinion}
+		where
+			mem_id=#{memberId} and approval_key=#{key}
+	
+	</update>
+	
+	<update id="returnApproval">
+	
+		update
+			appr
+		set
+			status ='r'
+		where 
+			key= #{apprKey}
+	
+	</update>
+	
+	<select id="returnApprList" resultMap="apprMap">
+	
+		select
+			*
+		from
+			appr
+		where
+			mem_id = #{memberId} and status = 'f'
+	</select>
 	
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
