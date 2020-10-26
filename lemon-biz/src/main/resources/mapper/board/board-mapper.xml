@@ -4,11 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board">
 	<select id="selectBoardMapList" resultMap="boardMap">
-		select * 
+		 select *
         	from ( select rownum as rnum, v.* 
         			from ( select(select count(*) 
         						from attachment 
-        							where post_key = P.key)file_count,P.*
+        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name,(select count(*) from good G where G.post_key = P.key )count
         		from post P 
         			where categ_key=1 
         				order by is_notice desc,key desc)v)v
@@ -26,6 +26,8 @@
   		<result column="is_deleted" property="isDeleted"/>
   		<result column="read_count" property="readCount"/>
   		<result column="dept_key" property="deptKey"/>
+  		<result column="name" property="name"/>
+  		<result column="count" property="count"/>
   		<result column="file_count" property="fileCount"/>
   		<result column="startRnum" property="startRnum"/>
   		<result column="endRnum" property="endRnum"/>
@@ -56,7 +58,7 @@
 			post
 		values(
 			seq_post_key.nextval,
-			#{ name },
+			#{ memId },
 			 1,
 			#{ title },
 			#{ content },
@@ -110,14 +112,14 @@
 	</select>
   
   <select id="selectOneBoardCollection" resultMap="boardCollectionMap">
- 	   select
+ 	  select
 		    P.*,
 		    A.key as "attach_key",
 		    A.post_key,
 		    A.origin_name,
 		    A.re_name,
 		    A.upload_date,
-		    A.download_cnt
+		    A.download_cnt,(select name from member M where M.member_id = p.mem_id) name
 		from 
 		    post P
 		        left join attachment A
@@ -137,6 +139,7 @@
   		<result column="is_notice" property="isNotice"/>
   		<result column="is_deleted" property="isDeleted"/>
   		<result column="read_count" property="readCount"/>
+  		<result column="name" property="name"/>
   		
   		<collection property="attachList" ofType="attachment">
   			<id column="attach_key" property="key"/>
@@ -195,12 +198,15 @@
   	</insert>
   	
   	<select id="selectCommentList" resultType="BoardComment">
-	  	select BC.*
-		from board_comment BC
+	  	select
+	  		 BC.*,(select name from member M where M.member_id = BC.board_comment_writer) name
+		from
+			 board_comment BC
 		where board_ref = #{ key }
-		start with board_comment_level = 1
-		connect by board_comment_ref = prior board_comment_no
+			start with board_comment_level = 1
+			connect by board_comment_ref = prior board_comment_no
 		order siblings by board_comment_no
+
   	</select>
   	
   	<delete id="boardDelete">
@@ -230,7 +236,7 @@
 			    from 
 			        attachment
 			    where
-		        post_key = P.key) file_count
+		        post_key = P.key) file_count,(select name from member M where M.member_id = P.mem_id) name1,(select count(*) from good G where G.post_key = P.key )count
 		from
    			 post P left join dept D on P.dept_key = D.key
    		where P.categ_key=2  and  P.dept_key = #{deptKey}
@@ -250,6 +256,8 @@
   		<result column="read_count" property="readCount"/>
   		<result column="dept_key" property="deptKey"/>
   		<result column="name" property="name"/>
+  		<result column="name1" property="name1"/>
+  		<result column="count" property="count"/>
   		<result column="file_count" property="fileCount"/>
   	</resultMap>
   	
@@ -258,7 +266,7 @@
 			post
 		values(
 			seq_post_key.nextval,
-			#{ name },
+			#{ memId },
 			 2,
 			#{ title },
 			#{ content },
@@ -276,28 +284,24 @@
 		</selectKey>
   	</insert>
   	
-  	<select id="boardSearch" resultType="board">
-  	 select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        post_key = P.key) file_count
-		from
-   			 post P
-   		where categ_key=1 and 
-        mem_id like '%'||#{ searchKeyword }||'%'
-         order by is_notice desc ,key desc
-  	</select>
-  	
-  	<select id="selectMaList" resultMap="boardMa">
-  	select * 
+  	<select id="boardSearch" resultMap="boardMap">
+  	  select * 
         	from ( select rownum as rnum, v.* 
         			from ( select(select count(*) 
         						from attachment 
-        							where post_key = P.key)file_count,P.*
+        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name
+        		from post P 
+        			where categ_key=1  and mem_id like '%'||#{ searchKeyword }||'%'
+        				order by is_notice desc,key desc)v)v
+        			where rnum between #{startRnum} and #{endRnum}
+  	</select>
+  	
+  	<select id="selectMaList" resultMap="boardMa">
+  	select *
+        	from ( select rownum as rnum, v.* 
+        			from ( select(select count(*) 
+        						from attachment 
+        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name,(select count(*) from good G where G.post_key = P.key )count
         		from post P 
         			where categ_key=3 
         				order by is_notice desc,key desc)v)v
@@ -314,6 +318,8 @@
   		<result column="is_deleted" property="isDeleted"/>
   		<result column="read_count" property="readCount"/>
   		<result column="dept_key" property="deptKey"/>
+  		<result column="name" property="name"/>
+  		<result column="count" property="count"/>
   		<result column="file_count" property="fileCount"/>
   		<result column="startRnum" property="startRnum"/>
   		<result column="endRnum" property="endRnum"/>
@@ -326,7 +332,7 @@
 			post
 		values(
 			seq_post_key.nextval,
-			#{ name },
+			#{ memId },
 			 3,
 			#{ title },
 			#{ content },
@@ -344,23 +350,19 @@
 		</selectKey>
   	</insert>
   	
-  	<select id="boardtitleSearch" resultType="board">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        post_key = P.key) file_count
-		from
-   			 post P
-   		where categ_key=1 and 
-        title like '%'||#{ searchKeyword }||'%'
-         order by is_notice desc ,key desc
+  	<select id="boardtitleSearch" resultMap="boardMap">
+  	 select * 
+        	from ( select rownum as rnum, v.* 
+        			from ( select(select count(*) 
+        						from attachment 
+        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name
+        		from post P 
+        			where categ_key=1  and title like '%'||#{ searchKeyword }||'%' 
+        				order by is_notice desc,key desc)v)v
+        			where rnum between #{startRnum} and #{endRnum}
   	</select>
   	
-  	<select id="boardTeamSearch" resultType="board">
+  	<select id="boardTeamSearch" resultMap="boardTeam">
   	select
     		P.*,
 			    (select 
@@ -368,7 +370,7 @@
 			    from 
 			        attachment
 			    where
-		        post_key = P.key) file_count
+		        post_key = P.key) file_count,(select name from member M where M.member_id = P.mem_id) name1
 		from
    			 post P
    		where categ_key=2
@@ -376,7 +378,7 @@
          order by is_notice desc ,key desc
   	</select>
   	
-  	<select id="boardTeamSearch2" resultType="board">
+  	<select id="boardTeamSearch2" resultMap="boardTeam">
   	select
     		P.*,
 			    (select 
@@ -384,7 +386,7 @@
 			    from 
 			        attachment
 			    where
-		        post_key = P.key) file_count
+		        post_key = P.key) file_count,(select name from member M where M.member_id = P.mem_id) name1
 		from
    			 post P
    		where categ_key=2
@@ -392,45 +394,95 @@
          order by is_notice desc ,key desc
   	</select>
   	
-  	<select id="boardMSearch" resultType="board">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        post_key = P.key) file_count
-		from
-   			 post P
-   		where categ_key=3
-        and title like '%'||#{ searchKeyword }||'%'  
-         order by is_notice desc ,key desc
+  	<select id="boardMSearch" resultMap="boardMap">
+  	 select * 
+        	from ( select rownum as rnum, v.* 
+        			from ( select(select count(*) 
+        						from attachment 
+        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name
+        		from post P 
+        			where categ_key=3  and title like '%'||#{ searchKeyword }||'%'
+        				order by is_notice desc,key desc)v)v
+        			where rnum between #{startRnum} and #{endRnum}
   	</select>
   	
-  	<select id="boardMSearch2" resultType="board">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        post_key = P.key) file_count
-		from
-   			 post P
-   		where categ_key=3
-        and mem_id like '%'||#{ searchKeyword }||'%'  
-         order by is_notice desc ,key desc
+  	<select id="boardMSearch2" resultMap="boardMap">
+  	select * 
+        	from ( select rownum as rnum, v.* 
+        			from ( select(select count(*) 
+        						from attachment 
+        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name
+        		from post P 
+        			where categ_key=3  and mem_id like '%'||#{ searchKeyword }||'%'
+        				order by is_notice desc,key desc)v)v
+        			where rnum between #{startRnum} and #{endRnum}
   	</select>
   	<select id="countBoard3" resultType="_int">
   	SELECT COUNT(*) as "cnt" FROM POST where categ_key=3
   	</select>
   	
   	<select id="selectTeamName" resultType="string">
-  	select distinct D.name from post P left join dept D on P.dept_key = D.key where P.categ_key=2  and  P.dept_key = #{deptKey}
+  	select name from dept where key = #{deptKey}
+  	<!-- select distinct D.name from post P left join dept D on P.dept_key = D.key where P.categ_key=2  and  P.dept_key = #{deptKey} -->
   	</select>
   
+  	<select id="countTitleBoard" resultType="_int">
+  	SELECT COUNT(*) as "cnt" FROM POST where categ_key=1 and title like'%'||#{ searchKeyword }||'%'
+  	</select>
+  	
+  	<select id="countNameBoard" resultType="_int">
+  	SELECT COUNT(*) as "cnt" FROM POST where categ_key=1 and mem_id like'%'||#{ searchKeyword }||'%'
+  	</select>
+  	
+  	<select id="countTitleBoard3" resultType="_int">
+  	SELECT COUNT(*) as "cnt" FROM POST where categ_key=3 and title like'%'||#{ searchKeyword }||'%'
+  	</select>
+  	
+  	<select id="countNameBoard3" resultType="_int">
+  	SELECT COUNT(*) as "cnt" FROM POST where categ_key=3 and mem_id like'%'||#{ searchKeyword }||'%'
+  	</select>
+  	
+  	<select id="SelectBoardOne" resultType="attachment">
+  	 select * from attachment where post_key= #{ key }
+  	</select>
+  	
+  	<update id="updateAttachment">
+  	update attachment set  origin_name = null, re_name = null where key= #{ boardKey }
+  	</update>
+  	
+  	<update id="updateAttachment2">
+  	update attachment set  origin_name = null, re_name = null where key= #{ boardKey2 }
+  	</update>
+  	
+  	<update id="updateFile">
+  	<selectKey order="BEFORE" resultType="attachment" keyProperty="key">
+  	select key from attachment where post_key=#{ postKey } and re_name=#{ reName }
+  	</selectKey>
+  	update attachment set  origin_name = #{originName}, re_name = #{reName} where key= #{ key }
+  	</update>
+  	
+  	<!-- 게시글 추천 여부 검색 -->
+  	<select id="recCheck" parameterType="map" resultType="int">
+  	select count(*) from good where post_key = #{key} and user_id= #{id}
+  	</select>
+  	<!-- 게시글 추천하기 -->
+  	<insert id="recUpdate" parameterType="map">
+  	insert into good
+		values(seq_good_good_key.nextval,#{ id },#{ key })
+  	</insert>
+  	<!-- 게시글 추천 취소 -->
+  	<delete id="recDelete" parameterType="map">
+  	delete from good where post_key= #{ key } and user_id= #{ id }
+  	</delete>
+  	<!-- 추천수 -->
+  	<select id="RecCount" parameterType="int" resultType="int">
+  	select count(*) from good where post_key = #{ key }
+  	</select>
+  	
+  	<!-- 덧글 한개 조회 -->
+  	<select id="selectOneBoardComment" resultType="BoardComment">
+  		select * from board_comment where board_comment_no = #{ key }
+  	</select>
 </mapper>
 
 

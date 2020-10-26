@@ -1,6 +1,7 @@
 package com.lemon.lemonbiz.attend.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,16 @@ public class AttendServiceImpl implements AttendService {
 	@Override
 	public Attend selectAttendInfo(Attend attend) {
 		return attendanDAO.selectAttendInfo(attend);
+	}
+
+	@Override
+	public int countAttend(Attend attend) {
+		return attendanDAO.countAttend(attend);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAttendList(int cPage, int numPerPage, Map<String, Object> map,String memId) {
+		return attendanDAO.selectAttendList(cPage,numPerPage,map,memId);
 	}
 
 
