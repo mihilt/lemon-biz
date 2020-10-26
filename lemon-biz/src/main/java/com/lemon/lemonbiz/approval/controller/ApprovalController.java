@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.lemon.lemonbiz.approval.model.service.approvalService;
+import com.lemon.lemonbiz.approval.model.service.ApprovalService;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
-import com.lemon.lemonbiz.approval.model.vo.apprCheck;
+import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.PagingInfo;
@@ -47,7 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ApprovalController {
 	
 	@Autowired
-	private approvalService approvalService;
+	private ApprovalService approvalService;
 	
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -60,7 +60,7 @@ public class ApprovalController {
 		
 		
 		List<Appr> apprList = new ArrayList<>();
-		apprList = approvalService.apprAndCkList(loginMember.getMemberId());
+		apprList = approvalService.apprAndCkList(loginMember);
 		
 		model.addAttribute("apvList",apprList);
 		model.addAttribute("auth", 0);
@@ -228,9 +228,9 @@ public class ApprovalController {
 		log.debug("status={}", status);
 		appr.setStatus(status);
 		
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
 		
 		//8. apprCheck 객체 생성
 		//1번 결제자
@@ -285,7 +285,7 @@ public class ApprovalController {
 			
 			//appr_check 도 행이 이미 존재하기 때문에 jsp에서 apprCheck.key값을 받아와서 update처리.
 			
-			List<apprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
+			List<ApprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
 			
 			log.debug("approvalchange={}",apprchList.get(0).getKey());
 			log.debug("approvalchange={}",apprchList.get(1).getKey());
@@ -348,9 +348,9 @@ public class ApprovalController {
 		
 		HttpSession session = req.getSession();
 		
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
 		
 		
 		
@@ -470,7 +470,7 @@ public class ApprovalController {
 			
 			//appr_check 도 행이 이미 존재하기 때문에 jsp에서 apprCheck.key값을 받아와서 update처리.
 			
-			List<apprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
+			List<ApprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
 			
 			
 			apprck1.setKey(apprchList.get(0).getKey());
@@ -513,12 +513,12 @@ public class ApprovalController {
 		
 		
 		Appr appr = approvalService.reWriteAppr(key);
-		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
 		Attachment attach = approvalService.reWriteAttach(key);
 		
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
 		
 		apprck1 = apprchList.get(0);
 		apprck2 = apprchList.get(1);
@@ -562,14 +562,14 @@ public class ApprovalController {
 		
 		
 		Appr appr = approvalService.reWriteAppr(key);
-		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
 		Attachment attach = approvalService.reWriteAttach(key);
 		
 		
 		
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
 		
 		apprck1 = apprchList.get(0);
 		apprck2 = apprchList.get(1);
@@ -594,13 +594,13 @@ public class ApprovalController {
 								   @RequestParam(value="apprKey") String key,
 								   @RequestParam(value="ckKey") int ckKey) {
 			
-		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
 		Attachment attach = approvalService.reWriteAttach(key);
 		Appr appr = approvalService.apprckDetail(ckKey);
 		
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
 		
 		apprck1 = apprchList.get(0);
 		apprck2 = apprchList.get(1);
@@ -676,7 +676,7 @@ public class ApprovalController {
 		Map<String, String> map = new HashMap<>();
 		map.put("apprKey",apprKey);
 		map.put("memberId",memberId);
-		apprCheck apprck = approvalService.selectcApprck(map);
+		ApprCheck apprck = approvalService.selectcApprck(map);
 		
 		log.debug("apprck={}",apprck);
 

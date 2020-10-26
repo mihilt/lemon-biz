@@ -277,10 +277,13 @@
 		    appr A
 		        left outer join appr_check C on A.key = C.approval_key
 		where
-		    C.mem_id = #{memberId} and A.status = 'p'
-		    
-		    and (select V.status from appr_check V where V.key =  C.key - 1) = 't'
-		    
+		    C.mem_id = #{memberId}
+		    and
+            (
+		    (select V.status from appr_check V where V.key =  C.key - 1) = 't'
+            or 
+            C.seq_num = 1
+            )
 		order by A.key desc
 	</select>
 	
