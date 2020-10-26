@@ -1,6 +1,7 @@
 package com.lemon.lemonbiz.approval.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 
 import com.lemon.lemonbiz.member.model.vo.Member;
-import com.lemon.lemonbiz.approval.model.vo.appr;
+import com.lemon.lemonbiz.approval.model.vo.Appr;
 import com.lemon.lemonbiz.approval.model.vo.apprCheck;
 import com.lemon.lemonbiz.approval.model.vo.approval;
 import com.lemon.lemonbiz.common.vo.Attachment;
@@ -57,7 +58,7 @@ public class approvalDAOImpl implements approvalDAO {
 	}
 
 	@Override
-	public int insertSaveApproval(appr appr) {
+	public int insertSaveApproval(Appr appr) {
 		return sqlSession.insert("approval.insertSaveApproval",appr);
 	}
 
@@ -82,12 +83,12 @@ public class approvalDAOImpl implements approvalDAO {
 	}
 
 	@Override
-	public List<appr> approvalList(String memberId) {
+	public List<Appr> approvalList(String memberId) {
 		return sqlSession.selectList("approval.approvalList",memberId);
 	}
 
 	@Override
-	public appr reWriteAppr(String key) {
+	public Appr reWriteAppr(String key) {
 		return sqlSession.selectOne("approval.reWriteAppr",key);
 	}
 
@@ -103,12 +104,12 @@ public class approvalDAOImpl implements approvalDAO {
 	
 
 	@Override
-	public int insertApproval(appr appr) {
+	public int insertApproval(Appr appr) {
 		return sqlSession.insert("approval.insertApproval",appr);
 	}
 	
 	@Override
-	public int updateApproval(appr appr) {
+	public int updateApproval(Appr appr) {
 		return sqlSession.update("approval.updateApproval",appr);
 	}
 
@@ -133,14 +134,41 @@ public class approvalDAOImpl implements approvalDAO {
 	}
 
 	@Override
-	public List<appr> apprAndCkList(String memberId) {
+	public List<Appr> apprAndCkList(String memberId) {
 		return sqlSession.selectList("approval.apprAndCkList",memberId);
 	}
 
 	@Override
-	public appr apprckDetail(int ckKey) {
+	public Appr apprckDetail(int ckKey) {
 		return sqlSession.selectOne("approval.apprckDetail",ckKey);
 	}
+
+	@Override
+	public Attachment selectOneAttachment(String key) {
+		return sqlSession.selectOne("approval.selectOneAttachment",key);
+	}
+
+	@Override
+	public apprCheck selectcApprck(Map<String, String> map) {
+		return sqlSession.selectOne("approval.selectcApprck",map);
+	}
+
+	@Override
+	public int changeApprck(int key) {
+		return sqlSession.update("approval.changeApprck",key);
+	}
+
+	@Override
+	public int backApprck(int key) {
+		return sqlSession.update("approval.backApprck",key);
+	}
+
+	@Override
+	public List<Appr> myApprovalList(String memberId) {
+		return sqlSession.selectList("approval.myApprovalList",memberId);
+	}
+
+	
 	
 	
 	

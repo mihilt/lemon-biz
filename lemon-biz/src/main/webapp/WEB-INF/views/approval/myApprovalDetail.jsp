@@ -13,6 +13,7 @@
 
 <div class="container">
 		<div class="container-fluid">
+		<h2>요청결제문서</h2>
 		<!-- 게시글 -->
  			<div class="col-lg-12">			
              	<div class="card" >
@@ -22,7 +23,7 @@
 					    	<td><strong>기안담당</strong>
 								<c:choose>
 								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
-								<c:otherwise>${ loginMember.Name }</c:otherwise>
+								<c:otherwise>${ loginMember.name }</c:otherwise>
 								</c:choose>
 							</td>
 								
@@ -147,18 +148,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
-
-
-
-
-
-
-
-
-
-
+		
 
 
 

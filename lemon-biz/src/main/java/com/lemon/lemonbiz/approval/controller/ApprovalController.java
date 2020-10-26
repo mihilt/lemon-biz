@@ -2,27 +2,34 @@ package com.lemon.lemonbiz.approval.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lemon.lemonbiz.approval.model.service.approvalService;
-import com.lemon.lemonbiz.approval.model.vo.appr;
+import com.lemon.lemonbiz.approval.model.vo.Appr;
 import com.lemon.lemonbiz.approval.model.vo.apprCheck;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
@@ -42,6 +49,9 @@ public class ApprovalController {
 	@Autowired
 	private approvalService approvalService;
 	
+	@Autowired
+	private ResourceLoader resourceLoader;
+	
 	
 	@RequestMapping(value="/requestApprovalList")
 	public String requestApprovalList(@ModelAttribute("loginMember") Member loginMember,
@@ -49,7 +59,7 @@ public class ApprovalController {
 									  Model model) {
 		
 		
-		List<appr> apprList = new ArrayList<>();
+		List<Appr> apprList = new ArrayList<>();
 		apprList = approvalService.apprAndCkList(loginMember.getMemberId());
 		
 		model.addAttribute("apvList",apprList);
@@ -66,8 +76,9 @@ public class ApprovalController {
 								 @RequestParam(value="page") int page,
 								 
 								 Model model) {
-		List<appr> apprList = new ArrayList<>();
-		apprList = approvalService.ApprovalList(loginMember.getMemberId());
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.myApprovalList(loginMember.getMemberId());
+		
 		
 		
 		model.addAttribute("apvList",apprList);
@@ -88,7 +99,7 @@ public class ApprovalController {
 		
 		HttpSession session = req.getSession(); 
 		
-		List<appr> apprList = new ArrayList<>();
+		List<Appr> apprList = new ArrayList<>();
 		try {
 			apprList = approvalService.ApprovalList(loginMember.getMemberId());
 			
@@ -176,7 +187,7 @@ public class ApprovalController {
 	@RequestMapping(value="applovalSave.do", method=RequestMethod.POST)
 	public String updateApproval(HttpServletRequest req,
 								Model model,
-								appr appr,
+								Appr appr,
 								@RequestParam (value="updateTitle", required=true) String title,
 								@RequestParam (value="updateContent", required=true) String semmernote,
 								@RequestParam (value="updateStatus", required=true) String status,
@@ -226,17 +237,17 @@ public class ApprovalController {
 		log.debug("authId1={}",authId1);
 		log.debug("authId2={}",authId2);
 		log.debug("authId3={}",authId3);
-		apprck1.setSeqNum(processNum1);
+		apprck1.setSeqNum(1);
 		log.debug("apprck1={}",apprck1.getSeqNum());
 		apprck1.setMemId(authId1);
 		apprck1.setStatus(status);
 		//2번결제자
-		apprck2.setSeqNum(processNum2);
+		apprck2.setSeqNum(2);
 		log.debug("apprck2={}",apprck2.getSeqNum());
 		apprck2.setMemId(authId2);
 		apprck2.setStatus(status);
 		//3번결제자
-		apprck3.setSeqNum(processNum3);
+		apprck3.setSeqNum(3);
 		apprck3.setMemId(authId3);
 		apprck3.setStatus(status);	
 		
@@ -318,7 +329,7 @@ public class ApprovalController {
 	@RequestMapping(value="updateApproval.do", method=RequestMethod.POST)
 	public String approvalWrite(HttpServletRequest req,
 								Model model,
-								appr appr,
+								Appr appr,
 								@RequestParam (value="approval_title", required=true) String title,
 								@RequestParam (value="approval_content", required=true) String semmernote,
 								@RequestParam (value="status", required=true) String status,
@@ -371,15 +382,15 @@ public class ApprovalController {
 		log.debug("authId1={}",authId1);
 		log.debug("authId2={}",authId2);
 		log.debug("authId3={}",authId3);
-		apprck1.setSeqNum(processNum1);
+		apprck1.setSeqNum(1);
 		apprck1.setMemId(authId1);
 		apprck1.setStatus(status);
 		//2번결제자
-		apprck2.setSeqNum(processNum2);
+		apprck2.setSeqNum(2);
 		apprck2.setMemId(authId2);
 		apprck2.setStatus(status);
 		//3번결제자
-		apprck3.setSeqNum(processNum3);
+		apprck3.setSeqNum(3);
 		apprck3.setMemId(authId3);
 		apprck3.setStatus(status);
 		
@@ -389,7 +400,7 @@ public class ApprovalController {
 		
 		
 		
-		if(upFile != null) {
+		if(!upFile.isEmpty()) {
 			
 			//8-1.파일 : 저장할 파일이 존재할 경우 attachment에 속성저장하기 (upfile)
 			// 서버컴퓨터에 업로드한 파일 저장 확인
@@ -401,7 +412,7 @@ public class ApprovalController {
 			//저장경로
 			String saveDirectory = req.getServletContext().getRealPath("/resources/upload/approval");
 			//파일을 선택하지 않고 전송한 경우
-			
+			log.debug("upFile={}", upFile.getOriginalFilename());
 				
 			//1. 파일명(renameFilename)생성
 			String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
@@ -501,7 +512,7 @@ public class ApprovalController {
 						  @RequestParam(value="approval_id") String key) {
 		
 		
-		appr appr = approvalService.reWriteAppr(key);
+		Appr appr = approvalService.reWriteAppr(key);
 		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
 		Attachment attach = approvalService.reWriteAttach(key);
 		
@@ -550,7 +561,7 @@ public class ApprovalController {
 								   @RequestParam(value="apprKey") String key) {
 		
 		
-		appr appr = approvalService.reWriteAppr(key);
+		Appr appr = approvalService.reWriteAppr(key);
 		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
 		Attachment attach = approvalService.reWriteAttach(key);
 		
@@ -579,14 +590,14 @@ public class ApprovalController {
 	
 	@RequestMapping(value="/reauestApprovalDetail.do")
 	
-	public String myApprovalDetail(Model model,
+	public String requestApprovalDetail(Model model,
 								   @RequestParam(value="apprKey") String key,
 								   @RequestParam(value="ckKey") int ckKey) {
 			
 		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
 		Attachment attach = approvalService.reWriteAttach(key);
+		Appr appr = approvalService.apprckDetail(ckKey);
 		
-		appr appr = approvalService.apprckDetail(ckKey);
 		apprCheck apprck1 = new apprCheck();
 		apprCheck apprck2 = new apprCheck();
 		apprCheck apprck3 = new apprCheck();
@@ -604,20 +615,90 @@ public class ApprovalController {
 		model.addAttribute("attach",attach);
 		
 		
+		
 		return "approval/reauestApprovalDetail";
 	}
 	
 	
 	
+	@RequestMapping(value="/fileDownload.do")
+	@ResponseBody
+	public Resource fileDownload(@RequestParam("key") String key,
+								 @RequestHeader("user-agent") String userAgent,
+								 HttpServletRequest request,
+								 HttpServletResponse response) throws UnsupportedEncodingException {
+		
+		Attachment attach = approvalService.selectOneAttachment(key);
+		
+		String saveDirectory = request.getServletContext()	
+				  .getRealPath("/resources/upload/approval");
+		File downFile = new File(saveDirectory, attach.getReName());
+		Resource resource = resourceLoader.getResource("file:" + downFile);
+		log.debug("resource = {}", resource);
+		
+		boolean isMSIE = userAgent.indexOf("MSIE") != -1 
+          	  || userAgent.indexOf("Trident") != -1;
+		String originalFilename = attach.getOriginName();
+		
+		if(isMSIE){
+	        //ie 구버젼을 위해 퍼센트인코딩을 명시적으로 처리. 
+	    	//퍼센트인코딩(URLEncoder.encode)이후 공백을 의미하는 +를 %20로 다시 치환.
+	        originalFilename = URLEncoder.encode(originalFilename, "UTF-8")//%EC%B7%A8+%EC%97%85+%ED%8A%B9+%EA%B0%95.txt
+	        							 .replaceAll("\\+", "%20");
+	    } 
+	    else {
+	        originalFilename = new String(originalFilename.getBytes("UTF-8"),"ISO-8859-1");
+	    }
+		
+		response.setContentType("application/octet-stream; charset=utf-8");
+		response.addHeader("Content-Disposition", "attachment; filename=\"" + originalFilename + "\"");//쌍따옴표 사용하지 말것.
+		
+		
+		return resource;
+	}
+	
+	@RequestMapping(value="approve.do", method=RequestMethod.POST)
+	public String approve(@ModelAttribute("loginMember") Member loginMember,
+						  Model model,
+						  Appr appr,
+						  @RequestParam("apprckKey1") int apprckKey1,
+						  @RequestParam("apprckKey2") int apprckKey2,
+						  @RequestParam("apprckKey3") int apprckKey3,
+						  RedirectAttributes red) {
+		
+		log.debug("appr={}",appr);
+		log.debug("apprckKey1={}",apprckKey1);
+		log.debug("apprckKey2={}",apprckKey2);
+		log.debug("apprckKey3={}",apprckKey3);
+		
+		String apprKey = appr.getKey();
+		String memberId = loginMember.getMemberId();
+		Map<String, String> map = new HashMap<>();
+		map.put("apprKey",apprKey);
+		map.put("memberId",memberId);
+		apprCheck apprck = approvalService.selectcApprck(map);
+		
+		log.debug("apprck={}",apprck);
+
+		if(apprck.getSeqNum() == 1 || apprck.getSeqNum() == 2) {
+			int result = approvalService.changeApprck(apprck.getKey());
+		}
+		else {
+			int result = approvalService.backApprck(apprck.getKey());
+		}
+		
+		red.addFlashAttribute("msg", "승인이 완료되었습니다.");
+		return "redirect:/approval/requestApprovalList?page=1";
+		
+	}
 	
 	
 	
 	
-	
-	public PagingInfo paging(int page, List<appr> appr) {
+	public PagingInfo paging(int page, List<Appr> appr) {
 		
 		int countList = 10; //페이지당 게시물 수
-		int countPage = 10; //페이지 수
+		int countPage = 20; //페이지 수
 		int totalCount = 0;
 		try {
 			totalCount = appr.size(); // 총 게시물 수

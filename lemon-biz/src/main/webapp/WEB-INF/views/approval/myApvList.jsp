@@ -38,7 +38,7 @@
 	<c:forEach var="item" items="${ apvList }" begin="${ pageInfo.startNum }" end="${ pageInfo.endNum }">
 	<c:if test="${ item.status == 't'}">
 		<tr onclick="reWrite(${item.key})" style="cursor: pointer;">
-			<td>${ item.memId }</td>
+			<td>${ item.key }</td>
 			<td><a >${ item.title }</a></td>
 			<td>${ item.name } </td>
 			<td><fmt:formatDate value="${ item.writeDate }"  pattern="yyyy-MM-dd HH:mm:ss"/></td>

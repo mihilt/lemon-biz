@@ -1,10 +1,10 @@
 package com.lemon.lemonbiz.approval.model.dao;
 
 import java.util.List;
-
+import java.util.Map;
 
 import com.lemon.lemonbiz.member.model.vo.Member;
-import com.lemon.lemonbiz.approval.model.vo.appr;
+import com.lemon.lemonbiz.approval.model.vo.Appr;
 import com.lemon.lemonbiz.approval.model.vo.apprCheck;
 import com.lemon.lemonbiz.approval.model.vo.approval;
 import com.lemon.lemonbiz.common.vo.Attachment;
@@ -27,7 +27,7 @@ public interface approvalDAO {
 
 	String SeqApprKey();
 
-	int insertSaveApproval(appr appr);
+	int insertSaveApproval(Appr appr);
 
 	int insertSaveAttachment(Attachment attach);
 
@@ -37,17 +37,17 @@ public interface approvalDAO {
 
 	int insertSaveApprck3(apprCheck apprck3);
 
-	List<appr> approvalList(String memberId);
+	List<Appr> approvalList(String memberId);
 
-	appr reWriteAppr(String key);
+	Appr reWriteAppr(String key);
 
 	List<apprCheck> reWriteApprck(String key);
 
 	Attachment reWriteAttach(String key);
 
-	int updateApproval(appr appr);
+	int updateApproval(Appr appr);
 
-	int insertApproval(appr appr);
+	int insertApproval(Appr appr);
 
 	int updateApprck1(apprCheck apprck1);
 
@@ -57,9 +57,21 @@ public interface approvalDAO {
 
 	List<apprCheck> apprckList(String memberId);
 
-	List<appr> apprAndCkList(String memberId);
+	List<Appr> apprAndCkList(String memberId);
 
-	appr apprckDetail(int ckKey);
+	Appr apprckDetail(int ckKey);
+
+	Attachment selectOneAttachment(String key);
+
+	apprCheck selectcApprck(Map<String, String> map);
+
+	int changeApprck(int key);
+
+	int backApprck(int key);
+
+	List<Appr> myApprovalList(String memberId);
+
+	
 
 
 
