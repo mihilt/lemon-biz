@@ -125,7 +125,7 @@
 							<br>
 							                  <div class="form-group" align="left">
 							<div>
-								<div class="form-control" style="height:300px; overflow:auto;" align=left>${ appr.content }</div> <br>
+								<div class="form-control" style="height:700px; overflow:auto;" align=left>${ appr.content }</div> <br>
 							</div>
 							
 							

@@ -174,6 +174,11 @@ public class ApprovalDAOImpl implements ApprovalDAO {
 		return sqlSession.selectOne("approval.selectOneDocTypeAjax",docType);
 	}
 
+	@Override
+	public List<DocType> selectDocTypeTitleList() {
+		return sqlSession.selectList("approval.selectDocTypeTitleList");
+	}
+
 	
 	
 	

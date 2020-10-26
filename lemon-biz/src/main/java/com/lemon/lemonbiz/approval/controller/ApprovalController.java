@@ -137,7 +137,7 @@ public class ApprovalController {
 		model.addAttribute("child",child);
 		model.addAttribute("child2",child2);
 
-		List<DocType> docTypeList = managerService.selectDocTypeList();
+		List<DocType> docTypeList = approvalService.selectDocTypeTitleList();
 		model.addAttribute("docTypeList", docTypeList);
 		
 		

@@ -74,6 +74,8 @@ public interface ApprovalDAO {
 
 	DocType selectOneDocTypeAjax(DocType docType);
 
+	List<DocType> selectDocTypeTitleList();
+
 	
 
 

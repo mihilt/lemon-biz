@@ -64,6 +64,8 @@ public interface ApprovalService {
 
 	DocType selectOneDocTypeAjax(DocType docType);
 
+	List<DocType> selectDocTypeTitleList();
+
 	
 
 	

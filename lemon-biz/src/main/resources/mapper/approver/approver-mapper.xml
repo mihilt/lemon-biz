@@ -367,6 +367,13 @@
 			key = #{key}
 	</select>
 	
+	<select id="selectDocTypeTitleList" resultType="docType">
+  		select
+			key,
+			name
+		from
+			doc_type
+	</select>
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
   <resultMap type="apprCheck" id="apprckMap"></resultMap>

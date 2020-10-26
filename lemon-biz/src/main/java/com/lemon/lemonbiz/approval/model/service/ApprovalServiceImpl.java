@@ -217,6 +217,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return approvalDAO.selectOneDocTypeAjax(docType);
 	}
 
+	@Override
+	public List<DocType> selectDocTypeTitleList() {
+		return approvalDAO.selectDocTypeTitleList();
+	}
+
 
 
 }
