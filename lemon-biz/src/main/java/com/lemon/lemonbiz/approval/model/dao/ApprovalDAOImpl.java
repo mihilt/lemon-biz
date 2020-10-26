@@ -12,6 +12,7 @@ import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
 import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
 import com.lemon.lemonbiz.approval.model.vo.Approval;
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 
@@ -166,6 +167,16 @@ public class ApprovalDAOImpl implements ApprovalDAO {
 	@Override
 	public List<Appr> myApprovalList(String memberId) {
 		return sqlSession.selectList("approval.myApprovalList",memberId);
+	}
+
+	@Override
+	public DocType selectOneDocTypeAjax(DocType docType) {
+		return sqlSession.selectOne("approval.selectOneDocTypeAjax",docType);
+	}
+
+	@Override
+	public List<DocType> selectDocTypeTitleList() {
+		return sqlSession.selectList("approval.selectDocTypeTitleList");
 	}
 
 	

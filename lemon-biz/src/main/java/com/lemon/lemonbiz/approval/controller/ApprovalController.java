@@ -28,12 +28,16 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.lemon.lemonbiz.approval.model.service.ApprovalService;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
 import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.PagingInfo;
+import com.lemon.lemonbiz.manager.model.service.ManagerService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 
@@ -45,6 +49,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/approval")
 @SessionAttributes({"loginMember"})
 public class ApprovalController {
+	
+	@Autowired
+	private ManagerService managerService;
 	
 	@Autowired
 	private ApprovalService approvalService;
@@ -122,7 +129,6 @@ public class ApprovalController {
 		List<Dept> dept = approvalService.deptList();
 		List<Dept> child = approvalService.child();
 		List<Dept> child2 = approvalService.child2();
-
 		log.debug("dept = {}",dept);
 		log.debug("child = {}",child);
 		log.debug("child2 = {}",child2);
@@ -131,6 +137,8 @@ public class ApprovalController {
 		model.addAttribute("child",child);
 		model.addAttribute("child2",child2);
 
+		List<DocType> docTypeList = approvalService.selectDocTypeTitleList();
+		model.addAttribute("docTypeList", docTypeList);
 		
 		
 		
@@ -147,6 +155,7 @@ public class ApprovalController {
 		log.debug("memberList={}",memberList);
 		
 		model.addAttribute("memberList",memberList);
+		
 		
 		return "jsonView";
 	}
@@ -740,5 +749,22 @@ public class ApprovalController {
 	
 	
 	
-	
+	//양식 하나 불러오기
+	@RequestMapping(value="selectOneDocTypeAjax.do", method=RequestMethod.GET)
+	public void selectOneDocTypeAjax(DocType docType, HttpServletResponse response) {
+		
+		DocType oneDocType = approvalService.selectOneDocTypeAjax(docType);
+		
+
+		response.setContentType("application/json; charset=utf-8");
+
+		Gson gson = new Gson();
+		try {
+			gson.toJson(oneDocType, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 }

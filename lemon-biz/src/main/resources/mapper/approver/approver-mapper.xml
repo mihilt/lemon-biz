@@ -33,8 +33,10 @@
 	</select>
 	
 	<select id="memberList" resultMap="memberMap">
-		SELECT
-		*
+        SELECT
+	    M.*,
+	    (select name from dept D2 where M.dept_key = D2.key) "dept_name",
+	    (select name from rank R2 where M.rank_key = R2.key) "rank_name"
 		FROM MEMBER M FULL OUTER JOIN DEPT D
 		ON M.DEPT_KEY = D.KEY
 		WHERE D.NAME = #{node}
@@ -45,7 +47,8 @@
 		M.*,
         D.key,
         D.ref,
-        D.name as deptName
+        D.name as deptName,
+        (select name from rank R2 where M.rank_key = R2.key) "rank_name"
 		FROM MEMBER M FULL OUTER JOIN DEPT D
 		ON M.DEPT_KEY = D.KEY
 		WHERE M.MEMBER_ID = #{param}
@@ -355,6 +358,22 @@
 	
 	</update>
 	
+	<select id="selectOneDocTypeAjax" resultType="docType">
+		select
+			*
+		from
+			doc_type
+		where
+			key = #{key}
+	</select>
+	
+	<select id="selectDocTypeTitleList" resultType="docType">
+  		select
+			key,
+			name
+		from
+			doc_type
+	</select>
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
   <resultMap type="apprCheck" id="apprckMap"></resultMap>
