@@ -147,8 +147,27 @@
 			left outer join member M on P.mem_id = M.member_id 
 			left outer join doc_type D on P.type_key = D.key
 		where
-			P.mem_id = #{memberId}
+			P.mem_id = #{memberId} and p.status = 't'
+		order by
+			P.key desc
 			
+	</select>
+	
+	<select id="myApprovalList" resultMap="apprMap">
+	
+		select
+			P.*,
+			M.name,
+			D.name as docName
+		from
+			appr P 
+			left outer join member M on P.mem_id = M.member_id 
+			left outer join doc_type D on P.type_key = D.key
+		where
+			P.mem_id = #{memberId} and p.status = 'p'
+		order by
+			P.key desc
+	
 	</select>
 	
 	<select id="reWriteAppr" resultMap="apprMap">
@@ -171,7 +190,7 @@
 		        full outer join rank R on M.rank_key = R.key
 		where
 		    A.approval_key = #{key}
-		order by seq_num desc
+		order by seq_num
 	</select>
 	
 	<select id="reWriteAttach" resultMap="attachMap">
@@ -244,7 +263,7 @@
 			mem_id = #{memberId}
 	</select>
 	
-	<select id="apprAndCkList" resultMap="apprMap">
+	<select id="apprAndCkList" resultType="Appr">
 		select
 		    A.*,
 		    C.key as ckKey,
@@ -258,8 +277,13 @@
 		    appr A
 		        left outer join appr_check C on A.key = C.approval_key
 		where
-		    C.mem_id = #{memberId}
+		    C.mem_id = #{memberId} and A.status = 'p'
+		    
+		    and (select V.status from appr_check V where V.key =  C.key - 1) = 't'
+		    
+		order by A.key desc
 	</select>
+	
 	
 	<select id="apprckDetail" resultMap="apprMap">
 		
@@ -271,21 +295,68 @@
 		    C.seq_num as ckSeqNum,
 		    C.check_date as ckCheckDate,
 		    C.status as ckStatus,
-		    C.opinion as ckOpinion
+		    C.opinion as ckOpinion,
+		    M.member_id as memName,
+		    R.name as rankName
 		from
 		    appr A
-		        left outer join appr_check C on A.key = C.approval_key
+		        full outer join appr_check C on A.key = C.approval_key
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
 		where
 		    C.key = #{ckKey}
 		
 	</select>
 	
+	<select id="selectOneAttachment" resultMap="attachMap">
+	
+		select
+			*
+		from
+			attachment
+		where
+			key = #{key}
+	
+	</select>
+	
+	<select id="selectcApprck" resultMap="apprckMap">
+	
+		select
+		    *
+		from
+		    appr_check
+		where
+		    mem_id = #{memberId} and approval_key = #{apprKey} 
+	
+	</select>
+	
+	<update id="changeApprck">
+	
+		update
+			appr_check
+		set
+			check_date = default , status = 't'
+		where
+			key=#{key}
+		
+	</update>
+	
+	<update id="backApprck">
+	
+		update
+			appr_check
+		set
+			check_date = default , status = 'f'
+		where
+			key=#{key}
+	
+	</update>
 	
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
   <resultMap type="apprCheck" id="apprckMap"></resultMap>
   
-  <resultMap type="appr" id="apprMap">
+  <resultMap type="Appr" id="apprMap">
   
   </resultMap>	
 	

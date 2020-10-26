@@ -18,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class appr {
+public class Appr {
 
 	private String Key;
 	private int typeKey;
@@ -46,6 +46,10 @@ public class appr {
 	private String ckCheckDate;
 	private String ckStatus;
 	private String ckOpinion;
+	
+	private String memName;
+	
+	private String rankName;
 	
 	
 }

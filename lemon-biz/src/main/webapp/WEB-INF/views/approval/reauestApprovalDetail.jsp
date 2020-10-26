@@ -22,21 +22,22 @@
 					    	<td><strong>기안담당</strong>
 								<c:choose>
 								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
-								<c:otherwise>${ loginMember.name }</c:otherwise>
+								<c:otherwise>${ appr.memName }</c:otherwise>
 								</c:choose>
 							</td>
 								
 							<td><strong>기안부서</strong>
 								<c:choose>
 								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
-								<c:otherwise>${ loginMember.deptName }</c:otherwise>
+								<c:otherwise>${ appr.rankName }</c:otherwise>
 								</c:choose>
 							</td>
 							
 							<td>
 							<strong>기안일자</strong>
-							<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
-							<c:out value="${today}"/>
+							
+							<fmt:formatDate value="${appr.draftDate}"  pattern="yyyy-MM-dd"/>
+							
 							</td>
 						</tr>
 					    </table>
@@ -173,13 +174,15 @@
 							</div>
 							
 							
-							
-							&nbsp;<label>첨부: ${ attach.reName } </label> <br>
+							<div class="container" align="left">
+							&nbsp;<label>첨부: ${ attach.originName } </label> <br>
 							<button type="button"
-									class="btn-outline-success btn-block"
+									class="btn btn-outline-primary"
 									onclick="fileDownload('${attach.key}')">
+									다운로드
 							</button>
 							<hr>
+							</div>
 						               
 						</form>
 						
@@ -188,23 +191,37 @@
 						<div class="container" align="center">
 						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
 						<button class="btn btn-outline-primary" onclick="updateApproval()">반려하기</button>
-						<button class="btn btn-outline-primary" onclick="approval()">승인하기</button>
+						<button class="btn btn-outline-primary" onclick="approve()">승인하기</button>
 						<div><br></div>
 						</div>
+						
+						<form action="${pageContext.request.contextPath}/approval/approve.do"
+							  method="POST"
+							  id="approve">
+						<input type="hidden" name="apprckKey1" value="${apprck1.key}"/>
+						<input type="hidden" name="apprckKey2" value="${apprck2.key}"/>
+						<input type="hidden" name="apprckKey3" value="${apprck3.key}"/>
+						<input type="hidden" name="key" value="${appr.key}"/>
+						
+						</form>
 						
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-
-
+	
 
 
 <script>
 
 function fileDownload(key) {
-	location.href = "${ pageContext.request.contextPath }/board/fileDownload.do?key=" + key;
+	location.href = "${ pageContext.request.contextPath }/approval/fileDownload.do?key=" + key;
+}
+
+function approve() {
+
+	$('#approve').submit();
+	
 }
 
 
