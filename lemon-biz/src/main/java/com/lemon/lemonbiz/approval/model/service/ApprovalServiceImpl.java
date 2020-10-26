@@ -13,6 +13,7 @@ import com.lemon.lemonbiz.approval.model.dao.ApprovalDAO;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
 import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
 import com.lemon.lemonbiz.approval.model.vo.Approval;
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
@@ -211,9 +212,10 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return approvalDAO.myApprovalList(memberId);
 	}
 
-
-
-
+	@Override
+	public DocType selectOneDocTypeAjax(DocType docType) {
+		return approvalDAO.selectOneDocTypeAjax(docType);
+	}
 
 
 

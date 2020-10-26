@@ -123,10 +123,9 @@
 							
 							&nbsp;제목 : <input class="form-control" id="title" type="text" name="approval_title" value="${ appr.title }" readonly>
 							<br>
-							
+							                  <div class="form-group" align="left">
 							<div>
-								<textarea id="summernote" class="form-control" name="approval_content"  cols="120" rows="18" 
-		      							  style="width:100%; resize:none" readonly>${ appr.content }</textarea> <br>
+								<div class="form-control" style="height:300px; overflow:auto;" align=left>${ appr.content }</div> <br>
 							</div>
 							
 							

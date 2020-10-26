@@ -7,6 +7,7 @@ import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
 import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
 import com.lemon.lemonbiz.approval.model.vo.Approval;
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 
@@ -70,6 +71,8 @@ public interface ApprovalDAO {
 	int backApprck(int key);
 
 	List<Appr> myApprovalList(String memberId);
+
+	DocType selectOneDocTypeAjax(DocType docType);
 
 	
 

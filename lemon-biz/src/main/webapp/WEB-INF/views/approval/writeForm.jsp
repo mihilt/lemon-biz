@@ -10,13 +10,22 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
-<style>
+<!-- include summernote-ko-KR -->
+<script src="${pageContext.request.contextPath }/resources/summernoteKr/summernote-ko-KR.js"></script>
 
-
-
-</style>
-
+<script>
+//add summernote
+$(document).ready(function() {
+  $('#summernote').summernote({
+    lang: 'ko-KR',
+    height: 500
+    
+  });
+});
+</script>
 
 <div>
 	<h2>일반결제 작성</h2>
@@ -68,7 +77,7 @@
       
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
     	<h5>결제자 선택</h5>
-    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
+    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; min-height:360px;">
     			<div class="row" style="margin: 5px 5px"> 
     			<label>성명</label>
     			<input type="text" id="searchN"/>
@@ -208,9 +217,7 @@
 						</tr>
 					    </table>
 					</div>
-					<div>
-					
-					
+					<div class="p-2">
 					    <!-- ================결제칸=============== -->
 					    <input type="hidden" id="authDept1" name="authDept1" value="">
 						<input type="hidden" id="authDept2" name="authDept2" value="">
@@ -283,11 +290,20 @@
 						</table>
 						</div>
 						<!-- ==============결제칸 끝============== -->
+						
+						<!-- 양식 선택 -->											      	
+						<select name="docType" class="col-5 form-control mx-2 my-5"
+							id="docType">
+							<option value="none" selected>--- 양식을 선택해주세요. ---</option>
+							<c:forEach items="${ docTypeList }" var="docType">
+								<option value="${ docType.key }">
+									${ docType.name }
+								</option>
+							</c:forEach>
+						</select>
+						
 						<!-- 폼 내용 -->
-						
-						
-						
-						<form id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
+						<form class="p-2" id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
 							<input type="hidden" id="authId1" name="approval_mem1" />
 							<input type="hidden" id="authId2" name="approval_mem2" />
 							<input type="hidden" id="authId3" name="approval_mem3" />
@@ -434,7 +450,7 @@
 						  .attr('id',data.memberList[i].memberId).appendTo('#tbody');
 			$('<td></td>').text(data.memberList[i].deptName).appendTo('#'+data.memberList[i].memberId+'');
 			$('<td></td>').text(data.memberList[i].name).appendTo('#'+data.memberList[i].memberId+'');
-			$('<td></td>').text(data.memberList[i].rankKey).appendTo('#'+data.memberList[i].memberId+'');
+			$('<td></td>').text(data.memberList[i].rankName).appendTo('#'+data.memberList[i].memberId+'');
 			$('<td></td>').text(data.memberList[i].memberId).appendTo('#'+data.memberList[i].memberId+'');
 		}
 	}
@@ -486,7 +502,7 @@
 
 				var result = data.selectMember;
 				
-				rankKey = result[0].rankKey;
+				rankName = result[0].rankName;
 				deptName = result[0].deptName;
 				memberName = result[0].name;
 				console.log(memberName);
@@ -508,7 +524,7 @@
 			$('#memId_'+(i+1)).text(memberId);
 			$('#dept_'+(i+1)).text(deptName);
 			$('#name_'+(i+1)).text(memberName);
-			$('#rank_'+(i+1)).text(rankKey);
+			$('#rank_'+(i+1)).text(rankName);
 
 			$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
 			$('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
@@ -780,7 +796,32 @@
 	/* ======================================폼 제출관련 script end=================================== */	 
 	 
 	 
-	 
+	/* 양식 설정 script */
+	
+	$(function(){
+			$('#docType').change(function(){
+
+					const key = $("#docType option:selected").val();
+					
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/approval/selectOneDocTypeAjax.do?key="+key,
+						data : {
+						},
+						dataType : "json",
+						success : function(data){
+							/* console.log(data); */
+							
+							$("#summernote").summernote("code", data.form);
+
+						},
+						error : function(xhr, status, err){
+							console.log(xhr, status, err);
+						}
+					});
+
+					
+				});
+		});
 	 
 </script>
 
