@@ -10,14 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
-import com.lemon.lemonbiz.approval.model.vo.apprCheck;
-import com.lemon.lemonbiz.approval.model.vo.approval;
+import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
+import com.lemon.lemonbiz.approval.model.vo.Approval;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 
 
 @Repository
-public class approvalDAOImpl implements approvalDAO {
+public class ApprovalDAOImpl implements ApprovalDAO {
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;
@@ -68,17 +68,17 @@ public class approvalDAOImpl implements approvalDAO {
 	}
 
 	@Override
-	public int insertSaveApprck1(apprCheck apprck1) {
+	public int insertSaveApprck1(ApprCheck apprck1) {
 		return sqlSession.insert("approval.insertSaveApprck1",apprck1);
 	}
 
 	@Override
-	public int insertSaveApprck2(apprCheck apprck2) {
+	public int insertSaveApprck2(ApprCheck apprck2) {
 		return sqlSession.insert("approval.insertSaveApprck2",apprck2);
 	}
 
 	@Override
-	public int insertSaveApprck3(apprCheck apprck3) {
+	public int insertSaveApprck3(ApprCheck apprck3) {
 		return sqlSession.insert("approval.insertSaveApprck3",apprck3);
 	}
 
@@ -93,7 +93,7 @@ public class approvalDAOImpl implements approvalDAO {
 	}
 
 	@Override
-	public List<apprCheck> reWriteApprck(String key) {
+	public List<ApprCheck> reWriteApprck(String key) {
 		return sqlSession.selectList("approval.reWriteApprck",key);
 	}
 	
@@ -114,28 +114,28 @@ public class approvalDAOImpl implements approvalDAO {
 	}
 
 	@Override
-	public int updateApprck1(apprCheck apprck1) {
+	public int updateApprck1(ApprCheck apprck1) {
 		return sqlSession.update("approval.updateApprck1",apprck1);
 	}
 
 	@Override
-	public int updateApprck2(apprCheck apprck2) {
+	public int updateApprck2(ApprCheck apprck2) {
 		return sqlSession.update("approval.updateApprck2",apprck2);
 	}
 
 	@Override
-	public int updateApprck3(apprCheck apprck3) {
+	public int updateApprck3(ApprCheck apprck3) {
 		return sqlSession.update("approval.updateApprck3",apprck3);
 	}
 
 	@Override
-	public List<apprCheck> apprckList(String memberId) {
+	public List<ApprCheck> apprckList(String memberId) {
 		return sqlSession.selectList("approval.apprckList",memberId);
 	}
 
 	@Override
-	public List<Appr> apprAndCkList(String memberId) {
-		return sqlSession.selectList("approval.apprAndCkList",memberId);
+	public List<Appr> apprAndCkList(Member loginMember) {
+		return sqlSession.selectList("approval.apprAndCkList",loginMember);
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class approvalDAOImpl implements approvalDAO {
 	}
 
 	@Override
-	public apprCheck selectcApprck(Map<String, String> map) {
+	public ApprCheck selectcApprck(Map<String, String> map) {
 		return sqlSession.selectOne("approval.selectcApprck",map);
 	}
 

@@ -6,23 +6,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class apprCheck {
+public class Approval {
 	
-	private int key;
-	private String approvalKey;
+	private String key;
+	private int typeKey;
 	private String memId;
-	private int seqNum;
-	private Date checkDate;
+	private String title;
+	private String content;
+	private Date draftDate;
+	private Date writeDate;
 	private String status;
-	private String opinion;
-
-	private String ckName;
-	private String rankName;
+	private int IsDeleted;
+	
 }

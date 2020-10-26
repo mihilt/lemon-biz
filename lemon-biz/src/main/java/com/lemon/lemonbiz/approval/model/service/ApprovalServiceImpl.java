@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lemon.lemonbiz.approval.model.dao.approvalDAO;
+import com.lemon.lemonbiz.approval.model.dao.ApprovalDAO;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
-import com.lemon.lemonbiz.approval.model.vo.apprCheck;
-import com.lemon.lemonbiz.approval.model.vo.approval;
+import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
+import com.lemon.lemonbiz.approval.model.vo.Approval;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
@@ -22,10 +22,10 @@ import com.lemon.lemonbiz.member.model.vo.Member;
 				rollbackFor = Exception.class)
 
 @Service
-public class approvalServiceImpl implements approvalService {
+public class ApprovalServiceImpl implements ApprovalService {
 	
 	@Autowired
-	private approvalDAO approvalDAO;
+	private ApprovalDAO approvalDAO;
 
 	@Override
 	public List<Dept> deptList() {
@@ -71,17 +71,17 @@ public class approvalServiceImpl implements approvalService {
 		result = approvalDAO.insertSaveApproval(appr);
 		
 		//2. attachment insert	
-		apprCheck apprck1 = appr.getApprck1();
+		ApprCheck apprck1 = appr.getApprck1();
 		result = approvalDAO.insertSaveApprck1(apprck1);
 		System.out.println(apprck1.getSeqNum());
 		
 	
-		apprCheck apprck2 = appr.getApprck2();
+		ApprCheck apprck2 = appr.getApprck2();
 		result = approvalDAO.insertSaveApprck2(apprck2);
 		System.out.println(apprck2.getSeqNum());
 		
 	
-		apprCheck apprck3 = appr.getApprck3();
+		ApprCheck apprck3 = appr.getApprck3();
 		result = approvalDAO.insertSaveApprck3(apprck3);
 		System.out.println(apprck3.getSeqNum());
 		
@@ -100,7 +100,7 @@ public class approvalServiceImpl implements approvalService {
 	}
 
 	@Override
-	public List<apprCheck> reWriteApprck(String key) {
+	public List<ApprCheck> reWriteApprck(String key) {
 		return approvalDAO.reWriteApprck(key);
 	}
 
@@ -115,17 +115,17 @@ public class approvalServiceImpl implements approvalService {
 		int result = 0;
 		result = approvalDAO.updateApproval(appr);
 		
-		apprCheck apprck1 = appr.getApprck1();
+		ApprCheck apprck1 = appr.getApprck1();
 		result = approvalDAO.updateApprck1(apprck1);
 		System.out.println(apprck1.getSeqNum());
 		
 	
-		apprCheck apprck2 = appr.getApprck2();
+		ApprCheck apprck2 = appr.getApprck2();
 		result = approvalDAO.updateApprck2(apprck2);
 		System.out.println(apprck2.getSeqNum());
 		
 	
-		apprCheck apprck3 = appr.getApprck3();
+		ApprCheck apprck3 = appr.getApprck3();
 		result = approvalDAO.updateApprck3(apprck3);
 		System.out.println(apprck3.getSeqNum());
 		
@@ -147,17 +147,17 @@ public class approvalServiceImpl implements approvalService {
 		result = approvalDAO.insertApproval(appr);
 		
 		//2. apprckeck insert
-		apprCheck apprck1 = appr.getApprck1();
+		ApprCheck apprck1 = appr.getApprck1();
 		result = approvalDAO.insertSaveApprck1(apprck1);
 		System.out.println(apprck1.getSeqNum());
 		
 	
-		apprCheck apprck2 = appr.getApprck2();
+		ApprCheck apprck2 = appr.getApprck2();
 		result = approvalDAO.insertSaveApprck2(apprck2);
 		System.out.println(apprck2.getSeqNum());
 		
 	
-		apprCheck apprck3 = appr.getApprck3();
+		ApprCheck apprck3 = appr.getApprck3();
 		result = approvalDAO.insertSaveApprck3(apprck3);
 		System.out.println(apprck3.getSeqNum());
 		
@@ -172,13 +172,13 @@ public class approvalServiceImpl implements approvalService {
 	}
 
 	@Override
-	public List<apprCheck> apprckList(String memberId) {
+	public List<ApprCheck> apprckList(String memberId) {
 		return approvalDAO.apprckList(memberId);
 	}
 
 	@Override
-	public List<Appr> apprAndCkList(String memberId) {
-		return approvalDAO.apprAndCkList(memberId);
+	public List<Appr> apprAndCkList(Member loginMember) {
+		return approvalDAO.apprAndCkList(loginMember);
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public class approvalServiceImpl implements approvalService {
 	}
 
 	@Override
-	public apprCheck selectcApprck(Map<String, String> map) {
+	public ApprCheck selectcApprck(Map<String, String> map) {
 		return approvalDAO.selectcApprck(map);
 	}
 
