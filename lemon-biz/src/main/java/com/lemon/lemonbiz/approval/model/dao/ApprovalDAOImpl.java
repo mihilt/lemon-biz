@@ -184,11 +184,41 @@ public class ApprovalDAOImpl implements ApprovalDAO {
 		return sqlSession.selectOne("approval.selectOneApprCheckKey", map);
 	}
 
-	
-	
-	
-	
-	
+	@Override
+	public List<Appr> compliteApprList(String memberId) {
+		return sqlSession.selectList("approval.compliteApprList", memberId);
+	}
+
+	@Override
+	public List<Appr> returnApprList(String memberId) {
+		return sqlSession.selectList("approval.returnApprList", memberId);
+	}
+
+	@Override
+	public Appr returnApprovalDetail(String key) {
+		return sqlSession.selectOne("approval.returnApprovalDetail", key);
+	}
+
+	@Override
+	public Appr compliteApprDetail(String key) {
+		return sqlSession.selectOne("approval.compliteApprDetail", key);
+	}
+
+	@Override
+	public int returnApproval(Map<String, String> map) {
+		return sqlSession.update("approval.returnApproval", map);
+	}
+
+	@Override
+	public int backAppr(String apprKey) {
+		return sqlSession.update("approval.backAppr", apprKey);
+	}
+
+	@Override
+	public int returnApprck(Map<String, String> map) {
+		return sqlSession.update("approval.returnApprck", map);
+	}
+
 	
 	
 }

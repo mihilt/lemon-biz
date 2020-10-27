@@ -167,7 +167,7 @@
 			left outer join member M on P.mem_id = M.member_id 
 			left outer join doc_type D on P.type_key = D.key
 		where
-			P.mem_id = #{memberId} and p.status = 'p'
+			P.mem_id = #{memberId} and P.status = 'p'
 		order by
 			P.key desc
 	
@@ -287,7 +287,37 @@
             or 
             C.seq_num = 1
             )
+            and
+            A.status != 't'
 		order by A.key desc
+	</select>
+	
+	<select id="returnApprovalDetail" resultMap="apprMap">
+		select
+		    A.*,
+		    M.member_id as memName,
+		    R.name as rankName
+		from
+		    appr A
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
+		where
+		    A.key = #{key}
+		
+	</select>
+	
+	<select id="compliteApprDetail" resultMap="apprMap">
+	
+		select
+		    A.*,
+		    M.member_id as memName,
+		    R.name as rankName
+		from
+		    appr A
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
+		where
+		    A.key = #{key}
 	</select>
 	
 	
@@ -352,12 +382,64 @@
 		update
 			appr_check
 		set
-			check_date = default , status = 'f'
+			check_date = default , status = 't'
 		where
 			key=#{key}
 	
 	</update>
 	
+	<update id="backAppr">
+		update
+			appr
+		set
+			status = 'a'
+		where
+			key=#{apprKey}
+	</update>
+	
+	<update id="returnApprck">
+		
+		update
+			appr_check
+		set
+			check_date = default, status = 'f', opinion = #{opinion}
+		where
+			mem_id= #{memberId} and approval_key= #{key}
+	
+	</update>
+	
+	<update id="returnApproval">
+	
+		update
+			appr
+		set
+			status ='r'
+		where 
+			key= #{key}
+	
+	</update>
+	
+	<select id="returnApprList" resultMap="apprMap">
+		select
+			*
+		from
+			appr
+		where
+			mem_id = #{memberId} and status = 'r'
+		order by key desc
+	</select>
+	
+	<select id="compliteApprList" resultMap="apprMap">
+		select
+			*
+		from
+			appr
+		where
+			mem_id = #{memberId} and status = 'a'
+		order by key desc
+	</select>
+	
+
 	<select id="selectOneDocTypeAjax" resultType="docType">
 		select
 			*
@@ -378,6 +460,7 @@
 	<select id="selectOneApprCheckKey" resultType="int">
 		select key from appr_check where  approval_key= #{approval_key} and mem_id = #{mem_id}
 	</select>
+
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
   <resultMap type="apprCheck" id="apprckMap"></resultMap>
