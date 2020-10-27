@@ -5,7 +5,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
 <fmt:requestEncoding value="utf-8" />
 
 <!-- Page Wrapper -->
@@ -64,29 +63,28 @@
 				</div>
 			</div></li>
 
-		<!-- 메일 관련 항목입니다 -->
-		<li class="nav-item"><a class="nav-link collapsed" href="#"
-			data-toggle="collapse" data-target="#mail" aria-expanded="false"
-			aria-controls="collapsePages"> <i class="fas fa-fw fa-envelope"></i>
-				<span>업무 메일</span>
-		</a>
-			<div id="mail" class="collapse" aria-labelledby="headingPages"
-				data-parent="#accordionSidebar">
-				<div class="bg-white py-2 collapse-inner rounded">
-					<h6 class="collapse-header">Mail</h6>
-					<a class="collapse-item"
-						href="${pageContext.request.contextPath}/mail/mailSend">메일 작성</a>
-					<a class="collapse-item"
-						href="${pageContext.request.contextPath}/mail/mailList">전체 메일함</a>
-					<a class="collapse-item" href="">부서 메일함</a> <a
-						class="collapse-item" href="">보낸 메일함</a>
-					<div class="collapse-divider"></div>
-					<h6 class="collapse-header">My Mail</h6>
-					<a class="collapse-item" href="">중요 메일함 </a> <a
-						class="collapse-item" href="">첨부 메일함</a> <a class="collapse-item"
-						href="">임시 보관함</a> <a class="collapse-item" href="">내게 쓴 메일함</a>
-				</div>
-			</div></li>
+      <!-- 메일 -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#mail" aria-expanded="false" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-envelope"></i>
+          <span>업무 메일</span>
+        </a>
+        <div id="mail" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Mail</h6>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omForm.do">새 메일 작성</a>             
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omList.do">전체 메일함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omTeamList.do">부서 메일함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omMyList.do">보낸 메일함</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">My Mail</h6>
+            <a class="collapse-item" href="">중요 메일함 </a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omAttachedList.do">첨부 메일함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/mail/mailList.do">외부 메일 발신 내역 - test</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omSelfList.do">내게 쓴 메일함</a>
+          </div>
+        </div>
+      </li> 
 
 		<!-- 일정 관리 -->
 		<li class="nav-item"><a class="nav-link"
