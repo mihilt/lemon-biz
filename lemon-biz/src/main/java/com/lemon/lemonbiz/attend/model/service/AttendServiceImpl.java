@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.attend.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,13 @@ public class AttendServiceImpl implements AttendService {
 	public Attend selectAttendInfo(Attend attend) {
 		return attendanDAO.selectAttendInfo(attend);
 	}
+
+	@Override
+	public int getTodayCount(String date) {
+		
+		return attendanDAO.getTodayCount(date);
+	}
+
 
 
 }

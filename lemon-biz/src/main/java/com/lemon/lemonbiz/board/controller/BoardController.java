@@ -2,7 +2,6 @@ package com.lemon.lemonbiz.board.controller;
 
 
 import java.io.File;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -18,12 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -667,4 +663,15 @@ public class BoardController {
 		return "board/boardFindMList";
 	}
 	
+	//wj
+	@RequestMapping(value = "/getBoardTopFive")
+	public @ResponseBody List<Board> getBoardTopFive(){
+		
+		List<Board> list = boardService.getBoardTopFive();
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("list = " + list);
+		
+		return list;
+	}
 }

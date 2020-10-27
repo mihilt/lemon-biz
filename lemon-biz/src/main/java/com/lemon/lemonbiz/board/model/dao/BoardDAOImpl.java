@@ -198,6 +198,13 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 
+	@Override
+	public List getBoardTopFive() {
+		
+		return sqlSession.selectList("board.getBoardTopFive");
+	}
+
+
 
 
 }

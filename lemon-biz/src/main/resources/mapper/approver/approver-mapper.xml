@@ -182,7 +182,16 @@
 			approval_key = #{key}
 	</select>
 	
-	
+	<select id="getCountApproval" resultType="int">
+		select 
+			count(*)
+		from 
+			appr_check
+		where 
+			mem_id = #{ memberId } 
+		and 
+			status is null
+	</select>
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
   <resultMap type="apprCheck" id="apprckMap"></resultMap>

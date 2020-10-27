@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -44,6 +45,8 @@ public interface approvalDAO {
 	List<apprCheck> reWriteApprck(String key);
 
 	Attachment reWriteAttach(String key);
+
+	int getCountApproval(HashMap<Object, Object> params);
 
 
 

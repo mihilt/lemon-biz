@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -39,6 +40,8 @@ public interface approvalService {
 	List<apprCheck> reWriteApprck(String key);
 
 	Attachment reWriteAttach(String key);
+
+	int getCountApproval(HashMap<Object, Object> params);
 
 	
 

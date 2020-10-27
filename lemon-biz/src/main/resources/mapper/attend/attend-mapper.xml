@@ -72,5 +72,13 @@
 	order by key 
  -->
 	</select>
+	
+	<select id="getTodayCount" resultType="int">
+	select 
+		count(*) 
+	from 
+		attend 
+	where to_char(arrive,'YYYYMMDD') = #{ date }
+	</select>
 
 </mapper>

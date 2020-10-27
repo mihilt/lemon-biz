@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -112,6 +113,12 @@ public class approvalServiceImpl implements approvalService {
 	@Override
 	public Attachment reWriteAttach(String key) {
 		return approvalDAO.reWriteAttach(key);
+	}
+
+	@Override
+	public int getCountApproval(HashMap<Object, Object> params) {
+		
+		return approvalDAO.getCountApproval(params);
 	}
 
 

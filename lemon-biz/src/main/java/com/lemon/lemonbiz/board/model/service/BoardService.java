@@ -63,6 +63,8 @@ public interface BoardService {
 
 	String selectTeamName(Member loginMember);
 
+	List getBoardTopFive();
+
 	
 
 	

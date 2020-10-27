@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.lemon.lemonbiz.approval.model.service.approvalService;
 import com.lemon.lemonbiz.approval.model.vo.appr;
@@ -374,6 +377,19 @@ public class ApprovalController {
 		
 		return pageInfo;
 		
+	}
+	
+	@RequestMapping("/getCountApproval")
+	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("params = " + params);
+		
+		int num = approvalService.getCountApproval(params);
+		
+		System.out.println("num = " + num);
+
+		return new ResponseEntity<>(num,HttpStatus.OK);		
 	}
 	
 	

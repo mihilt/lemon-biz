@@ -266,6 +266,13 @@ public class BoardServiceImpl implements BoardService {
 	public String selectTeamName(Member loginMember) {
 		return boardDAO.selectTeamName(loginMember);
 	}
+
+
+	@Override
+	public List getBoardTopFive() {
+		
+		return boardDAO.getBoardTopFive();
+	}
 	
 	
 

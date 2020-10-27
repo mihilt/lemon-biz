@@ -67,6 +67,8 @@ public interface BoardDAO {
 
 	String selectTeamName(Member loginMember);
 
+	List getBoardTopFive();
+
 	
 
 	

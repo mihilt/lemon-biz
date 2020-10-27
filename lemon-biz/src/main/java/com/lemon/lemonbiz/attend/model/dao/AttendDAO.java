@@ -18,4 +18,6 @@ public interface AttendDAO {
 
 	Attend selectAttendInfo(Attend attend);
 
+	int getTodayCount(String date);
+
 }

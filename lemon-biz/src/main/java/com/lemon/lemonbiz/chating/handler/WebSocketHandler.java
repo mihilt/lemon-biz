@@ -34,19 +34,24 @@ public class WebSocketHandler extends TextWebSocketHandler {
 		// 소켓 연결
 		// 웹소켓 연결이 되면 동작합니다.
 		super.afterConnectionEstablished(session);
+		
 		boolean flag = false;
-		String url = session.getUri().toString();
-		System.out.println("url = " + url);
+		String url = session.getUri().toString(); 
+		
+		System.out.println("url = " + url); 
 		//url = ws://localhost:8080/lemonbiz/chating/1
 		
-//		String roomNumber = url.split("/chating/")[0];
+		//String roomNumber = url.split("/chating/")[0];
 		// roomNumber = ws://localhost:8080/lemonbiz
 		String roomNumber = url.split("/chating/")[1];
-		// roomNumber = 1
 		System.out.println("roomNumber = " + roomNumber);
+		// roomNumber = 1
+		
+		System.out.println("list = " + list);
 		int idx = list.size(); //방의 사이즈를 조사한다.
-		if(list.size() > 0) {
-			for(int i=0; i<list.size(); i++) {
+		
+		if(idx > 0) {
+			for(int i=0; i<idx; i++) {
 				String rN = (String) list.get(i).get("roomNumber");
 				System.out.println("rN = " + rN);
 				if(rN.equals(roomNumber)) {
@@ -67,6 +72,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
 			list.add(map);
 		}
 		
+		System.out.println("list = " + list);
+		
 		//세션등록이 끝나면 발급받은 세션ID값의 메시지를 발송한다.
 		JSONObject obj = new JSONObject();
 		obj.put("type", "getId");
@@ -84,7 +91,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
 		System.out.println("msg =" + msg);
 		
 		JSONParser parser = new JSONParser();
-		
 		JSONObject obj = null;
 		
 		try {
@@ -101,6 +107,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 		System.out.println("list = " + list);
 		
 		HashMap<String, Object> temp = new HashMap<String, Object>();
+		
 		if(list.size() > 0) {
 			for(int i=0; i<list.size(); i++) {
 				System.out.println("i = " + i);

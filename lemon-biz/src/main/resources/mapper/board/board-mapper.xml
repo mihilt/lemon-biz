@@ -430,6 +430,18 @@
   	<select id="selectTeamName" resultType="string">
   	select distinct D.name from post P left join dept D on P.dept_key = D.key where P.categ_key=2  and  P.dept_key = #{deptKey}
   	</select>
+  	
+  	<select id="getBoardTopFive" resultType="board"> 
+  		select * 
+		from(
+		    select *
+		    from post
+		    where categ_key = 3
+		    order by post_date desc
+		    )
+		where
+		    rownum &lt;= 5
+  	</select>
   
 </mapper>
 

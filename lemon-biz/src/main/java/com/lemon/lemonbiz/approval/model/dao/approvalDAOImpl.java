@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -99,6 +100,12 @@ public class approvalDAOImpl implements approvalDAO {
 	@Override
 	public Attachment reWriteAttach(String key) {
 		return sqlSession.selectOne("approval.reWriteAttach",key);
+	}
+
+	@Override
+	public int getCountApproval(HashMap<Object, Object> params) {
+		
+		return sqlSession.selectOne("approval.getCountApproval",params);
 	}
 
 
