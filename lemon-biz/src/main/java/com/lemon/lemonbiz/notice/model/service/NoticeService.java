@@ -17,4 +17,6 @@ public interface NoticeService {
 
 	int insertNoticeList(List<Notice> groupNoticeList);
 
+	int deleteNotice(Notice notice);
+
 }

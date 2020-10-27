@@ -54,12 +54,13 @@ function goBoardForm(){
 			<th>제목</th>
 			<th>작성자</th>
 			<th>작성일</th>
+			<th>추천</th>
 			<th>조회수</th>
 		</tr>
 		<c:forEach items="${ list }" var="post">
 		<tr data-no="${ post.key }">
 			
-			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.jpg" 
+			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.png" 
 						 style="width:30px;" /></td>
 
 			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.title } </td>
@@ -67,7 +68,7 @@ function goBoardForm(){
 			
 			
 			
-			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.memId }</td>
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.name }</td>
 			
 			
 			
@@ -76,6 +77,8 @@ function goBoardForm(){
 			
 			
 			
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.count }</td>
+	
 			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.readCount }</td>
 			
 			

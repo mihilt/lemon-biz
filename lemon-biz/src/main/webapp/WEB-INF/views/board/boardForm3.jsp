@@ -35,12 +35,42 @@
 						<input type="hidden" name="memId" value="${loginMember.memberId}"/>	
 					</div> 
 					<div class="custom-control custom-checkbox" >
-				<input type="checkbox" id="jb-checkbox" name="isNotice" class="custom-control-input" value="0">
+				<input type="checkbox" id="jb-checkbox" name="isNotice" class="custom-control-input" value="0"${ board.isNotice eq 1 ? 'checked' : '' }>
+				<c:if test="${ board.categKey ne 3 }">
 				<label class="custom-control-label" for="jb-checkbox" style="float:right;"><strong>공지사항 등록</strong></label>
+				</c:if>
 			</div>
 			<div class="form-group">
 				<label for="title">제목:</label> <input value="${board.title}" type="text" class="form-control" id="title" name="title">
 			</div>
+			<hr>
+
+		  <c:if test="${ Oname1 ne null }">
+		  <div class="input-group mb-3" style="padding:0px;">
+		  <div class="input-group-prepend" style="padding:0px;">
+		    <span class="input-group-text">첨부파일</span>
+		  </div>
+		  <div class="custom-file">
+		  	
+		    <input type="file" class="custom-file-input" name="upFile1" id="upFile1" >
+		    <label class="custom-file-label" for="upFile1">${ Oname1 }</label>
+
+		  </div>
+		 
+		</div>
+		  </c:if>
+		
+		<c:if test="${ Oname2 ne null }">
+		<div class="input-group mb-3" style="padding:0px;">
+		  <div class="input-group-prepend" style="padding:0px;">
+		    <span class="input-group-text">첨부파일</span>
+		  </div>
+		  <div class="custom-file">
+		    <input type="file" class="custom-file-input" name="upFile2" id="upFile2" >
+		    <label class="custom-file-label" for="upFile2">${ Oname2 }</label>
+		  </div>
+		</div>
+		</c:if>
 			 
 			<div class="form-group">
 				<label for="content">내용:</label>
@@ -49,7 +79,8 @@
 			<div align="center">
 
 					<a href="#"	class="btn btn-outline-warning" onclick="fn_formSubmit()">작성 완료</a>
-					<a href="${pageContext.request.contextPath}/board/boardList.do" class="btn btn-outline-warning">취소</a> 
+					<button type="button" id="cancel" class="btn btn-outline-warning">취소</button>
+					 
 			</div>
 		</form>
 				<br>
@@ -63,12 +94,21 @@
 $(document).ready(function(){
 	 $("#jb-checkbox").click(function () {
 		 if($("input[name=isNotice]:checked") ){
-			 document.getElementById("jb-checkbox").value = "1"
-			 
+			 document.getElementById("jb-checkbox").value = "1" 
 		 }
+		 if($("input[name=isNotice]:checked")==false ){
+			 document.getElementById("jb-checkbox").value = "0" 
+		 }
+		 
 	});
 });
- 
+
+
+$('#cancel').click(function(){
+	
+		  window.history.back();
+		
+});
 
 
 $(document).ready(function(){
@@ -122,7 +162,19 @@ function fn_formSubmit() {
 }
 
 $(function(){
-	$("[name=upFile]").on("change", function(){
+	$("[name=upFile1]").on("change", function(){
+		var file = $(this).prop('files')[0];
+		var $label = $(this).next(".custom-file-label");
+
+		if(file == undefined)
+			$label.html("파일을 선택하세요");
+		else
+			$label.html(file.name);
+	});
+});
+
+$(function(){
+	$("[name=upFile2]").on("change", function(){
 		var file = $(this).prop('files')[0];
 		var $label = $(this).next(".custom-file-label");
 

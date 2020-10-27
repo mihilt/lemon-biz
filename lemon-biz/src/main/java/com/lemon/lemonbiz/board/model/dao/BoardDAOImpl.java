@@ -133,8 +133,15 @@ public class BoardDAOImpl implements BoardDAO {
 
 
 	@Override
-	public List<Board> boardSearch(String searchKeyword) {
-		return sqlSession.selectList("board.boardSearch",searchKeyword);
+	public List<Map<String, Object>> boardSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		int startRnum = (cPage-1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("searchKeyword",searchKeyword);
+		return sqlSession.selectList("board.boardSearch",map);
 	}
 
 
@@ -157,8 +164,15 @@ public class BoardDAOImpl implements BoardDAO {
 
 
 	@Override
-	public List<Board> boardtitleSearch(String searchKeyword) {
-		return sqlSession.selectList("board.boardtitleSearch",searchKeyword);
+	public List<Map<String, Object>> boardtitleSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		int startRnum = (cPage-1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("searchKeyword",searchKeyword);
+		return sqlSession.selectList("board.boardtitleSearch",map);
 	}
 
 
@@ -175,14 +189,28 @@ public class BoardDAOImpl implements BoardDAO {
 
 
 	@Override
-	public List<Board> boardMSearch(String searchKeyword) {
-		return sqlSession.selectList("board.boardMSearch",searchKeyword);
+	public List<Map<String, Object>> boardMSearch(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		int startRnum = (cPage-1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("searchKeyword",searchKeyword);
+		return sqlSession.selectList("board.boardMSearch",map);
 	}
 
 
 	@Override
-	public List<Board> boardMSearch2(String searchKeyword) {
-		return sqlSession.selectList("board.boardMSearch2",searchKeyword);
+	public List<Map<String, Object>> boardMSearch2(String searchKeyword, int cPage, int numPerPage, Map<String, Object> map) {
+		int startRnum = (cPage-1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("searchKeyword",searchKeyword);
+		return sqlSession.selectList("board.boardMSearch2",map);
 	}
 
 
@@ -195,6 +223,99 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public String selectTeamName(Member loginMember) {
 		return sqlSession.selectOne("board.selectTeamName",loginMember);
+	}
+
+
+	@Override
+	public int countTitleBoard(String searchKeyword) {
+		return sqlSession.selectOne("board.countTitleBoard",searchKeyword);
+	}
+
+
+	@Override
+	public int countNameBoard(String searchKeyword) {
+		return sqlSession.selectOne("board.countNameBoard",searchKeyword);
+	}
+
+
+	@Override
+	public int countTitleBoard3(String searchKeyword) {
+		return sqlSession.selectOne("board.countTitleBoard3",searchKeyword);
+	}
+
+
+	@Override
+	public int countNameBoard3(String searchKeyword) {
+		return sqlSession.selectOne("board.countNameBoard3",searchKeyword);
+	}
+
+
+	@Override
+	public List<Attachment> SelectBoardOne(int key) {
+		return  sqlSession.selectList("board.SelectBoardOne",key);
+	}
+
+
+	@Override
+	public void updateAttachment(int boardKey) {
+		sqlSession.update("board.updateAttachment",boardKey);
+		
+	}
+
+
+	@Override
+	public void updateAttachment2(int boardKey2) {
+		sqlSession.update("board.updateAttachment2",boardKey2);
+		
+	}
+
+
+	@Override
+	public int updateFile(Attachment attach) {
+		return sqlSession.update("board.updateFile",attach);
+	}
+
+
+	@Override
+	public int recCheck(Map<String, Object> map) {
+		int result = 0;
+		result = sqlSession.selectOne("board.recCheck",map);
+		return result;
+	}
+
+
+	@Override
+	public void recUpdate(Map<String, Object> map) {
+		sqlSession.insert("board.recUpdate",map);
+		
+	}
+
+
+	@Override
+	public void recDelete(Map<String, Object> map) {
+		sqlSession.delete("board.recDelete",map);
+		
+	}
+
+
+	@Override
+	public int RecCount(int key) {
+		int count =0;
+		count = sqlSession.selectOne("board.RecCount",key);
+		return count;
+	}
+
+
+	@Override
+	public BoardComment selectOneBoardComment(int key) {
+		return sqlSession.selectOne("selectOneBoardComment", key);
+	}
+
+
+	@Override
+	public void boardGoodDelete(int key) {
+		sqlSession.delete("board.boardGoodDelete",key);
+		
 	}
 
 

@@ -59,7 +59,7 @@ function goBoardForm(){
 		<c:forEach items="${ list }" var="post">
 		<tr data-no="${ post.key }">
 			
-			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.jpg" 
+			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.png" 
 						 style="width:30px;" /></td>
 
 			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.title } </td>
@@ -67,7 +67,7 @@ function goBoardForm(){
 			
 			
 			
-			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.memId }</td>
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.name }</td>
 			
 			
 			
@@ -107,7 +107,7 @@ function goBoardForm(){
         </div>
         
          <div id="search-memberName" class="search-type">
-            <form action="${ pageContext.request.contextPath }/board/boardMSearch.do">
+            <form action="${ pageContext.request.contextPath }/board/boardMSearch2.do">
                 <input type="hidden" name="searchType" value="memberName"/>
                 <input type="text" class="btn btn-outline-warning" name="searchKeyword"/>
                 <button type="submit" class="btn btn-outline-warning"><i class="fas fa-search fa-sm"></i></button>			
@@ -120,14 +120,8 @@ function goBoardForm(){
 			<div class="row">
 				<div class="col">
 					
-					<ul class="pagination">
-						<!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#">4</a></li>
-						<li class="page-item"><a class="page-link" href="#">5</a></li>
-						<li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+					<ul style="justify-content: center;" class="pagination">
+						
 						${pagebar}
 					</ul>
 					
