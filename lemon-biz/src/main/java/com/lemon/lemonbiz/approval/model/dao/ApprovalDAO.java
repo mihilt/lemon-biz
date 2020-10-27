@@ -76,6 +76,8 @@ public interface ApprovalDAO {
 
 	List<DocType> selectDocTypeTitleList();
 
+	int selectOneApprCheckKey(Map<String, Object> map);
+
 	
 
 

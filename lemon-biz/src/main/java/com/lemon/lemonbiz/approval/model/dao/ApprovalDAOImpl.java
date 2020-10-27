@@ -179,6 +179,11 @@ public class ApprovalDAOImpl implements ApprovalDAO {
 		return sqlSession.selectList("approval.selectDocTypeTitleList");
 	}
 
+	@Override
+	public int selectOneApprCheckKey(Map<String, Object> map) {
+		return sqlSession.selectOne("approval.selectOneApprCheckKey", map);
+	}
+
 	
 	
 	
