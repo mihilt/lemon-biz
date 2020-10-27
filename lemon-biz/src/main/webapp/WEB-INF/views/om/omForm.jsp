@@ -131,7 +131,7 @@ form {
   <div class="modal-dialog" style="max-width: 90%;" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">결제라인 추가</h5>
+        <h5 class="modal-title" id="exampleModalLabel">결재라인 추가</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -169,7 +169,7 @@ form {
         <!-- printList Form -->
       
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결제자 선택</h5>
+    	<h5>결재자 선택</h5>
     		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
     			<div class="row" style="margin: 5px 5px"> 
     			<label>성명</label>
@@ -214,7 +214,7 @@ form {
     	
       	<!-- selectMember Form-->
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결제자 선택</h5>
+    	<h5>결재자 선택</h5>
     		<div id="apprst" style="margin: 5px; padding: 5px; border:1px solid lightgray; height:360px;">
     			
     	
@@ -371,7 +371,7 @@ function selectMember(memberId) {
 	
 	for(var j = MIN_NUM; j <= MAX_NUM; j++) {
 		if($('#memId_'+j).text()==memberId) {
-			alert('이미 추가되어있는 결제자 입니다.');
+			alert('이미 추가되어있는 결재자 입니다.');
 			return;	
 		}
 		if(trArr[j-1].value != 'exist') {
@@ -380,7 +380,7 @@ function selectMember(memberId) {
 	}
 	
 	if(cnt==3) {
-		alert('결제자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
+		alert('결재자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
 		return;
 	}
 

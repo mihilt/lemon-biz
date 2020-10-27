@@ -46,7 +46,7 @@
 					<div>
 					
 					
-					    <!-- ================결제칸=============== -->
+					    <!-- ================결재칸=============== -->
 					
 						
 					    <table>
@@ -157,7 +157,7 @@
 						
 						</table>
 						</div>
-						<!-- ==============결제칸 끝============== -->
+						<!-- ==============결재칸 끝============== -->
 						<!-- 폼 내용 -->
 						
 						
@@ -170,8 +170,7 @@
 							<br>
 							
 							<div>
-								<textarea id="summernote" class="form-control" name="approval_content"  cols="120" rows="18" 
-		      							  style="width:100%; resize:none" readonly>${ appr.content }</textarea> <br>
+								<div class="form-control" style="height:700px; overflow:auto;" align=left>${ appr.content }</div> <br>
 							</div>
 							
 							
