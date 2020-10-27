@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -26,12 +27,16 @@ public class CostController {
 	@Autowired
 	private CostService costService;
 	
-	@RequestMapping(value = "selectAllCost.do")
-	public @ResponseBody List<Cost> selectAllCost(@SessionAttribute("loginMember") Member loginMember){
+	@RequestMapping(value = "/selectAllCost.do")
+	public @ResponseBody List<Cost> selectAllCost(@SessionAttribute("loginMember") Member loginMember
+												 ,@RequestParam HashMap<Object, Object> params){
 		
-		System.out.println("loginMember" + loginMember);
+		params.put("memberId", loginMember.getMemberId());
 		
-		List<Cost> list = costService.selectAllCost(loginMember.getMemberId());
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("params = " + params); 
+	
+		List<Cost> list = costService.selectAllCost(params);
 		
 		System.out.println("list = " + list);
 		

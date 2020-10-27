@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +76,8 @@ public interface ApprovalService {
 	Appr compliteApprDetail(String key);
 
 	int returnApproval(Map<String, String> map, Appr appr);
-	
+
+	int getCountApproval(HashMap<Object, Object> params);
+
 	
 }

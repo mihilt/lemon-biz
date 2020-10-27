@@ -2,7 +2,6 @@
 package com.lemon.lemonbiz.board.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -356,6 +355,11 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
+	public List getBoardTopFive() {
+		
+		return boardDAO.getBoardTopFive();
+	}
+	
 	public int countTitleBoard(String searchKeyword) {
 		return boardDAO.countTitleBoard(searchKeyword);
 	}
@@ -427,14 +431,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void boardGoodDelete(int key) {
 		boardDAO.boardGoodDelete(key);
-		
 	}
-	
-	
-
-
-	
-
 
 	
 }

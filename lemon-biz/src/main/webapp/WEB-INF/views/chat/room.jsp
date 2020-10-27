@@ -29,7 +29,7 @@
 
 
 <script type="text/javascript">
-	var ws;
+
 	window.onload = function(){
 		getRoom();
 		createRoom();
@@ -88,11 +88,11 @@
 	}
 
 	function createChatingRoom(res){
-		console.log('res',res);
+
 		if(res != null){
 			var tag = "";
 			res.forEach(function(d, idx){
-				console.log('d',d)
+				
 				var rn = d.roomName.trim();
 				var roomNumber = d.roomNumber;
 				var creator = d.creator;

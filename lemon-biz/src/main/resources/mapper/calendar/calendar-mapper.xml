@@ -75,5 +75,15 @@
 			calendar_id = #{no}
 	</delete>
 	
+	<select id="getTodayCount" resultType="int">
+	select 
+		count(*)
+	from 
+		calendar
+	where 
+		calendar_member_id = #{ memberId }
+	and 
+		calendar_start like '%'||#{ date }||'%'
 	
+	</select>
 </mapper>

@@ -19,6 +19,9 @@ public interface AttendDAO {
 
 	Attend selectAttendInfo(Attend attend);
 
+
+	int getTodayCount(String date);
+
 	int countAttend(Attend attend);
 
 	List<Map<String, Object>> selectAttendList(int cPage, int numPerPage, Map<String, Object> map ,String memId);

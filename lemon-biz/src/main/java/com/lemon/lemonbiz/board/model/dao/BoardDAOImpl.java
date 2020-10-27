@@ -1,6 +1,5 @@
 package com.lemon.lemonbiz.board.model.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -227,6 +226,12 @@ public class BoardDAOImpl implements BoardDAO {
 
 
 	@Override
+
+	public List getBoardTopFive() {
+		
+		return sqlSession.selectList("board.getBoardTopFive");
+	}
+	
 	public int countTitleBoard(String searchKeyword) {
 		return sqlSession.selectOne("board.countTitleBoard",searchKeyword);
 	}
@@ -315,7 +320,6 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public void boardGoodDelete(int key) {
 		sqlSession.delete("board.boardGoodDelete",key);
-		
 	}
 
 

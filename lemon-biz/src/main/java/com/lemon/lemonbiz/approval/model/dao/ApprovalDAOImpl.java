@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -224,6 +225,8 @@ public class ApprovalDAOImpl implements ApprovalDAO {
 		return sqlSession.selectOne("approval.selectNextMemberId", key);
 	}
 
-	
+	public int getCountApproval(HashMap<Object, Object> params) {
+		return sqlSession.selectOne("approval.getCountApproval", params);
+	}
 	
 }
