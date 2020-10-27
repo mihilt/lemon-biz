@@ -95,11 +95,4 @@ public interface ApprovalDAO {
 
 	int getCountApproval(HashMap<Object, Object> params);
 
-	
-
-
-
-	
-
-
 }
