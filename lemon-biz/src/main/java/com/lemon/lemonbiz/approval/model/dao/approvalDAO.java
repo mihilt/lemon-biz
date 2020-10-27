@@ -5,13 +5,14 @@ import java.util.Map;
 
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
-import com.lemon.lemonbiz.approval.model.vo.apprCheck;
-import com.lemon.lemonbiz.approval.model.vo.approval;
+import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
+import com.lemon.lemonbiz.approval.model.vo.Approval;
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 
 
-public interface approvalDAO {
+public interface ApprovalDAO {
 
 	List<Dept> deptList();
 
@@ -31,17 +32,17 @@ public interface approvalDAO {
 
 	int insertSaveAttachment(Attachment attach);
 
-	int insertSaveApprck1(apprCheck apprck1);
+	int insertSaveApprck1(ApprCheck apprck1);
 
-	int insertSaveApprck2(apprCheck apprck2);
+	int insertSaveApprck2(ApprCheck apprck2);
 
-	int insertSaveApprck3(apprCheck apprck3);
+	int insertSaveApprck3(ApprCheck apprck3);
 
 	List<Appr> approvalList(String memberId);
 
 	Appr reWriteAppr(String key);
 
-	List<apprCheck> reWriteApprck(String key);
+	List<ApprCheck> reWriteApprck(String key);
 
 	Attachment reWriteAttach(String key);
 
@@ -49,21 +50,21 @@ public interface approvalDAO {
 
 	int insertApproval(Appr appr);
 
-	int updateApprck1(apprCheck apprck1);
+	int updateApprck1(ApprCheck apprck1);
 
-	int updateApprck2(apprCheck apprck2);
+	int updateApprck2(ApprCheck apprck2);
 
-	int updateApprck3(apprCheck apprck3);
+	int updateApprck3(ApprCheck apprck3);
 
-	List<apprCheck> apprckList(String memberId);
+	List<ApprCheck> apprckList(String memberId);
 
-	List<Appr> apprAndCkList(String memberId);
+	List<Appr> apprAndCkList(Member memberId);
 
 	Appr apprckDetail(int ckKey);
 
 	Attachment selectOneAttachment(String key);
 
-	apprCheck selectcApprck(Map<String, String> map);
+	ApprCheck selectcApprck(Map<String, String> map);
 
 	int changeApprck(int key);
 
@@ -71,20 +72,25 @@ public interface approvalDAO {
 
 	List<Appr> myApprovalList(String memberId);
 
-	int backAppr(String apprKey);
+	DocType selectOneDocTypeAjax(DocType docType);
 
-	int returnApprck(Map<String, String> map);
+	List<DocType> selectDocTypeTitleList();
 
-	int returnApproval(Map<String, String> map);
-	
+	int selectOneApprCheckKey(Map<String, Object> map);
+
+	List<Appr> compliteApprList(String memberId);
+
 	List<Appr> returnApprList(String memberId);
 
 	Appr returnApprovalDetail(String key);
 
-	List<Appr> compliteApprList(String memberId);
-
 	Appr compliteApprDetail(String key);
 
+	int returnApproval(Map<String, String> map);
+
+	int backAppr(String apprKey);
+
+	int returnApprck(Map<String, String> map);
 
 	
 

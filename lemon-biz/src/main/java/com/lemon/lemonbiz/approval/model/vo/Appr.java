@@ -32,9 +32,9 @@ public class Appr {
 	
 	
 	private Attachment attachment;
-	private apprCheck apprck1;
-	private apprCheck apprck2;
-	private apprCheck apprck3;
+	private ApprCheck apprck1;
+	private ApprCheck apprck2;
+	private ApprCheck apprck3;
 	
 	private String docName;
 	private String name;

@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,23 +10,31 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lemon.lemonbiz.approval.model.dao.approvalDAO;
+import com.lemon.lemonbiz.approval.model.dao.ApprovalDAO;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
-import com.lemon.lemonbiz.approval.model.vo.apprCheck;
-import com.lemon.lemonbiz.approval.model.vo.approval;
+import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.notice.model.service.NoticeService;
+import com.lemon.lemonbiz.notice.model.vo.Notice;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Transactional(propagation = Propagation.REQUIRED, 
 				isolation = Isolation.READ_COMMITTED,
 				rollbackFor = Exception.class)
 
 @Service
-public class approvalServiceImpl implements approvalService {
+public class ApprovalServiceImpl implements ApprovalService {
 	
 	@Autowired
-	private approvalDAO approvalDAO;
+	private ApprovalDAO approvalDAO;
+	
+	@Autowired
+	private NoticeService noticeService;
 
 	@Override
 	public List<Dept> deptList() {
@@ -71,17 +80,17 @@ public class approvalServiceImpl implements approvalService {
 		result = approvalDAO.insertSaveApproval(appr);
 		
 		//2. attachment insert	
-		apprCheck apprck1 = appr.getApprck1();
+		ApprCheck apprck1 = appr.getApprck1();
 		result = approvalDAO.insertSaveApprck1(apprck1);
 		System.out.println(apprck1.getSeqNum());
 		
 	
-		apprCheck apprck2 = appr.getApprck2();
+		ApprCheck apprck2 = appr.getApprck2();
 		result = approvalDAO.insertSaveApprck2(apprck2);
 		System.out.println(apprck2.getSeqNum());
 		
 	
-		apprCheck apprck3 = appr.getApprck3();
+		ApprCheck apprck3 = appr.getApprck3();
 		result = approvalDAO.insertSaveApprck3(apprck3);
 		System.out.println(apprck3.getSeqNum());
 		
@@ -100,7 +109,7 @@ public class approvalServiceImpl implements approvalService {
 	}
 
 	@Override
-	public List<apprCheck> reWriteApprck(String key) {
+	public List<ApprCheck> reWriteApprck(String key) {
 		return approvalDAO.reWriteApprck(key);
 	}
 
@@ -115,17 +124,17 @@ public class approvalServiceImpl implements approvalService {
 		int result = 0;
 		result = approvalDAO.updateApproval(appr);
 		
-		apprCheck apprck1 = appr.getApprck1();
+		ApprCheck apprck1 = appr.getApprck1();
 		result = approvalDAO.updateApprck1(apprck1);
 		System.out.println(apprck1.getSeqNum());
 		
 	
-		apprCheck apprck2 = appr.getApprck2();
+		ApprCheck apprck2 = appr.getApprck2();
 		result = approvalDAO.updateApprck2(apprck2);
 		System.out.println(apprck2.getSeqNum());
 		
 	
-		apprCheck apprck3 = appr.getApprck3();
+		ApprCheck apprck3 = appr.getApprck3();
 		result = approvalDAO.updateApprck3(apprck3);
 		System.out.println(apprck3.getSeqNum());
 		
@@ -134,7 +143,6 @@ public class approvalServiceImpl implements approvalService {
 			Attachment attach = appr.getAttachment();
 			result = approvalDAO.insertSaveAttachment(attach);
 		}
-		
 		
 		return result;
 	}
@@ -147,17 +155,17 @@ public class approvalServiceImpl implements approvalService {
 		result = approvalDAO.insertApproval(appr);
 		
 		//2. apprckeck insert
-		apprCheck apprck1 = appr.getApprck1();
+		ApprCheck apprck1 = appr.getApprck1();
 		result = approvalDAO.insertSaveApprck1(apprck1);
 		System.out.println(apprck1.getSeqNum());
 		
 	
-		apprCheck apprck2 = appr.getApprck2();
+		ApprCheck apprck2 = appr.getApprck2();
 		result = approvalDAO.insertSaveApprck2(apprck2);
 		System.out.println(apprck2.getSeqNum());
 		
 	
-		apprCheck apprck3 = appr.getApprck3();
+		ApprCheck apprck3 = appr.getApprck3();
 		result = approvalDAO.insertSaveApprck3(apprck3);
 		System.out.println(apprck3.getSeqNum());
 		
@@ -166,19 +174,43 @@ public class approvalServiceImpl implements approvalService {
 			Attachment attach = appr.getAttachment();
 			result = approvalDAO.insertSaveAttachment(attach);
 		}
+
+//		log.debug("?음? = {}", appr);
+//		log.debug("?음? = {}", apprck1);
+//		log.debug("?음? = {}", apprck2);
+//		log.debug("?음? = {}", apprck3);
+		
+		//1차 결재자 알림
+		Notice notice = new Notice();
+		notice.setContent("새로운 결재 요청 \"" + appr.getTitle() + "\" 있습니다.");
+//		notice.setAddress("/approval/requestApprovalList?page=1");
+		notice.setIcon("fa-file");
+		notice.setColor("success");
+
+		//1차 결재자 appr_check 키값 알아오기
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("approval_key", appr.getKey());
+		map.put("mem_id", apprck1.getMemId());
+		int noticeKey = approvalDAO.selectOneApprCheckKey(map);
+		
+		notice.setMemId(apprck1.getMemId());
+		notice.setAddress("/approval/reauestApprovalDetail.do?apprKey=" + appr.getKey() + "&ckKey=" + noticeKey);
+		noticeService.insertNotice(notice);
+		
+		//2,3차는 1,2차 결재 승인일 경우에, 현재 컨트롤러 3차 승인이 반려처리 되어있어 수정사항 있을 것임, 완료가 되면 추가 
 		
 		return result;
 		
 	}
 
 	@Override
-	public List<apprCheck> apprckList(String memberId) {
+	public List<ApprCheck> apprckList(String memberId) {
 		return approvalDAO.apprckList(memberId);
 	}
 
 	@Override
-	public List<Appr> apprAndCkList(String memberId) {
-		return approvalDAO.apprAndCkList(memberId);
+	public List<Appr> apprAndCkList(Member loginMember) {
+		return approvalDAO.apprAndCkList(loginMember);
 	}
 
 	@Override
@@ -192,7 +224,7 @@ public class approvalServiceImpl implements approvalService {
 	}
 
 	@Override
-	public apprCheck selectcApprck(Map<String, String> map) {
+	public ApprCheck selectcApprck(Map<String, String> map) {
 		return approvalDAO.selectcApprck(map);
 	}
 
@@ -203,7 +235,10 @@ public class approvalServiceImpl implements approvalService {
 
 	@Override
 	public int backApprck(int key, String apprKey) {
+		
 		int result = 0;
+		
+		
 		result = approvalDAO.backApprck(key);
 		
 		result = approvalDAO.backAppr(apprKey);
@@ -217,24 +252,13 @@ public class approvalServiceImpl implements approvalService {
 	}
 
 	@Override
-	public int returnApprove(Map<String, String> map) {
-		int result = 0;
-		
-		result = approvalDAO.returnApprck(map);
-		
-		result = approvalDAO.returnApproval(map);
-		
-		return result;
+	public DocType selectOneDocTypeAjax(DocType docType) {
+		return approvalDAO.selectOneDocTypeAjax(docType);
 	}
 
 	@Override
-	public List<Appr> returnApprList(String memberId) {
-		return approvalDAO.returnApprList(memberId);
-	}
-
-	@Override
-	public Appr returnApprovalDetail(String key) {
-		return approvalDAO.returnApprovalDetail(key);
+	public List<DocType> selectDocTypeTitleList() {
+		return approvalDAO.selectDocTypeTitleList();
 	}
 
 	@Override
@@ -243,12 +267,33 @@ public class approvalServiceImpl implements approvalService {
 	}
 
 	@Override
+	public List<Appr> returnApprList(String memberId) {	
+		return approvalDAO.returnApprList(memberId);
+	}
+
+	@Override
+	public Appr returnApprovalDetail(String key) {
+		
+		
+		return approvalDAO.returnApprovalDetail(key);
+	}
+
+	@Override
 	public Appr compliteApprDetail(String key) {
 		return approvalDAO.compliteApprDetail(key);
 	}
 
-
-
+	@Override
+	public int returnApproval(Map<String, String> map) {
+		
+		int result = 0;
+		
+		result = approvalDAO.returnApprck(map);
+		
+		result = approvalDAO.returnApproval(map);
+		
+		return result;
+	}
 
 
 
