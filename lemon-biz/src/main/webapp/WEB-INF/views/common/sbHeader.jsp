@@ -55,7 +55,7 @@
 					<a class="collapse-item"
 						href="${pageContext.request.contextPath}/approval/myApprovalList?page=1">내문서함</a>
 					<a class="collapse-item"
-						href="${pageContext.request.contextPath}/approval/requestApprovalList?page=1">요청결제문서함</a>
+						href="${pageContext.request.contextPath}/approval/requestApprovalList?page=1">요청결재문서함</a>
 					<a class="collapse-item"
 						href="${pageContext.request.contextPath}/approval/returnApprovalList?page=1">반려된 문서</a>
 					<a class="collapse-item" 
