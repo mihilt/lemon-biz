@@ -39,7 +39,6 @@
 	<c:forEach var="item" items="${ apvList }" begin="${ pageInfo.startNum }" end="${ pageInfo.endNum }">
 	<c:if test="${ item.status == 'p'}">
 		<tr onclick="detail(${ item.key },${ item.ckKey })" style="cursor: pointer;">
-			${ item }
 			<td>${ item.key }</td>
 			<td>${ item.memId}</td>
 			<td><a >${ item.title }</a></td>

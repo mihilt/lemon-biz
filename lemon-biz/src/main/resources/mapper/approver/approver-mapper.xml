@@ -374,6 +374,10 @@
 		from
 			doc_type
 	</select>
+	
+	<select id="selectOneApprCheckKey" resultType="int">
+		select key from appr_check where  approval_key= #{approval_key} and mem_id = #{mem_id}
+	</select>
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
   <resultMap type="apprCheck" id="apprckMap"></resultMap>

@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,12 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lemon.lemonbiz.approval.model.dao.ApprovalDAO;
 import com.lemon.lemonbiz.approval.model.vo.Appr;
 import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
-import com.lemon.lemonbiz.approval.model.vo.Approval;
 import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
+import com.lemon.lemonbiz.notice.model.service.NoticeService;
+import com.lemon.lemonbiz.notice.model.vo.Notice;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Transactional(propagation = Propagation.REQUIRED, 
 				isolation = Isolation.READ_COMMITTED,
 				rollbackFor = Exception.class)
@@ -27,6 +32,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 	
 	@Autowired
 	private ApprovalDAO approvalDAO;
+	
+	@Autowired
+	private NoticeService noticeService;
 
 	@Override
 	public List<Dept> deptList() {
@@ -136,7 +144,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 			result = approvalDAO.insertSaveAttachment(attach);
 		}
 		
-		
 		return result;
 	}
 
@@ -167,6 +174,30 @@ public class ApprovalServiceImpl implements ApprovalService {
 			Attachment attach = appr.getAttachment();
 			result = approvalDAO.insertSaveAttachment(attach);
 		}
+
+//		log.debug("?음? = {}", appr);
+//		log.debug("?음? = {}", apprck1);
+//		log.debug("?음? = {}", apprck2);
+//		log.debug("?음? = {}", apprck3);
+		
+		//1차 결재자 알림
+		Notice notice = new Notice();
+		notice.setContent("새로운 결재 요청 \"" + appr.getTitle() + "\" 있습니다.");
+//		notice.setAddress("/approval/requestApprovalList?page=1");
+		notice.setIcon("fa-file");
+		notice.setColor("success");
+
+		//1차 결재자 appr_check 키값 알아오기
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("approval_key", appr.getKey());
+		map.put("mem_id", apprck1.getMemId());
+		int noticeKey = approvalDAO.selectOneApprCheckKey(map);
+		
+		notice.setMemId(apprck1.getMemId());
+		notice.setAddress("/approval/reauestApprovalDetail.do?apprKey=" + appr.getKey() + "&ckKey=" + noticeKey);
+		noticeService.insertNotice(notice);
+		
+		//2,3차는 1,2차 결재 승인일 경우에, 현재 컨트롤러 3차 승인이 반려처리 되어있어 수정사항 있을 것임, 완료가 되면 추가 
 		
 		return result;
 		
