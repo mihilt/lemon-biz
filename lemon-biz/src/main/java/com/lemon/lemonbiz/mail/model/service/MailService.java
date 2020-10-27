@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.mail.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,4 +30,6 @@ public interface MailService {
 	List<Mail> selectStarredMail(Member loginMember);
 
 	Member selectMyInfo(Member loginMember);
+
+	int getCountNoReadMail(HashMap<Object, Object> params);
 }

@@ -86,6 +86,15 @@ where rnum between #{startRnum} and #{endRnum}
  -->
 	</select>
 	
+
+	<select id="getTodayCount" resultType="int">
+	select 
+		count(*) 
+	from 
+		attend 
+	where to_char(arrive,'YYYYMMDD') = #{ date }
+	</select>
+	
 	<select id="countAttend" resultType="_int">
 	select  count(*)
 	from attend

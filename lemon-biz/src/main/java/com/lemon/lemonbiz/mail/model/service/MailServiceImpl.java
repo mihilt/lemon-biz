@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.mail.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,6 +94,12 @@ public class MailServiceImpl implements MailService{
 	@Override
 	public Member selectMyInfo(Member loginMember) {
 		return mailDAO.selectMyInfo(loginMember);
+	}
+
+	@Override
+	public int getCountNoReadMail(HashMap<Object, Object> params) {
+		
+		return mailDAO.getCountNoReadMail(params);
 	}
 
 }

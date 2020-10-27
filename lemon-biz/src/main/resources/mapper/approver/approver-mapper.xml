@@ -204,7 +204,18 @@
 		where
 			approval_key = #{key}
 	</select>
-	
+
+	<select id="getCountApproval" resultType="int">
+		select 
+			count(*)
+		from 
+			appr_check
+		where 
+			mem_id = #{ memberId } 
+		and 
+			status is null
+	</select>
+
 	<update id="updateApproval">
 		update
 			appr
@@ -460,7 +471,6 @@
 	<select id="selectOneApprCheckKey" resultType="int">
 		select key from appr_check where  approval_key= #{approval_key} and mem_id = #{mem_id}
 	</select>
-
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
   <resultMap type="apprCheck" id="apprckMap"></resultMap>

@@ -28,11 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.lemon.lemonbiz.approval.model.service.approvalService;
+import com.lemon.lemonbiz.approval.model.service.ApprovalService;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.Paging;
-import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.om.model.service.OMService;
 import com.lemon.lemonbiz.om.model.vo.OM;
@@ -50,7 +49,7 @@ public class OMController {
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private approvalService approvalService;
+	private ApprovalService approvalService;
 	
 	@RequestMapping("/omForm.do")
 	public void omForm() {

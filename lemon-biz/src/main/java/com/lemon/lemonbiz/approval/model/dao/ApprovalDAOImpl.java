@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -217,6 +218,11 @@ public class ApprovalDAOImpl implements ApprovalDAO {
 	@Override
 	public int returnApprck(Map<String, String> map) {
 		return sqlSession.update("approval.returnApprck", map);
+	}
+
+	@Override
+	public int getCountApproval(HashMap<Object, Object> params) {
+		return sqlSession.selectOne("approval.getCountApproval", params);
 	}
 
 	

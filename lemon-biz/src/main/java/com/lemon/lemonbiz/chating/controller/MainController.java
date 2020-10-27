@@ -97,11 +97,10 @@ public class MainController {
 	}
 	
 	@RequestMapping("/moveChating")
-	public ModelAndView chating(@RequestParam HashMap<Object, Object> params) {
+	public ModelAndView chating(@RequestParam HashMap<Object, Object> params,ModelAndView mav) {
 		
 		System.out.println("-------------3-----------");
 		System.out.println("params = " + params); //params = {roomName=ww, roomNumber=1}
-		ModelAndView mv = new ModelAndView();
 		int roomNumber = Integer.parseInt((String)params.get("roomNumber"));
 		System.out.println("roomNumber = " + roomNumber); //roomNumber1
 	
@@ -113,12 +112,12 @@ public class MainController {
 			}
 		}
 		if(list != null && list.size() > 0) {
-			mv.addObject("roomName", params.get("roomName"));
-			mv.addObject("roomNumber", params.get("roomNumber"));
-			mv.setViewName("/chat/chat");
+			mav.addObject("roomName", params.get("roomName"));
+			mav.addObject("roomNumber", params.get("roomNumber"));
+			mav.setViewName("/chat/chat");
 		}else {
-			mv.setViewName("/chat/room");
+			mav.setViewName("/chat/room");
 		}
-		return mv;
+		return mav;
 	}
 }

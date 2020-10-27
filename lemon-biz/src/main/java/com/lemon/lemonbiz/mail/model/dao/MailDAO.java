@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.mail.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,4 +33,6 @@ public interface MailDAO {
 	List<Mail> selectStarredMail(Member loginMember);
 
 	Member selectMyInfo(Member loginMember);
+
+	int getCountNoReadMail(HashMap<Object, Object> params);
 }

@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.approval.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -91,6 +92,8 @@ public interface ApprovalDAO {
 	int backAppr(String apprKey);
 
 	int returnApprck(Map<String, String> map);
+
+	int getCountApproval(HashMap<Object, Object> params);
 
 	
 
