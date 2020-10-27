@@ -174,11 +174,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 			Attachment attach = appr.getAttachment();
 			result = approvalDAO.insertSaveAttachment(attach);
 		}
-
-//		log.debug("?음? = {}", appr);
-//		log.debug("?음? = {}", apprck1);
-//		log.debug("?음? = {}", apprck2);
-//		log.debug("?음? = {}", apprck3);
 		
 		//1차 결재자 알림
 		Notice notice = new Notice();
@@ -229,12 +224,36 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int changeApprck(int key) {
+	public int changeApprck(int key, Appr appr) {
+		//1,2차 승인시 2,3차 결재자 알림
+
+		//다음 결재자 아이디 조회
+		String nextMemberId = approvalDAO.selectNextMemberId(key);
+		
+		Notice notice = new Notice();
+		notice.setMemId(nextMemberId);
+		notice.setContent("새로운 결재 요청 \"" + appr.getTitle() + "\" 있습니다.");
+		notice.setIcon("fa-file");
+		notice.setColor("success");
+		notice.setAddress("/approval/reauestApprovalDetail.do?apprKey=" + appr.getKey() + "&ckKey=" + key);
+		noticeService.insertNotice(notice);
+		
 		return approvalDAO.changeApprck(key);
 	}
 
+	
+	//마지막 3차 승인
 	@Override
-	public int backApprck(int key, String apprKey) {
+	public int backApprck(int key, String apprKey, Appr appr) {
+		//기안자에게 최종 승인 알림
+		Notice notice = new Notice();
+		notice.setMemId(appr.getMemId());
+		notice.setContent("결재 \"" + appr.getTitle() + "\" 최종적으로 승인 되었습니다.");
+		notice.setIcon("fa-file");
+		notice.setColor("success");
+		notice.setAddress("/approval/compliteApprovalDetail.do?apprKey=" + appr.getKey());
+		noticeService.insertNotice(notice);
+		
 		
 		int result = 0;
 		
@@ -273,7 +292,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 	@Override
 	public Appr returnApprovalDetail(String key) {
-		
+
 		
 		return approvalDAO.returnApprovalDetail(key);
 	}
@@ -284,7 +303,15 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int returnApproval(Map<String, String> map) {
+	public int returnApproval(Map<String, String> map, Appr appr) {
+		//기안자에게 최종 반려 알림
+		Notice notice = new Notice();
+		notice.setMemId(appr.getMemId());
+		notice.setContent("결재 \"" + appr.getTitle() + "\" 최종적으로 반려 되었습니다.");
+		notice.setIcon("fa-file");
+		notice.setColor("warning");
+		notice.setAddress("/approval/returnApprovalDetail.do?apprKey=" + appr.getKey());
+		noticeService.insertNotice(notice);
 		
 		int result = 0;
 		

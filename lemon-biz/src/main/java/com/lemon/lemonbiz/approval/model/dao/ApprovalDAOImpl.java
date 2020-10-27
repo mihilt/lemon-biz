@@ -219,6 +219,11 @@ public class ApprovalDAOImpl implements ApprovalDAO {
 		return sqlSession.update("approval.returnApprck", map);
 	}
 
+	@Override
+	public String selectNextMemberId(int key) {
+		return sqlSession.selectOne("approval.selectNextMemberId", key);
+	}
+
 	
 	
 }

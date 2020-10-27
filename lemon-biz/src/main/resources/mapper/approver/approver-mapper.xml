@@ -460,6 +460,10 @@
 	<select id="selectOneApprCheckKey" resultType="int">
 		select key from appr_check where  approval_key= #{approval_key} and mem_id = #{mem_id}
 	</select>
+	
+	<select id="selectNextMemberId" resultType="string">
+		select mem_id from appr_check where key = #{key} + 1
+	</select>
 
   
   <resultMap type="Attachment" id="attachMap"></resultMap>

@@ -92,6 +92,8 @@ public interface ApprovalDAO {
 
 	int returnApprck(Map<String, String> map);
 
+	String selectNextMemberId(int key);
+
 	
 
 
