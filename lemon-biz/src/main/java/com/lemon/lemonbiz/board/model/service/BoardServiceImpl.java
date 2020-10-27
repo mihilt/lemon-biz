@@ -2,6 +2,7 @@
 package com.lemon.lemonbiz.board.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -107,20 +108,67 @@ public class BoardServiceImpl implements BoardService {
 		int result = 0;
 		
 		result = boardDAO.updateBoard(board);
+
+		  if(board.getAttachList() != null) {
+		  try {
+		  for(Attachment attach : board.getAttachList()) {
+			 attach.setPostKey(board.getKey());
+		  result = boardDAO.updateFile(attach);
+
+		  }
+		  }catch (Exception e) {
 		
+		}
+		  } 
+		  return result;
+		  
 		
+	}
+
+	
+
+	@Override
+	public void updateBoard2(Board board, List<Attachment> oldBoard) {
+		String oldOrigin = oldBoard.get(0).getOriginName();	
 		
+		int result = 0;
+		
+		result = boardDAO.updateBoard(board);
+
+		  if(board.getAttachList() != null) {
+		  try {
+		  for(Attachment attach : board.getAttachList()) {
+			 attach.setPostKey(board.getKey());
+//			 attach.setOriginName(oldOrigin);
+		  result = boardDAO.updateFile(attach);
+		  }
+		  }catch (Exception e) {
+			 
+		  }
+		  return;
+		  }		  
+	}
+	
+	
+
+	@Override
+	public void updateBoard3(Board board) {
+		
+		int result = 0;
+		
+		result = boardDAO.updateBoard(board);
+
 		  if(board.getAttachList() != null) {
 		  
 		  for(Attachment attach : board.getAttachList()) {
 			 attach.setPostKey(board.getKey());
 		  result = boardDAO.updateFile(attach);
 		  }
-		  } 
-		  
-		return result;
+		  return;
+		  }		  
 		
 	}
+	
 
 
 	@Override
@@ -373,6 +421,13 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int RecCount(int key) {
 		return boardDAO.RecCount(key);
+	}
+
+
+	@Override
+	public void boardGoodDelete(int key) {
+		boardDAO.boardGoodDelete(key);
+		
 	}
 	
 	

@@ -93,6 +93,8 @@ public interface BoardDAO {
 
 	BoardComment selectOneBoardComment(int boardCommentRef);
 
+	void boardGoodDelete(int key);
+
 	
 
 	
