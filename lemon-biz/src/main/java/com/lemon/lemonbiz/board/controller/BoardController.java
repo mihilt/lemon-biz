@@ -2,6 +2,7 @@ package com.lemon.lemonbiz.board.controller;
 
 
 import java.io.File;
+//github.com/mihilt/lemon-biz.git
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -36,6 +37,7 @@ import com.lemon.lemonbiz.board.model.vo.BoardComment;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.Paging;
+import com.lemon.lemonbiz.common.vo.PagingType;
 import com.lemon.lemonbiz.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +57,7 @@ public class BoardController {
 	@RequestMapping("/boardList.do")
 	public ModelAndView boardList(ModelAndView mav,HttpServletRequest request,@SessionAttribute("loginMember") Member loginMember) {
 
-		int numPerPage = 3;
+		int numPerPage = 10;
 		int cPage = 1;
 		
 		try {
@@ -72,6 +74,7 @@ public class BoardController {
 	
 		
 		List<Map<String, Object>> list = boardService.selectBoardMapList(cPage,numPerPage,map);
+		log.debug("list = {}", list);
 		mav.addObject("list", list);
 		mav.addObject("pagebar",pageBar);		
 		mav.setViewName("board/boardList");
@@ -91,7 +94,7 @@ public class BoardController {
 	
 	@RequestMapping(value = "/boardEnroll.do",
 			method = RequestMethod.POST)
-	public String boardEnroll(Board board,@RequestParam("name") String name, 
+	public String boardEnroll(Board board,
 						  @RequestParam(value = "upFile",
 								  	    required = false) MultipartFile[] upFiles,
 						  RedirectAttributes redirectAttr,
@@ -132,7 +135,6 @@ public class BoardController {
 	
 	log.debug("attachList = {}", attachList);
 	board.setAttachList(attachList);
-	board.setName(name);
 	
 	//2. Board, Attachment객체 DB에 저장하기
 	int result = boardService.insertBoard(board);
@@ -186,7 +188,7 @@ public class BoardController {
 		Board board = boardService.selectOneBoardCollection(key,hasRead);
 		List<BoardComment> commentList = boardService.selectCommentList(key);
 		
-		/* log.debug("commentList = {}", commentList); */
+		log.debug("commentList = {}", commentList); 
 		mav.addObject("board", board);
 		mav.addObject("commentList", commentList);
 		
@@ -287,6 +289,20 @@ public class BoardController {
 	public ModelAndView boardUpdate(@RequestParam("key") int key ,ModelAndView mav) {
 
 		Board board = boardService.selectOneBoardCollection(key);
+		if(board.getAttachList() !=null) {
+		try {
+		List<Attachment> atc =board.getAttachList();
+		log.debug("atc={}",atc);
+		String Oname1 = atc.get(0).getOriginName();
+		String Oname2 = atc.get(1).getOriginName();
+		log.debug("dd={}",Oname1);
+		log.debug("d2={}",Oname2);
+		mav.addObject("Oname1",Oname1);
+		mav.addObject("Oname2",Oname2);
+		}catch (Exception e) {
+			
+		}
+		}
 		mav.addObject("board", board);
 	  
 	    mav.setViewName("board/boardForm3");
@@ -294,14 +310,108 @@ public class BoardController {
 	    return mav; 
 	}
 	@RequestMapping("/boardupdatesucces.do")
-	public ModelAndView boardupdatesucces(@ModelAttribute Board board,@RequestParam("key") int key ,ModelAndView mav) {
+	public ModelAndView boardupdatesucces(@ModelAttribute Board board,@RequestParam("key") int key ,ModelAndView mav,
+										@RequestParam(value = "upFile1",required = false) MultipartFile upFile1,
+										@RequestParam(value = "upFile2",required = false) MultipartFile upFile2,
+										HttpServletRequest request) throws IllegalStateException, IOException {
+
+
+		//1. 서버컴퓨터에 업로드한 파일 저장하기
+		List<Attachment> attachList = new ArrayList<>();
+		
+		if(upFile1 != null && upFile2 !=null) {
+	
+		try {
+		List<Attachment> oldBoard = boardService.SelectBoardOne(key); 
+		String oldRename = oldBoard.get(0).getReName();	
+		String oldRename2= oldBoard.get(1).getReName();	
+			
+
+		
+		//첨부파일 수정관련
+			//이전 첨부파일이 존재하는 경우만 실행
+		  String saveDirectory = request.getServletContext()
+				  .getRealPath("/resources/upload/board");
+		 
+				
+				
+				 
+
+		  
+		  log.debug("upFileget={}",upFile1.getOriginalFilename());
+		  log.debug("upFileget={}",upFile2.getOriginalFilename());
+	
+		  log.debug("getOriginalFilename()={}",upFile1.getOriginalFilename());
+		  //2.메모리의 파일 -> 서버컴퓨터 디렉토리 저장  transferTo
+		  // 첨부파일을 새로 추가한 경우
+				if(upFile1.getOriginalFilename() != "") {	
+					  File dest = new File(saveDirectory, oldRename); //
+					  upFile1.transferTo(dest);
+					 				
+					String oldRenamedFileName1 = oldBoard.get(0).getReName();
+					
+					Attachment attach = new Attachment();
+					attach.setOriginName(upFile1.getOriginalFilename());
+					attach.setReName(oldRenamedFileName1);
+					attachList.add(attach);
+					
+					board.setAttachList(attachList);
+					board.setKey(key);
+					boardService.updateBoard(board,oldBoard);
+					mav.addObject("board", board);
+					log.debug("attachList11={}",attachList);
+					log.debug("board11= {}",board);
+					mav.setViewName("redirect:/board/boardDetail.do?key="+key);
+					
+					
+						
+				}
+				
+				if(upFile2.getOriginalFilename() != "") {
+					
+					File dest2 = new File(saveDirectory, oldRename2); //
+					  upFile2.transferTo(dest2);
+
+					Attachment attach = new Attachment();
+					
+					String oldRenamedFileName2 = oldBoard.get(1).getReName();
+					attach.setOriginName(upFile2.getOriginalFilename());
+					attach.setReName(oldRenamedFileName2);
+					attachList.add(attach);
+					
+					board.setAttachList(attachList);
+					board.setKey(key);
+					boardService.updateBoard(board,oldBoard);
+					mav.addObject("board", board);
+					log.debug("attachList11={}",attachList);
+					log.debug("board11= {}",board);
+					mav.setViewName("redirect:/board/boardDetail.do?key="+key);
+					
+			}	
+
+				
+				if(upFile1.getOriginalFilename() == "" && upFile2.getOriginalFilename() == "")  { 			
+					board.setAttachList(oldBoard);
+					board.setKey(key);
+					boardService.updateBoard2(board,oldBoard);
+					mav.addObject("board", board);
+					log.debug("attachList11={}",attachList);
+					log.debug("board11= {}",board);
+					mav.setViewName("redirect:/board/boardDetail.do?key="+key);
+				}
+			
+		}catch (Exception e) {
+			
+		}
+		}
 		
 		board.setKey(key);
-		boardService.updateBoard(board);
+		boardService.updateBoard3(board);
 		mav.addObject("board", board);
-	    mav.setViewName("redirect:/board/boardDetail.do?key="+key);
-	    return mav; 
-	}
+		mav.setViewName("redirect:/board/boardDetail.do?key="+key);
+		return mav; 
+		
+		}
 	
 	@RequestMapping(value="/boardInsert.do", method = RequestMethod.POST)
 	
@@ -310,7 +420,7 @@ public class BoardController {
 		
 		boardService.boardInsert(boardComment);
 		int key = boardComment.getBoardRef();
-		log.debug("boardComment = {}" ,boardComment); 
+		
 		
 		
 		redirectAttr.addFlashAttribute("msg", "댓글 등록 성공");
@@ -332,6 +442,7 @@ public class BoardController {
 			
 		String renamedFileName = attachment.getReName();
 		boardService.boardFileDelete(key);
+		boardService.boardGoodDelete(key);
 		boardService.boardfrmDelete(key);
 		
 		if(renamedFileName != null) {
@@ -385,10 +496,10 @@ public class BoardController {
 		String url = request.getRequestURI();
 		String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
 		
-		log.debug("list = {}", list);
+		
 		mav.addObject("list", list);
 		mav.addObject("name",name);
-		log.debug("name22 = {}",name);
+		
 		mav.addObject("pagebar",pageBar);
 		
 		mav.setViewName("board/boardTeamList");
@@ -451,13 +562,29 @@ public class BoardController {
 	
 	@RequestMapping("/boardSearch.do")
 	public String boardSearch(@RequestParam("searchKeyword")String searchKeyword,
-									Model model) {
+									Model model,HttpServletRequest request) {
+		
+		int numPerPage = 2;
+		int cPage = 1;
+		
+		try {
+			cPage = Integer.parseInt(request.getParameter("cPage"));
+		} catch (NumberFormatException e) {
+			
+		}
+		int totalContents = boardService.countNameBoard(searchKeyword);
+		/* log.debug("totalContents = {} ",totalContents); */
+		String url = request.getRequestURI();
+		/* log.debug("url = {} " , url); */
+		String pageBar = PagingType.getPageBarHtml(cPage, numPerPage, totalContents, url, searchKeyword);
+		Map<String,Object> map = new HashMap<String, Object>();
 	
-		List<Board> list = boardService.boardSearch(searchKeyword);
-		log.debug("list ={}" , list);
+		List<Map<String, Object>> list = boardService.boardSearch(searchKeyword,cPage,numPerPage,map);
 		model.addAttribute("list", list);
+		model.addAttribute("pagebar",pageBar);		
 		return "board/boardFindNList";
 	}
+		
 	
 	@RequestMapping("/boardMaList.do")
 	public ModelAndView boardMaList(ModelAndView mav,HttpServletRequest request,@SessionAttribute("loginMember") Member loginMember) {
@@ -613,11 +740,27 @@ public class BoardController {
 	
 	@RequestMapping("/boardSearch2.do")
 	public String boardSearch2(@RequestParam("searchKeyword")String searchKeyword,
-								Model model) {
+								Model model,HttpServletRequest request) {
 
-		List<Board> list = boardService.boardtitleSearch(searchKeyword);
-		log.debug("list ={}" , list);
+		int numPerPage = 2;
+		int cPage = 1;
+		
+		try {
+			cPage = Integer.parseInt(request.getParameter("cPage"));
+		} catch (NumberFormatException e) {
+			
+		}
+		int totalContents = boardService.countTitleBoard(searchKeyword);
+		/* log.debug("totalContents = {} ",totalContents); */
+		String url = request.getRequestURI();
+		/* log.debug("url = {} " , url); */
+		String pageBar = PagingType.getPageBarHtml(cPage, numPerPage, totalContents, url, searchKeyword);
+		Map<String,Object> map = new HashMap<String, Object>();
+		List<Map<String, Object>> list = boardService.boardtitleSearch(searchKeyword,cPage,numPerPage,map);
+		
+		log.debug("list222 ={}" , list);
 		model.addAttribute("list", list);
+		model.addAttribute("pagebar",pageBar);		
 		return "board/boardFindNList";
 	}
 	
@@ -645,21 +788,50 @@ public class BoardController {
 	
 	@RequestMapping("/boardMSearch.do")
 	public String boardMSearch(@RequestParam("searchKeyword")String searchKeyword,
-								Model model) {
+								Model model,HttpServletRequest request) {
 
-		List<Board> list = boardService.boardMSearch(searchKeyword);
-		log.debug("list ={}" , list);
+		int numPerPage = 2;
+		int cPage = 1;
+		
+		try {
+			cPage = Integer.parseInt(request.getParameter("cPage"));
+		} catch (NumberFormatException e) {
+			
+		}
+		int totalContents = boardService.countTitleBoard3(searchKeyword);
+		/* log.debug("totalContents = {} ",totalContents); */
+		String url = request.getRequestURI();
+		/* log.debug("url = {} " , url); */
+		String pageBar = PagingType.getPageBarHtml(cPage, numPerPage, totalContents, url, searchKeyword);
+		Map<String,Object> map = new HashMap<String, Object>();
+	
+		List<Map<String, Object>> list = boardService.boardMSearch(searchKeyword,cPage,numPerPage,map);
 		model.addAttribute("list", list);
+		model.addAttribute("pagebar",pageBar);		
 		return "board/boardFindMList";
 	}
-	
+		
 	@RequestMapping("/boardMSearch2.do")
 	public String boardMSearch2(@RequestParam("searchKeyword")String searchKeyword,
-								Model model) {
-
-		List<Board> list = boardService.boardMSearch2(searchKeyword);
-		log.debug("list ={}" , list);
+								Model model,HttpServletRequest request) {
+		int numPerPage = 4;
+		int cPage = 1;
+		
+		try {
+			cPage = Integer.parseInt(request.getParameter("cPage"));
+		} catch (NumberFormatException e) {
+			
+		}
+		int totalContents = boardService.countNameBoard3(searchKeyword);
+		/* log.debug("totalContents = {} ",totalContents); */
+		String url = request.getRequestURI();
+		/* log.debug("url = {} " , url); */
+		String pageBar = PagingType.getPageBarHtml(cPage, numPerPage, totalContents, url, searchKeyword);
+		Map<String,Object> map = new HashMap<String, Object>();
+	
+		List<Map<String, Object>> list = boardService.boardMSearch2(searchKeyword,cPage,numPerPage,map);
 		model.addAttribute("list", list);
+		model.addAttribute("pagebar",pageBar);		
 		return "board/boardFindMList";
 	}
 	
@@ -673,5 +845,32 @@ public class BoardController {
 		System.out.println("list = " + list);
 		
 		return list;
+	}
+	@RequestMapping(value="/RecUpdate.do")
+	@ResponseBody
+	public Object RecUpdate(@RequestParam("key")int key,@RequestParam("id")String id) {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("key", key);
+		map.put("id", id);
+
+		int result = boardService.recCheck(map);
+		log.debug("result= {}",result);
+		if(result == 0){ // 추천하지 않았다면 추천 추가
+			boardService.recUpdate(map);
+		}else{ // 추천을 하였다면 추천 삭제
+			boardService.recDelete(map);
+		}
+		
+		return result;
+	}
+
+	@ResponseBody
+	@RequestMapping("/RecCount.do")
+	public Object RecCount(@RequestParam("key")int key) {
+		
+		int count = boardService.RecCount(key);
+		log.debug("count={}",count );
+		return count;
 	}
 }

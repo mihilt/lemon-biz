@@ -33,8 +33,10 @@
 	</select>
 	
 	<select id="memberList" resultMap="memberMap">
-		SELECT
-		*
+        SELECT
+	    M.*,
+	    (select name from dept D2 where M.dept_key = D2.key) "dept_name",
+	    (select name from rank R2 where M.rank_key = R2.key) "rank_name"
 		FROM MEMBER M FULL OUTER JOIN DEPT D
 		ON M.DEPT_KEY = D.KEY
 		WHERE D.NAME = #{node}
@@ -45,7 +47,8 @@
 		M.*,
         D.key,
         D.ref,
-        D.name as deptName
+        D.name as deptName,
+        (select name from rank R2 where M.rank_key = R2.key) "rank_name"
 		FROM MEMBER M FULL OUTER JOIN DEPT D
 		ON M.DEPT_KEY = D.KEY
 		WHERE M.MEMBER_ID = #{param}
@@ -104,7 +107,7 @@
 			#{memId},
 			#{seqNum},
 			null,
-			#{status},
+			null,
 			null
 		)
 	</insert>
@@ -118,7 +121,7 @@
 			#{memId},
 			#{seqNum},
 			null,
-			#{status},
+			null,
 			null
 		)
 	</insert>
@@ -132,7 +135,7 @@
 			#{memId},
 			#{seqNum},
 			null,
-			#{status},
+			null,
 			null
 		)
 	</insert>
@@ -147,8 +150,27 @@
 			left outer join member M on P.mem_id = M.member_id 
 			left outer join doc_type D on P.type_key = D.key
 		where
-			P.mem_id = #{memberId}
+			P.mem_id = #{memberId} and p.status = 't'
+		order by
+			P.key desc
 			
+	</select>
+	
+	<select id="myApprovalList" resultMap="apprMap">
+	
+		select
+			P.*,
+			M.name,
+			D.name as docName
+		from
+			appr P 
+			left outer join member M on P.mem_id = M.member_id 
+			left outer join doc_type D on P.type_key = D.key
+		where
+			P.mem_id = #{memberId} and P.status = 'p'
+		order by
+			P.key desc
+	
 	</select>
 	
 	<select id="reWriteAppr" resultMap="apprMap">
@@ -171,6 +193,7 @@
 		        full outer join rank R on M.rank_key = R.key
 		where
 		    A.approval_key = #{key}
+		order by seq_num
 	</select>
 	
 	<select id="reWriteAttach" resultMap="attachMap">
@@ -181,7 +204,7 @@
 		where
 			approval_key = #{key}
 	</select>
-	
+
 	<select id="getCountApproval" resultType="int">
 		select 
 			count(*)
@@ -192,11 +215,267 @@
 		and 
 			status is null
 	</select>
+
+	<update id="updateApproval">
+		update
+			appr
+		set
+			type_key = null, mem_id = #{memId}, title = #{title}, content = #{content},
+			draft_date = default, write_date = default, status=#{status}
+		where
+			key = #{key}
+	</update>
+	
+	<update id="updateApprck1">
+		update
+			appr_check
+		set
+			seq_num = #{seqNum}, mem_id = #{memId}
+		where
+			key=#{key}
+	</update>
+	
+	<update id="updateApprck2">
+		update
+			appr_check
+		set
+			seq_num = #{seqNum}, mem_id = #{memId}
+		where
+			key=#{key}
+	</update>
+	
+	<update id="updateApprck3">
+		update
+			appr_check
+		set
+			seq_num = #{seqNum}, mem_id = #{memId}
+		where
+			key=#{key}
+	</update>
+	
+	<insert id="insertApproval">
+		insert into
+			appr
+		values(
+			#{key},
+			null,
+			#{memId},
+			#{title},
+			#{content},
+			default,
+			default,
+			#{status}
+		)
+	</insert>
+	
+	<select id="apprckList" resultMap="apprckMap">
+		select
+			*
+		from
+			appr_check
+		where
+			mem_id = #{memberId}
+	</select>
+	
+	<select id="apprAndCkList" resultType="Appr">
+		select
+		    A.*,
+		    C.key as ckKey,
+		    C.approval_key as ckApprovalKey,
+		    C.mem_id as ckMemId,
+		    C.seq_num as ckSeqNum,
+		    C.check_date as ckCheckDate,
+		    C.status as ckStatus,
+		    C.opinion as ckOpinion
+		from
+		    appr A
+		        left outer join appr_check C on A.key = C.approval_key
+		where
+		    C.mem_id = #{memberId}
+		    and
+            (
+		    (select V.status from appr_check V where V.key =  C.key - 1) = 't'
+            or 
+            C.seq_num = 1
+            )
+            and
+            A.status != 't'
+		order by A.key desc
+	</select>
+	
+	<select id="returnApprovalDetail" resultMap="apprMap">
+		select
+		    A.*,
+		    M.member_id as memName,
+		    R.name as rankName
+		from
+		    appr A
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
+		where
+		    A.key = #{key}
+		
+	</select>
+	
+	<select id="compliteApprDetail" resultMap="apprMap">
+	
+		select
+		    A.*,
+		    M.member_id as memName,
+		    R.name as rankName
+		from
+		    appr A
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
+		where
+		    A.key = #{key}
+	</select>
+	
+	
+	<select id="apprckDetail" resultMap="apprMap">
+		
+		select
+		    A.*,
+		    C.key as ckKey,
+		    C.approval_key as ckApprovalKey,
+		    C.mem_id as ckMemId,
+		    C.seq_num as ckSeqNum,
+		    C.check_date as ckCheckDate,
+		    C.status as ckStatus,
+		    C.opinion as ckOpinion,
+		    M.member_id as memName,
+		    R.name as rankName
+		from
+		    appr A
+		        full outer join appr_check C on A.key = C.approval_key
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
+		where
+		    C.key = #{ckKey}
+		
+	</select>
+	
+	<select id="selectOneAttachment" resultMap="attachMap">
+	
+		select
+			*
+		from
+			attachment
+		where
+			key = #{key}
+	
+	</select>
+	
+	<select id="selectcApprck" resultMap="apprckMap">
+	
+		select
+		    *
+		from
+		    appr_check
+		where
+		    mem_id = #{memberId} and approval_key = #{apprKey} 
+	
+	</select>
+	
+	<update id="changeApprck">
+	
+		update
+			appr_check
+		set
+			check_date = default , status = 't'
+		where
+			key=#{key}
+		
+	</update>
+	
+	<update id="backApprck">
+	
+		update
+			appr_check
+		set
+			check_date = default , status = 't'
+		where
+			key=#{key}
+	
+	</update>
+	
+	<update id="backAppr">
+		update
+			appr
+		set
+			status = 'a'
+		where
+			key=#{apprKey}
+	</update>
+	
+	<update id="returnApprck">
+		
+		update
+			appr_check
+		set
+			check_date = default, status = 'f', opinion = #{opinion}
+		where
+			mem_id= #{memberId} and approval_key= #{key}
+	
+	</update>
+	
+	<update id="returnApproval">
+	
+		update
+			appr
+		set
+			status ='r'
+		where 
+			key= #{key}
+	
+	</update>
+	
+	<select id="returnApprList" resultMap="apprMap">
+		select
+			*
+		from
+			appr
+		where
+			mem_id = #{memberId} and status = 'r'
+		order by key desc
+	</select>
+	
+	<select id="compliteApprList" resultMap="apprMap">
+		select
+			*
+		from
+			appr
+		where
+			mem_id = #{memberId} and status = 'a'
+		order by key desc
+	</select>
+	
+
+	<select id="selectOneDocTypeAjax" resultType="docType">
+		select
+			*
+		from
+			doc_type
+		where
+			key = #{key}
+	</select>
+	
+	<select id="selectDocTypeTitleList" resultType="docType">
+  		select
+			key,
+			name
+		from
+			doc_type
+	</select>
+	
+	<select id="selectOneApprCheckKey" resultType="int">
+		select key from appr_check where  approval_key= #{approval_key} and mem_id = #{mem_id}
+	</select>
   
   <resultMap type="Attachment" id="attachMap"></resultMap>
   <resultMap type="apprCheck" id="apprckMap"></resultMap>
   
-  <resultMap type="appr" id="apprMap">
+  <resultMap type="Appr" id="apprMap">
   
   </resultMap>	
 	

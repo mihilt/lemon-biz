@@ -52,7 +52,9 @@
 			rank_key = #{rankKey}, 
 		    tel_num = #{telNum}, 
 		    address = #{address},
-		    is_manager = #{isManager}
+		    is_manager = #{isManager},
+		    email = #{email},
+		    email_pwd = #{emailPwd}
 		where 
 			member_id = #{memberId}
 	</update>

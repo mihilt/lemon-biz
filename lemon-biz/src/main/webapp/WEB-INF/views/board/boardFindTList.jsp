@@ -68,7 +68,7 @@ font-size: 17px;
 		<c:forEach items="${ list }" var="post">
 		<tr data-no="${ post.key }">
 			<c:if test="${ post.isNotice eq 1 }">
-			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.jpg" 
+			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.png" 
 						 style="width:30px;" /></td>
 			</c:if>
 			<c:if test="${ post.isNotice eq 0 }">
@@ -88,10 +88,10 @@ font-size: 17px;
 			</c:if>	
 			
 			<c:if test="${ post.isNotice eq 1 }">
-			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.memId }</td>
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.name1 }</td>
 			</c:if>
 			<c:if test="${ post.isNotice eq 0 }">
-			<td>${ post.memId }</td>
+			<td>${ post.name1 }</td>
 			</c:if>
 			
 			<c:if test="${ post.isNotice eq 1 }">

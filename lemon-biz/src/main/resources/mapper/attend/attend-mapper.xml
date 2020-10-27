@@ -12,6 +12,18 @@
 	order by key desc
   </select>
   
+  <!-- 페이징 근태정보 -->
+ <select id="selectAttendListPaging" resultType="attend">
+  select *
+from (
+    select row_number() over (order by key desc) rnum,
+        A.*
+    from attend A 
+    where mem_id=#{memId}) A
+where rnum between #{startRnum} and #{endRnum}
+   </select>
+    
+    
    <!--출근-->
   <insert id="attendArrive" >
   insert into 
@@ -43,12 +55,13 @@
   <select id="selectLastOne" resultType="attend">
     select *
 	from attend 
-	where mem_id=#{memId}
-        and key= (select max(key) from attend )
+        where key= (    select max(key)
+                 from attend
+    where mem_id=#{memId} )
 	order by key desc
   </select>
   
-  <!--  -->
+  	<!-- 출결 정보 -->
     <select id="selectAttendInfo" resultType="attend">
    	select count(*)key,round(sum(time))memId,round(avg(time),2)time
 	from attend
@@ -56,8 +69,8 @@
   	</select>
   
   
+  	<!-- 캘린더 출력리스트 -->
 	<select id="selectCalAttend" resultType="attend">
-
 	select d.key,mem_id,arrive,leave,time,d.yyyymm
 	from attend E,(select to_char(arrive,('YYYYMMDD'))yyyymm,key
     from attend
@@ -73,6 +86,7 @@
  -->
 	</select>
 	
+
 	<select id="getTodayCount" resultType="int">
 	select 
 		count(*) 
@@ -80,5 +94,25 @@
 		attend 
 	where to_char(arrive,'YYYYMMDD') = #{ date }
 	</select>
+	
+	<select id="countAttend" resultType="_int">
+	select  count(*)
+	from attend
+	where mem_id=#{mem_id}
+	
+	</select>
 
+
+	<resultMap type="map" id="attendMap">
+  		<id column="key" property="key"/>
+  		<result column="mem_id" property="memId"/>
+  		<result column="arrive" property="arrive"/>
+  		<result column="leave" property="leave"/>
+  		<result column="time" property="time"/>
+  		<result column="startRnum" property="startRnum"/>
+  		<result column="endRnum" property="endRnum"/>
+  		<result column="cPage" property="cPage"/>
+  		<result column="numPerPage" property="numPerPage"/>
+  	</resultMap>
+	
 </mapper>

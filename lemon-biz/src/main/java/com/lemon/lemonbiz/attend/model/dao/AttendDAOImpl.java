@@ -1,6 +1,7 @@
 package com.lemon.lemonbiz.attend.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +45,28 @@ public class AttendDAOImpl implements AttendDAO {
 	}
 
 	@Override
+
 	public int getTodayCount(String date) {
 		
 		return sqlSession.selectOne("attend.getTodayCount",date);
 	}
 	
+
+	public int countAttend(Attend attend) {
+		return sqlSession.selectOne("attend.countAttend");
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAttendList(int cPage, int numPerPage, Map<String, Object> map,String memId) {
+		int startRnum = (cPage-1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("memId",memId);
+		return sqlSession.selectList("attend.selectAttendListPaging",map);
+	}
+
 	
 }

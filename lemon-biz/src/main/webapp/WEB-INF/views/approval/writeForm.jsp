@@ -10,13 +10,22 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
-<style>
+<!-- include summernote-ko-KR -->
+<script src="${pageContext.request.contextPath }/resources/summernoteKr/summernote-ko-KR.js"></script>
 
-
-
-</style>
-
+<script>
+//add summernote
+$(document).ready(function() {
+  $('#summernote').summernote({
+    lang: 'ko-KR',
+    height: 500
+    
+  });
+});
+</script>
 
 <div>
 	<h2>일반결제 작성</h2>
@@ -68,7 +77,7 @@
       
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
     	<h5>결제자 선택</h5>
-    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
+    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; min-height:360px;">
     			<div class="row" style="margin: 5px 5px"> 
     			<label>성명</label>
     			<input type="text" id="searchN"/>
@@ -189,7 +198,7 @@
 					    	<td><strong>기안담당</strong>
 								<c:choose>
 								<c:when test="${ loginMember.isManager == 1 }">관리자</c:when>
-								<c:otherwise>${ loginMember.Name }</c:otherwise>
+								<c:otherwise>${ loginMember.name }</c:otherwise>
 								</c:choose>
 							</td>
 								
@@ -208,9 +217,7 @@
 						</tr>
 					    </table>
 					</div>
-					<div>
-					
-					
+					<div class="p-2">
 					    <!-- ================결제칸=============== -->
 					    <input type="hidden" id="authDept1" name="authDept1" value="">
 						<input type="hidden" id="authDept2" name="authDept2" value="">
@@ -283,18 +290,28 @@
 						</table>
 						</div>
 						<!-- ==============결제칸 끝============== -->
+						
+						<!-- 양식 선택 -->											      	
+						<select name="docType" class="col-5 form-control mx-2 my-5"
+							id="docType">
+							<option value="none" selected>--- 양식을 선택해주세요. ---</option>
+							<c:forEach items="${ docTypeList }" var="docType">
+								<option value="${ docType.key }">
+									${ docType.name }
+								</option>
+							</c:forEach>
+						</select>
+						
 						<!-- 폼 내용 -->
-						
-						
-						
-						<form id="sendApv" action="${ pageContext.request.contextPath }/approval/applovalSave.do" method="POST" enctype="multipart/form-data">
+						<form class="p-2" id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
 							<input type="hidden" id="authId1" name="approval_mem1" />
 							<input type="hidden" id="authId2" name="approval_mem2" />
 							<input type="hidden" id="authId3" name="approval_mem3" />
 							<input type="hidden" id="processNum1" name="process_num1">
 							<input type="hidden" id="processNum2" name="process_num2">
 							<input type="hidden" id="processNum3" name="process_num3">
-							<input type="hidden" id="status" name="status" value="t"/>
+							<input type="hidden" id="status" name="status" value="p"/>
+							
 							
 							&nbsp;제목 : <input class="form-control" id="title" type="text" name="approval_title" value="${ appr.title }">
 							<br>
@@ -306,7 +323,7 @@
 							
 							
 							<label for="file">첨부: </label> <br>
-							<input type="file" name="upFile" id="upFile" value=""/>
+							<input type="file" name="upFile" id="upFile"/>
 							<hr>
 						               
 						</form>
@@ -315,8 +332,8 @@
 						
 						<div class="container" align="center">
 						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
-						<button class="btn btn-outline-primary" onclick="sendApv()">제출하기</button>
-						<button class="btn btn-outline-primary" onclick="tempchk()">저장하기</button>
+						<button class="btn btn-outline-primary" onclick="updateApproval()">저장하기</button>
+						<button class="btn btn-outline-primary" onclick="tempchk()">제출하기</button>
 						
 						<div><br></div>
 						</div>
@@ -331,14 +348,14 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">임시저장</h5>
+					<h5 class="modal-title">알림</h5>
 					<button type="button" class="btn btn-outline-primary" data-dismiss="modal">&times;</button>
 				</div>
 
 					<div class="form-group">
 						<div class="modal-body">
 
-							<label>임시저장함으로 제출문서가 이동합니다.</label><br>
+							<label>문서가 제출되었습니다. .</label><br>
 							
 						</div>
 						<div class="modal-footer float-right">
@@ -353,7 +370,7 @@
 	
 	
 	
-</div>
+
 
 
 
@@ -371,10 +388,10 @@
 		for(var i = MIN_NUM; i <= MAX_NUM ; i++) {
 
 			if($(document).find('#authRank'+i+'').text().trim() != ''){
-		    	$('#rank_'+i+'').text($(opener.document).find('#authRank'+i+'').text());
-		    	$('#name_'+i+'').text($(opener.document).find('#authName'+i+'').text());
-		    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').val());
-		    	$('#memId_'+i+'').text($(opener.document).find('#apv_mem'+i+'').text());
+		    	$('#rank_'+i+'').text($(document).find('#authRank'+i+'').text());
+		    	$('#name_'+i+'').text($(document).find('#authName'+i+'').text());
+		    	$('#dept_'+i+'').text($(document).find('#authDept'+i+'').val());
+		    	$('#memId_'+i+'').text($(document).find('#apv_mem'+i+'').text());
 				$('#del_'+i+'').html('<a class="xBtn" onclick="delLine('+i+')">[ X ]</a>');
 				$('#order_'+i+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+i+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+i+')">▼</a>&nbsp;');
 				$('#'+i+'').val('exist');
@@ -413,6 +430,7 @@
 			}
 		})
 	});
+	
 
 	function printList(data) {
 
@@ -432,7 +450,7 @@
 						  .attr('id',data.memberList[i].memberId).appendTo('#tbody');
 			$('<td></td>').text(data.memberList[i].deptName).appendTo('#'+data.memberList[i].memberId+'');
 			$('<td></td>').text(data.memberList[i].name).appendTo('#'+data.memberList[i].memberId+'');
-			$('<td></td>').text(data.memberList[i].rankKey).appendTo('#'+data.memberList[i].memberId+'');
+			$('<td></td>').text(data.memberList[i].rankName).appendTo('#'+data.memberList[i].memberId+'');
 			$('<td></td>').text(data.memberList[i].memberId).appendTo('#'+data.memberList[i].memberId+'');
 		}
 	}
@@ -484,7 +502,7 @@
 
 				var result = data.selectMember;
 				
-				rankKey = result[0].rankKey;
+				rankName = result[0].rankName;
 				deptName = result[0].deptName;
 				memberName = result[0].name;
 				console.log(memberName);
@@ -506,7 +524,7 @@
 			$('#memId_'+(i+1)).text(memberId);
 			$('#dept_'+(i+1)).text(deptName);
 			$('#name_'+(i+1)).text(memberName);
-			$('#rank_'+(i+1)).text(rankKey);
+			$('#rank_'+(i+1)).text(rankName);
 
 			$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
 			$('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
@@ -707,6 +725,7 @@
 		for(var i = 1 ; i <=3 ; i++) {
 			$("#processNum"+i).val($('#proNum'+i).val());
 		}
+		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','updateApprovalKey').appendTo('#sendApv');
 	
 		$('#sendApv').submit();
 		
@@ -717,7 +736,7 @@
 		
 	}
 
-	function sendApv() {
+	function updateApproval() {
 
 		if(($('#title').val()).trim() == ''){
 			alert('제목을 입력해주세요')
@@ -726,9 +745,6 @@
 		if(($('#summernote').val()).trim() == ''){
 			alert('내용을 입력해주세요')
 			return;
-		}
-		if(${ not empty appr.key }){
-			$('<input></input>').attr('type','hidden').attr('value',${ appr.key }).attr('status','p').appendTo('#sendApv');
 		}
 
 		for(var i = 1 ; i <=3 ; i++){
@@ -742,20 +758,33 @@
 		
 		
 		var status = $('#status');
-		status.attr('value','p');
-
-		$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/updateApproval.do").attr('method', 'POST').attr('id','updateApproval').appendTo('#body');
-		$('<input></input>').attr('type','hidden').attr('value',#authId1.val()).attr('name','updatdAuthId1').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#authId2.val()).attr('name','updatdAuthId2').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#authId3.val()).attr('name','updatdAuthId3').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#processNum1.val()).attr('name','updateProcessNum1').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#processNum2.val()).attr('name','updateProcessNum2').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#processNum3.val()).attr('name','updateProcessNum3').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',#status.val()).attr('name','updateStatus').appendTo('#updateApproval');
+		status.attr('value','t');
+		
+		
+		var authId11 = $('#authId1').val();
+		
+		console.log(authId11);
+		
+																																			
+		$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/applovalSave.do").attr('method', 'POST').attr('id','updateApproval').attr('enctype','multipart/form-data').appendTo('#body');
+		$('<input></input>').attr('type','hidden').attr('value',$('#authId1').val()).attr('name','updatdAuthId1').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#authId2').val()).attr('name','updatdAuthId2').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#authId3').val()).attr('name','updatdAuthId3').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#processNum1').val()).attr('name','updateProcessNum1').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#processNum2').val()).attr('name','updateProcessNum2').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#processNum3').val()).attr('name','updateProcessNum3').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#status').val()).attr('name','updateStatus').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#title').val()).attr('name','updateTitle').appendTo('#updateApproval');
+		$('<input></input>').attr('type','hidden').attr('value',$('#summernote').val()).attr('name','updateContent').appendTo('#updateApproval');
+		
+		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','updateApprovalKey').appendTo('#updateApproval');
 		
 		
 		
-		$('#sendApv').submit();
+		console.dir($('#updateApproval'));
+		
+		
+		$('#updateApproval').submit();
 	
 
 	}
@@ -767,7 +796,32 @@
 	/* ======================================폼 제출관련 script end=================================== */	 
 	 
 	 
-	 
+	/* 양식 설정 script */
+	
+	$(function(){
+			$('#docType').change(function(){
+
+					const key = $("#docType option:selected").val();
+					
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/approval/selectOneDocTypeAjax.do?key="+key,
+						data : {
+						},
+						dataType : "json",
+						success : function(data){
+							/* console.log(data); */
+							
+							$("#summernote").summernote("code", data.form);
+
+						},
+						error : function(xhr, status, err){
+							console.log(xhr, status, err);
+						}
+					});
+
+					
+				});
+		});
 	 
 </script>
 

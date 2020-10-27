@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -13,6 +13,7 @@
         
     	<!-- sb-admin-2 css -->
 		<link href="${pageContext.request.contextPath }/resources/css/sb-admin-2.min.css" rel="stylesheet">
+		
         
         <!-- jquery -->
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -40,7 +41,7 @@
 		<script src="${pageContext.request.contextPath }/resources/js/jquery.dataTables.min.js"></script>
 		<script src="${pageContext.request.contextPath }/resources/js/dataTables.bootstrap4.min.js"></script>
 		<script src="${pageContext.request.contextPath }/resources/js/datatables-demo.js"></script>
-  
+
         <!-- custom css -->
         <link href="${pageContext.request.contextPath }/resources/css/custom.css" rel="stylesheet">
         
@@ -66,7 +67,7 @@
             <script>
                 alert("${ msg }");
             </script>
-        </c:if>
-    
-    </head>
-    <body id="body">
+</c:if>
+
+</head>
+<body id="body">

@@ -28,6 +28,7 @@ $(document).ready(function() {
 								<tr>
 									<th scope="col">날짜</th>
 									<th scope="col">내용</th>
+									<th scope="col"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -39,6 +40,14 @@ $(document).ready(function() {
 								<td>
 			                      <i class="fas ${ notice.icon } text-${notice.color}"></i>
 								  <a href="${pageContext.request.contextPath}${ notice.address }">${ notice.content }</a>
+								</td>
+								<td style="width: 8%">
+									<a type="button" 
+									   class="btn btn-outline-danger"
+									   onclick="return confirm('정말 삭제 하시겠습니까 ?')"
+									   href="${pageContext.request.contextPath}/notice/noticeList/delete.do?key=${ notice.key }">
+									   삭제
+									</a>
 								</td>
 							</tr>
 					</c:forEach>

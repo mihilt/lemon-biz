@@ -33,7 +33,6 @@
 				action="${pageContext.request.contextPath}/board/boardEnroll.do" method="post">
 					<div class="form-group">
 						<input type="hidden" name="memId" value="${loginMember.memberId}"/>	
-						<input type="hidden" name="name" value="${loginMember.name}"/>	
 					</div> 
 					<div class="custom-control custom-checkbox" >
 				<input type="checkbox" id="jb-checkbox" name="isNotice" class="custom-control-input" value="0">
@@ -44,10 +43,10 @@
 					</div>
 					<div class="input-group mb-3" style="padding:0px;">
 		  <div class="input-group-prepend" style="padding:0px;">
-		    <span class="input-group-text">첨부파일1</span>
+		    <span class="input-group-text">첨부파일</span>
 		  </div>
 		  <div class="custom-file">
-		    <input type="file" class="custom-file-input" name="upFile" id="upFile" >
+		    <input type="file" class="custom-file-input" name="upFile" id="upFile1" >
 		    <label class="custom-file-label" for="upFile1">파일을 선택하세요</label>
 		  </div>
 		</div>
@@ -56,7 +55,7 @@
 		    <span class="input-group-text">첨부파일2</span>
 		  </div>
 		  <div class="custom-file">
-		    <input type="file" class="custom-file-input" name="upFile" id="upFile" >
+		    <input type="file" class="custom-file-input" name="upFile" id="upFile2" >
 		    <label class="custom-file-label" for="upFile2">파일을 선택하세요</label>
 		  </div>
 		</div>

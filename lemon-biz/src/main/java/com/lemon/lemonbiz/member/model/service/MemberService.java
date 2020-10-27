@@ -29,4 +29,6 @@ public interface MemberService {
 
 	List<Dept> hierarchicalDeptList();
 
+	int updatePasswordWithEmail(Member realMember);
+
 }
