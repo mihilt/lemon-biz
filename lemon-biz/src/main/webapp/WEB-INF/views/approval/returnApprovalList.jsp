@@ -30,7 +30,7 @@
 	<th>제목</th>
 	<th>상태</th>
 	<th>작성일</th>
-	<th>문서분류</th>
+	
 	
 	</tr>
 	</thead>
@@ -38,12 +38,12 @@
 	<c:if test="${ pageInfo.totalCount != 0 }">
 	<c:forEach var="item" items="${ apvList }" begin="${ pageInfo.startNum }" end="${ pageInfo.endNum }">
 	<c:if test="${ item.status == 'r'}">
-		<tr onclick="detail(${ item.key })" style="cursor: pointer;">
+		<tr onclick="returnDetail(${ item.key })" style="cursor: pointer;">
 			<td>${ item.key }</td>
 			<td><a >${ item.title }</a></td>
 			<td> 반려 </td>
 			<td><fmt:formatDate value="${ item.writeDate }"  pattern="yyyy-MM-dd HH:mm:ss"/></td>
-			<td>${ item.docName }</td>
+			
 		</tr>
 	</c:if>
 	</c:forEach>
@@ -97,13 +97,22 @@
 	</div>
 	
 	</div>
-	<form id="myApprovalDetail" action="${pageContext.request.contextPath}/approval/myApprovalDetail.do" method="GET">
+	<form id="returnApprovalDetail" action="${pageContext.request.contextPath}/approval/returnApprovalDetail.do" method="GET">
 		
 	</form>
 
 
 
+<script>
 
+function returnDetail(j) {
+
+	$('<input></input>').attr('type','hidden').attr('value',j).attr('name','apprKey').appendTo('#returnApprovalDetail');
+	$('#returnApprovalDetail').submit();		
+	
+}
+
+</script>
 
 
 

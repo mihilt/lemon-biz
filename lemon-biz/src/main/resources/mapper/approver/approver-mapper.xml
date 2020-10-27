@@ -277,11 +277,28 @@
 		    appr A
 		        left outer join appr_check C on A.key = C.approval_key
 		where
-		    C.mem_id = #{memberId} and A.status = 'p'
-		    
-		    and (select V.status from appr_check V where V.key =  C.key - 1) = 't'
-		    
+		    C.mem_id = #{memberId}
+		    and
+            (
+		    (select V.status from appr_check V where V.key =  C.key - 1) = 't'
+            or 
+            C.seq_num = 1
+            )
 		order by A.key desc
+	</select>
+	
+	<select id="returnApprovalDetail" resultMap="apprMap">
+		select
+		    A.*,
+		    M.member_id as memName,
+		    R.name as rankName
+		from
+		    appr A
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
+		where
+		    A.key = #{key}
+		
 	</select>
 	
 	
@@ -368,7 +385,7 @@
 		set
 			check_date = default, status = 'f', opinion = #{opinion}
 		where
-			mem_id=#{memberId} and approval_key=#{key}
+			mem_id= #{memberId} and approval_key= #{key}
 	
 	</update>
 	
@@ -379,18 +396,28 @@
 		set
 			status ='r'
 		where 
-			key= #{apprKey}
+			key= #{key}
 	
 	</update>
 	
 	<select id="returnApprList" resultMap="apprMap">
-	
 		select
 			*
 		from
 			appr
 		where
-			mem_id = #{memberId} and status = 'f'
+			mem_id = #{memberId} and status = 'r'
+		order by key desc
+	</select>
+	
+	<select id="compliteApprList" resultMap="apprMap">
+		select
+			*
+		from
+			appr
+		where
+			mem_id = #{memberId} and status = 'a'
+		order by key desc
 	</select>
 	
   

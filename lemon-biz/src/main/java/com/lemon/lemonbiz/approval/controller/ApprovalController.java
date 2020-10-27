@@ -53,6 +53,22 @@ public class ApprovalController {
 	private ResourceLoader resourceLoader;
 	
 	
+	@RequestMapping(value="/compliteApprovalList")
+	public String compliteApprovalList(@ModelAttribute("loginMember") Member loginMember,
+									   @RequestParam(value="page") int page,
+									   Model model) {
+		
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.compliteApprList(loginMember.getMemberId());
+		
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("auth", 0);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/compliteApprovalList");
+		
+		return "approval/compliteApprovalList";
+	}
+	
 	@RequestMapping(value="/returnApprovalList")
 	public String returnApprovalList(@ModelAttribute("loginMember") Member loginMember,
 									 @RequestParam(value="page") int page,
@@ -531,8 +547,11 @@ public class ApprovalController {
 		
 		Appr appr = approvalService.reWriteAppr(key);
 		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		try {
 		Attachment attach = approvalService.reWriteAttach(key);
-		
+		model.addAttribute("attach",attach);
+		} catch(Exception e) {
+		}
 		apprCheck apprck1 = new apprCheck();
 		apprCheck apprck2 = new apprCheck();
 		apprCheck apprck3 = new apprCheck();
@@ -566,11 +585,51 @@ public class ApprovalController {
 		model.addAttribute("apprck2",apprck2);
 		model.addAttribute("apprck3",apprck3);
 		
-		model.addAttribute("attach",attach);
+		
 		
 		
 		
 		return "approval/writeForm";
+	}
+	
+	
+	@RequestMapping(value="/returnApprovalDetail.do", method=RequestMethod.GET)
+	public String returnApprovalDetail(Model model,
+						  @RequestParam(value="apprKey") String key) {
+		
+		
+		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		try {
+		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("attach",attach);
+		}catch(Exception e) {	
+		}
+		Appr appr = approvalService.returnApprovalDetail(key);
+		
+		apprCheck apprck1 = new apprCheck();
+		apprCheck apprck2 = new apprCheck();
+		apprCheck apprck3 = new apprCheck();
+		
+		apprck1 = apprchList.get(0);
+		apprck2 = apprchList.get(1);
+		apprck3 = apprchList.get(2);
+		
+		log.debug("apprck1={}",apprck1);
+		log.debug("apprck2={}",apprck2);
+		log.debug("apprck3={}",apprck3);
+		
+		
+		model.addAttribute("appr",appr);
+		
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
+		
+		
+		
+		
+		return "approval/returnApprovalDetail";
 	}
 	
 	@RequestMapping(value="/myApprovalDetail", method=RequestMethod.GET)
@@ -612,7 +671,11 @@ public class ApprovalController {
 								   @RequestParam(value="ckKey") int ckKey) {
 			
 		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		try {
 		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("attach",attach);
+		}catch(Exception e) {
+		}
 		Appr appr = approvalService.apprckDetail(ckKey);
 		
 		apprCheck apprck1 = new apprCheck();
@@ -629,7 +692,7 @@ public class ApprovalController {
 		model.addAttribute("apprck2",apprck2);
 		model.addAttribute("apprck3",apprck3);
 		
-		model.addAttribute("attach",attach);
+		
 		
 		
 		
@@ -719,7 +782,7 @@ public class ApprovalController {
 		
 		String memberId = loginMember.getMemberId();
 		Map<String, String> map = new HashMap<>();
-		map.put("apprKey",key);
+		map.put("key",key);
 		map.put("opinion",opinion);
 		map.put("memberId",memberId);
 		

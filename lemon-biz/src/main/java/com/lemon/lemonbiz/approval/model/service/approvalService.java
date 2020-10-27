@@ -65,6 +65,10 @@ public interface approvalService {
 
 	List<Appr> returnApprList(String memberId);
 
+	Appr returnApprovalDetail(String key);
+
+	List<Appr> compliteApprList(String memberId);
+
 	
 
 	
