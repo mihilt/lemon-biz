@@ -814,10 +814,10 @@ public class ApprovalController {
 		log.debug("apprck={}",apprck);
 
 		if(apprck.getSeqNum() == 1 || apprck.getSeqNum() == 2) {
-			int result = approvalService.changeApprck(apprck.getKey());
+			int result = approvalService.changeApprck(apprck.getKey(),appr);
 		}
 		else {
-			int result = approvalService.backApprck(apprck.getKey(),apprKey);
+			int result = approvalService.backApprck(apprck.getKey(),apprKey,appr);
 		}
 		
 		red.addFlashAttribute("msg", "승인이 완료되었습니다.");
@@ -830,6 +830,7 @@ public class ApprovalController {
 								Model model,
 								@RequestParam("opinion") String opinion,
 								@RequestParam("returnApprKey") String key,
+								Appr appr,
 								RedirectAttributes red) {
 		
 		
@@ -839,7 +840,7 @@ public class ApprovalController {
 		map.put("opinion",opinion);
 		map.put("memberId",memberId);
 
-		int result = approvalService.returnApproval(map);
+		int result = approvalService.returnApproval(map, appr);
 		
 		System.out.println("dddddddddddddddddddddddddd");
 		red.addFlashAttribute("msg", "반려되었습니다.");
