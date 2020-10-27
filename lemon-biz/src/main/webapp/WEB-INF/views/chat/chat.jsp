@@ -32,14 +32,16 @@
 </head>
 
 <script type="text/javascript">
+	var ws;
+
 	window.onload = function(){
 		wsOpen();
 	}
 
-	var ws;
 
 	function wsOpen(){
 		ws = new WebSocket("ws://" + location.host + "/lemonbiz/chating/"+$("#roomNumber").val());
+		console.log('ws',ws);
 		wsEvt();
 	}
 		
@@ -54,6 +56,7 @@
 			
 			//메시지를 받으면 동작
 			var msg = data.data;
+			console.log('msg',msg);
 			if(msg != null && msg.trim() != ''){
 				var d = JSON.parse(msg);
 				console.log('d',d);

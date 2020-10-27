@@ -173,7 +173,8 @@
   	<update id="updateBoard">
   	update post set
   		title = #{ title },
-  		content = #{ content }
+  		content = #{ content },
+  		is_notice = #{ isNotice }
   		where key = #{ key }
   	</update>
   	
@@ -425,6 +426,18 @@
   	select name from dept where key = #{deptKey}
   	<!-- select distinct D.name from post P left join dept D on P.dept_key = D.key where P.categ_key=2  and  P.dept_key = #{deptKey} -->
   	</select>
+  	
+  	<select id="getBoardTopFive" resultType="board"> 
+  		select * 
+		from(
+		    select *
+		    from post
+		    where categ_key = 3
+		    order by post_date desc
+		    )
+		where
+		    rownum &lt;= 5
+  	</select>
   
   	<select id="countTitleBoard" resultType="_int">
   	SELECT COUNT(*) as "cnt" FROM POST where categ_key=1 and title like'%'||#{ searchKeyword }||'%'
@@ -483,6 +496,10 @@
   	<select id="selectOneBoardComment" resultType="BoardComment">
   		select * from board_comment where board_comment_no = #{ key }
   	</select>
+  	
+  	<delete id="boardGoodDelete">
+  	delete from good where post_key = #{ key }
+  	</delete>
 </mapper>
 
 

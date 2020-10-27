@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.cost.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -21,8 +22,8 @@ public class CostDAOImpl implements CostDAO {
 	}
 
 	@Override
-	public List<Cost> selectAllCost(String memberId) {
+	public List<Cost> selectAllCost(HashMap<Object, Object> params) {
 		
-		return sqlSession.selectList("cost.selectAllCost",memberId);
+		return sqlSession.selectList("cost.selectAllCost",params);
 	}
 }

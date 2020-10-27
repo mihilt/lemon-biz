@@ -295,6 +295,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return result;
 	}
 
+	@Override
+	public int getCountApproval(HashMap<Object, Object> params) {
+		return approvalDAO.getCountApproval(params);
+	}
+
 
 
 

@@ -14,7 +14,7 @@ import com.lemon.lemonbiz.chating.handler.WebSocketHandler;
 // 웹소켓에 대해 대부분 자동설정을 한다.
 public class WebSocketConfig implements WebSocketConfigurer {
 
-// 안정적인 주입
+//  안정적인 주입
 //	private final YoSocketHandler wh;
 //	
 //	public WebSocketConfig(YoSocketHandler wh) {

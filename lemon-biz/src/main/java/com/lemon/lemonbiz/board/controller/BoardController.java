@@ -2,7 +2,7 @@ package com.lemon.lemonbiz.board.controller;
 
 
 import java.io.File;
-
+//github.com/mihilt/lemon-biz.git
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -18,12 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,9 +40,7 @@ import com.lemon.lemonbiz.common.vo.Paging;
 import com.lemon.lemonbiz.common.vo.PagingType;
 import com.lemon.lemonbiz.member.model.vo.Member;
 
-
 import lombok.extern.slf4j.Slf4j;
-import sun.security.util.Length;
 
 
 @Controller
@@ -79,6 +74,7 @@ public class BoardController {
 	
 		
 		List<Map<String, Object>> list = boardService.selectBoardMapList(cPage,numPerPage,map);
+		log.debug("list = {}", list);
 		mav.addObject("list", list);
 		mav.addObject("pagebar",pageBar);		
 		mav.setViewName("board/boardList");
@@ -317,26 +313,105 @@ public class BoardController {
 	public ModelAndView boardupdatesucces(@ModelAttribute Board board,@RequestParam("key") int key ,ModelAndView mav,
 										@RequestParam(value = "upFile1",required = false) MultipartFile upFile1,
 										@RequestParam(value = "upFile2",required = false) MultipartFile upFile2,
-					@RequestParam(value="delFile1", required=false) String delFile1,@RequestParam(value="delFile2", required=false) String delFile2, HttpServletRequest request) throws IllegalStateException, IOException {
+										HttpServletRequest request) throws IllegalStateException, IOException {
 
 
 		//1. 서버컴퓨터에 업로드한 파일 저장하기
 		List<Attachment> attachList = new ArrayList<>();
 		
+		if(upFile1 != null && upFile2 !=null) {
 	
+		try {
 		List<Attachment> oldBoard = boardService.SelectBoardOne(key); 
-			
-			
+		String oldRename = oldBoard.get(0).getReName();	
+		String oldRename2= oldBoard.get(1).getReName();	
 			
 
-		board.setKey(key);
-		boardService.updateBoard(board,oldBoard);
-		mav.addObject("board", board);
-	    mav.setViewName("redirect:/board/boardDetail.do?key="+key);
-	    return mav; 
-	}
 		
+		//첨부파일 수정관련
+			//이전 첨부파일이 존재하는 경우만 실행
+		  String saveDirectory = request.getServletContext()
+				  .getRealPath("/resources/upload/board");
+		 
+				
+				
+				 
+
+		  
+		  log.debug("upFileget={}",upFile1.getOriginalFilename());
+		  log.debug("upFileget={}",upFile2.getOriginalFilename());
 	
+		  log.debug("getOriginalFilename()={}",upFile1.getOriginalFilename());
+		  //2.메모리의 파일 -> 서버컴퓨터 디렉토리 저장  transferTo
+		  // 첨부파일을 새로 추가한 경우
+				if(upFile1.getOriginalFilename() != "") {	
+					  File dest = new File(saveDirectory, oldRename); //
+					  upFile1.transferTo(dest);
+					 				
+					String oldRenamedFileName1 = oldBoard.get(0).getReName();
+					
+					Attachment attach = new Attachment();
+					attach.setOriginName(upFile1.getOriginalFilename());
+					attach.setReName(oldRenamedFileName1);
+					attachList.add(attach);
+					
+					board.setAttachList(attachList);
+					board.setKey(key);
+					boardService.updateBoard(board,oldBoard);
+					mav.addObject("board", board);
+					log.debug("attachList11={}",attachList);
+					log.debug("board11= {}",board);
+					mav.setViewName("redirect:/board/boardDetail.do?key="+key);
+					
+					
+						
+				}
+				
+				if(upFile2.getOriginalFilename() != "") {
+					
+					File dest2 = new File(saveDirectory, oldRename2); //
+					  upFile2.transferTo(dest2);
+
+					Attachment attach = new Attachment();
+					
+					String oldRenamedFileName2 = oldBoard.get(1).getReName();
+					attach.setOriginName(upFile2.getOriginalFilename());
+					attach.setReName(oldRenamedFileName2);
+					attachList.add(attach);
+					
+					board.setAttachList(attachList);
+					board.setKey(key);
+					boardService.updateBoard(board,oldBoard);
+					mav.addObject("board", board);
+					log.debug("attachList11={}",attachList);
+					log.debug("board11= {}",board);
+					mav.setViewName("redirect:/board/boardDetail.do?key="+key);
+					
+			}	
+
+				
+				if(upFile1.getOriginalFilename() == "" && upFile2.getOriginalFilename() == "")  { 			
+					board.setAttachList(oldBoard);
+					board.setKey(key);
+					boardService.updateBoard2(board,oldBoard);
+					mav.addObject("board", board);
+					log.debug("attachList11={}",attachList);
+					log.debug("board11= {}",board);
+					mav.setViewName("redirect:/board/boardDetail.do?key="+key);
+				}
+			
+		}catch (Exception e) {
+			
+		}
+		}
+		
+		board.setKey(key);
+		boardService.updateBoard3(board);
+		mav.addObject("board", board);
+		mav.setViewName("redirect:/board/boardDetail.do?key="+key);
+		return mav; 
+		
+		}
 	
 	@RequestMapping(value="/boardInsert.do", method = RequestMethod.POST)
 	
@@ -345,7 +420,7 @@ public class BoardController {
 		
 		boardService.boardInsert(boardComment);
 		int key = boardComment.getBoardRef();
-		log.debug("boardComment = {}" ,boardComment); 
+		
 		
 		
 		redirectAttr.addFlashAttribute("msg", "댓글 등록 성공");
@@ -367,6 +442,7 @@ public class BoardController {
 			
 		String renamedFileName = attachment.getReName();
 		boardService.boardFileDelete(key);
+		boardService.boardGoodDelete(key);
 		boardService.boardfrmDelete(key);
 		
 		if(renamedFileName != null) {
@@ -420,10 +496,10 @@ public class BoardController {
 		String url = request.getRequestURI();
 		String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
 		
-		log.debug("list = {}", list);
+		
 		mav.addObject("list", list);
 		mav.addObject("name",name);
-		log.debug("name22 = {}",name);
+		
 		mav.addObject("pagebar",pageBar);
 		
 		mav.setViewName("board/boardTeamList");
@@ -757,6 +833,18 @@ public class BoardController {
 		model.addAttribute("list", list);
 		model.addAttribute("pagebar",pageBar);		
 		return "board/boardFindMList";
+	}
+	
+	//wj
+	@RequestMapping(value = "/getBoardTopFive")
+	public @ResponseBody List<Board> getBoardTopFive(){
+		
+		List<Board> list = boardService.getBoardTopFive();
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("list = " + list);
+		
+		return list;
 	}
 	@RequestMapping(value="/RecUpdate.do")
 	@ResponseBody

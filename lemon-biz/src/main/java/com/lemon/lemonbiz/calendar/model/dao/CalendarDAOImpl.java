@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.calendar.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -45,6 +46,12 @@ public class CalendarDAOImpl implements CalendarDAO {
 	public int dragNdropCalendar(NewDates newDates) {
 		
 		return sqlSession.update("calendar.dragNdropCalendar",newDates);
+	}
+
+	@Override
+	public int getTodayCount(HashMap<Object, Object> params) {
+		
+		return sqlSession.selectOne("calendar.getTodayCount",params);
 	}
 
 }
