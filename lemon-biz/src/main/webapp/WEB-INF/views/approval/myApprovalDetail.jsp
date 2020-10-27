@@ -107,11 +107,57 @@
 	
 						</tr>
 						
+						<tr>
+						
+						<td>
+							<c:choose>
+								<c:when test="${ apprck1.status eq null}">
+									미결재
+								</c:when>
+								<c:when test="${ apprck1.status eq 't' }">
+									승인
+								</c:when>
+								<c:when test="${ apprck1.status eq 'f' }">
+									반려
+								</c:when>
+							</c:choose>
+						</td>
+						<td>
+							<c:choose>
+								<c:when test="${ apprck2.status eq null }">
+									미결재
+								</c:when>
+								<c:when test="${ apprck2.status eq 't' }">
+									승인
+								</c:when>
+								<c:when test="${ apprck2.status eq 'f' }">
+									반려
+								</c:when>
+							</c:choose>
+						</td>
+						<td>
+							<c:choose>
+								<c:when test="${ apprck3.status eq null }">
+									미결재
+								</c:when>
+								<c:when test="${ apprck3.status eq 't' }">
+									승인
+								</c:when>
+								<c:when test="${ apprck3.status eq 'f' }">
+									반려
+								</c:when>
+							</c:choose>
+						</td>
+						
+						</tr>
+						
 						</table>
 						</div>
 						
 						</table>
 						</div>
+						
+						
 						<!-- ==============결제칸 끝============== -->
 						<!-- 폼 내용 -->
 						
