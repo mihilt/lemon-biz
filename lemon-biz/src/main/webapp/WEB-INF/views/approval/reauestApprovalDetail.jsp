@@ -221,8 +221,7 @@
 						<div class="modal-body">
 
 							<textarea id="returnResult" class="form-control" name="approval_content"  cols="40" rows="9" 
-		      							  style="width:100%; resize:none">
-							</textarea>
+		      							  style="width:100%; resize:none"></textarea>
 							
 						</div>
 						<div class="modal-footer float-right">
