@@ -173,7 +173,8 @@
   	<update id="updateBoard">
   	update post set
   		title = #{ title },
-  		content = #{ content }
+  		content = #{ content },
+  		is_notice = #{ isNotice }
   		where key = #{ key }
   	</update>
   	
@@ -483,6 +484,10 @@
   	<select id="selectOneBoardComment" resultType="BoardComment">
   		select * from board_comment where board_comment_no = #{ key }
   	</select>
+  	
+  	<delete id="boardGoodDelete">
+  	delete from good where post_key = #{ key }
+  	</delete>
 </mapper>
 
 

@@ -213,17 +213,17 @@ $("[name=boardCommentFrm]").submit(function(){
 /*  대댓글 */
 	$(".btn-reply").click(function(){
 		var html = "<tr>"
-				 + "<td style='display:none; text-align:left' colspan='2'>"
-				 + "<form action='${pageContext.request.contextPath}/board/boardInsert.do' method='POST'>"
-				 + '<input type="hidden" name="boardRef" value="${ board.key }" />'
-				 + '<input type="hidden" name="boardCommentWriter" value="${loginMember.memberId }" />'
-				 + '<input type="hidden" name="boardCommentLevel" value="2" />'
-				 + '<input type="hidden" name="boardCommentRef" value="' + $(this).val() + '" />' 
-				 + '<textarea name="boardCommentContent" cols="60" rows="1" style="width:450px;"></textarea>'
-				 + '<button type="submit" class="btn-insert2" style="width:60px;">등록</button>'
-				 + "</form>"
-				 + "</td>"
-				 + "</tr>"
+			 + "<td style='display:none; text-align:left' colspan='2'>"
+			 + "<form action='${pageContext.request.contextPath}/board/boardInsert.do' method='POST'>"
+			 + '<input type="hidden" name="boardRef" value="${ board.key }" />'
+			 + '<input type="hidden" name="boardCommentWriter" value="${loginMember.memberId }" />'
+			 + '<input type="hidden" name="boardCommentLevel" value="2" />'
+			 + '<input type="hidden" name="boardCommentRef" value="' + $(this).val() + '" />' 
+			 + '<textarea name="boardCommentContent" cols="60" rows="1" style="width:450px;"></textarea>'
+			 + '<button type="submit" class="btn-insert2" style="width:60px;">등록</button>'
+			 + "</form>"
+			 + "</td>"
+			 + "</tr>"
 		  var $tr = $(html);
 		  var $trFromBtn = $(this).parent().parent();
 		  $tr.insertAfter($trFromBtn)

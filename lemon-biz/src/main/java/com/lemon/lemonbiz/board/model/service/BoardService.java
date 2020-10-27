@@ -85,6 +85,12 @@ public interface BoardService {
 
 	int RecCount(int key);
 
+	void boardGoodDelete(int key);
+
+	void updateBoard2(Board board, List<Attachment> oldBoard);
+
+	void updateBoard3(Board board);
+
 	
 
 	

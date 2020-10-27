@@ -312,6 +312,13 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 
+	@Override
+	public void boardGoodDelete(int key) {
+		sqlSession.delete("board.boardGoodDelete",key);
+		
+	}
+
+
 
 
 }
