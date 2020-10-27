@@ -58,13 +58,23 @@ public interface ApprovalService {
 
 	int changeApprck(int key);
 
-	int backApprck(int key);
+	int backApprck(int key, String apprKey);
 
 	List<Appr> myApprovalList(String memberId);
 
 	DocType selectOneDocTypeAjax(DocType docType);
 
 	List<DocType> selectDocTypeTitleList();
+
+	List<Appr> compliteApprList(String memberId);
+
+	List<Appr> returnApprList(String memberId);
+
+	Appr returnApprovalDetail(String key);
+
+	Appr compliteApprDetail(String key);
+
+	int returnApproval(Map<String, String> map);
 
 	
 

@@ -11,13 +11,13 @@
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
 	<div class="container-fluid">
-    							<h2>내문서</h2>
+    							<h2>요청결제문서함</h2>
     			
 	<table class="table table-hover text-center">
 <colgroup>
 			<col width='8%' />
+			<col width='8%' />
 			<col width='*%' />
-			<col width='15%' />
 			<col width='15%' />
 			<col width='10%' />
 			<col width='10%' />
@@ -28,25 +28,31 @@
 	<th>문서번호</th>
 	<th>기안자</th>
 	<th>제목</th>
-	<th>상태</th>
+	<th>요청</th>
 	<th>작성일</th>
-	<th>문서분류</th>
+	<th>상태</th>
 	
 	</tr>
 	</thead>
 	
 	<c:if test="${ pageInfo.totalCount != 0 }">
 	<c:forEach var="item" items="${ apvList }" begin="${ pageInfo.startNum }" end="${ pageInfo.endNum }">
-	<c:if test="${ item.status == 'p'}">
 		<tr onclick="detail(${ item.key },${ item.ckKey })" style="cursor: pointer;">
 			<td>${ item.key }</td>
 			<td>${ item.memId}</td>
 			<td><a >${ item.title }</a></td>
 			<td>${item.ckSeqNum}차 결제요청</td>
 			<td><fmt:formatDate value="${ item.writeDate }"  pattern="yyyy-MM-dd HH:mm:ss"/></td>
-			<td>${ item.docName }</td>
-		</tr>
+	<c:if test="${ item.status == 'p'}">
+			<td>대기</td>
 	</c:if>
+	<c:if test="${ item.status == 'a'}">
+			<td>완료</td>
+	</c:if>
+	<c:if test="${ item.status == 'r'}">
+			<td>반려</td>
+	</c:if>
+		</tr>
 	</c:forEach>
 	</c:if>
 	

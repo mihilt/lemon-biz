@@ -234,8 +234,16 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int backApprck(int key) {
-		return approvalDAO.backApprck(key);
+	public int backApprck(int key, String apprKey) {
+		
+		int result = 0;
+		
+		
+		result = approvalDAO.backApprck(key);
+		
+		result = approvalDAO.backAppr(apprKey);
+		
+		return result;
 	}
 
 	@Override
@@ -252,6 +260,41 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public List<DocType> selectDocTypeTitleList() {
 		return approvalDAO.selectDocTypeTitleList();
 	}
+
+	@Override
+	public List<Appr> compliteApprList(String memberId) {
+		return approvalDAO.compliteApprList(memberId);
+	}
+
+	@Override
+	public List<Appr> returnApprList(String memberId) {	
+		return approvalDAO.returnApprList(memberId);
+	}
+
+	@Override
+	public Appr returnApprovalDetail(String key) {
+		
+		
+		return approvalDAO.returnApprovalDetail(key);
+	}
+
+	@Override
+	public Appr compliteApprDetail(String key) {
+		return approvalDAO.compliteApprDetail(key);
+	}
+
+	@Override
+	public int returnApproval(Map<String, String> map) {
+		
+		int result = 0;
+		
+		result = approvalDAO.returnApprck(map);
+		
+		result = approvalDAO.returnApproval(map);
+		
+		return result;
+	}
+
 
 
 

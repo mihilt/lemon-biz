@@ -78,6 +78,20 @@ public interface ApprovalDAO {
 
 	int selectOneApprCheckKey(Map<String, Object> map);
 
+	List<Appr> compliteApprList(String memberId);
+
+	List<Appr> returnApprList(String memberId);
+
+	Appr returnApprovalDetail(String key);
+
+	Appr compliteApprDetail(String key);
+
+	int returnApproval(Map<String, String> map);
+
+	int backAppr(String apprKey);
+
+	int returnApprck(Map<String, String> map);
+
 	
 
 
