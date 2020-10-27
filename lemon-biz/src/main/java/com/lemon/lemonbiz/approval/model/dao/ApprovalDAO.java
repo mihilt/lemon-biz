@@ -92,11 +92,4 @@ public interface ApprovalDAO {
 
 	int returnApprck(Map<String, String> map);
 
-	
-
-
-
-	
-
-
 }

@@ -13,7 +13,7 @@
 
 <div class="container">
 		<div class="container-fluid">
-		<h2>요청결제문서</h2>
+		<h2>요청결재문서</h2>
 		<!-- 게시글 -->
  			<div class="col-lg-12">			
              	<div class="card" >
@@ -61,14 +61,14 @@
 						
 						<tr>
 							<td></td>
-							<td>기안자</td>
-							<td id="proNum1">1차 결제자</td>
-							<td id="proNum2">2차 결제자</td>
-							<td id="proNum3">3차 결제자</td>
+							
+							<td id="proNum1">1차 결재자</td>
+							<td id="proNum2">2차 결재자</td>
+							<td id="proNum3">3차 결재자</td>
 						</tr>
 						<tr>
 						<td class="tt" rowspan='4'>결재</td>
-						<td class="aa">작성자</td>
+						
 						
 						<td id="authRank1" class="aa">
 						${ apprck1.rankName }
@@ -91,7 +91,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.name }</td>
+						
 						<td id="authName1">${ apprck1.ckName }</td>
 						<td id="authName2">${ apprck2.ckName }</td>
 						<td id="authName3">${ apprck3.ckName }</td>
@@ -100,7 +100,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.memberId }</td>
+						
 						<td id="apv_mem1">${ apprck1.memId }</td>
 						<td id="apv_mem2">${ apprck2.memId }</td>
 						<td id="apv_mem3">${ apprck3.memId }</td>
@@ -130,7 +130,12 @@
 							
 							
 							
-							&nbsp;<label>첨부: ${ attach.reName } </label> <br>
+							&nbsp;<label>첨부: ${ attach.originName } </label> <br>
+							<button type="button"
+									class="btn btn-outline-primary"
+									onclick="fileDownload('${attach.key}')">
+									다운로드
+							</button>
 							<hr>
 						               
 						</form>
@@ -147,6 +152,14 @@
 				</div>
 			</div>
 		</div>
+		
+<script>
+
+function fileDownload(key) {
+	location.href = "${ pageContext.request.contextPath }/approval/fileDownload.do?key=" + key;
+}
+
+</script>
 		
 
 

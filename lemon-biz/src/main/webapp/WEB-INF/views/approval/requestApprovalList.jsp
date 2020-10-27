@@ -11,7 +11,7 @@
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
 	<div class="container-fluid">
-    							<h2>요청결제문서함</h2>
+    							<h2>요청결재문서함</h2>
     			
 	<table class="table table-hover text-center">
 <colgroup>
@@ -41,7 +41,7 @@
 			<td>${ item.key }</td>
 			<td>${ item.memId}</td>
 			<td><a >${ item.title }</a></td>
-			<td>${item.ckSeqNum}차 결제요청</td>
+			<td>${item.ckSeqNum}차 결재요청</td>
 			<td><fmt:formatDate value="${ item.writeDate }"  pattern="yyyy-MM-dd HH:mm:ss"/></td>
 	<c:if test="${ item.status == 'p'}">
 			<td>대기</td>
