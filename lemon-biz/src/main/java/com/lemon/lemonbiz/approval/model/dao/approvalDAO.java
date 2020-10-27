@@ -83,6 +83,8 @@ public interface approvalDAO {
 
 	List<Appr> compliteApprList(String memberId);
 
+	Appr compliteApprDetail(String key);
+
 
 	
 

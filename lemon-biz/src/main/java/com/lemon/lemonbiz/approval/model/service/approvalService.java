@@ -69,6 +69,8 @@ public interface approvalService {
 
 	List<Appr> compliteApprList(String memberId);
 
+	Appr compliteApprDetail(String key);
+
 	
 
 	

@@ -242,6 +242,11 @@ public class approvalServiceImpl implements approvalService {
 		return approvalDAO.compliteApprList(memberId);
 	}
 
+	@Override
+	public Appr compliteApprDetail(String key) {
+		return approvalDAO.compliteApprDetail(key);
+	}
+
 
 
 

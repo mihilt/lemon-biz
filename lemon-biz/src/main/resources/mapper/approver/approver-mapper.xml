@@ -301,6 +301,20 @@
 		
 	</select>
 	
+	<select id="compliteApprDetail" resultMap="apprMap">
+	
+		select
+		    A.*,
+		    M.member_id as memName,
+		    R.name as rankName
+		from
+		    appr A
+		        full outer join member M on A.mem_id = M.member_id
+		        full outer join rank R on M.rank_key = R.key
+		where
+		    A.key = #{key}
+	</select>
+	
 	
 	<select id="apprckDetail" resultMap="apprMap">
 		

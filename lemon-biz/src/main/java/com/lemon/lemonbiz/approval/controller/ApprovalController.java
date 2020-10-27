@@ -699,6 +699,36 @@ public class ApprovalController {
 		return "approval/reauestApprovalDetail";
 	}
 	
+	@RequestMapping(value="/compliteApprovalDetail.do")
+	
+	public String compliteApprovalDetail(Model model,
+								   @RequestParam(value="apprKey") String key) {
+			
+		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		try {
+		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("attach",attach);
+		}catch(Exception e) {
+		}
+		Appr appr = approvalService.compliteApprDetail(key);
+		
+		apprCheck apprck1 = new apprCheck();
+		apprCheck apprck2 = new apprCheck();
+		apprCheck apprck3 = new apprCheck();
+		
+		apprck1 = apprchList.get(0);
+		apprck2 = apprchList.get(1);
+		apprck3 = apprchList.get(2);
+		
+		model.addAttribute("appr",appr);
+		
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
+		
+		return "approval/compliteApprovalDetail";
+	}
 	
 	
 	@RequestMapping(value="/fileDownload.do")

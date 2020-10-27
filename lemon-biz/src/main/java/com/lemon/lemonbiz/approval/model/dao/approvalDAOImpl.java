@@ -198,6 +198,11 @@ public class approvalDAOImpl implements approvalDAO {
 		return sqlSession.selectList("approval.compliteApprList",memberId);
 	}
 
+	@Override
+	public Appr compliteApprDetail(String key) {
+		return sqlSession.selectOne("approval.compliteApprDetail",key);
+	}
+
 
 	
 	
