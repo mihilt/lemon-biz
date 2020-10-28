@@ -7,6 +7,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
 	
 
 <style>
@@ -63,7 +64,7 @@ function goBoardForm(){
 			<td style="color:black; font-weight:bold;"><img src="${ pageContext.request.contextPath }/resources/images/notic.png" 
 						 style="width:30px;" /></td>
 
-			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.title } </td>
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.title } <span class="badge bg-teal"><i class="fa fa-comment-o">[${ post.boardCommentCnt }]</i></span></td>
 			
 			
 			
