@@ -28,8 +28,6 @@ $(document).ready(function() {
 </script>
 
 <div>
-	<h2>일반결재 작성</h2>
-
 	
 
 
@@ -192,7 +190,10 @@ $(document).ready(function() {
 		<!-- 게시글 -->
  			<div class="col-lg-12">			
              	<div class="card" >
-                	<div class="card-header py-3" align="center">	
+                	<div class="card-header py-2" align="center">
+                	<br />
+                	<h2>결재문서 작성</h2>
+                	<br />
 						<table class="table table text-center">
 					    <tr>
 					    	<td><strong>기안담당</strong>
@@ -223,29 +224,54 @@ $(document).ready(function() {
 						<input type="hidden" id="authDept2" name="authDept2" value="">
 						<input type="hidden" id="authDept3" name="authDept3" value="">
 						
-					    <table>
-						<tr><td width="50%">
-						<div class="float-center">
+						
+						<div class="float-left col-md-5" >
+						<div class="float-left col-md-4">
 							<!-- Button trigger modal -->
-							<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+							
+							<label for="#approvalSelectBtn">결제자 등록 : </label>
+							<button id="approvalSelectBtn" type="button" class="btn btn-outline-primary" 
+							data-toggle="modal" data-target="#exampleModal">
 							  결재라인 추가
 							</button>
+							
+							<!-- 양식 선택 -->
 						</div>
-						</td>
-						<td width="50%">
-						<div class="float-right">
-						<table border="1" style="display: inline-block">
+						
+						
+						<div class="float-left col-md-10" style="padding:15px">
+							
+							<p>문서양식 선택 : </p>				      	
+							<select name="docType" class="col-6 form-control"
+								id="docType">
+								<option value="none" selected>선택</option>
+								<c:forEach items="${ docTypeList }" var="docType">
+									<option value="${ docType.key }">
+										${ docType.name }
+									</option>
+								</c:forEach>
+							</select>
+							
+						</div>
+						</div>
+						
+						
+					    <table>
+						<tr>
+						<td width="40%">
+						<div class="float-center">
+						<table class="table table-hover text-center" >
 						
 						<tr>
-							<td></td>
-							<td>기안자</td>
+							
+							<td>분류</td>
 							<td id="proNum1">1차 결재자</td>
 							<td id="proNum2">2차 결재자</td>
 							<td id="proNum3">3차 결재자</td>
 						</tr>
 						<tr>
-						<td class="tt" rowspan='4'>결재</td>
-						<td class="aa">작성자</td>
+						
+						<td class="aa">직급</td>
 						
 						<td id="authRank1" class="aa">
 						${ apprck1.rankName }
@@ -268,7 +294,7 @@ $(document).ready(function() {
 						
 						<tr>
 						
-						<td>${ loginMember.name }</td>
+						<td>성명</td>
 						<td id="authName1">${ apprck1.ckName }</td>
 						<td id="authName2">${ apprck2.ckName }</td>
 						<td id="authName3">${ apprck3.ckName }</td>
@@ -277,7 +303,7 @@ $(document).ready(function() {
 						
 						<tr>
 						
-						<td>${ loginMember.memberId }</td>
+						<td>사원번호</td>
 						<td id="apv_mem1">${ apprck1.memId }</td>
 						<td id="apv_mem2">${ apprck2.memId }</td>
 						<td id="apv_mem3">${ apprck3.memId }</td>
@@ -288,19 +314,12 @@ $(document).ready(function() {
 						</div>
 						
 						</table>
+						
 						</div>
 						<!-- ==============결재칸 끝============== -->
 						
-						<!-- 양식 선택 -->											      	
-						<select name="docType" class="col-5 form-control mx-2 my-5"
-							id="docType">
-							<option value="none" selected>--- 양식을 선택해주세요. ---</option>
-							<c:forEach items="${ docTypeList }" var="docType">
-								<option value="${ docType.key }">
-									${ docType.name }
-								</option>
-							</c:forEach>
-						</select>
+						
+						<hr />
 						
 						<!-- 폼 내용 -->
 						<form class="p-2" id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
