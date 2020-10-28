@@ -8,7 +8,8 @@
         	from ( select rownum as rnum, v.* 
         			from ( select(select count(*) 
         						from attachment 
-        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name,(select count(*) from good G where G.post_key = P.key )count
+        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name,(select count(*) from good G where G.post_key = P.key )count,
+        							(select count(*) from board_comment B where B.board_ref = P.key) board_comment_cnt 
         		from post P 
         			where categ_key=1 
         				order by is_notice desc,key desc)v)v
@@ -28,6 +29,7 @@
   		<result column="dept_key" property="deptKey"/>
   		<result column="name" property="name"/>
   		<result column="count" property="count"/>
+  		<result column="board_comment_cnt" property="boardCommentCnt"/>
   		<result column="file_count" property="fileCount"/>
   		<result column="startRnum" property="startRnum"/>
   		<result column="endRnum" property="endRnum"/>
@@ -237,7 +239,8 @@
 			    from 
 			        attachment
 			    where
-		        post_key = P.key) file_count,(select name from member M where M.member_id = P.mem_id) name1,(select count(*) from good G where G.post_key = P.key )count
+		        post_key = P.key) file_count,(select name from member M where M.member_id = P.mem_id) name1,(select count(*) from good G where G.post_key = P.key )count,
+		        (select count(*) from board_comment B where B.board_ref = P.key) board_comment_cnt
 		from
    			 post P left join dept D on P.dept_key = D.key
    		where P.categ_key=2  and  P.dept_key = #{deptKey}
@@ -259,6 +262,7 @@
   		<result column="name" property="name"/>
   		<result column="name1" property="name1"/>
   		<result column="count" property="count"/>
+  		<result column="board_comment_cnt" property="boardCommentCnt"/>
   		<result column="file_count" property="fileCount"/>
   	</resultMap>
   	
@@ -302,7 +306,8 @@
         	from ( select rownum as rnum, v.* 
         			from ( select(select count(*) 
         						from attachment 
-        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name,(select count(*) from good G where G.post_key = P.key )count
+        							where post_key = P.key)file_count,P.*,(select name from member M where M.member_id = P.mem_id) name,(select count(*) from good G where G.post_key = P.key )count,
+        							(select count(*) from board_comment B where B.board_ref = P.key) board_comment_cnt
         		from post P 
         			where categ_key=3 
         				order by is_notice desc,key desc)v)v
@@ -321,6 +326,7 @@
   		<result column="dept_key" property="deptKey"/>
   		<result column="name" property="name"/>
   		<result column="count" property="count"/>
+  		<result column="board_comment_cnt" property="boardCommentCnt"/>
   		<result column="file_count" property="fileCount"/>
   		<result column="startRnum" property="startRnum"/>
   		<result column="endRnum" property="endRnum"/>
