@@ -14,8 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+
+import org.springframework.web.servlet.ModelAndView;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
@@ -253,20 +261,20 @@ public class ApprovalController {
 		
 		//2. 문서종류
 		
-		//3. 사원번호 : 전자결제에 대한 사원번호 받기
+		//3. 사원번호 : 전자결재에 대한 사원번호 받기
 		String memId = ((Member)session.getAttribute("loginMember")).getMemberId();
 		appr.setMemId(memId);
 		
-		//4. 제목 : 전자결제에 대한 제목받기(title)
+		//4. 제목 : 전자결재에 대한 제목받기(title)
 		appr.setTitle(title);
 		
-		//5. 내용 : 전자결제에 대한 제목받기(semmernote)
+		//5. 내용 : 전자결재에 대한 제목받기(semmernote)
 		log.debug("semmernote={}", semmernote);
 		appr.setContent(semmernote);
 		
-		//6. 기안일자 : 전자결제에 대한 작성일자 받기(디비에서 default)
+		//6. 기안일자 : 전자결재에 대한 작성일자 받기(디비에서 default)
 		
-		//7. 상태 : 전자결제에 대한 상태받기(status)
+		//7. 상태 : 전자결재에 대한 상태받기(status)
 		log.debug("status={}", status);
 		appr.setStatus(status);
 		
@@ -275,7 +283,7 @@ public class ApprovalController {
 		ApprCheck apprck3 = new ApprCheck();
 		
 		//8. apprCheck 객체 생성
-		//1번 결제자
+		//1번 결재자
 		log.debug("authId1={}",authId1);
 		log.debug("authId2={}",authId2);
 		log.debug("authId3={}",authId3);
@@ -283,12 +291,12 @@ public class ApprovalController {
 		log.debug("apprck1={}",apprck1.getSeqNum());
 		apprck1.setMemId(authId1);
 		apprck1.setStatus(status);
-		//2번결제자
+		//2번결재자
 		apprck2.setSeqNum(2);
 		log.debug("apprck2={}",apprck2.getSeqNum());
 		apprck2.setMemId(authId2);
 		apprck2.setStatus(status);
-		//3번결제자
+		//3번결재자
 		apprck3.setSeqNum(3);
 		apprck3.setMemId(authId3);
 		apprck3.setStatus(status);	
@@ -315,7 +323,7 @@ public class ApprovalController {
 			appr.setApprck2(apprck2);
 			appr.setApprck3(apprck3);
 			
-			//appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			//appr(전자결재), apprch(전자결재승인) attachment(파일) 객체 db에 저장
 			int result = approvalService.insertApproval(appr);
 			log.debug("result={}",result);
 			
@@ -348,7 +356,7 @@ public class ApprovalController {
 			appr.setApprck2(apprck2);
 			appr.setApprck3(apprck3);
 			
-			// appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			// appr(전자결재), apprch(전자결재승인) attachment(파일) 객체 db에 저장
 			int result = approvalService.updateApproval(appr);
 			log.debug("result={}",result);
 		}
@@ -396,42 +404,42 @@ public class ApprovalController {
 		
 		
 		
-		//-----------------------전자결제에 대한 속성저장
+		//-----------------------전자결재에 대한 속성저장
 		
 		
 		//2. 문서종류번호
 		
-		//3. 사원번호 : 전자결제에 대한 사원번호 받기 
+		//3. 사원번호 : 전자결재에 대한 사원번호 받기 
 		String memId = ((Member)session.getAttribute("loginMember")).getMemberId();
 		appr.setMemId(memId);
 		
-		//4. 제목 : 전자결제에 대한 제목받기(title)
+		//4. 제목 : 전자결재에 대한 제목받기(title)
 		log.debug("title={}",title);
 		appr.setTitle(title);
 		
-		//5. 내용 : 전자결제에 대한 제목받기(semmernote)
+		//5. 내용 : 전자결재에 대한 제목받기(semmernote)
 		log.debug("semmernote={}", semmernote);
 		appr.setContent(semmernote);
 		
-		//6. 기안일자 : 전자결제에 대한 작성일자 받기(디비에서 default)
+		//6. 기안일자 : 전자결재에 대한 작성일자 받기(디비에서 default)
 		
-		//7. 상태 : 전자결제에 대한 상태받기(status)
+		//7. 상태 : 전자결재에 대한 상태받기(status)
 		log.debug("status={}", status);
 		appr.setStatus(status);
 		
 		//8. apprCheck 객체 생성
-		//1번 결제자
+		//1번 결재자
 		log.debug("authId1={}",authId1);
 		log.debug("authId2={}",authId2);
 		log.debug("authId3={}",authId3);
 		apprck1.setSeqNum(1);
 		apprck1.setMemId(authId1);
 		apprck1.setStatus(status);
-		//2번결제자
+		//2번결재자
 		apprck2.setSeqNum(2);
 		apprck2.setMemId(authId2);
 		apprck2.setStatus(status);
-		//3번결제자
+		//3번결재자
 		apprck3.setSeqNum(3);
 		apprck3.setMemId(authId3);
 		apprck3.setStatus(status);
@@ -472,7 +480,7 @@ public class ApprovalController {
 		}
 		
 		
-		//2. appr(전자결제), apprch(전자결제승인) 객체 db에 저장
+		//2. appr(전자결재), apprch(전자결재승인) 객체 db에 저장
 		
 		log.debug("approvalKey={}",approvalKey);
 		log.debug("approvalKey={}",approvalKey);
@@ -500,7 +508,7 @@ public class ApprovalController {
 			appr.setApprck2(apprck2);
 			appr.setApprck3(apprck3);
 			
-			//appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			//appr(전자결재), apprch(전자결재승인) attachment(파일) 객체 db에 저장
 			int result = approvalService.insertApproval(appr);
 			log.debug("result={}",result);
 			
@@ -525,7 +533,7 @@ public class ApprovalController {
 			appr.setApprck2(apprck2);
 			appr.setApprck3(apprck3);
 			
-			// appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			// appr(전자결재), apprch(전자결재승인) attachment(파일) 객체 db에 저장
 			int result = approvalService.updateApproval(appr);
 			log.debug("result={}",result);
 		}
@@ -806,10 +814,10 @@ public class ApprovalController {
 		log.debug("apprck={}",apprck);
 
 		if(apprck.getSeqNum() == 1 || apprck.getSeqNum() == 2) {
-			int result = approvalService.changeApprck(apprck.getKey());
+			int result = approvalService.changeApprck(apprck.getKey(),appr);
 		}
 		else {
-			int result = approvalService.backApprck(apprck.getKey(),apprKey);
+			int result = approvalService.backApprck(apprck.getKey(),apprKey,appr);
 		}
 		
 		red.addFlashAttribute("msg", "승인이 완료되었습니다.");
@@ -822,6 +830,7 @@ public class ApprovalController {
 								Model model,
 								@RequestParam("opinion") String opinion,
 								@RequestParam("returnApprKey") String key,
+								Appr appr,
 								RedirectAttributes red) {
 		
 		
@@ -831,7 +840,7 @@ public class ApprovalController {
 		map.put("opinion",opinion);
 		map.put("memberId",memberId);
 
-		int result = approvalService.returnApproval(map);
+		int result = approvalService.returnApproval(map, appr);
 		
 		System.out.println("dddddddddddddddddddddddddd");
 		red.addFlashAttribute("msg", "반려되었습니다.");
@@ -885,6 +894,19 @@ public class ApprovalController {
 		
 		return pageInfo;
 		
+	}
+	
+	@RequestMapping("/getCountApproval")
+	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("params = " + params);
+		
+		int num = approvalService.getCountApproval(params);
+		
+		System.out.println("num = " + num);
+
+		return new ResponseEntity<>(num,HttpStatus.OK);		
 	}
 	
 	

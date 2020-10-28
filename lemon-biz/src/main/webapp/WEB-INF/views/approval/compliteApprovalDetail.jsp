@@ -12,7 +12,7 @@
 
 
 <div class="container">
-		<h2>결제완료문서</h2>
+		<h2>결재완료문서</h2>
 		<div class="container-fluid">
 		<!-- 게시글 -->
  			<div class="col-lg-12">			
@@ -46,7 +46,7 @@
 					<div>
 					
 					
-					    <!-- ================결제칸=============== -->
+					    <!-- ================결재칸=============== -->
 					
 						
 					    <table>
@@ -62,14 +62,14 @@
 						
 						<tr>
 							<td></td>
-							<td>기안자</td>
-							<td id="proNum1">1차 결제자</td>
-							<td id="proNum2">2차 결제자</td>
-							<td id="proNum3">3차 결제자</td>
+							
+							<td id="proNum1">1차 결재자</td>
+							<td id="proNum2">2차 결재자</td>
+							<td id="proNum3">3차 결재자</td>
 						</tr>
 						<tr>
 						<td class="tt" rowspan='4'>결재</td>
-						<td class="aa">작성자</td>
+						
 						
 						<td id="authRank1" class="aa">
 						${ apprck1.rankName }
@@ -92,7 +92,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.name }</td>
+						
 						<td id="authName1">${ apprck1.ckName }</td>
 						<td id="authName2">${ apprck2.ckName }</td>
 						<td id="authName3">${ apprck3.ckName }</td>
@@ -101,7 +101,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.memberId }</td>
+						
 						<td id="apv_mem1">${ apprck1.memId }</td>
 						<td id="apv_mem2">${ apprck2.memId }</td>
 						<td id="apv_mem3">${ apprck3.memId }</td>
@@ -109,11 +109,11 @@
 						</tr>
 						
 						<tr>
-						<td>제출</td>
+						
 						<td>
 							<c:choose>
 								<c:when test="${ apprck1.status eq null}">
-									미결제
+									미결재
 								</c:when>
 								<c:when test="${ apprck1.status eq 't' }">
 									승인
@@ -126,7 +126,7 @@
 						<td>
 							<c:choose>
 								<c:when test="${ apprck2.status eq null }">
-									미결제
+									미결재
 								</c:when>
 								<c:when test="${ apprck2.status eq 't' }">
 									승인
@@ -139,7 +139,7 @@
 						<td>
 							<c:choose>
 								<c:when test="${ apprck3.status eq null }">
-									미결제
+									미결재
 								</c:when>
 								<c:when test="${ apprck3.status eq 't' }">
 									승인
@@ -157,7 +157,7 @@
 						
 						</table>
 						</div>
-						<!-- ==============결제칸 끝============== -->
+						<!-- ==============결재칸 끝============== -->
 						<!-- 폼 내용 -->
 						
 						
@@ -170,8 +170,7 @@
 							<br>
 							
 							<div>
-								<textarea id="summernote" class="form-control" name="approval_content"  cols="120" rows="18" 
-		      							  style="width:100%; resize:none" readonly>${ appr.content }</textarea> <br>
+								<div class="form-control" style="height:700px; overflow:auto;" align=left>${ appr.content }</div> <br>
 							</div>
 							
 							

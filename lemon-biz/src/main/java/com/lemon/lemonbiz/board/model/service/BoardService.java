@@ -63,6 +63,8 @@ public interface BoardService {
 
 	String selectTeamName(Member loginMember);
 
+	List getBoardTopFive();
+
 	int countTitleBoard(String searchKeyword);
 
 	int countNameBoard(String searchKeyword);
@@ -90,6 +92,7 @@ public interface BoardService {
 	void updateBoard2(Board board, List<Attachment> oldBoard);
 
 	void updateBoard3(Board board);
+
 
 	
 

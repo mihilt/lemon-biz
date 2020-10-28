@@ -28,7 +28,7 @@ $(document).ready(function() {
 </script>
 
 <div>
-	<h2>일반결제 작성</h2>
+	<h2>일반결재 작성</h2>
 
 	
 
@@ -38,7 +38,7 @@ $(document).ready(function() {
   <div class="modal-dialog" style="max-width: 90%;" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">결제라인 추가</h5>
+        <h5 class="modal-title" id="exampleModalLabel">결재라인 추가</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -76,7 +76,7 @@ $(document).ready(function() {
         <!-- printList Form -->
       
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결제자 선택</h5>
+    	<h5>결재자 선택</h5>
     		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; min-height:360px;">
     			<div class="row" style="margin: 5px 5px"> 
     			<label>성명</label>
@@ -121,7 +121,7 @@ $(document).ready(function() {
     	
       	<!-- selectMember Form-->
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결제자 선택</h5>
+    	<h5>결재자 선택</h5>
     		<div id="apprst" style="margin: 5px; padding: 5px; border:1px solid lightgray; height:360px;">
     			
     	
@@ -218,7 +218,7 @@ $(document).ready(function() {
 					    </table>
 					</div>
 					<div class="p-2">
-					    <!-- ================결제칸=============== -->
+					    <!-- ================결재칸=============== -->
 					    <input type="hidden" id="authDept1" name="authDept1" value="">
 						<input type="hidden" id="authDept2" name="authDept2" value="">
 						<input type="hidden" id="authDept3" name="authDept3" value="">
@@ -228,7 +228,7 @@ $(document).ready(function() {
 						<div class="float-center">
 							<!-- Button trigger modal -->
 							<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
-							  결제라인 추가
+							  결재라인 추가
 							</button>
 						</div>
 						</td>
@@ -239,9 +239,9 @@ $(document).ready(function() {
 						<tr>
 							<td></td>
 							<td>기안자</td>
-							<td id="proNum1">1차 결제자</td>
-							<td id="proNum2">2차 결제자</td>
-							<td id="proNum3">3차 결제자</td>
+							<td id="proNum1">1차 결재자</td>
+							<td id="proNum2">2차 결재자</td>
+							<td id="proNum3">3차 결재자</td>
 						</tr>
 						<tr>
 						<td class="tt" rowspan='4'>결재</td>
@@ -289,7 +289,7 @@ $(document).ready(function() {
 						
 						</table>
 						</div>
-						<!-- ==============결제칸 끝============== -->
+						<!-- ==============결재칸 끝============== -->
 						
 						<!-- 양식 선택 -->											      	
 						<select name="docType" class="col-5 form-control mx-2 my-5"
@@ -317,8 +317,7 @@ $(document).ready(function() {
 							<br>
 							
 							<div>
-								<textarea id="summernote" class="form-control" name="approval_content"  cols="120" rows="18" 
-		      							  style="width:100%; resize:none" >${ appr.content }</textarea> <br>
+								<div class="form-control" style="height:700px; overflow:auto;" align=left>${ appr.content }</div> <br>
 							</div>
 							
 							
@@ -332,7 +331,7 @@ $(document).ready(function() {
 						
 						<div class="container" align="center">
 						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
-						<button class="btn btn-outline-primary" onclick="updateApproval()">저장하기</button>
+						<button class="btn btn-outline-primary" onclick="save()">저장하기</button>
 						<button class="btn btn-outline-primary" onclick="tempchk()">제출하기</button>
 						
 						<div><br></div>
@@ -355,11 +354,36 @@ $(document).ready(function() {
 					<div class="form-group">
 						<div class="modal-body">
 
-							<label>문서가 제출되었습니다. .</label><br>
+							<label>문서를 제출합니다.</label><br>
 							
 						</div>
 						<div class="modal-footer float-right">
-							<button class="btn btn-outline-primary" type="submit" onclick="tempStore()" >저장</button>
+							<button class="btn btn-outline-primary" type="submit" onclick="tempStore()" >제출</button>
+							
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="modal" id="savingApproval">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">알림</h5>
+					<button type="button" class="btn btn-outline-primary" data-dismiss="modal">&times;</button>
+				</div>
+
+					<div class="form-group">
+						<div class="modal-body">
+
+							<label>문서 저장시에 첨부파일은 저장되지 않습니다.</label><br>
+							
+						</div>
+						<div class="modal-footer float-right">
+							<button class="btn btn-outline-primary" type="submit" onclick="updateApproval()" >제출</button>
+							
 						</div>
 					</div>
 			</div>
@@ -376,7 +400,7 @@ $(document).ready(function() {
 
 
 <script>
-/*=================================== 결제라인추가 script start ====================================*/
+/*=================================== 결재라인추가 script start ====================================*/
 	$(document).ready(function() {
 		$('#proNum1').val(1);
 		$('#proNum2').val(2);
@@ -474,7 +498,7 @@ $(document).ready(function() {
 		
 		for(var j = MIN_NUM; j <= MAX_NUM; j++) {
 			if($('#memId_'+j).text()==memberId) {
-				alert('이미 추가되어있는 결제자 입니다.');
+				alert('이미 추가되어있는 결재자 입니다.');
 				return;	
 			}
 			if(trArr[j-1].value != 'exist') {
@@ -483,7 +507,7 @@ $(document).ready(function() {
 		}
 		
 		if(cnt==3) {
-			alert('결제자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
+			alert('결재자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
 			return;
 		}
 
@@ -677,7 +701,7 @@ $(document).ready(function() {
 		 }
 
 	}
-	/*=================================== 결제라인추가 script end ====================================*/
+	/*=================================== 결재라인추가 script end ====================================*/
 	
 	/* ======================================폼 제출관련 script start=================================== */
 	function tempchk() {
@@ -702,22 +726,19 @@ $(document).ready(function() {
 			alert('내용을 입력해주세요')
 			return;
 		}
+		
+		if( $('#authId1').val() == '' || $('#authId2').val() == '' || $('#authId3').val() == '') {
+			alert('결재자를 모두 선택해주세요');
+			return;
+		}
+
+		
 
 		$('#comment').modal();
 	}
 
 	function tempStore() {
 		
-		/* if('${mem1}' != null){
-			$('#authId1').val(${mem1});
-		}
-		if('${mem2}' != null){
-			$('#authId2').val(${mem1});
-		}
-		if('${mem3}' != null){
-			$('#authId3').val(${mem1});
-		}
-		*/
 		
 		for(var i = 1 ; i <=3 ; i++){
 			$('#authId'+i+'').val($('#apv_mem'+i+'').text());	
@@ -729,11 +750,13 @@ $(document).ready(function() {
 	
 		$('#sendApv').submit();
 		
-		/* $('#apvCateGo').val(1);
-		if($('#apvCateGo').val() == ''){
-		$('#apvCateGo').val(${ apvReWrite.approval_cate });
-		} */
 		
+		
+	}
+
+	function save() {
+
+		$('#savingApproval').modal();
 	}
 
 	function updateApproval() {
@@ -746,6 +769,8 @@ $(document).ready(function() {
 			alert('내용을 입력해주세요')
 			return;
 		}
+
+		
 
 		for(var i = 1 ; i <=3 ; i++){
 			$('#authId'+i+'').val($('#apv_mem'+i+'').text());	
@@ -778,7 +803,11 @@ $(document).ready(function() {
 		$('<input></input>').attr('type','hidden').attr('value',$('#summernote').val()).attr('name','updateContent').appendTo('#updateApproval');
 		
 		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','updateApprovalKey').appendTo('#updateApproval');
-		
+
+		if( $('#authId1').val() == '' || $('#authId2').val() == '' || $('#authId3').val() == '') {
+			alert('결재자를 모두 선택해주세요');
+			return;
+		}
 		
 		
 		console.dir($('#updateApproval'));

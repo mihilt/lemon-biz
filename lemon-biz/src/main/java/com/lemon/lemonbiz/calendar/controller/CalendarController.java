@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -23,8 +24,6 @@ import com.lemon.lemonbiz.calendar.model.service.CalendarService;
 import com.lemon.lemonbiz.calendar.model.vo.Calendar;
 import com.lemon.lemonbiz.calendar.model.vo.NewDates;
 import com.lemon.lemonbiz.member.model.vo.Member;
-
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/calendar")
@@ -131,5 +130,18 @@ public class CalendarController {
 			System.out.println("삭제 실패");
 			return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);			
 		}
+	}
+	
+	@RequestMapping("/getTodayCount")
+	public ResponseEntity<?> getTodayCount(ModelAndView mav,@RequestParam HashMap<Object,Object> params) {
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("params = " + params);
+		
+		int num = calendarService.getTodayCount(params);
+		
+		System.out.println("num = " + num);
+
+		return new ResponseEntity<>(num,HttpStatus.OK);		
 	}
 }

@@ -45,7 +45,7 @@
 					<div>
 					
 					
-					    <!-- ================결제칸=============== -->
+					    <!-- ================결재칸=============== -->
 					
 						
 					    <table>
@@ -61,14 +61,14 @@
 						
 						<tr>
 							<td></td>
-							<td>기안자</td>
-							<td id="proNum1">1차 결제자</td>
-							<td id="proNum2">2차 결제자</td>
-							<td id="proNum3">3차 결제자</td>
+							
+							<td id="proNum1">1차 결재자</td>
+							<td id="proNum2">2차 결재자</td>
+							<td id="proNum3">3차 결재자</td>
 						</tr>
 						<tr>
 						<td class="tt" rowspan='4'>결재</td>
-						<td class="aa">작성자</td>
+						
 						
 						<td id="authRank1" class="aa">
 						${ apprck1.rankName }
@@ -91,7 +91,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.name }</td>
+						
 						<td id="authName1">${ apprck1.ckName }</td>
 						<td id="authName2">${ apprck2.ckName }</td>
 						<td id="authName3">${ apprck3.ckName }</td>
@@ -100,7 +100,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.memberId }</td>
+						
 						<td id="apv_mem1">${ apprck1.memId }</td>
 						<td id="apv_mem2">${ apprck2.memId }</td>
 						<td id="apv_mem3">${ apprck3.memId }</td>
@@ -108,11 +108,11 @@
 						</tr>
 						
 						<tr>
-						<td>제출</td>
+						
 						<td>
 							<c:choose>
 								<c:when test="${ apprck1.status eq null}">
-									미결제
+									미결재
 								</c:when>
 								<c:when test="${ apprck1.status eq 't' }">
 									승인
@@ -125,7 +125,7 @@
 						<td>
 							<c:choose>
 								<c:when test="${ apprck2.status eq null }">
-									미결제
+									미결재
 								</c:when>
 								<c:when test="${ apprck2.status eq 't' }">
 									승인
@@ -138,7 +138,7 @@
 						<td>
 							<c:choose>
 								<c:when test="${ apprck3.status eq null }">
-									미결제
+									미결재
 								</c:when>
 								<c:when test="${ apprck3.status eq 't' }">
 									승인
@@ -156,7 +156,7 @@
 						
 						</table>
 						</div>
-						<!-- ==============결제칸 끝============== -->
+						<!-- ==============결재칸 끝============== -->
 						<!-- 폼 내용 -->
 						
 						
@@ -197,10 +197,12 @@
 						<form action="${pageContext.request.contextPath}/approval/approve.do"
 							  method="POST"
 							  id="approve">
+						<input type="hidden" name="title" value="${appr.title}"/>
 						<input type="hidden" name="apprckKey1" value="${apprck1.key}"/>
 						<input type="hidden" name="apprckKey2" value="${apprck2.key}"/>
 						<input type="hidden" name="apprckKey3" value="${apprck3.key}"/>
 						<input type="hidden" name="key" value="${appr.key}"/>
+						<input type="hidden" name="memId" value="${appr.memId}"/>
 						
 						</form>
 						
@@ -221,8 +223,7 @@
 						<div class="modal-body">
 
 							<textarea id="returnResult" class="form-control" name="approval_content"  cols="40" rows="9" 
-		      							  style="width:100%; resize:none">
-							</textarea>
+		      							  style="width:100%; resize:none"></textarea>
 							
 						</div>
 						<div class="modal-footer float-right">
@@ -251,6 +252,9 @@ function returnApprove() {
 	$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/returnApprove.do").attr('method', 'POST').attr('id','returnApprovalForm').appendTo('#body');
 	$('<input></input>').attr('type','hidden').attr('value',$('#returnResult').val()).attr('name','opinion').appendTo('#returnApprovalForm');
 	$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','returnApprKey').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.title}').attr('name','title').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.memId}').attr('name','memId').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','key').appendTo('#returnApprovalForm');
 	
 	$('#returnApprovalForm').submit();
 }

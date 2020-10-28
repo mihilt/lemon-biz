@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.attend.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,10 @@ public interface AttendService {
 	List<Attend> selectCalAttend(Attend attend);
 
 	Attend selectAttendInfo(Attend attend);
+
+
+	int getTodayCount(String date);
+
 
 	int countAttend(Attend attend);
 
