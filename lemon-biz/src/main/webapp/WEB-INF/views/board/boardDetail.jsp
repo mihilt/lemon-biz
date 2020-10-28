@@ -10,12 +10,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <!-- 헤드 네비게이션 효과 -->
-  <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
-
-
   <!-- summernote -->
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
@@ -25,14 +19,18 @@
 <div class="container">
 	<div class="container-fluid text-center">
 
-		<!-- 게시글 -->
+	<!-- 게시글 -->
  	<div class="col-lg-12">
  			
-              <input type="hidden" name="key" value="${board.key }" />
+              <input type="hidden" name="key" value="${board.key}" />
               <input type="hidden" name="id" value="${loginMember.memberId}" />
               <div class="card" >
                 <div class="card-header py-3">
-                  <div align="right">작성일 :<strong class="m-0 font-weight-bold text-warning"> <fmt:formatDate  value="${ board.postDate }" pattern="yyyy/MM/dd"/><br></strong>작성자  : <strong class="m-0 font-weight-bold text-warning">${board.name}</strong>	&nbsp; 조회수 : <strong class="m-0 font-weight-bold text-warning">${ board.readCount }</strong></div>
+                  <div align="right">작성일 :<strong class="m-0 font-weight-bold text-warning"> 
+                  <fmt:formatDate  value="${ board.postDate }" pattern="yyyy/MM/dd"/>
+                  <br>
+                  </strong>작성자  : <strong onclick="memberInfo('${board.memId}');" style="cursor:pointer;" class="m-0 font-weight-bold text-primary">${board.name}</strong>	&nbsp; 
+                  	조회수 : <strong class="m-0 font-weight-bold text-warning">${ board.readCount }</strong></div>
                 </div>
                 <div class="card-body text-center">
                   <div align="left"><strong>제목 : ${board.title}</strong>
@@ -82,9 +80,9 @@
 				<input type="hidden" name="boardCommentWriter" value= "${loginMember.memberId }" />
 				<input type="hidden" name="boardCommentLevel" value="1" />
 				<input type="hidden" name="boardCommentRef" value="0" /> 
-				<textarea style="width:50% !important;" class="form-control bg-light border-0 small" name="boardCommentContent"  rows="3" cols="60" maxlength="500" placeholder="댓글을 달아주세요."></textarea>
+				<textarea style="width:90% !important;" class="form-control bg-light border-0 small" name="boardCommentContent"  rows="3" cols="60" maxlength="500" placeholder="댓글을 달아주세요."></textarea>
 				<br>
-				<button  type="submit" id="btn-insert" class="btn btn-outline-warning" >등록</button>
+				<button  type="submit" id="btn-insert" class="float-right mr-5 btn btn-outline-warning" >등록</button>
 				</div>
 			</form>
 				<hr>
@@ -95,41 +93,56 @@
 		 			<c:choose>
 		 			<c:when test="${ BoardComment.boardCommentLevel eq 1 }">
 		 			<tr class="level1">
-					<td>
-						<sub class="comment-writer">
-							${ BoardComment.name }
-						</sub>
-						<sub class="comment-date">
-							<fmt:formatDate value="${ BoardComment.boardCommentDate }" pattern="yyyy/MM/dd"/>
-						</sub>
-						<br />
-						${ BoardComment.boardCommentContent }
-					</td>
-					<td>
-						<button class="btn-reply"
-								value="${ BoardComment.boardCommentNo }">답글</button>
+					<td class="mx-5 border-bottom" style="text-align: left;">
+						<div class="ml-4 text-primary comment-writer">
+							<a href="#" onclick="memberInfo('${BoardComment.boardCommentWriter}');">${ BoardComment.name }</a>
+						</div>
+						<div class="ml-4">
+							${ BoardComment.boardCommentContent }
+						</div>
 						<c:if test="${ BoardComment.boardCommentWriter eq (loginMember.memberId)}">			
-						<button class="btn-delete" value="${ BoardComment.boardCommentNo }">삭제</button>
+						<button class="btn-delete float-right mx-2 text-primary" 
+							   style="border: none;
+									  background-color: inherit;
+									  font-size: 11px;
+									  cursor: pointer;
+									  display: inline-block;"
+							   value="${ BoardComment.boardCommentNo }">삭제</button>
 						</c:if>										
+						<button class="btn-reply float-right mx-2 text-primary"
+						  		style="border: none;
+									  background-color: inherit;
+									  font-size: 11px;
+									  cursor: pointer;
+									  display: inline-block;"
+								value="${ BoardComment.boardCommentNo }">답글</button>
+						<small style="font-size:11px;" class="comment-date ml-4 font-weight-bolder">
+							<fmt:formatDate value="${ BoardComment.boardCommentDate }" pattern="yyyy/MM/dd"/>
+						</small>
 					</td>
 				</tr>	
 		 		</c:when>
 				<c:otherwise>
 				<tr class="level2">
-					<td>
-						<sub class="comment-writer">
-							${ BoardComment.name }
-						</sub>
-						<sub class="comment-date">
-							<fmt:formatDate value="${ BoardComment.boardCommentDate }" pattern="yyyy/MM/dd"/>
-						</sub>
-						<br />
-						${ BoardComment.boardCommentContent }
-					</td>
-					<td>
+					<td class="mx-5 border-bottom" style="text-align: left;">
+						<div class="ml-5 text-primary comment-writer">
+							<a href="#" onclick="memberInfo('${BoardComment.boardCommentWriter}');">${ BoardComment.name }</a>
+						</div>
+						<div class="ml-5">
+							${ BoardComment.boardCommentContent }
+						</div>
 						<c:if test="${ BoardComment.boardCommentWriter eq (loginMember.memberId)}">			
-						<button class="btn-delete" value="${ BoardComment.boardCommentNo }">삭제</button>
-						</c:if>										
+						<button class="btn-delete float-right mx-2 text-primary" 
+							   style="border: none;
+									  background-color: inherit;
+									  font-size: 11px;
+									  cursor: pointer;
+									  display: inline-block;"
+							   value="${ BoardComment.boardCommentNo }">삭제</button>
+						</c:if>
+						<small style="font-size:11px;" class="comment-date ml-5 font-weight-bolder">
+							<fmt:formatDate value="${ BoardComment.boardCommentDate }" pattern="yyyy/MM/dd"/>
+						</small>										
 					</td>
 				</tr>
 				</c:otherwise>
@@ -219,8 +232,8 @@ $("[name=boardCommentFrm]").submit(function(){
 			 + '<input type="hidden" name="boardCommentWriter" value="${loginMember.memberId }" />'
 			 + '<input type="hidden" name="boardCommentLevel" value="2" />'
 			 + '<input type="hidden" name="boardCommentRef" value="' + $(this).val() + '" />' 
-			 + '<textarea name="boardCommentContent" cols="60" rows="1" style="width:450px;"></textarea>'
-			 + '<button type="submit" class="btn-insert2" style="width:60px;">등록</button>'
+			 + '<textarea name="boardCommentContent" rows="3" class="ml-5" style="width: 80%;"></textarea>'
+			 + '<button type="submit" class="btn-insert2 btn btn-outline-warning ml-2" style="width:60px;">등록</button>'
 			 + "</form>"
 			 + "</td>"
 			 + "</tr>"
@@ -261,8 +274,13 @@ $("[name=boardCommentFrm]").submit(function(){
                     key: ${board.key},
                     id
                 },
-                success: function () {
-          
+                success: function (result) {
+          			if(result == 0){
+							alert("추천되었습니다!");
+              		}
+          			else{
+						alert("추천 취소!");
+              		}
                    
 			       recCount(); 
                 },
@@ -293,5 +311,7 @@ $("[name=boardCommentFrm]").submit(function(){
 </script>
 
 </html>
+
+<jsp:include page="/WEB-INF/views/common/showMemberInfo.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

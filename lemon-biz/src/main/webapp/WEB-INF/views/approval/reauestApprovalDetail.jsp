@@ -48,7 +48,7 @@
 					<div>
 					
 					
-					    <!-- ================결제칸=============== -->
+					    <!-- ================결재칸=============== -->
 					
 						
 					     <div class="float-left col-md-5" >
@@ -165,7 +165,7 @@
 						
 						</table>
 						</div>
-						<!-- ==============결제칸 끝============== -->
+						<!-- ==============결재칸 끝============== -->
 						<!-- 폼 내용 -->
 						
 						<hr />
@@ -206,10 +206,12 @@
 						<form action="${pageContext.request.contextPath}/approval/approve.do"
 							  method="POST"
 							  id="approve">
+						<input type="hidden" name="title" value="${appr.title}"/>
 						<input type="hidden" name="apprckKey1" value="${apprck1.key}"/>
 						<input type="hidden" name="apprckKey2" value="${apprck2.key}"/>
 						<input type="hidden" name="apprckKey3" value="${apprck3.key}"/>
 						<input type="hidden" name="key" value="${appr.key}"/>
+						<input type="hidden" name="memId" value="${appr.memId}"/>
 						
 						</form>
 						
@@ -259,6 +261,9 @@ function returnApprove() {
 	$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/returnApprove.do").attr('method', 'POST').attr('id','returnApprovalForm').appendTo('#body');
 	$('<input></input>').attr('type','hidden').attr('value',$('#returnResult').val()).attr('name','opinion').appendTo('#returnApprovalForm');
 	$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','returnApprKey').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.title}').attr('name','title').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.memId}').attr('name','memId').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','key').appendTo('#returnApprovalForm');
 	
 	$('#returnApprovalForm').submit();
 }
