@@ -83,7 +83,7 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	@Override
 	public Board selectOneBoardCollection(int key) {
-		int result = boardDAO.increaseReadConut(key);
+		
 		return boardDAO.selectOneBoardCollection(key);
 	}
 
