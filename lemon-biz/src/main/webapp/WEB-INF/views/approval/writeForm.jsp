@@ -317,7 +317,8 @@ $(document).ready(function() {
 							<br>
 							
 							<div>
-								<div class="form-control" style="height:700px; overflow:auto;" align=left>${ appr.content }</div> <br>
+								<textarea id="summernote" class="form-control" name="approval_content"  cols="120" rows="18" 
+		      							  style="width:100%; resize:none" >${ appr.content }</textarea> <br>
 							</div>
 							
 							
