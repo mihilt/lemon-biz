@@ -218,7 +218,7 @@ $(document).ready(function() {
 					    </table>
 					</div>
 					<div class="p-2">
-					    <!-- ================결재칸=============== -->
+					    <!-- ================결제칸=============== -->
 					    <input type="hidden" id="authDept1" name="authDept1" value="">
 						<input type="hidden" id="authDept2" name="authDept2" value="">
 						<input type="hidden" id="authDept3" name="authDept3" value="">
@@ -289,7 +289,7 @@ $(document).ready(function() {
 						
 						</table>
 						</div>
-						<!-- ==============결재칸 끝============== -->
+						<!-- ==============결제칸 끝============== -->
 						
 						<!-- 양식 선택 -->											      	
 						<select name="docType" class="col-5 form-control mx-2 my-5"
@@ -317,7 +317,8 @@ $(document).ready(function() {
 							<br>
 							
 							<div>
-								<div class="form-control" style="height:700px; overflow:auto;" align=left>${ appr.content }</div> <br>
+								<textarea id="summernote" class="form-control" name="approval_content"  cols="120" rows="18" 
+		      							  style="width:100%; resize:none" >${ appr.content }</textarea> <br>
 							</div>
 							
 							
@@ -400,7 +401,7 @@ $(document).ready(function() {
 
 
 <script>
-/*=================================== 결재라인추가 script start ====================================*/
+/*=================================== 결제라인추가 script start ====================================*/
 	$(document).ready(function() {
 		$('#proNum1').val(1);
 		$('#proNum2').val(2);
@@ -701,7 +702,7 @@ $(document).ready(function() {
 		 }
 
 	}
-	/*=================================== 결재라인추가 script end ====================================*/
+	/*=================================== 결제라인추가 script end ====================================*/
 	
 	/* ======================================폼 제출관련 script start=================================== */
 	function tempchk() {
