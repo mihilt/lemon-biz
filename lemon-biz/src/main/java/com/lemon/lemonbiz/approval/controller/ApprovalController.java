@@ -608,7 +608,8 @@ public class ApprovalController {
 		model.addAttribute("apprck3",apprck3);
 		
 		
-		
+		List<DocType> docTypeList = approvalService.selectDocTypeTitleList();
+		model.addAttribute("docTypeList", docTypeList);
 		
 		
 		return "approval/writeForm";
