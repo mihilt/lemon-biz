@@ -221,10 +221,12 @@ public class ApprovalDAOImpl implements ApprovalDAO {
 	}
 
 	@Override
+	public String selectNextMemberId(int key) {
+		return sqlSession.selectOne("approval.selectNextMemberId", key);
+	}
+
 	public int getCountApproval(HashMap<Object, Object> params) {
 		return sqlSession.selectOne("approval.getCountApproval", params);
 	}
-
-	
 	
 }

@@ -261,8 +261,13 @@ $("[name=boardCommentFrm]").submit(function(){
                     key: ${board.key},
                     id
                 },
-                success: function () {
-          
+                success: function (result) {
+          			if(result == 0){
+							alert("추천되었습니다!");
+              		}
+          			else{
+						alert("추천 취소!");
+              		}
                    
 			       recCount(); 
                 },

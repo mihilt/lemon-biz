@@ -12,7 +12,7 @@
 
 
 <div class="container-fluid">
-<h2>결제완료문서</h2>
+<h2>결재완료문서</h2>
     			
 <table class="table table-hover text-center">
 <colgroup>

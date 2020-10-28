@@ -93,13 +93,9 @@ public interface ApprovalDAO {
 
 	int returnApprck(Map<String, String> map);
 
+	String selectNextMemberId(int key);
+
 	int getCountApproval(HashMap<Object, Object> params);
-
-	
-
-
-
-	
 
 
 }
