@@ -57,9 +57,9 @@ public interface ApprovalService {
 
 	ApprCheck selectcApprck(Map<String, String> map);
 
-	int changeApprck(int key);
+	int changeApprck(int key, Appr appr);
 
-	int backApprck(int key, String apprKey);
+	int backApprck(int key, String apprKey, Appr appr);
 
 	List<Appr> myApprovalList(String memberId);
 
@@ -75,14 +75,9 @@ public interface ApprovalService {
 
 	Appr compliteApprDetail(String key);
 
-	int returnApproval(Map<String, String> map);
+	int returnApproval(Map<String, String> map, Appr appr);
 
 	int getCountApproval(HashMap<Object, Object> params);
-
-	
-
-	
-
 
 	
 }

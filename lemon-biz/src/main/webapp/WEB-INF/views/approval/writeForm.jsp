@@ -218,8 +218,10 @@ $(document).ready(function() {
 						</tr>
 					    </table>
 					</div>
-					<div class="p-2" >
-					    <!-- ================결제칸=============== -->
+
+					<div class="p-2">
+					
+					    <!-- ================결재칸=============== -->
 					    <input type="hidden" id="authDept1" name="authDept1" value="">
 						<input type="hidden" id="authDept2" name="authDept2" value="">
 						<input type="hidden" id="authDept3" name="authDept3" value="">
@@ -316,7 +318,7 @@ $(document).ready(function() {
 						</table>
 						
 						</div>
-						<!-- ==============결제칸 끝============== -->
+						<!-- ==============결재칸 끝============== -->
 						
 						
 						<hr />
@@ -420,7 +422,7 @@ $(document).ready(function() {
 
 
 <script>
-/*=================================== 결제라인추가 script start ====================================*/
+/*=================================== 결재라인추가 script start ====================================*/
 	$(document).ready(function() {
 		$('#proNum1').val(1);
 		$('#proNum2').val(2);
@@ -552,33 +554,33 @@ $(document).ready(function() {
 				console.log(memberName);
 				console.log(deptName);
 				
-		if(rankKey == null) {
-			rankKey = '입사대기';
-		}
-		if(deptName == null) {
-			deptName = '발령대기';
-		}
-		if(memberName == null) {
-			memberName= '오류';
-		}
+				if(rankKey == null) {
+					rankKey = '입사대기';
+				}
+				if(deptName == null) {
+					deptName = '발령대기';
+				}
+				if(memberName == null) {
+					memberName= '오류';
+				}
+				
+				for(var i=0; i<trArr.length; i++ ) {
 		
-		for(var i=0; i<trArr.length; i++ ) {
-
-			if($('#'+(i+1)+'').val() != 'exist'){
-			$('#memId_'+(i+1)).text(memberId);
-			$('#dept_'+(i+1)).text(deptName);
-			$('#name_'+(i+1)).text(memberName);
-			$('#rank_'+(i+1)).text(rankName);
-
-			$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
-			$('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
-			$('#'+(i+1)+'').val('exist');
-
-			return;
-		}
-
-
-	 }
+					if($('#'+(i+1)+'').val() != 'exist'){
+					$('#memId_'+(i+1)).text(memberId);
+					$('#dept_'+(i+1)).text(deptName);
+					$('#name_'+(i+1)).text(memberName);
+					$('#rank_'+(i+1)).text(rankName);
+		
+					$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
+					$('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
+					$('#'+(i+1)+'').val('exist');
+		
+					return;
+				}
+		
+		
+			 }
 			}
 		});
 
@@ -721,7 +723,7 @@ $(document).ready(function() {
 		 }
 
 	}
-	/*=================================== 결제라인추가 script end ====================================*/
+	/*=================================== 결재라인추가 script end ====================================*/
 	
 	/* ======================================폼 제출관련 script start=================================== */
 	function tempchk() {
