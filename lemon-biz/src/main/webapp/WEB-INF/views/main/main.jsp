@@ -36,7 +36,7 @@
 
 		 $(document).ready(function() {
 
-			msg = { memberId : ${loginMember.memberId} }
+			msg = { memberId : '${loginMember.memberId}' }
 				
 			$.ajax({
 				url : "${pageContext.request.contextPath}/approval/getCountApproval",
@@ -58,7 +58,7 @@
 
 		 $(document).ready(function() {
 
-				msg = { memberId : ${loginMember.memberId} }
+				msg = { memberId : '${loginMember.memberId}' }
 					
 				$.ajax({
 					url : "${pageContext.request.contextPath}/mail/getCountNoReadMail",
@@ -291,7 +291,7 @@
 					
 					var costForm = $('#costForm');
 				
-					var memberId = ${loginMember.memberId};
+					var memberId = '${loginMember.memberId}';
 					
 					var transportationCosts = $('#transportationCosts');
 					var fitment = $('#fitment');
@@ -324,6 +324,14 @@
 		
 						if (costData.expenditureDate == '') {
 							alert('날짜는 필수입니다.');
+							return false;
+						}
+
+						var date = costData.expenditureDate;
+						var str = /^([0-9]{8})$/;
+						
+						if (!str.test(date)) {
+							alert('날짜를 올바르게 입력하세요.');
 							return false;
 						}
 
@@ -667,7 +675,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text" style="width: 100px;">날짜</span>
 										</div>
-										<input type="text" class="form-control" id="expenditureDate" placeholder="yyyy-MM-dd형식으로 입력." aria-label="Username" aria-describedby="basic-addon1" style="height: 40px;">
+										<input type="text" class="form-control" id="expenditureDate" placeholder="ex) 20201020 형식으로 입력." aria-label="Username" aria-describedby="basic-addon1" style="height: 40px;">
 									</div>
 								</div>
 								<hr>
