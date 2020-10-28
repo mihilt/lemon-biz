@@ -55,5 +55,10 @@ public class AttendServiceImpl implements AttendService {
 		return attendanDAO.selectAttendList(cPage,numPerPage,map,memId);
 	}
 
+	@Override
+	public List<Attend> selectAttendList() {
+		return attendanDAO.selectAttendList();
+	}
+
 
 }

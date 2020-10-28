@@ -22,5 +22,6 @@ public class Attend implements Serializable {
 	private Date leave;
 	private float time;
 	
+	private int isManager;
 	private String yyyymm;
 }

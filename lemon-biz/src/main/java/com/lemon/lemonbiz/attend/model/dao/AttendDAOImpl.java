@@ -61,5 +61,10 @@ public class AttendDAOImpl implements AttendDAO {
 		return sqlSession.selectList("attend.selectAttendListPaging",map);
 	}
 
+	@Override
+	public List<Attend> selectAttendList() {
+		return sqlSession.selectList("attend.AttendAllList");
+	}
+
 	
 }
