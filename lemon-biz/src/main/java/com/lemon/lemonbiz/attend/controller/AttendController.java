@@ -109,7 +109,6 @@ public class AttendController {
 
 			try {
 				attendService.attendArrive(attend);
-				redirectAttr.addFlashAttribute("msg", "출근록됨!");
 			} catch (Exception e) {
 				log.error("출근 등록 오류!", e);
 				redirectAttr.addFlashAttribute("msg", "출근 등록 오류!");
@@ -128,7 +127,6 @@ public class AttendController {
 			
 			try {
 				attendService.attendLeabe(attend);
-				redirectAttr.addFlashAttribute("msg", "퇴근록됨!");
 			} catch (Exception e) {
 				log.error("출결 등록 오류!", e);
 				redirectAttr.addFlashAttribute("msg", "퇴근 등록 오류!");
