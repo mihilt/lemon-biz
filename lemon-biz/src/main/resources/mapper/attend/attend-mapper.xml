@@ -77,15 +77,8 @@ where rnum between #{startRnum} and #{endRnum}
     where mem_id=#{memId}) D
 	where E.key(+)=D.key and D.yyyymm like #{yyyymm}
 	order by key
-<!--
- 	select d.key,mem_id,arrive,leave,time,d.yyyymm
-	from attend E,(select to_char(arrive,('YYYYMMDD'))yyyymm,key
-    from attend) D
-	where E.key(+)=D.key and mem_id=#{memId}
-	order by key 
- -->
+
 	</select>
-	
 
 	<select id="getTodayCount" resultType="int">
 	select 
@@ -99,10 +92,17 @@ where rnum between #{startRnum} and #{endRnum}
 	select  count(*)
 	from attend
 	where mem_id=#{mem_id}
-	
 	</select>
 
-
+	<select id="AttendAllList" resultType="attend">
+	
+	select A.*,M.name name
+	from attend A, member M
+	where A.mem_id=M.member_id
+	
+	</select>
+	
+	
 	<resultMap type="map" id="attendMap">
   		<id column="key" property="key"/>
   		<result column="mem_id" property="memId"/>

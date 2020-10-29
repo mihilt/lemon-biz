@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -78,10 +79,14 @@ public class AttendController {
 			}catch(Exception e){
 				totalContents=0;
 			}
-			log.debug("totalContents = {} ",totalContents);
+
 			String url = request.getRequestURI();
-			log.debug("url = {} " , url);
-			String pageBar = Paging.attendPageHtml(cPage, numPerPage, totalContents, url);
+			log.debug("totalContents = {} ",totalContents);
+			log.debug("cPage = {} ",totalContents);
+			log.debug("numPerPage = {} ",totalContents);
+			log.debug("url = {} ",totalContents);
+			
+			String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
 			Map<String,Object> map = new HashMap<String, Object>();
 		
 			String memId =attend.getMemId();
@@ -139,15 +144,6 @@ public class AttendController {
 		return "attend/attendCal";
 		}
 		
-		public void aa(HttpServletRequest request) {
-			int numPerPage = 3;
-			int cPage = 1;
-			
-			try {
-				cPage = Integer.parseInt(request.getParameter("cPage"));
-			} catch (NumberFormatException e) {
-			}
-		}
 		//캘린더 데이터값
 		@ResponseBody
 		@RequestMapping("/selectCalAttend.do") 
@@ -176,6 +172,8 @@ public class AttendController {
 			
 			System.out.println("num = " + num);
 
+
 			return new ResponseEntity<>(num,HttpStatus.OK);		
 		}
+
 }

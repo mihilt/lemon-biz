@@ -2,7 +2,7 @@ package com.lemon.lemonbiz.board.controller;
 
 
 import java.io.File;
-//github.com/mihilt/lemon-biz.git
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

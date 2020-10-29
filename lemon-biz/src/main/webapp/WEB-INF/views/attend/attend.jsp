@@ -37,7 +37,10 @@ tr[data-no]{cursor: pointer;}
 	 		<div id="lastarrive" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="yyyyMMdd"/></div>
 	 		<div id="lastLeave" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="HH"/></div>
 	<div>
-		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="attendCal();">월별 근태</button>
+		<c:if test="${ loginMember.isManager eq 1 }">			
+		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="location.href='${pageContext.request.contextPath}/manager/manageAttend.do' ">근태 조회</button>
+		</c:if>
+		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="location.href='${pageContext.request.contextPath}/attend/attendCal.do' ">월별 근태</button>
 		<button id="btn-leabe" class="btn btn-outline-warning" type="button" onclick="attendLeabe();">퇴근</button>
 	 	<button id="btn-arrive" class="btn btn-outline-warning" type="button" onclick="attendArrive();">출근</button>
 	</div>
@@ -49,10 +52,10 @@ tr[data-no]{cursor: pointer;}
 			<th>출근시간</th>
 			<th>퇴근시간</th>
 			<th>근무시간</th>
-			<th>번호</th>
 		</tr>
 			</thead>
 		<c:forEach items="${ list }" var="attend">
+
 		<c:if test="${attend.leave ne null}">
 		<thead class="alert-warning">
 		</c:if>
@@ -65,7 +68,6 @@ tr[data-no]{cursor: pointer;}
 			<td><fmt:formatDate value="${ attend.arrive }" pattern="HH:mm"/></td>
 			<td><fmt:formatDate value="${ attend.leave }" pattern="HH:mm"/></td>
 			<td>${ attend.time }</td>
-			<td>${ attend.key }</td>
 		</tr>
 		</c:forEach>
 	</table>
@@ -118,13 +120,6 @@ function attendLeabe(){
 	}   
 }
 
-
-//Cal 호출
-function attendCal(){
-	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendCal.do")
-	.attr("method", "POST")
-	.submit(); 
-}
 </script>
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -28,4 +28,6 @@ public interface AttendService {
 
 	List<Map<String, Object>> selectAttendList(int cPage, int numPerPage, Map<String, Object> map, String memId);
 
+	List<Attend> selectAttendList();
+
 }
