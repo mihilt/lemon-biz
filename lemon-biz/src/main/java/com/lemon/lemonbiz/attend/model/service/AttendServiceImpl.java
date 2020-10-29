@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.attend.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,11 @@ public class AttendServiceImpl implements AttendService {
 	}
 
 	@Override
+	public int getTodayCount(String date) {
+		
+		return attendanDAO.getTodayCount(date);
+	}
+
 	public int countAttend(Attend attend) {
 		return attendanDAO.countAttend(attend);
 	}

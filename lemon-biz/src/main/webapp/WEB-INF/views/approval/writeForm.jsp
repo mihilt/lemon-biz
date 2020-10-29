@@ -10,17 +10,24 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
-<style>
+<!-- include summernote-ko-KR -->
+<script src="${pageContext.request.contextPath }/resources/summernoteKr/summernote-ko-KR.js"></script>
 
-
-
-</style>
-
+<script>
+//add summernote
+$(document).ready(function() {
+  $('#summernote').summernote({
+    lang: 'ko-KR',
+    height: 500
+    
+  });
+});
+</script>
 
 <div>
-	<h2>일반결제 작성</h2>
-
 	
 
 
@@ -29,7 +36,7 @@
   <div class="modal-dialog" style="max-width: 90%;" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">결제라인 추가</h5>
+        <h5 class="modal-title" id="exampleModalLabel">결재라인 추가</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -67,8 +74,8 @@
         <!-- printList Form -->
       
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결제자 선택</h5>
-    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
+    	<h5>결재자 선택</h5>
+    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; min-height:360px;">
     			<div class="row" style="margin: 5px 5px"> 
     			<label>성명</label>
     			<input type="text" id="searchN"/>
@@ -112,7 +119,7 @@
     	
       	<!-- selectMember Form-->
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결제자 선택</h5>
+    	<h5>결재자 선택</h5>
     		<div id="apprst" style="margin: 5px; padding: 5px; border:1px solid lightgray; height:360px;">
     			
     	
@@ -183,7 +190,10 @@
 		<!-- 게시글 -->
  			<div class="col-lg-12">			
              	<div class="card" >
-                	<div class="card-header py-3" align="center">	
+                	<div class="card-header py-2" align="center">
+                	<br />
+                	<h2>결재문서 작성</h2>
+                	<br />
 						<table class="table table text-center">
 					    <tr>
 					    	<td><strong>기안담당</strong>
@@ -208,37 +218,62 @@
 						</tr>
 					    </table>
 					</div>
-					<div>
+
+					<div class="p-2">
 					
-					
-					    <!-- ================결제칸=============== -->
+					    <!-- ================결재칸=============== -->
 					    <input type="hidden" id="authDept1" name="authDept1" value="">
 						<input type="hidden" id="authDept2" name="authDept2" value="">
 						<input type="hidden" id="authDept3" name="authDept3" value="">
 						
-					    <table>
-						<tr><td width="50%">
-						<div class="float-center">
+						
+						<div class="float-left col-md-5" >
+						<div class="float-left col-md-4">
 							<!-- Button trigger modal -->
-							<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
-							  결제라인 추가
+							
+							<label for="#approvalSelectBtn">결제자 등록 : </label>
+							<button id="approvalSelectBtn" type="button" class="btn btn-outline-primary" 
+							data-toggle="modal" data-target="#exampleModal">
+							  결재라인 추가
 							</button>
+							
+							<!-- 양식 선택 -->
 						</div>
-						</td>
-						<td width="50%">
-						<div class="float-right">
-						<table border="1" style="display: inline-block">
+						
+						
+						<div class="float-left col-md-10" style="padding:15px">
+							
+							<p>문서양식 선택 : </p>				      	
+							<select name="docType" class="col-6 form-control"
+								id="docType">
+								<option value="none" selected>선택</option>
+								<c:forEach items="${ docTypeList }" var="docType">
+									<option value="${ docType.key }">
+										${ docType.name }
+									</option>
+								</c:forEach>
+							</select>
+							
+						</div>
+						</div>
+						
+						
+					    <table>
+						<tr>
+						<td width="40%">
+						<div class="float-center">
+						<table class="table table-hover text-center" >
 						
 						<tr>
-							<td></td>
-							<td>기안자</td>
-							<td id="proNum1">1차 결제자</td>
-							<td id="proNum2">2차 결제자</td>
-							<td id="proNum3">3차 결제자</td>
+							
+							<td>분류</td>
+							<td id="proNum1">1차 결재자</td>
+							<td id="proNum2">2차 결재자</td>
+							<td id="proNum3">3차 결재자</td>
 						</tr>
 						<tr>
-						<td class="tt" rowspan='4'>결재</td>
-						<td class="aa">작성자</td>
+						
+						<td class="aa">직급</td>
 						
 						<td id="authRank1" class="aa">
 						${ apprck1.rankName }
@@ -261,7 +296,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.name }</td>
+						<td>성명</td>
 						<td id="authName1">${ apprck1.ckName }</td>
 						<td id="authName2">${ apprck2.ckName }</td>
 						<td id="authName3">${ apprck3.ckName }</td>
@@ -270,7 +305,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.memberId }</td>
+						<td>사원번호</td>
 						<td id="apv_mem1">${ apprck1.memId }</td>
 						<td id="apv_mem2">${ apprck2.memId }</td>
 						<td id="apv_mem3">${ apprck3.memId }</td>
@@ -281,13 +316,15 @@
 						</div>
 						
 						</table>
+						
 						</div>
-						<!-- ==============결제칸 끝============== -->
+						<!-- ==============결재칸 끝============== -->
+						
+						
+						<hr />
+						
 						<!-- 폼 내용 -->
-						
-						
-						
-						<form id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
+						<form class="p-2" id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
 							<input type="hidden" id="authId1" name="approval_mem1" />
 							<input type="hidden" id="authId2" name="approval_mem2" />
 							<input type="hidden" id="authId3" name="approval_mem3" />
@@ -316,7 +353,7 @@
 						
 						<div class="container" align="center">
 						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
-						<button class="btn btn-outline-primary" onclick="updateApproval()">저장하기</button>
+						<button class="btn btn-outline-primary" onclick="save()">저장하기</button>
 						<button class="btn btn-outline-primary" onclick="tempchk()">제출하기</button>
 						
 						<div><br></div>
@@ -339,11 +376,36 @@
 					<div class="form-group">
 						<div class="modal-body">
 
-							<label>문서가 제출되었습니다. .</label><br>
+							<label>문서를 제출합니다.</label><br>
 							
 						</div>
 						<div class="modal-footer float-right">
-							<button class="btn btn-outline-primary" type="submit" onclick="tempStore()" >저장</button>
+							<button class="btn btn-outline-primary" type="submit" onclick="tempStore()" >제출</button>
+							
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="modal" id="savingApproval">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">알림</h5>
+					<button type="button" class="btn btn-outline-primary" data-dismiss="modal">&times;</button>
+				</div>
+
+					<div class="form-group">
+						<div class="modal-body">
+
+							<label>문서 저장시에 첨부파일은 저장되지 않습니다.</label><br>
+							
+						</div>
+						<div class="modal-footer float-right">
+							<button class="btn btn-outline-primary" type="submit" onclick="updateApproval()" >제출</button>
+							
 						</div>
 					</div>
 			</div>
@@ -354,13 +416,13 @@
 	
 	
 	
-</div>
+
 
 
 
 
 <script>
-/*=================================== 결제라인추가 script start ====================================*/
+/*=================================== 결재라인추가 script start ====================================*/
 	$(document).ready(function() {
 		$('#proNum1').val(1);
 		$('#proNum2').val(2);
@@ -434,7 +496,7 @@
 						  .attr('id',data.memberList[i].memberId).appendTo('#tbody');
 			$('<td></td>').text(data.memberList[i].deptName).appendTo('#'+data.memberList[i].memberId+'');
 			$('<td></td>').text(data.memberList[i].name).appendTo('#'+data.memberList[i].memberId+'');
-			$('<td></td>').text(data.memberList[i].rankKey).appendTo('#'+data.memberList[i].memberId+'');
+			$('<td></td>').text(data.memberList[i].rankName).appendTo('#'+data.memberList[i].memberId+'');
 			$('<td></td>').text(data.memberList[i].memberId).appendTo('#'+data.memberList[i].memberId+'');
 		}
 	}
@@ -458,7 +520,7 @@
 		
 		for(var j = MIN_NUM; j <= MAX_NUM; j++) {
 			if($('#memId_'+j).text()==memberId) {
-				alert('이미 추가되어있는 결제자 입니다.');
+				alert('이미 추가되어있는 결재자 입니다.');
 				return;	
 			}
 			if(trArr[j-1].value != 'exist') {
@@ -467,7 +529,7 @@
 		}
 		
 		if(cnt==3) {
-			alert('결제자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
+			alert('결재자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
 			return;
 		}
 
@@ -486,39 +548,39 @@
 
 				var result = data.selectMember;
 				
-				rankKey = result[0].rankKey;
+				rankName = result[0].rankName;
 				deptName = result[0].deptName;
 				memberName = result[0].name;
 				console.log(memberName);
 				console.log(deptName);
 				
-		if(rankKey == null) {
-			rankKey = '입사대기';
-		}
-		if(deptName == null) {
-			deptName = '발령대기';
-		}
-		if(memberName == null) {
-			memberName= '오류';
-		}
+				if(rankKey == null) {
+					rankKey = '입사대기';
+				}
+				if(deptName == null) {
+					deptName = '발령대기';
+				}
+				if(memberName == null) {
+					memberName= '오류';
+				}
+				
+				for(var i=0; i<trArr.length; i++ ) {
 		
-		for(var i=0; i<trArr.length; i++ ) {
-
-			if($('#'+(i+1)+'').val() != 'exist'){
-			$('#memId_'+(i+1)).text(memberId);
-			$('#dept_'+(i+1)).text(deptName);
-			$('#name_'+(i+1)).text(memberName);
-			$('#rank_'+(i+1)).text(rankKey);
-
-			$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
-			$('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
-			$('#'+(i+1)+'').val('exist');
-
-			return;
-		}
-
-
-	 }
+					if($('#'+(i+1)+'').val() != 'exist'){
+					$('#memId_'+(i+1)).text(memberId);
+					$('#dept_'+(i+1)).text(deptName);
+					$('#name_'+(i+1)).text(memberName);
+					$('#rank_'+(i+1)).text(rankName);
+		
+					$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
+					$('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
+					$('#'+(i+1)+'').val('exist');
+		
+					return;
+				}
+		
+		
+			 }
 			}
 		});
 
@@ -661,7 +723,7 @@
 		 }
 
 	}
-	/*=================================== 결제라인추가 script end ====================================*/
+	/*=================================== 결재라인추가 script end ====================================*/
 	
 	/* ======================================폼 제출관련 script start=================================== */
 	function tempchk() {
@@ -686,22 +748,19 @@
 			alert('내용을 입력해주세요')
 			return;
 		}
+		
+		if( $('#authId1').val() == '' || $('#authId2').val() == '' || $('#authId3').val() == '') {
+			alert('결재자를 모두 선택해주세요');
+			return;
+		}
+
+		
 
 		$('#comment').modal();
 	}
 
 	function tempStore() {
 		
-		/* if('${mem1}' != null){
-			$('#authId1').val(${mem1});
-		}
-		if('${mem2}' != null){
-			$('#authId2').val(${mem1});
-		}
-		if('${mem3}' != null){
-			$('#authId3').val(${mem1});
-		}
-		*/
 		
 		for(var i = 1 ; i <=3 ; i++){
 			$('#authId'+i+'').val($('#apv_mem'+i+'').text());	
@@ -713,11 +772,13 @@
 	
 		$('#sendApv').submit();
 		
-		/* $('#apvCateGo').val(1);
-		if($('#apvCateGo').val() == ''){
-		$('#apvCateGo').val(${ apvReWrite.approval_cate });
-		} */
 		
+		
+	}
+
+	function save() {
+
+		$('#savingApproval').modal();
 	}
 
 	function updateApproval() {
@@ -730,6 +791,8 @@
 			alert('내용을 입력해주세요')
 			return;
 		}
+
+		
 
 		for(var i = 1 ; i <=3 ; i++){
 			$('#authId'+i+'').val($('#apv_mem'+i+'').text());	
@@ -762,7 +825,11 @@
 		$('<input></input>').attr('type','hidden').attr('value',$('#summernote').val()).attr('name','updateContent').appendTo('#updateApproval');
 		
 		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','updateApprovalKey').appendTo('#updateApproval');
-		
+
+		if( $('#authId1').val() == '' || $('#authId2').val() == '' || $('#authId3').val() == '') {
+			alert('결재자를 모두 선택해주세요');
+			return;
+		}
 		
 		
 		console.dir($('#updateApproval'));
@@ -780,7 +847,32 @@
 	/* ======================================폼 제출관련 script end=================================== */	 
 	 
 	 
-	 
+	/* 양식 설정 script */
+	
+	$(function(){
+			$('#docType').change(function(){
+
+					const key = $("#docType option:selected").val();
+					
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/approval/selectOneDocTypeAjax.do?key="+key,
+						data : {
+						},
+						dataType : "json",
+						success : function(data){
+							/* console.log(data); */
+							
+							$("#summernote").summernote("code", data.form);
+
+						},
+						error : function(xhr, status, err){
+							console.log(xhr, status, err);
+						}
+					});
+
+					
+				});
+		});
 	 
 </script>
 

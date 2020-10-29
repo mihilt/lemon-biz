@@ -39,3 +39,42 @@ create table cost(
 
 select * from cost;
 
+drop table cost;
+
+select * from post;
+
+select * from attend;
+
+select * 
+from(
+    select *
+    from post
+    where categ_key = 3
+    order by post_date desc
+    )
+where
+    rownum <= 5;
+    
+select count(*)
+from calendar
+where calendar_member_id = 1
+and calendar_start like '%2020-10-04%';
+
+select * from attend;
+select count(*) from attend where to_char(arrive,'YYYYMMDD') = '20201022';
+
+commit;
+
+select * from appr;
+
+select * from om;
+
+select * from attachment;
+
+select * from appr_check;
+
+select count(*)
+from appr_check
+where mem_id = '808'
+and status is null;
+

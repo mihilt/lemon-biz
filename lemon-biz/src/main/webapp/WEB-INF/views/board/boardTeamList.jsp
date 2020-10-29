@@ -7,6 +7,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
 
 <style>
 /*글쓰기버튼*/
@@ -63,7 +64,7 @@ div#search-memberName{display:none;}
 			</c:if>
 			
 			<c:if test="${ post.isNotice eq 1 }">
-			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.title } </td>
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.title }<span class="badge bg-teal"><i class="fa fa-comment-o">[${ post.boardCommentCnt }]</i></span> </td>
 			</c:if>
 			<c:if test="${ post.isNotice eq 0 }">
 			<td >${ post.title } 
@@ -71,6 +72,7 @@ div#search-memberName{display:none;}
 					<img src="${ pageContext.request.contextPath }/resources/images/file.png"
 						 style="width:16px;" />
 				</c:if>
+				<span class="badge bg-teal"><i class="fa fa-comment-o">[${ post.boardCommentCnt }]</i></span>
 			</td>
 			</c:if>	
 			

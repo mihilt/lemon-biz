@@ -79,8 +79,16 @@ where rnum between #{startRnum} and #{endRnum}
 	order by key
 
 	</select>
+
+	<select id="getTodayCount" resultType="int">
+	select 
+		count(*) 
+	from 
+		attend 
+	where to_char(arrive,'YYYYMMDD') = #{ date }
+	</select>
 	
-	<!-- sum -->
+>>>>>>> branch 'master' of https://github.com/mihilt/lemon-biz.git
 	<select id="countAttend" resultType="_int">
 	select  count(*)
 	from attend

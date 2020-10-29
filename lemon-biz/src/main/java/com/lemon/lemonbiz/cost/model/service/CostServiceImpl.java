@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.cost.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class CostServiceImpl implements CostService {
 	}
 
 	@Override
-	public List<Cost> selectAllCost(String memberId) {
+	public List<Cost> selectAllCost(HashMap<Object, Object> params) {
 		
-		return costDAO.selectAllCost(memberId);
+		return costDAO.selectAllCost(params);
 	}
 }

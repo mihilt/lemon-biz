@@ -45,6 +45,13 @@ public class AttendDAOImpl implements AttendDAO {
 	}
 
 	@Override
+
+	public int getTodayCount(String date) {
+		
+		return sqlSession.selectOne("attend.getTodayCount",date);
+	}
+	
+
 	public int countAttend(Attend attend) {
 		return sqlSession.selectOne("attend.countAttend");
 	}

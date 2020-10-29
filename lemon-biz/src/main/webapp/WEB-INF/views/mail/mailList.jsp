@@ -318,7 +318,7 @@ $(function(){
 	});
 });
 function goMailForm(){
-	location.href = "${pageContext.request.contextPath}/board/mailForm.do";
+	location.href = "${pageContext.request.contextPath}/mail/mailForm.do";
 }
 $(document).ready(function() { 	
 	$('#star-all').click(function(){

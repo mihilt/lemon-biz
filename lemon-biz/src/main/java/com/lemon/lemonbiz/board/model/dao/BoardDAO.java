@@ -1,6 +1,5 @@
 package com.lemon.lemonbiz.board.model.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +66,8 @@ public interface BoardDAO {
 
 	String selectTeamName(Member loginMember);
 
+	List getBoardTopFive();
+
 	int countTitleBoard(String searchKeyword);
 
 	int countNameBoard(String searchKeyword);
@@ -93,12 +94,6 @@ public interface BoardDAO {
 
 	BoardComment selectOneBoardComment(int boardCommentRef);
 
-	
-
-	
-
-	
-
-
+	void boardGoodDelete(int key);
 
 }

@@ -2,18 +2,29 @@ package com.lemon.lemonbiz.approval.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,12 +32,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lemon.lemonbiz.approval.model.service.approvalService;
-import com.lemon.lemonbiz.approval.model.vo.appr;
-import com.lemon.lemonbiz.approval.model.vo.apprCheck;
+import org.springframework.web.servlet.ModelAndView;
+
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.lemon.lemonbiz.approval.model.service.ApprovalService;
+import com.lemon.lemonbiz.approval.model.vo.Appr;
+import com.lemon.lemonbiz.approval.model.vo.ApprCheck;
+import com.lemon.lemonbiz.approval.model.vo.DocType;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.PagingInfo;
+import com.lemon.lemonbiz.manager.model.service.ManagerService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 
@@ -40,8 +59,47 @@ import lombok.extern.slf4j.Slf4j;
 public class ApprovalController {
 	
 	@Autowired
-	private approvalService approvalService;
+	private ManagerService managerService;
 	
+	@Autowired
+	private ApprovalService approvalService;
+	
+	@Autowired
+	private ResourceLoader resourceLoader;
+	
+	
+	@RequestMapping(value="/compliteApprovalList")
+	public String compliteApprovalList(@ModelAttribute("loginMember") Member loginMember,
+									   @RequestParam(value="page") int page,
+									   Model model) {
+		
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.compliteApprList(loginMember.getMemberId());
+		
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("auth", 0);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/compliteApprovalList");
+		
+		return "approval/compliteApprovalList";
+	}
+	
+	@RequestMapping(value="/returnApprovalList")
+	public String returnApprovalList(@ModelAttribute("loginMember") Member loginMember,
+									 @RequestParam(value="page") int page,
+									 Model model) {
+		
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.returnApprList(loginMember.getMemberId());
+		
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("auth", 0);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/requestApprovalList");
+		
+		
+		return "approval/returnApprovalList";
+	}
 	
 	@RequestMapping(value="/requestApprovalList")
 	public String requestApprovalList(@ModelAttribute("loginMember") Member loginMember,
@@ -49,8 +107,8 @@ public class ApprovalController {
 									  Model model) {
 		
 		
-		List<appr> apprList = new ArrayList<>();
-		apprList = approvalService.apprAndCkList(loginMember.getMemberId());
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.apprAndCkList(loginMember);
 		
 		model.addAttribute("apvList",apprList);
 		model.addAttribute("auth", 0);
@@ -66,8 +124,9 @@ public class ApprovalController {
 								 @RequestParam(value="page") int page,
 								 
 								 Model model) {
-		List<appr> apprList = new ArrayList<>();
-		apprList = approvalService.ApprovalList(loginMember.getMemberId());
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.myApprovalList(loginMember.getMemberId());
+		
 		
 		
 		model.addAttribute("apvList",apprList);
@@ -88,7 +147,7 @@ public class ApprovalController {
 		
 		HttpSession session = req.getSession(); 
 		
-		List<appr> apprList = new ArrayList<>();
+		List<Appr> apprList = new ArrayList<>();
 		try {
 			apprList = approvalService.ApprovalList(loginMember.getMemberId());
 			
@@ -111,7 +170,6 @@ public class ApprovalController {
 		List<Dept> dept = approvalService.deptList();
 		List<Dept> child = approvalService.child();
 		List<Dept> child2 = approvalService.child2();
-
 		log.debug("dept = {}",dept);
 		log.debug("child = {}",child);
 		log.debug("child2 = {}",child2);
@@ -120,6 +178,8 @@ public class ApprovalController {
 		model.addAttribute("child",child);
 		model.addAttribute("child2",child2);
 
+		List<DocType> docTypeList = approvalService.selectDocTypeTitleList();
+		model.addAttribute("docTypeList", docTypeList);
 		
 		
 		
@@ -136,6 +196,7 @@ public class ApprovalController {
 		log.debug("memberList={}",memberList);
 		
 		model.addAttribute("memberList",memberList);
+		
 		
 		return "jsonView";
 	}
@@ -176,7 +237,7 @@ public class ApprovalController {
 	@RequestMapping(value="applovalSave.do", method=RequestMethod.POST)
 	public String updateApproval(HttpServletRequest req,
 								Model model,
-								appr appr,
+								Appr appr,
 								@RequestParam (value="updateTitle", required=true) String title,
 								@RequestParam (value="updateContent", required=true) String semmernote,
 								@RequestParam (value="updateStatus", required=true) String status,
@@ -200,43 +261,43 @@ public class ApprovalController {
 		
 		//2. 문서종류
 		
-		//3. 사원번호 : 전자결제에 대한 사원번호 받기
+		//3. 사원번호 : 전자결재에 대한 사원번호 받기
 		String memId = ((Member)session.getAttribute("loginMember")).getMemberId();
 		appr.setMemId(memId);
 		
-		//4. 제목 : 전자결제에 대한 제목받기(title)
+		//4. 제목 : 전자결재에 대한 제목받기(title)
 		appr.setTitle(title);
 		
-		//5. 내용 : 전자결제에 대한 제목받기(semmernote)
+		//5. 내용 : 전자결재에 대한 제목받기(semmernote)
 		log.debug("semmernote={}", semmernote);
 		appr.setContent(semmernote);
 		
-		//6. 기안일자 : 전자결제에 대한 작성일자 받기(디비에서 default)
+		//6. 기안일자 : 전자결재에 대한 작성일자 받기(디비에서 default)
 		
-		//7. 상태 : 전자결제에 대한 상태받기(status)
+		//7. 상태 : 전자결재에 대한 상태받기(status)
 		log.debug("status={}", status);
 		appr.setStatus(status);
 		
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
 		
 		//8. apprCheck 객체 생성
-		//1번 결제자
+		//1번 결재자
 		log.debug("authId1={}",authId1);
 		log.debug("authId2={}",authId2);
 		log.debug("authId3={}",authId3);
-		apprck1.setSeqNum(processNum1);
+		apprck1.setSeqNum(1);
 		log.debug("apprck1={}",apprck1.getSeqNum());
 		apprck1.setMemId(authId1);
 		apprck1.setStatus(status);
-		//2번결제자
-		apprck2.setSeqNum(processNum2);
+		//2번결재자
+		apprck2.setSeqNum(2);
 		log.debug("apprck2={}",apprck2.getSeqNum());
 		apprck2.setMemId(authId2);
 		apprck2.setStatus(status);
-		//3번결제자
-		apprck3.setSeqNum(processNum3);
+		//3번결재자
+		apprck3.setSeqNum(3);
 		apprck3.setMemId(authId3);
 		apprck3.setStatus(status);	
 		
@@ -262,7 +323,7 @@ public class ApprovalController {
 			appr.setApprck2(apprck2);
 			appr.setApprck3(apprck3);
 			
-			//appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			//appr(전자결재), apprch(전자결재승인) attachment(파일) 객체 db에 저장
 			int result = approvalService.insertApproval(appr);
 			log.debug("result={}",result);
 			
@@ -274,7 +335,7 @@ public class ApprovalController {
 			
 			//appr_check 도 행이 이미 존재하기 때문에 jsp에서 apprCheck.key값을 받아와서 update처리.
 			
-			List<apprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
+			List<ApprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
 			
 			log.debug("approvalchange={}",apprchList.get(0).getKey());
 			log.debug("approvalchange={}",apprchList.get(1).getKey());
@@ -295,7 +356,7 @@ public class ApprovalController {
 			appr.setApprck2(apprck2);
 			appr.setApprck3(apprck3);
 			
-			// appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			// appr(전자결재), apprch(전자결재승인) attachment(파일) 객체 db에 저장
 			int result = approvalService.updateApproval(appr);
 			log.debug("result={}",result);
 		}
@@ -318,7 +379,7 @@ public class ApprovalController {
 	@RequestMapping(value="updateApproval.do", method=RequestMethod.POST)
 	public String approvalWrite(HttpServletRequest req,
 								Model model,
-								appr appr,
+								Appr appr,
 								@RequestParam (value="approval_title", required=true) String title,
 								@RequestParam (value="approval_content", required=true) String semmernote,
 								@RequestParam (value="status", required=true) String status,
@@ -337,49 +398,49 @@ public class ApprovalController {
 		
 		HttpSession session = req.getSession();
 		
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
 		
 		
 		
-		//-----------------------전자결제에 대한 속성저장
+		//-----------------------전자결재에 대한 속성저장
 		
 		
 		//2. 문서종류번호
 		
-		//3. 사원번호 : 전자결제에 대한 사원번호 받기 
+		//3. 사원번호 : 전자결재에 대한 사원번호 받기 
 		String memId = ((Member)session.getAttribute("loginMember")).getMemberId();
 		appr.setMemId(memId);
 		
-		//4. 제목 : 전자결제에 대한 제목받기(title)
+		//4. 제목 : 전자결재에 대한 제목받기(title)
 		log.debug("title={}",title);
 		appr.setTitle(title);
 		
-		//5. 내용 : 전자결제에 대한 제목받기(semmernote)
+		//5. 내용 : 전자결재에 대한 제목받기(semmernote)
 		log.debug("semmernote={}", semmernote);
 		appr.setContent(semmernote);
 		
-		//6. 기안일자 : 전자결제에 대한 작성일자 받기(디비에서 default)
+		//6. 기안일자 : 전자결재에 대한 작성일자 받기(디비에서 default)
 		
-		//7. 상태 : 전자결제에 대한 상태받기(status)
+		//7. 상태 : 전자결재에 대한 상태받기(status)
 		log.debug("status={}", status);
 		appr.setStatus(status);
 		
 		//8. apprCheck 객체 생성
-		//1번 결제자
+		//1번 결재자
 		log.debug("authId1={}",authId1);
 		log.debug("authId2={}",authId2);
 		log.debug("authId3={}",authId3);
-		apprck1.setSeqNum(processNum1);
+		apprck1.setSeqNum(1);
 		apprck1.setMemId(authId1);
 		apprck1.setStatus(status);
-		//2번결제자
-		apprck2.setSeqNum(processNum2);
+		//2번결재자
+		apprck2.setSeqNum(2);
 		apprck2.setMemId(authId2);
 		apprck2.setStatus(status);
-		//3번결제자
-		apprck3.setSeqNum(processNum3);
+		//3번결재자
+		apprck3.setSeqNum(3);
 		apprck3.setMemId(authId3);
 		apprck3.setStatus(status);
 		
@@ -389,7 +450,7 @@ public class ApprovalController {
 		
 		
 		
-		if(upFile != null) {
+		if(!upFile.isEmpty()) {
 			
 			//8-1.파일 : 저장할 파일이 존재할 경우 attachment에 속성저장하기 (upfile)
 			// 서버컴퓨터에 업로드한 파일 저장 확인
@@ -401,7 +462,7 @@ public class ApprovalController {
 			//저장경로
 			String saveDirectory = req.getServletContext().getRealPath("/resources/upload/approval");
 			//파일을 선택하지 않고 전송한 경우
-			
+			log.debug("upFile={}", upFile.getOriginalFilename());
 				
 			//1. 파일명(renameFilename)생성
 			String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
@@ -419,7 +480,7 @@ public class ApprovalController {
 		}
 		
 		
-		//2. appr(전자결제), apprch(전자결제승인) 객체 db에 저장
+		//2. appr(전자결재), apprch(전자결재승인) 객체 db에 저장
 		
 		log.debug("approvalKey={}",approvalKey);
 		log.debug("approvalKey={}",approvalKey);
@@ -447,7 +508,7 @@ public class ApprovalController {
 			appr.setApprck2(apprck2);
 			appr.setApprck3(apprck3);
 			
-			//appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			//appr(전자결재), apprch(전자결재승인) attachment(파일) 객체 db에 저장
 			int result = approvalService.insertApproval(appr);
 			log.debug("result={}",result);
 			
@@ -459,7 +520,7 @@ public class ApprovalController {
 			
 			//appr_check 도 행이 이미 존재하기 때문에 jsp에서 apprCheck.key값을 받아와서 update처리.
 			
-			List<apprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
+			List<ApprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
 			
 			
 			apprck1.setKey(apprchList.get(0).getKey());
@@ -472,7 +533,7 @@ public class ApprovalController {
 			appr.setApprck2(apprck2);
 			appr.setApprck3(apprck3);
 			
-			// appr(전자결제), apprch(전자결제승인) attachment(파일) 객체 db에 저장
+			// appr(전자결재), apprch(전자결재승인) attachment(파일) 객체 db에 저장
 			int result = approvalService.updateApproval(appr);
 			log.debug("result={}",result);
 		}
@@ -501,13 +562,21 @@ public class ApprovalController {
 						  @RequestParam(value="approval_id") String key) {
 		
 		
-		appr appr = approvalService.reWriteAppr(key);
-		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		Appr appr = approvalService.reWriteAppr(key);
+
+
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
+		try {
 		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("attach",attach);
+		} catch(Exception e) {
+		}
+
 		
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
+
 		
 		apprck1 = apprchList.get(0);
 		apprck2 = apprchList.get(1);
@@ -538,11 +607,52 @@ public class ApprovalController {
 		model.addAttribute("apprck2",apprck2);
 		model.addAttribute("apprck3",apprck3);
 		
-		model.addAttribute("attach",attach);
 		
+		List<DocType> docTypeList = approvalService.selectDocTypeTitleList();
+		model.addAttribute("docTypeList", docTypeList);
 		
 		
 		return "approval/writeForm";
+	}
+	
+	
+	@RequestMapping(value="/returnApprovalDetail.do", method=RequestMethod.GET)
+	public String returnApprovalDetail(Model model,
+						  @RequestParam(value="apprKey") String key) {
+		
+		
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
+		try {
+		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("attach",attach);
+		}catch(Exception e) {	
+		}
+		Appr appr = approvalService.returnApprovalDetail(key);
+		
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
+		
+		apprck1 = apprchList.get(0);
+		apprck2 = apprchList.get(1);
+		apprck3 = apprchList.get(2);
+		
+		log.debug("apprck1={}",apprck1);
+		log.debug("apprck2={}",apprck2);
+		log.debug("apprck3={}",apprck3);
+		
+		
+		model.addAttribute("appr",appr);
+		
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
+		
+		
+		
+		
+		return "approval/returnApprovalDetail";
 	}
 	
 	@RequestMapping(value="/myApprovalDetail", method=RequestMethod.GET)
@@ -550,15 +660,15 @@ public class ApprovalController {
 								   @RequestParam(value="apprKey") String key) {
 		
 		
-		appr appr = approvalService.reWriteAppr(key);
-		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		Appr appr = approvalService.reWriteAppr(key);
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
 		Attachment attach = approvalService.reWriteAttach(key);
 		
 		
 		
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
 		
 		apprck1 = apprchList.get(0);
 		apprck2 = apprchList.get(1);
@@ -579,17 +689,22 @@ public class ApprovalController {
 	
 	@RequestMapping(value="/reauestApprovalDetail.do")
 	
-	public String myApprovalDetail(Model model,
+	public String requestApprovalDetail(Model model,
 								   @RequestParam(value="apprKey") String key,
 								   @RequestParam(value="ckKey") int ckKey) {
 			
-		List<apprCheck> apprchList = approvalService.reWriteApprck(key);
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
+		try {
+
 		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("attach",attach);
+		}catch(Exception e) {
+		}
+		Appr appr = approvalService.apprckDetail(ckKey);
 		
-		appr appr = approvalService.apprckDetail(ckKey);
-		apprCheck apprck1 = new apprCheck();
-		apprCheck apprck2 = new apprCheck();
-		apprCheck apprck3 = new apprCheck();
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
 		
 		apprck1 = apprchList.get(0);
 		apprck2 = apprchList.get(1);
@@ -601,10 +716,137 @@ public class ApprovalController {
 		model.addAttribute("apprck2",apprck2);
 		model.addAttribute("apprck3",apprck3);
 		
-		model.addAttribute("attach",attach);
+		
+		
 		
 		
 		return "approval/reauestApprovalDetail";
+	}
+	
+	@RequestMapping(value="/compliteApprovalDetail.do")
+	
+	public String compliteApprovalDetail(Model model,
+								   @RequestParam(value="apprKey") String key) {
+			
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
+		try {
+		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("attach",attach);
+		}catch(Exception e) {
+		}
+		Appr appr = approvalService.compliteApprDetail(key);
+		
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
+		
+		apprck1 = apprchList.get(0);
+		apprck2 = apprchList.get(1);
+		apprck3 = apprchList.get(2);
+		
+		model.addAttribute("appr",appr);
+		
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
+		
+		return "approval/compliteApprovalDetail";
+	}
+	
+	
+	@RequestMapping(value="/fileDownload.do")
+	@ResponseBody
+	public Resource fileDownload(@RequestParam("key") String key,
+								 @RequestHeader("user-agent") String userAgent,
+								 HttpServletRequest request,
+								 HttpServletResponse response) throws UnsupportedEncodingException {
+		
+		Attachment attach = approvalService.selectOneAttachment(key);
+		
+		String saveDirectory = request.getServletContext()	
+				  .getRealPath("/resources/upload/approval");
+		File downFile = new File(saveDirectory, attach.getReName());
+		Resource resource = resourceLoader.getResource("file:" + downFile);
+		log.debug("resource = {}", resource);
+		
+		boolean isMSIE = userAgent.indexOf("MSIE") != -1 
+          	  || userAgent.indexOf("Trident") != -1;
+		String originalFilename = attach.getOriginName();
+		
+		if(isMSIE){
+	        //ie 구버젼을 위해 퍼센트인코딩을 명시적으로 처리. 
+	    	//퍼센트인코딩(URLEncoder.encode)이후 공백을 의미하는 +를 %20로 다시 치환.
+	        originalFilename = URLEncoder.encode(originalFilename, "UTF-8")//%EC%B7%A8+%EC%97%85+%ED%8A%B9+%EA%B0%95.txt
+	        							 .replaceAll("\\+", "%20");
+	    } 
+	    else {
+	        originalFilename = new String(originalFilename.getBytes("UTF-8"),"ISO-8859-1");
+	    }
+		
+		response.setContentType("application/octet-stream; charset=utf-8");
+		response.addHeader("Content-Disposition", "attachment; filename=\"" + originalFilename + "\"");//쌍따옴표 사용하지 말것.
+		
+		
+		return resource;
+	}
+	
+	@RequestMapping(value="approve.do", method=RequestMethod.POST)
+	public String approve(@ModelAttribute("loginMember") Member loginMember,
+						  Model model,
+						  Appr appr,
+						  @RequestParam("apprckKey1") int apprckKey1,
+						  @RequestParam("apprckKey2") int apprckKey2,
+						  @RequestParam("apprckKey3") int apprckKey3,
+						  RedirectAttributes red) {
+		
+		log.debug("appr={}",appr);
+		log.debug("apprckKey1={}",apprckKey1);
+		log.debug("apprckKey2={}",apprckKey2);
+		log.debug("apprckKey3={}",apprckKey3);
+		
+		String apprKey = appr.getKey();
+		String memberId = loginMember.getMemberId();
+		Map<String, String> map = new HashMap<>();
+		map.put("apprKey",apprKey);
+		map.put("memberId",memberId);
+		ApprCheck apprck = approvalService.selectcApprck(map);
+		
+		log.debug("apprck={}",apprck);
+
+		if(apprck.getSeqNum() == 1 || apprck.getSeqNum() == 2) {
+			int result = approvalService.changeApprck(apprck.getKey(),appr);
+		}
+		else {
+			int result = approvalService.backApprck(apprck.getKey(),apprKey,appr);
+		}
+		
+		red.addFlashAttribute("msg", "승인이 완료되었습니다.");
+		return "redirect:/approval/requestApprovalList?page=1";
+		
+	}
+	
+	@RequestMapping(value="/returnApprove.do", method=RequestMethod.POST)
+	public String returnApprove(@ModelAttribute("loginMember") Member loginMember,
+								Model model,
+								@RequestParam("opinion") String opinion,
+								@RequestParam("returnApprKey") String key,
+								Appr appr,
+								RedirectAttributes red) {
+		
+		
+		String memberId = loginMember.getMemberId();
+		Map<String, String> map = new HashMap<>();
+		map.put("key",key);
+		map.put("opinion",opinion);
+		map.put("memberId",memberId);
+
+		int result = approvalService.returnApproval(map, appr);
+		
+		System.out.println("dddddddddddddddddddddddddd");
+		red.addFlashAttribute("msg", "반려되었습니다.");
+		
+		return "redirect:/approval/requestApprovalList?page=1";
 	}
 	
 	
@@ -612,12 +854,10 @@ public class ApprovalController {
 	
 	
 	
-	
-	
-	public PagingInfo paging(int page, List<appr> appr) {
+	public PagingInfo paging(int page, List<Appr> appr) {
 		
 		int countList = 10; //페이지당 게시물 수
-		int countPage = 10; //페이지 수
+		int countPage = 20; //페이지 수
 		int totalCount = 0;
 		try {
 			totalCount = appr.size(); // 총 게시물 수
@@ -657,7 +897,37 @@ public class ApprovalController {
 		
 	}
 	
+	@RequestMapping("/getCountApproval")
+	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("params = " + params);
+		
+		int num = approvalService.getCountApproval(params);
+		
+		System.out.println("num = " + num);
+
+		return new ResponseEntity<>(num,HttpStatus.OK);		
+	}
 	
 	
 	
+	//양식 하나 불러오기
+	@RequestMapping(value="selectOneDocTypeAjax.do", method=RequestMethod.GET)
+	public void selectOneDocTypeAjax(DocType docType, HttpServletResponse response) {
+		
+		DocType oneDocType = approvalService.selectOneDocTypeAjax(docType);
+		
+
+		response.setContentType("application/json; charset=utf-8");
+
+		Gson gson = new Gson();
+		try {
+			gson.toJson(oneDocType, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 }
