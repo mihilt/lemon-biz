@@ -17,13 +17,13 @@
 				cellspacing="0">
 				<thead>
 					<tr>
-						<th scope="col">요일</th>
 						<th scope="col">일자</th>
-						<th scope="col">아이디</th>
+						<th scope="col">요일</th>
+						<th scope="col">사번</th>
+						<th scope="col">이름</th>
 						<th scope="col">출근</th>
 						<th scope="col">퇴근</th>
 						<th scope="col">근무시간</th>
-						<th scope="col">번호</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -33,13 +33,13 @@
 								class = "text-danger font-weight-bold"
 							</c:if>	 --%>					
 						>
-				<td><fmt:formatDate value="${ attend.arrive }" pattern="E"/></td>
 				<td><fmt:formatDate value="${ attend.arrive }" pattern="yyyy/MM/dd"/></td>
+				<td><fmt:formatDate value="${ attend.arrive }" pattern="E"/></td>
 				<td>${attend.memId }</td>
+				<td>${attend.name }</td>
 				<td><fmt:formatDate value="${ attend.arrive }" pattern="HH:mm"/></td>
 				<td><fmt:formatDate value="${ attend.leave }" pattern="HH:mm"/></td>
 				<td>${ attend.time }</td>
-				<td>${ attend.key }</td>
 			</tr>
 					</c:forEach>
 				</tbody>
@@ -47,6 +47,11 @@
 		</div>
 	</div>
 </div>
+<script>
+$('#dataTable').DataTable( {
+    "order": [[ 0, "desc" ]]
+} );
+</script>
 
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp" />
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

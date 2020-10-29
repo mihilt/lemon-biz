@@ -38,7 +38,7 @@ tr[data-no]{cursor: pointer;}
 	 		<div id="lastLeave" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="HH"/></div>
 	<div>
 		<c:if test="${ loginMember.isManager eq 1 }">			
-		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="location.href='${pageContext.request.contextPath}/attend/manageAttend.do' ">근태 조회</button>
+		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="location.href='${pageContext.request.contextPath}/manager/manageAttend.do' ">근태 조회</button>
 		</c:if>
 		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="location.href='${pageContext.request.contextPath}/attend/attendCal.do' ">월별 근태</button>
 		<button id="btn-leabe" class="btn btn-outline-warning" type="button" onclick="attendLeabe();">퇴근</button>
@@ -52,7 +52,6 @@ tr[data-no]{cursor: pointer;}
 			<th>출근시간</th>
 			<th>퇴근시간</th>
 			<th>근무시간</th>
-			<th>번호</th>
 		</tr>
 			</thead>
 		<c:forEach items="${ list }" var="attend">
@@ -69,7 +68,6 @@ tr[data-no]{cursor: pointer;}
 			<td><fmt:formatDate value="${ attend.arrive }" pattern="HH:mm"/></td>
 			<td><fmt:formatDate value="${ attend.leave }" pattern="HH:mm"/></td>
 			<td>${ attend.time }</td>
-			<td>${ attend.key }</td>
 		</tr>
 		</c:forEach>
 	</table>

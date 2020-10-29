@@ -151,13 +151,6 @@ public class AttendController {
 		
 		return list;
 		}
-		@RequestMapping(value = "/manageAttend.do", method = RequestMethod.GET)
-		public String attendMember(Model model) {
-			
-			List<Attend> attendList = attendService.selectAttendList();
-			
-			model.addAttribute("attendList",attendList);
-			return "/attend/managerAttend";
-		}
+
 
 }

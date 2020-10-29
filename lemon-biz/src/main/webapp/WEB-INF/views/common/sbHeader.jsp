@@ -204,6 +204,11 @@
 							양식 조회</a>
 					</div>
 				</div></li>
+				
+			<li class="nav-item"><a class="nav-link"
+			href="${pageContext.request.contextPath}/manager/manageAttend.do"> <i
+				class="fas fa-fw fa-building"></i> <span>근태조회</span></a></li>
+				
 
 			<!-- Divider -->
 			<hr class="sidebar-divider">
