@@ -30,4 +30,7 @@ public interface AttendService {
 
 	List<Attend> selectAttendList();
 
+	Attend getAttendLeave(HashMap<Object, Object> params);
+
+
 }

@@ -34,28 +34,60 @@
 
 <script type="text/javascript">
 
+		 
+
+
 		 $(document).ready(function() {
 
-			msg = { memberId : '${loginMember.memberId}' }
-				
-			$.ajax({
-				url : "${pageContext.request.contextPath}/approval/getCountApproval",
-				method : "GET",
-				data : msg,
-				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-				success: function(response){
-					console.log(response);
-					$('#apvCount4').text(response);
-				},
-				error : function(xhr,status,err){
-					console.log("처리 실패");
-					console.log(xhr);
-					console.log(status);
-					console.log(err);
-				}
+				msg = { memberId : '${loginMember.memberId}' }
+					
+				$.ajax({
+					url : "${pageContext.request.contextPath}/approval/getCountApproval",
+					method : "GET",
+					data : msg,
+					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+					success: function(response){
+						console.log(response);
+						$('#apvCount4').text(response);
+					},
+					error : function(xhr,status,err){
+						console.log("처리 실패");
+						console.log(xhr);
+						console.log(status);
+						console.log(err);
+					}
+				});
 			});
-		});
 
+		 $(document).ready(function() {
+
+				var now=new Date;
+				msg = { memberId : "${ loginMember.memberId }",
+						date : now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() }
+					
+				$.ajax({
+					url : "${pageContext.request.contextPath}/attend/getAttendLeave",
+					method : "GET",
+					data : msg,
+					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+					success: function(response){
+						console.log('asdasd',response);
+						if(response != ''){
+							console.log('qqqq',moment(response.arrive).format('YYYY-MM-DD'));
+							$('#arriveTime').text(moment(response.arrive).format('YYYY-MM-DD hh:mm'));
+							if(response.leave != null)
+							$('#leaveTime').text(moment(response.leave).format('YYYY-MM-DD hh:mm')); 
+						}
+					},
+					error : function(xhr,status,err){
+						console.log("처리 실패");
+						console.log(xhr);
+						console.log(status);
+						console.log(err);
+					}
+				});
+			});
+			
 		 $(document).ready(function() {
 
 				msg = { memberId : '${loginMember.memberId}' }
@@ -592,8 +624,8 @@
 										class="card bg-info text-white shadow btn-outline-info">
 										<div class="card-body" align="center" style="cursor: pointer;"
 											id="arrTime">
-											출근체크
-											<div class="text-white-50 small" align="center">9시 이전에
+											출근
+											<div class="text-white-50 small" align="center" id="arriveTime">9시 이전에
 												체크해주세요!</div>
 										</div>
 									</div>
@@ -603,9 +635,9 @@
 									<div id="leave" style="width: 100%;"
 										class="card bg-warning text-white shadow btn-outline-warning">
 										<div class="card-body" align="center" style="cursor: pointer;"
-											id="leavTime">
-											퇴근체크
-											<div class="text-white-50 small" align="center">6시 이후에
+											id="leavTime"> 
+											퇴근
+											<div class="text-white-50 small" align="center" id="leaveTime">6시 이후에
 												체크해주세요!</div>
 										</div>
 									</div>
