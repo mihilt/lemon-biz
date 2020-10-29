@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.attend.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,10 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lemon.lemonbiz.attend.model.service.AttendService;
 import com.lemon.lemonbiz.attend.model.vo.Attend;
-
-
 import com.lemon.lemonbiz.common.vo.Paging;
-
 import com.lemon.lemonbiz.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
@@ -106,7 +103,7 @@ public class AttendController {
 			HttpSession session = request.getSession();
 			Member loginMember = (Member)session.getAttribute("loginMember");
 			attend.setMemId(loginMember.getMemberId());
-
+			
 			try {
 				attendService.attendArrive(attend);
 			} catch (Exception e) {
@@ -117,7 +114,7 @@ public class AttendController {
 		}
 		
 		//퇴근
-		@RequestMapping("/attendLeabe.do")
+		@RequestMapping("/attendLeave.do")
 		public String attendLeabe( RedirectAttributes redirectAttr,
 									HttpServletRequest request,  Attend attend) {
 			
@@ -125,6 +122,7 @@ public class AttendController {
 			Member loginMember = (Member)session.getAttribute("loginMember");
 			attend.setMemId(loginMember.getMemberId());
 			
+
 			try {
 				attendService.attendLeabe(attend);
 			} catch (Exception e) {
@@ -173,5 +171,28 @@ public class AttendController {
 
 			return new ResponseEntity<>(num,HttpStatus.OK);		
 		}
+		
+		
+		@RequestMapping("/getAttendLeave")
+		public ResponseEntity<?> getAttendLeave(@RequestParam HashMap<Object,Object> params) {
+			
+
+			
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+			System.out.println("params = " + params);
+			
+			String date = (String)params.get("date");
+			
+			System.out.println("date = " + date);
+			
+			Attend attend = attendService.getAttendLeave(params);
+			
+			System.out.println("attend = " + attend);
+			
+			
+			return new ResponseEntity<>(attend,HttpStatus.OK);		
+		}
+		
+		
 
 }

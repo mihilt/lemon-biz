@@ -66,5 +66,11 @@ public class AttendServiceImpl implements AttendService {
 		return attendanDAO.selectAttendList();
 	}
 
+	@Override
+	public Attend getAttendLeave(HashMap<Object, Object> params) {
+		return attendanDAO.getAttendLeave(params);
+	}
+
+	
 
 }

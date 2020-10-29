@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.attend.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +72,11 @@ public class AttendDAOImpl implements AttendDAO {
 	@Override
 	public List<Attend> selectAttendList() {
 		return sqlSession.selectList("attend.AttendAllList");
+	}
+
+	@Override
+	public Attend getAttendLeave(HashMap<Object, Object> params) {
+		return sqlSession.selectOne("attend.getAttendLeave",params);
 	}
 
 	
