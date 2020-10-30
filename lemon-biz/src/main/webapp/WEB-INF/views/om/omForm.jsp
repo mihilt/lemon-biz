@@ -123,7 +123,7 @@ td[id^="authName"]{
 					</div>
 
 					<div class="form-group row">
-						<label for="mFrom" class="col-sm-1 col-form-label">&ensp;제목</label>
+						<label for="title" class="col-sm-1 col-form-label">&ensp;제목</label>
 						<div class="col-sm-9">
 							<input type="text" name="title" placeholder="제목을 입력해주세요."
 								class="form-control" id="title">
@@ -145,6 +145,8 @@ td[id^="authName"]{
 							class="form-control"></textarea>
 					</div>
 					<div align="center" id="btns">
+						<input type="checkbox" name="goG" id="goG" value="2"/>
+						<label for="goG">Gmail로 본문 발송</label> &emsp;
 						<input type="submit" value="메일 발송" id="send-mail"
 							class="btn btn-success" onclick="fn_formSubmit()"> 
 							<input type="button" value="임시 저장"
@@ -672,14 +674,6 @@ function apply(){
 			return;
 		if (!chkInputValue("#brdmemo", "글 내용을"))
 			return;
-
-		/* for(int i=1; i>10; i++){
-		$('#auth[i]').val()
-			}
- */
-
-
-		
 		$("#omFrm").submit();
 	}
 
