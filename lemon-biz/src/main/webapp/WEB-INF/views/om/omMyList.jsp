@@ -111,31 +111,34 @@ function goOmForm(){
 		
 		 <!-- 여기서부터 card-body내 본문 영역 -->
          <!-- 여기서부터 네비게이션 헤더 -->
-         <ul class="nav nav-tabs" id="addl-btns" role="tablist">
+        <ul class="nav nav-tabs" id="addl-btns" role="tablist">
 		      <li class="nav-item">
-		        <a class="nav-link" id="allOM-tab" data-toggle="tab" href="#allOM" 
+		        <a class="nav-link" id="allOM-tab" href="${pageContext.request.contextPath}/om/omList.do" 
 		        	role="tab" aria-controls="allOM" aria-selected="false">전체</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" id="deptOM-tab" data-toggle="tab" href="#deptOM" 
+		        <a class="nav-link" id="deptOM-tab" href="${pageContext.request.contextPath}/om/omTeamList.do"
 		        	role="tab" aria-controls="deptOM" aria-selected="false">내 부서 메일</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link active" id="myOM-tab" data-toggle="tab" href="#myOM" 
+		        <a class="nav-link active" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyList.do"
 		        	role="tab" aria-controls="myOM" aria-selected="true">내가 보낸 메일</a>
 		      </li>
 		       <li class="nav-item">
-		        <a class="nav-link" id="selfOM-tab" data-toggle="tab" href="#selfOM" 
+		        <a class="nav-link" id="selfOM-tab" href="${pageContext.request.contextPath}/om/omSelfList.do"
 		        	role="tab" aria-controls="selfOM" aria-selected="false">내게 보낸 메일</a>
 		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" id="starredOM-tab" data-toggle="tab" href="#starredOM" 
-		        	role="tab" aria-controls="starredOM" aria-selected="false">중요 메일</a>
-		      </li>
 		     <li class="nav-item">
-		        <a class="nav-link active" id="attachedOM-tab" data-toggle="tab" href="#attachedOM" 
+		        <a class="nav-link" id="attachedOM-tab" href="${pageContext.request.contextPath}/om/omAttachedList.do"
 		        	role="tab" aria-controls="attachedOM" aria-selected="false">첨부 메일</a>
 		      </li>
+		       <li class="nav-item"> 
+                     <a class="nav-link disabled" href="#" style="margin-left:.2rem">
+                     	<input type="text" name="search-om" id="search-om" 
+                     		style="width:10rem; height:1.6rem; margin-right: .2rem; margin-bottom: -.1rem"/>
+                     	<i class="fa fa-search"></i>
+                     </a>
+		      	</li>
 		   </ul>
 		   <!-- 여기까지 네비게이션 헤더 -->
 		   

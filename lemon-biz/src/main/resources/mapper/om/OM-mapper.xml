@@ -17,6 +17,7 @@
 	                  		 FROM OM O
 	                  WHERE OMR_ID = #{ myId } AND CATEG_KEY = 1 ) RECEIVED) RECEIVED
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
+	ORDER BY OM_DATE DESC
 	</select>
 	
 	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 -->
@@ -29,6 +30,7 @@
 	                  		 FROM OM O
 	                  WHERE MEM_ID = #{ myId } AND CATEG_KEY = 1 ) MY) MY
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
+	ORDER BY OM_DATE DESC
 	</select>
 	
 	<!-- 페이징 처리 + 로그인 사용자가 자신에게 발송한 사내 메일 및 그의 첨부파일 조회 -->
@@ -41,6 +43,7 @@
 	                  		 FROM OM O
 	                  WHERE OMR_ID = #{ myId } AND CATEG_KEY = 1 AND MEM_ID = #{ myId } ) SELF) SELF
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
+	ORDER BY OM_DATE DESC
 	</select> 
 
 	<resultMap type="map" id="omMap">
@@ -72,6 +75,7 @@
 	              WHERE OMR_ID = #{ memId }
 	              ORDER BY KEY DESC ) RECEIVED
 	WHERE ROWNUM BETWEEN #{startRnum} AND #{endRnum}
+	ORDER BY OM_DATE DESC
 	</select>
 	
   	<!-- 가장 기본적인 사내 메일 INSERT 구문 -->
@@ -117,6 +121,7 @@
 		SELECT *
 		FROM OM
 		WHERE KEY =  #{ key }
+		ORDER BY OM_DATE DESC
 	</select>
 	
 	<!-- 첨부파일 메일 구분자 고유 번호로 첨부파일 조회 -->
@@ -216,7 +221,7 @@
 	FROM OM O LEFT JOIN DEPT D
 	     ON O.DEPT_KEY  = D.KEY
 	WHERE OMR_ID = #{ memberId } AND O.DEPT_KEY = #{ deptKey }
-	ORDER BY O.KEY DESC
+	ORDER BY O.OM_DATE DESC
   	</select>
   	
   	<resultMap type="map" id="omTeam">

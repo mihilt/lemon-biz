@@ -99,8 +99,6 @@ public class MailController {
 		// 사용자가 수신한 메일 중 중요 메일로 체크한 메일 조회 
 		List<Mail> listStarred = mailService.selectStarredMail(loginMember);
 		
-		// 푸쉬
-		
 		log.debug("list = {}", list); 
 		log.debug("listDept = {}", listDept);
 		log.debug("listMy = {}", listMy);
@@ -193,6 +191,9 @@ public class MailController {
 
 		return new ResponseEntity<>(num,HttpStatus.OK);		
 	}
+<<<<<<< HEAD
+		
+=======
 }
 
 	
@@ -312,3 +313,4 @@ public class MailController {
 	 * 
 	 * return "redirect:/mail/sendMail"; } }
 	 */
+>>>>>>> branch 'yb' of https://github.com/mihilt/lemon-biz.git

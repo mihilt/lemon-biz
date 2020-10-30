@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -32,6 +35,9 @@ import com.lemon.lemonbiz.approval.model.service.ApprovalService;
 import com.lemon.lemonbiz.common.Utils;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.Paging;
+import com.lemon.lemonbiz.member.model.service.MemberService;
+import com.lemon.lemonbiz.member.model.vo.Dept;
+//github.com/mihilt/lemon-biz.git
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.om.model.service.OMService;
 import com.lemon.lemonbiz.om.model.vo.OM;
@@ -50,6 +56,12 @@ public class OMController {
 
 	@Autowired
 	private ApprovalService approvalService;
+	
+	@Autowired
+	private MemberService memberService;
+
+	@Autowired
+	private JavaMailSender mailSender;
 
 /// DQL ///
 	// 여기서부터 DQL - List 처리
@@ -159,16 +171,11 @@ public class OMController {
 
 /// DML 시작 ///
 	// 여기서부터 사내 메일 작성
-	
-	
-	
-	
-	
 	@RequestMapping(value = "/omEnroll.do", method = RequestMethod.POST)
 	public String omEnroll(OM om, @RequestParam("name") String name,
 			@RequestParam(value = "upFile", required = false) MultipartFile[] upFiles, RedirectAttributes redirectAttr,
 			HttpServletRequest request, Model model, @SessionAttribute("loginMember") Member loginMember, 
-			/*@RequestParam(value = "omrList") List<String> omrList*/
+			@RequestParam(value = "goG", required = false) String goG,
 			@RequestParam(value="omrId1", required= true) String omrId1, 
 			@RequestParam(value="omrId2", required= false) String omrId2, 
 			@RequestParam(value="omrId3", required= false) String omrId3, 
@@ -183,29 +190,7 @@ public class OMController {
 		
 		log.debug("om = {}", om);
 		
-		// 여기서부터 첨부파일 추가
-		List<Attachment> attachList = new ArrayList<>();
-
-		String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om");
-
-		for (MultipartFile upFile : upFiles) {
-			if (upFile.isEmpty())
-				continue;
-			String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
-			File dest = new File(saveDirectory, renamedFilename);
-			upFile.transferTo(dest);
-			
-			Attachment attach = new Attachment();
-			attach.setOriginName(upFile.getOriginalFilename());
-			attach.setReName(renamedFilename);
-			attachList.add(attach);
-		}
-
-		log.debug("attachList = {}", attachList);
-		om.setAttachList(attachList);
-		om.setName(name);
-		// 여기까지 첨부파일 추가
-
+		// 수신자 추가 (최대 10명)
 		List<String> omrs = new ArrayList<>();
 
 		omrs.add(omrId1);
@@ -219,24 +204,78 @@ public class OMController {
 		omrs.add(omrId9);
 		omrs.add(omrId10);
 		
+		// 여기서부터 첨부파일 추가
+				List<Attachment> attachList = new ArrayList<>();
+
+				String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om");
+
+				for (MultipartFile upFile : upFiles) {
+					if (upFile.isEmpty())
+						continue;
+					String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
+					File dest = new File(saveDirectory, renamedFilename);
+					upFile.transferTo(dest);
+					
+					Attachment attach = new Attachment();
+					attach.setOriginName(upFile.getOriginalFilename());
+					attach.setReName(renamedFilename);
+					attachList.add(attach);
+				}
+
+				log.debug("attachList = {}", attachList);
+				om.setAttachList(attachList);
+				om.setName(name);
+				// 여기까지 첨부파일 추가
+		
+		// insert 처리
 		int result = 0;
+		
 		for(int i=0; i< omrs.size(); i++) {
-			if(omrs.get(i) != null || omrs.get(i).length() > 0) {
+			if(omrs.get(i).length() > 0) {
+				
+				if(goG != null) {
+					
+					Member mem = memberService.selectOneMember(omrs.get(i));
+					
+					String mFrom = "lemonbiz.manager@gmail.com";
+					/* String mTo = request.getParameter("mTo"); */
+					String sendTo = mem.getEmail();
+					String title = request.getParameter("title");
+					String content = request.getParameter("content");
+					
+					 try {
+					      MimeMessage message = mailSender.createMimeMessage();
+					      MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+					 
+					      messageHelper.setFrom(mFrom);  
+					      messageHelper.setTo(sendTo);    
+					      messageHelper.setSubject(title); 
+					      messageHelper.setText(content); 
+
+					      omService.insertOM(om, omrs.get(i));
+					      mailSender.send(message);
+					      result++;
+					    } catch(Exception e){
+					      System.out.println(e);
+					    }
+					
+				} else {
 				omService.insertOM(om, omrs.get(i));
 				log.debug("omrs = {}", omrs.get(i));
 				result++;
 				log.debug("result = {}", result);
+				
+				}
 			} 
 		}
 		
-		// insert 처리
 
 		if (result > 0)
-			redirectAttr.addFlashAttribute("msg", "사내 메일이 성공적으로 전송되었습니다.");
+			redirectAttr.addFlashAttribute("msg", " 총 "+result+"건의 사내 메일이 성공적으로 전송되었습니다.");
 		else
 			redirectAttr.addFlashAttribute("msg", "사내 메일 전송에 실패하였습니다.");
 
-		return "om/omList.do";
+		return "redirect:/om/omList.do";
 	}
 	// 여기까지 사내 메일 작성
 	
