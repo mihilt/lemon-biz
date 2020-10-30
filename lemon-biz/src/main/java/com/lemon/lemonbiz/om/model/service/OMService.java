@@ -25,6 +25,9 @@ public interface OMService {
 	
 	// 임시 저장하는 경우
 	int insertOMT(OM om, String omrId);
+	
+	// 중요 메일로 발송하는 경우
+	int insertOMS(OM om, String omrId);
 
 	OM selectOneOMCollection(int key);
 
@@ -45,16 +48,6 @@ public interface OMService {
 	List<Map<String, Object>> selectTeamOMMapList(Member loginMember);
 
 	int insertTeamOM(OM om);
-
-	List<Member> omSearch(String searchType, String searchKeyword, Map<String, Object> map);
-
-	int insertMaOM(OM om);
-
-	List<OM> omtitleSearch(String searchKeyword);
-
-	List<OM> omMSearch(String searchKeyword);
-
-	int countOM3();
 
 	String selectTeamName(Member loginMember);
 

@@ -37,7 +37,6 @@ import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.Paging;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
-//github.com/mihilt/lemon-biz.git
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.om.model.service.OMService;
 import com.lemon.lemonbiz.om.model.vo.OM;
@@ -121,7 +120,7 @@ public class OMController {
 
 	// 여기서부터 DQL - Detail 처리
 	// 각 사내 메일 상세 조회
-	@RequestMapping("omDetail.do")
+	@RequestMapping("/omDetail.do")
 	public ModelAndView omDeatil(@RequestParam("key") int key, ModelAndView mav, HttpServletRequest request,
 			HttpServletResponse response, @SessionAttribute("loginMember") Member loginMember) {
 
@@ -151,30 +150,14 @@ public class OMController {
 			response.addCookie(omCookie);
 		}
 		OM om = omService.selectOneOMCollection(key, hasRead);
+		Member sender = memberService.selectOneMember(om.getMemId());
+		mav.addObject("sender", sender);
 		mav.addObject("om", om);
 		mav.setViewName("om/omDetail");
 
 		return mav;
 	}
 	// 여기까지 DQL - Detail 처리
-
-	// DQL 중 메일 검색 파트
-	// 여기서부터 전체 메일 중 검색한 메일 조회
-	@ResponseBody
-	@RequestMapping("/omSearch.do")
-	public ModelAndView omSearch(ModelAndView mav, @RequestParam("searchKeyword") String searchKeyword,
-			@RequestParam("searchType") String searchType) {
-
-		Map<String, Object> map = new HashMap<>();
-		List<Member> found = omService.omSearch(searchType, searchKeyword, map);
-
-		log.debug("found ={}", found);
-		mav.addObject("found", found);
-		mav.setViewName("om/omForm");
-
-		return mav;
-	}
-	// 여기까지 전체 메일 중 검색한 메일 조회
 /// DQL 끝 ///
 
 /// DML 시작 ///
@@ -185,6 +168,8 @@ public class OMController {
 			HttpServletRequest request, Model model, @SessionAttribute("loginMember") Member loginMember, 
 			@RequestParam(value = "goG", required = false) String goG,
 			@RequestParam(value = "goT", required = false) String goT,
+			@RequestParam(value = "goS", required = false) String goS,
+			
 			@RequestParam(value="omrId1", required= true) String omrId1, 
 			@RequestParam(value="omrId2", required= false) String omrId2, 
 			@RequestParam(value="omrId3", required= false) String omrId3, 
@@ -285,6 +270,9 @@ public class OMController {
 				result = 999;
 				
 				// 사내 메일로 발송하는 경우
+				} else if (goS != null){
+					omService.insertOMS(om, omrs.get(i));
+					result = 9999;
 				} else
 				omService.insertOM(om, omrs.get(i));
 				log.debug("omrs = {}", omrs.get(i));
@@ -298,8 +286,10 @@ public class OMController {
 		if (result > 0) {
 			redirectAttr.addFlashAttribute("msg", " 총 "+result+"건의 메일이 성공적으로 전송되었습니다.");
 		}
-		else if (result > 999) {
+		else if (result > 999 && result < 9999) {
 			redirectAttr.addFlashAttribute("msg", "성공적으로 임시 저장되었습니다.");
+		} else if (result > 9999) {
+			
 		}
 		else {
 			redirectAttr.addFlashAttribute("msg", "메일 전송에 실패하였습니다.");

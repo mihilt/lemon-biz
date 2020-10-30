@@ -117,11 +117,11 @@ function goOmForm(){
 		        	role="tab" aria-controls="allOM" aria-selected="false">발송함 전체</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link active" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyList.do"
+		        <a class="nav-link active" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyListIn.do"
 		        	role="tab" aria-controls="myOM" aria-selected="true">발송함(사내)</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyList.do"
+		        <a class="nav-link" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyListEx.do"
 		        	role="tab" aria-controls="myOM" aria-selected="false">발송함(외부)</a>
 		      </li>
 		       <li class="nav-item">
@@ -152,11 +152,12 @@ function goOmForm(){
 			<!-- 여기까지 메일함 상단부 헤더 -->
 
 			
-			<!-- 여기서부터 내가 보낸 메일 리스트 -->
+			<!-- 여기서부터 메일 리스트 -->
 			<div class="tab-pane fade" id="myOM" role="tabpanel" aria-labelledby="myOM-tab">
-				<!-- <table id="tbl-dept" class="table"> -->
 				<c:forEach items="${ list }" var="om">
-					<tr data-no="${ om.key }">
+			<c:if test="${om.readCount gt 0}">
+					<tr data-no="${ om.key }" style="background:#DCDCDC">
+			</c:if>
 						<td><input type="checkbox" name="ck-om" id="ck-om" /></td>
 					   	<td>
 					   	<div class="the-star">
@@ -177,7 +178,7 @@ function goOmForm(){
 					</tr>
 					</c:forEach>
 				</div>
-			<!-- 여기까지 내가 보낸 메일 리스트 -->	
+			<!-- 여기까지 메일 리스트 -->	
 		</table>
 		
 		</div> <!-- 여기까지 card 본문 영역 -->	
@@ -189,7 +190,6 @@ function goOmForm(){
 			 <!-- 하단 버튼 영역 -->
 		   	 <div align="center" id="btns">
 		      <input type="submit" value="중요 메일로 이동" id="send-om" class="btn btn-success">
-		      <input type="button" value="첨부파일 다운로드" id="attach-to" class="btn btn-info"/>
 		       <input type="button" value="선택 메일 삭제" id="content-reset" class="btn btn-danger"/>
 		       <input type="button" value="새 메일 작성" id="btn-add" class="btn btn-warning" onclick="goOmForm();"/>
 			</div>	   
@@ -218,7 +218,7 @@ $(function(){
 	});
 });
 function goOMForm(){
-	location.href = "${pageContext.request.contextPath}/board/omForm.do";
+	location.href = "${pageContext.request.contextPath}/om/omForm.do";
 }
 $(document).ready(function() { 	
 	$('#star-all').click(function(){

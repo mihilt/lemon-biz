@@ -38,33 +38,40 @@
 				<form action="${pageContext.request.contextPath}/om" method="post"
 					name="om">
 					<div class="card">
-						<div class="card-header py-3">
-							<div align="right">
-								작성일 :<strong class="m-0 font-weight-bold text-warning">
-									<fmt:formatDate value="${ om.omDate }" pattern="yyyy/MM/dd" /><br>
-								</strong>작성자 : <strong class="m-0 font-weight-bold text-warning">${om.memId}</strong>
-								&nbsp; 조회수 : <strong class="m-0 font-weight-bold text-warning">${ om.readCount }</strong>
-							</div>
-						</div>
-						<div class="card-body text-center">
+						<div class="card-header">
 							<div align="left">
-								<strong>제목 : ${om.title}</strong>
+								<h4><strong>${om.title}</strong></h4>
+								<br />
+								<strong class="text-warning">${sender.name}</strong> <strong>(${sender.deptName}/${sender.rankName})</strong>
+								<br />
+								${sender.email}
 							</div>
-							<hr>
+								<div align="right"><strong>발송일시:&nbsp;</strong>
+									<strong class="text-warning">
+									<fmt:formatDate value="${ om.omDate }" pattern="yyyy/MM/dd HH:mm" />
+									</strong></div>
+							</div>
+						<div class="card-body text-center">
 							<div class="form-group" align="left">
 								<div style="height: 300px; overflow: auto;" align=left>${ om.content }</div>
 							</div>
 							<hr>
 							<div>
-								<strong>첨부파일</strong><br>
 								<c:forEach items="${ om.attachList }" var="attach">
-									<c:if test="${ attach.originName != null }">
+								<c:choose>
+									<c:when test="${ attach.originName != null }">
+								<strong>첨부파일 목록</strong><br>
 										<a href="javascript:fileDownload('${ attach.key }');"> <img
 											alt="첨부파일"
 											src="${ pageContext.request.contextPath }/resources/images/file.png"
-											width=16px> ${ attach.originName }
+											width=1rem> ${ attach.originName }
 										</a>
-									</c:if>
+									</c:when>
+									<c:otherwise>
+									<br />
+									첨부된 파일이 없습니다.
+									</c:otherwise>
+									</c:choose>
 								</c:forEach>
 							</div>
 							<br>
@@ -75,14 +82,13 @@
 										class="btn btn-danger" />
 								<input type="button" value="이전 화면" id="content-reset"
 									class="btn btn-secondary" onclick="window.history.back();" />
+									<br />
+									<br />
 							</div>
-
 						</div>
 					</div>
 				</form>
 			</div>
-			<br>
-
 		</div>
 	</div>
 

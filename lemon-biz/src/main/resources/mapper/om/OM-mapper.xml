@@ -177,6 +177,29 @@
 			FROM DUAL
 		</selectKey>
   	</insert>
+  	
+  	<!-- 중요 메일로 발송하는 경우 INSERT 구문 -->
+  	<insert id="insertOMS">
+	INSERT INTO OM VALUES (
+	    SEQ_OM_KEY.NEXTVAL,
+	    #{ memId },
+	    1,
+	    #{ title },
+	    #{ content },
+	    DEFAULT,
+	    1,
+	    0, 
+	    DEFAULT,
+	    #{ deptKey },
+	   	#{ omrId }	 
+	)
+	
+		<!-- 현재 시점 가장 최근에 시퀀스에서 사출된 사내메일 고유 번호 조회 -->
+		<selectKey order="AFTER" resultType="_int" keyProperty="key">
+			SELECT SEQ_OM_KEY.CURRVAL
+			FROM DUAL
+		</selectKey>
+  	</insert>
   
 	<!-- 메일 고유 번호로 첨부파일 INSERT 구문 -->  
   	<insert id="insertAttachment">
@@ -341,125 +364,7 @@
 				dual
 		</selectKey>
   	</insert>
-  	
-  	<select id="omSearch" resultType="member">
-		SELECT M.*, ( SELECT NAME
-		              FROM DEPT D 
-		              WHERE M.DEPT_KEY = D.KEY) "DEPT_NAME",
-		            ( SELECT NAME
-		              FROM RANK R 
-		              WHERE M.RANK_KEY = R.KEY) "RANK_NAME"
-		FROM MEMBER M
-		WHERE ${ searchType } LIKE '%${ searchKeyword }%'
-  	</select>
-  	
-<!--   	<insert id="insertMaOM">
-  	insert into
-			om
-		values(
-			seq_om_key.nextval,
-			#{ name },
-			 3,
-			#{ title },
-			#{ content },
-			default,
-			1,
-			default,
-			default,
-			null,
-			#{ omrId }	
-		)
-		<selectKey order="AFTER" resultType="_int" keyProperty="key">
-			select
-				seq_om_key.currval
-			from 
-				dual
-		</selectKey>
-  	</insert> -->
-  	
-  	<select id="omtitleSearch" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where is_done=1 and 
-        title like '%'||#{ searchKeyword }||'%'
-         order by is_starred desc ,key desc
-  	</select>
-  	
-  	<select id="omTeamSearch" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where is_done=2
-        and mem_id like '%'||#{ searchKeyword }||'%' and dept_key = #{ deptKey }  
-         order by is_starred desc ,key desc
-  	</select>
-  	
-  	<select id="omTeamSearch2" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where is_done=2
-        and title like '%'||#{ searchKeyword }||'%' and dept_key = #{ deptKey }  
-         order by is_starred desc ,key desc
-  	</select>
-  	
-  	<select id="omMSearch" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where is_done=3
-        and title like '%'||#{ searchKeyword }||'%'  
-         order by is_starred desc ,key desc
-  	</select>
-  	
-  	<select id="omMSearch2" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where is_done=3
-        and mem_id like '%'||#{ searchKeyword }||'%'  
-         order by is_starred desc ,key desc
-  	</select>
-  	<select id="countOM3" resultType="_int">
-  	SELECT COUNT(*) as "cnt" FROM om where is_done=3
-  	</select>
-  	
+
   	<select id="selectTeamName" resultType="string">
   	select distinct D.name from om P left join dept D on P.dept_key = D.key where P.is_done=2  and  P.dept_key = #{deptKey}
   	</select>
