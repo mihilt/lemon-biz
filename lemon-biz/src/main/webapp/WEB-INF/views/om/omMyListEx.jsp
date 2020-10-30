@@ -105,24 +105,24 @@ function goOmForm(){
 <body>
 	<div class="container">
 		<div class="card">
-		  <h4 id="m-title" class="card-header"><strong>발송함 전체</strong></h4>
+		  <h4 id="m-title" class="card-header"><strong>발송함(외부)</strong></h4>
 			<div class="container-inner card-body">
-		  <form action="${pageContext.request.contextPath}/om/omMyList" method="GET">
+		  <form action="${pageContext.request.contextPath}/om/omMyListEx" method="GET">
 		
 		 <!-- 여기서부터 card-body내 본문 영역 -->
          <!-- 여기서부터 네비게이션 헤더 -->
-         <ul class="nav nav-tabs" id="addl-btns" role="tablist">
+        <ul class="nav nav-tabs" id="addl-btns" role="tablist">
 		      <li class="nav-item">
-		        <a class="nav-link active" id="allOM-tab" href="${pageContext.request.contextPath}/om/omList.do" 
-		        	role="tab" aria-controls="allOM" aria-selected="true">발송함 전체</a>
+		        <a class="nav-link" id="allOM-tab" href="${pageContext.request.contextPath}/om/omList.do" 
+		        	role="tab" aria-controls="allOM" aria-selected="false">발송함 전체</a>
 		      </li>
 		      <li class="nav-item">
 		        <a class="nav-link" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyList.do"
 		        	role="tab" aria-controls="myOM" aria-selected="false">발송함(사내)</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyList.do"
-		        	role="tab" aria-controls="myOM" aria-selected="false">발송함(외부)</a>
+		        <a class="nav-link active" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyList.do"
+		        	role="tab" aria-controls="myOM" aria-selected="true">발송함(외부)</a>
 		      </li>
 		       <li class="nav-item">
 		        <a class="nav-link" id="selfOM-tab" href="${pageContext.request.contextPath}/om/omSelfList.do"

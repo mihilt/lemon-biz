@@ -46,6 +46,30 @@ public class OMDAOImpl implements OMDAO {
 		map.put("myId", myId);
 		return sqlSession.selectList("om.selectMyOMMapList", map);
 	}
+	@Override
+	public List<Map<String, Object>> selectMyOMMapListEX(int cPage, int numPerPage, Map<String, Object> map,
+			String myId) {
+		int startRnum = (cPage - 1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("myId", myId);
+		return sqlSession.selectList("om.selectMyOMMapListEX", map);
+	}
+	@Override
+	public List<Map<String, Object>> selectMyOMMapListIN(int cPage, int numPerPage, Map<String, Object> map,
+			String myId) {
+		int startRnum = (cPage - 1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("myId", myId);
+		return sqlSession.selectList("om.selectMyOMMapListIN", map);
+	}
 
 	@Override
 	public List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map,

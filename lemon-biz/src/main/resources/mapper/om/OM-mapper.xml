@@ -15,12 +15,13 @@
 	                                  FROM ATTACHMENT
 	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
 	                  		 FROM OM O
-	                  WHERE OMR_ID = #{ myId } AND IS_DONE = 1 ) RECEIVED) RECEIVED
+	                  WHERE OMR_ID = #{ myId } AND IS_DONE = 1 
+	                  ORDER BY OM_DATE DESC) RECEIVED) RECEIVED
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
 	ORDER BY OM_DATE DESC
 	</select>
 	
-	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 -->
+	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 (일괄) -->
 	<select id="selectMyOMMapList" resultMap="omMap">
 	SELECT * 
 	FROM ( SELECT ROWNUM AS RNUM, MY.* 
@@ -28,7 +29,36 @@
 	                                  FROM ATTACHMENT
 	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
 	                  		 FROM OM O
-	                  WHERE MEM_ID = #{ myId } AND IS_DONE = 1 ) MY) MY
+	                  WHERE MEM_ID = #{ myId } AND IS_DONE = 1 
+	                  ORDER BY OM_DATE DESC) MY) MY
+	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
+	ORDER BY OM_DATE DESC
+	</select>
+	
+	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 (사내 ONLY) -->
+	<select id="selectMyOMMapListIN" resultMap="omMap">
+	SELECT * 
+	FROM ( SELECT ROWNUM AS RNUM, MY.* 
+	                  FROM ( SELECT ( SELECT COUNT(*)
+	                                  FROM ATTACHMENT
+	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
+	                  		 FROM OM O
+	                  WHERE MEM_ID = #{ myId } AND IS_DONE = 1 AND IS_EXTERNAL = 0
+	                  ORDER BY OM_DATE DESC) MY) MY
+	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
+	ORDER BY OM_DATE DESC
+	</select>
+	
+	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 (외부 ONLY) -->
+	<select id="selectMyOMMapListEX" resultMap="omMap">
+	SELECT * 
+	FROM ( SELECT ROWNUM AS RNUM, MY.* 
+	                  FROM ( SELECT ( SELECT COUNT(*)
+	                                  FROM ATTACHMENT
+	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
+	                  		 FROM OM O
+	                  WHERE MEM_ID = #{ myId } AND IS_DONE = 1 AND IS_EXTERNAL = 1
+	                  ORDER BY OM_DATE DESC) MY) MY
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
 	ORDER BY OM_DATE DESC
 	</select>
@@ -41,7 +71,8 @@
 	                                  FROM ATTACHMENT
 	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
 	                  		 FROM OM O
-	                  WHERE OMR_ID = #{ myId } AND IS_DONE = 1 AND MEM_ID = #{ myId } ) SELF) SELF
+	                  WHERE OMR_ID = #{ myId } AND IS_DONE = 1 AND MEM_ID = #{ myId } 
+	                  ORDER BY OM_DATE DESC) SELF) SELF
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
 	ORDER BY OM_DATE DESC
 	</select> 
@@ -73,7 +104,7 @@
 	FROM ( SELECT * 
 	              FROM OM
 	              WHERE OMR_ID = #{ memId }
-	              ORDER BY KEY DESC ) RECEIVED
+	              ORDER BY OM_DATE DESC ) RECEIVED
 	WHERE ROWNUM BETWEEN #{startRnum} AND #{endRnum}
 	ORDER BY OM_DATE DESC
 	</select>

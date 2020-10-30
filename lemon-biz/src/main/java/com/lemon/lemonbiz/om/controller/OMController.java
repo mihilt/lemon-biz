@@ -66,7 +66,8 @@ public class OMController {
 /// DQL ///
 	// 여기서부터 DQL - List 처리
 	// 사내 메일 리스트 조회 분기처리
-	@RequestMapping(value = { "/omList.do", "/omAttachedList.do", "/omMyList.do", "/omSelfList.do", "/omTeamList.do" })
+	@RequestMapping(value = { "/omList.do", "/omAttachedList.do", "/omMyList.do", "/omSelfList.do", "/omTeamList.do",
+							  "/omMyListIn.do", "/omMyListEx.do"})
 	public ModelAndView omLists(ModelAndView mav, HttpServletRequest request,
 			@SessionAttribute("loginMember") Member loginMember) {
 
@@ -90,18 +91,25 @@ public class OMController {
 		if (request.getServletPath().equals("/om/omList.do")) {
 			list = omService.selectOMMapList(cPage, numPerPage, map, myId);
 			mav.setViewName("om/omList");
-		} else if (request.getServletPath().equals("/om/omMyList.do")) {
-			list = omService.selectMyOMMapList(cPage, numPerPage, map, myId);
-			mav.setViewName("om/omMyList");
 		} else if (request.getServletPath().equals("/om/omTeamList.do")) {
 			list = omService.selectTeamOMMapList(loginMember);
 			mav.setViewName("om/omTeamList");
 		} else if (request.getServletPath().equals("/om/omAttachedList.do")) {
 			list = omService.selectOMMapList(cPage, numPerPage, map, myId);
 			mav.setViewName("om/omAttachedList");
+			
 		} else if (request.getServletPath().equals("/om/omSelfList.do")) {
 			list = omService.selectSelfOMMapList(cPage, numPerPage, map, myId);
 			mav.setViewName("om/omSelfList");
+		} else if (request.getServletPath().equals("/om/omMyList.do")) {
+			list = omService.selectMyOMMapList(cPage, numPerPage, map, myId);
+			mav.setViewName("om/omMyList");
+		} else if (request.getServletPath().equals("/om/omMyListEx.do")) {
+			list = omService.selectMyOMMapListEX(cPage, numPerPage, map, myId);
+			mav.setViewName("om/omMyListEx");
+		} else if (request.getServletPath().equals("/om/omMyListIn.do")) {
+			list = omService.selectMyOMMapListIN(cPage, numPerPage, map, myId);
+			mav.setViewName("om/omMyListIn");
 		}
 
 		mav.addObject("list", list);

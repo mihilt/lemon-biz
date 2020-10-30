@@ -42,6 +42,16 @@ public class OMServiceImpl implements OMService {
 			String myId) {
 		return omDAO.selectMyOMMapList(cPage, numPerPage, map, myId);
 	}
+	@Override
+	public List<Map<String, Object>> selectMyOMMapListEX(int cPage, int numPerPage, Map<String, Object> map,
+			String myId) {
+		return omDAO.selectMyOMMapListEX(cPage, numPerPage, map, myId);
+	}
+	@Override
+	public List<Map<String, Object>> selectMyOMMapListIN(int cPage, int numPerPage, Map<String, Object> map,
+			String myId) {
+		return omDAO.selectMyOMMapListIN(cPage, numPerPage, map, myId);
+	}
 
 	@Override
 	public List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map,

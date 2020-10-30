@@ -12,6 +12,8 @@ public interface OMService {
 	List<Map<String, Object>> selectOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
 	List<Map<String, Object>> selectMyOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
+	List<Map<String, Object>> selectMyOMMapListEX(int cPage, int numPerPage, Map<String, Object> map, String myId);
+	List<Map<String, Object>> selectMyOMMapListIN(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
 	List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 

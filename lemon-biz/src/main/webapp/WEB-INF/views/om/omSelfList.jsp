@@ -105,7 +105,7 @@ function goOmForm(){
 <body>
 	<div class="container">
 		<div class="card">
-		  <h4 id="m-title" class="card-header"><strong>내게 쓴 메일</strong></h4>
+		  <h4 id="m-title" class="card-header"><strong>내게 보낸 메일</strong></h4>
 			<div class="container-inner card-body">
 		  <form action="${pageContext.request.contextPath}/om/omSelfList" method="GET">
 		 <!-- 여기서부터 card-body내 본문 영역 -->
@@ -127,17 +127,6 @@ function goOmForm(){
 		        <a class="nav-link active" id="selfOM-tab" href="${pageContext.request.contextPath}/om/omSelfList.do"
 		        	role="tab" aria-controls="selfOM" aria-selected="true">내게 보낸 메일</a>
 		      </li>
-		     <li class="nav-item">
-		        <a class="nav-link" id="attachedOM-tab" href="${pageContext.request.contextPath}/om/omAttachedList.do"
-		        	role="tab" aria-controls="attachedOM" aria-selected="false">첨부 메일</a>
-		      </li>
-		       <li class="nav-item"> 
-                     <a class="nav-link disabled" href="#" style="margin-left:.2rem">
-                     	<input type="text" name="search-om" id="search-om" 
-                     		style="width:10rem; height:1.6rem; margin-right: .2rem; margin-bottom: -.1rem"/>
-                     	<i class="fa fa-search"></i>
-                     </a>
-		      	</li>
 		   </ul>
 		   <!-- 여기까지 네비게이션 헤더 -->
 		   
