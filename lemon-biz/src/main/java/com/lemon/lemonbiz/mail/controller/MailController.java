@@ -99,6 +99,7 @@ public class MailController {
 		// 사용자가 수신한 메일 중 중요 메일로 체크한 메일 조회 
 		List<Mail> listStarred = mailService.selectStarredMail(loginMember);
 		
+		// 푸쉬
 		
 		log.debug("list = {}", list); 
 		log.debug("listDept = {}", listDept);
@@ -113,12 +114,6 @@ public class MailController {
 
 		return mav;
 	}
-
-	/*
-	 * @RequestMapping("/selectMail.do") public ResponseEntity<?> selectMailList() {
-	 * List<Mail> list = mailService.selectMailList(); return new
-	 * ResponseEntity<>(list, HttpStatus.OK); }
-	 */
 // 여기까지 DQL
 	
 // 여기부터 DML

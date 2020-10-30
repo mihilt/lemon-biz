@@ -50,10 +50,6 @@ public class OMController {
 
 	@Autowired
 	private ApprovalService approvalService;
-	
-	@RequestMapping("/omForm.do")
-	public void omForm() {
-	}
 
 /// DQL ///
 	// 여기서부터 DQL - List 처리
@@ -163,13 +159,31 @@ public class OMController {
 
 /// DML 시작 ///
 	// 여기서부터 사내 메일 작성
+	
+	
+	
+	
+	
 	@RequestMapping(value = "/omEnroll.do", method = RequestMethod.POST)
 	public String omEnroll(OM om, @RequestParam("name") String name,
 			@RequestParam(value = "upFile", required = false) MultipartFile[] upFiles, RedirectAttributes redirectAttr,
-			HttpServletRequest request, Model model) throws IllegalStateException, IOException {
+			HttpServletRequest request, Model model, @SessionAttribute("loginMember") Member loginMember, 
+			/*@RequestParam(value = "omrList") List<String> omrList*/
+			@RequestParam(value="omrId1", required= true) String omrId1, 
+			@RequestParam(value="omrId2", required= false) String omrId2, 
+			@RequestParam(value="omrId3", required= false) String omrId3, 
+			@RequestParam(value="omrId4", required= false) String omrId4, 
+			@RequestParam(value="omrId5", required= false) String omrId5, 
+			@RequestParam(value="omrId6", required= false) String omrId6, 
+			@RequestParam(value="omrId7", required= false) String omrId7, 
+			@RequestParam(value="omrId8", required= false) String omrId8, 
+			@RequestParam(value="omrId9", required= false) String omrId9, 
+			@RequestParam(value="omrId10", required= false) String omrId10
+			) throws IllegalStateException, IOException{
+		
 		log.debug("om = {}", om);
 		
-		// 첨부파일
+		// 여기서부터 첨부파일 추가
 		List<Attachment> attachList = new ArrayList<>();
 
 		String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om");
@@ -180,8 +194,8 @@ public class OMController {
 			String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
 			File dest = new File(saveDirectory, renamedFilename);
 			upFile.transferTo(dest);
+			
 			Attachment attach = new Attachment();
-			Member member = new Member();
 			attach.setOriginName(upFile.getOriginalFilename());
 			attach.setReName(renamedFilename);
 			attachList.add(attach);
@@ -190,18 +204,119 @@ public class OMController {
 		log.debug("attachList = {}", attachList);
 		om.setAttachList(attachList);
 		om.setName(name);
+		// 여기까지 첨부파일 추가
 
+		List<String> omrs = new ArrayList<>();
+
+		omrs.add(omrId1);
+		omrs.add(omrId2);
+		omrs.add(omrId3);
+		omrs.add(omrId4);
+		omrs.add(omrId5);
+		omrs.add(omrId6);
+		omrs.add(omrId7);
+		omrs.add(omrId8);
+		omrs.add(omrId9);
+		omrs.add(omrId10);
+		
+		int result = 0;
+		for(int i=0; i< omrs.size(); i++) {
+			if(omrs.get(i) != null || omrs.get(i).length() > 0) {
+				omService.insertOM(om, omrs.get(i));
+				log.debug("omrs = {}", omrs.get(i));
+				result++;
+				log.debug("result = {}", result);
+			} 
+		}
+		
 		// insert 처리
-		int result = omService.insertOM(om);
 
 		if (result > 0)
 			redirectAttr.addFlashAttribute("msg", "사내 메일이 성공적으로 전송되었습니다.");
 		else
 			redirectAttr.addFlashAttribute("msg", "사내 메일 전송에 실패하였습니다.");
 
-		return "redirect:/om/omList.do";
+		return "om/omList.do";
 	}
 	// 여기까지 사내 메일 작성
+	
+// 여기서부터 수신인 추가 & jstree
+		// 여기서부터 전사 부서 리스트 jstree로 노출
+	@RequestMapping(value="/omForm.do")
+    public String writeForm(Model model) {
+        
+
+        List<Dept> dept = approvalService.deptList();
+        List<Dept> child = approvalService.child();
+        List<Dept> child2 = approvalService.child2();
+
+        log.debug("dept = {}",dept);
+        log.debug("child = {}",child);
+        log.debug("child2 = {}",child2);
+        
+        model.addAttribute("dept",dept);
+        model.addAttribute("child",child);
+        model.addAttribute("child2",child2);
+        
+        return "om/omForm";
+    }
+	// 여기까지 전사 부서 리스트 jstree로 노출
+    
+	
+	// 여기서부터 전사 사원 리스트 노출
+    @RequestMapping(value="/omReceivers.do")
+    public String approvalSelect(@RequestParam("node") String node,
+                                 Model model) {
+        
+        List<Member> memberList = approvalService.memberList(node);
+
+        log.debug("node = {}",node);
+        log.debug("memberList={}",memberList);
+        
+        model.addAttribute("memberList",memberList);
+        
+        return "jsonView";
+    }
+    // 여기까지 전사 사원 리스트 노출
+    
+    // 여기서부터 선택된 수신인 데이터 가져오기
+    @RequestMapping(value="/selectMember.do",
+                    method=RequestMethod.POST,
+                    produces = "application/json; charset=utf8")
+    @ResponseBody
+    public Map<String, Object> selectMember(@RequestParam("param") String param,
+                               Model model) {
+        log.debug("11");
+        log.debug("param = {}",param);
+        Map<String, Object> map = new HashMap<>();
+        
+        List<Member> selectMember = approvalService.selectMember(param);
+        
+        map.put("selectMember",selectMember);
+        
+        return map;
+    }
+    // 여기까지 선택된 수신인 데이터 가져오기
+    
+    // 여기서부터 사원명 검색
+    @RequestMapping(value="/searchName.do",
+                    method=RequestMethod.POST,
+                    produces="application/json; charset=utf8")
+    @ResponseBody
+    public Map<String, Object> joinMemberList(@RequestParam("param") String param) {
+        
+        log.debug("param ={}", param);
+        Map<String, Object> map = new HashMap<>();
+        List<Member> joinMemberList = approvalService.joinMemberlist(param);
+        
+        log.debug("joinMemberList = {}", joinMemberList);
+        map.put("joinMemberList", joinMemberList);
+        
+        return map;
+    }
+	// 여기서부터 사원명 검색
+ // 여기까지 수신인 추가 & jstree	
+	
 
 	// 여기서부터 첨부파일 클릭시 다운로드 기능
 	@RequestMapping(value = "/fileDownload.do")
@@ -248,7 +363,7 @@ public class OMController {
 		}
 		return "redirect:/om/omList.do";
 		// 여기까지 메일 삭제 기능
-/// DML 끝 ///
 	}
+/// DML 끝 ///
 
 }

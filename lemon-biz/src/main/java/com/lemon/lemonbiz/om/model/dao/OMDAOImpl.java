@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.lemon.lemonbiz.common.vo.Attachment;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.om.model.vo.OM;
-import com.lemon.lemonbiz.om.model.vo.OMComment;
 
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 @Repository
 public class OMDAOImpl implements OMDAO {
 
@@ -62,7 +66,8 @@ public class OMDAOImpl implements OMDAO {
 	}
 
 	@Override
-	public int insertOM(OM om) {
+	public int insertOM(OM om, String omrId) {
+		om.setOmrId(omrId);
 		return sqlSession.insert("om.insertOM", om);
 	}
 
@@ -99,12 +104,6 @@ public class OMDAOImpl implements OMDAO {
 	@Override
 	public int countOM() {
 		return sqlSession.selectOne("om.countOM");
-	}
-
-	@Override
-	public void omInsert(OMComment omComment) {
-		sqlSession.insert("om.omInsert", omComment);
-
 	}
 
 	@Override
@@ -172,6 +171,42 @@ public class OMDAOImpl implements OMDAO {
 	@Override
 	public String selectTeamName(Member loginMember) {
 		return sqlSession.selectOne("om.selectTeamName", loginMember);
+	}
+	
+	// 여기서부터 jstree 관련
+	@Override
+	public List<Dept> deptList() {
+		return sqlSession.selectList("om.selectDeptList");
+	}
+
+	@Override
+	public List<Dept> child() {
+		return sqlSession.selectList("om.selectChild");
+	}
+
+	@Override
+	public List<Dept> child2() {
+		return sqlSession.selectList("om.selectChild2");
+	}
+
+	@Override
+	public List<Member> memberList(String node) {
+		return sqlSession.selectList("om.memberList",node);
+	}
+
+	@Override
+	public List<Member> selectMember(String param) {
+		return sqlSession.selectList("om.selectMember",param);
+	}
+
+	@Override
+	public List<Member> joinMemberList(String param) {
+		return sqlSession.selectList("om.joinMemberList",param);
+	}
+
+	@Override
+	public String SeqApprKey() {
+		return sqlSession.selectOne("om.SeqApprKey");
 	}
 
 }
