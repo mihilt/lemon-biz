@@ -29,7 +29,7 @@
 	<th>제목</th>
 	<th>상태</th>
 	<th>작성일</th>
-	<th>문서분류</th>
+	
 	
 	</tr>
 	</thead>
@@ -42,7 +42,7 @@
 			<td><a >${ item.title }</a></td>
 			<td> 진행중 </td>
 			<td><fmt:formatDate value="${ item.writeDate }"  pattern="yyyy-MM-dd HH:mm:ss"/></td>
-			<td>${ item.docName }</td>
+			
 		</tr>
 	</c:if>
 	</c:forEach>
