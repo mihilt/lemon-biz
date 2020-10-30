@@ -306,7 +306,6 @@ td[id^="authName"]{
 	</div>
 <!-- 여기까지 수신인 선택 모달 -->
 
-
 </body>
 <script>
 
@@ -409,6 +408,7 @@ function selectMember(memberId) {
 	for(var j = MIN_NUM; j <= MAX_NUM; j++) {
 		if($('#memId_'+j).text() == memberId) {
 			alert('이미 추가된 수신자입니다.');
+
 			return;	
 		}
 		if(trArr[j-1].value != 'exist') {

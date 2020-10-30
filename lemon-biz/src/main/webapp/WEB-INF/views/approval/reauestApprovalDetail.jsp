@@ -16,7 +16,10 @@
 		<!-- 게시글 -->
  			<div class="col-lg-12">			
              	<div class="card" >
-                	<div class="card-header py-3" align="center">	
+                	<div class="card-header py-2" align="center">
+                	<br />	
+                	<h2>요청결제문서</h2>
+                	<br />
 						<table class="table table text-center">
 					    <tr>
 					    	<td><strong>기안담당</strong>
@@ -45,31 +48,37 @@
 					<div>
 					
 					
-					    <!-- ================결제칸=============== -->
+					    <!-- ================결재칸=============== -->
 					
 						
-					    <table>
-						<tr><td width="50%">
-						<div class="float-center">
-							<!-- Button trigger modal -->
+					     <div class="float-left col-md-5" >
+						<div class="float-left col-md-4">
+						
+						</div>
+						
+						
+						<div class="float-left col-md-10" style="padding:15px">
+							
+					
 							
 						</div>
-						</td>
-						<td width="50%">
-						<div class="float-center">
-						<table border="1" style="display: inline-block">
+						</div>
 						
+						
+					    <table>
 						<tr>
-							<td></td>
-							<td>기안자</td>
-							<td id="proNum1">1차 결제자</td>
-							<td id="proNum2">2차 결제자</td>
-							<td id="proNum3">3차 결제자</td>
+						<td width="40%">
+						<div class="float-center"  style="padding:15px">
+						<table class="table table-hover text-center" >
+						<tr>
+							
+							<td>분류</td>
+							<td id="proNum1">1차 결재자</td>
+							<td id="proNum2">2차 결재자</td>
+							<td id="proNum3">3차 결재자</td>
 						</tr>
 						<tr>
-						<td class="tt" rowspan='4'>결재</td>
-						<td class="aa">작성자</td>
-						
+						<td class="tt">직급</td>
 						<td id="authRank1" class="aa">
 						${ apprck1.rankName }
 						</td>
@@ -91,7 +100,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.name }</td>
+						<td>성명</td>
 						<td id="authName1">${ apprck1.ckName }</td>
 						<td id="authName2">${ apprck2.ckName }</td>
 						<td id="authName3">${ apprck3.ckName }</td>
@@ -100,7 +109,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.memberId }</td>
+						<td>사원번호</td>
 						<td id="apv_mem1">${ apprck1.memId }</td>
 						<td id="apv_mem2">${ apprck2.memId }</td>
 						<td id="apv_mem3">${ apprck3.memId }</td>
@@ -108,11 +117,11 @@
 						</tr>
 						
 						<tr>
-						<td>제출</td>
+						<td>승인여부</td>
 						<td>
 							<c:choose>
 								<c:when test="${ apprck1.status eq null}">
-									미결제
+									미결재
 								</c:when>
 								<c:when test="${ apprck1.status eq 't' }">
 									승인
@@ -125,7 +134,7 @@
 						<td>
 							<c:choose>
 								<c:when test="${ apprck2.status eq null }">
-									미결제
+									미결재
 								</c:when>
 								<c:when test="${ apprck2.status eq 't' }">
 									승인
@@ -138,7 +147,7 @@
 						<td>
 							<c:choose>
 								<c:when test="${ apprck3.status eq null }">
-									미결제
+									미결재
 								</c:when>
 								<c:when test="${ apprck3.status eq 't' }">
 									승인
@@ -156,10 +165,10 @@
 						
 						</table>
 						</div>
-						<!-- ==============결제칸 끝============== -->
+						<!-- ==============결재칸 끝============== -->
 						<!-- 폼 내용 -->
 						
-						
+						<hr />
 						
 						<form id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
 							
@@ -197,10 +206,12 @@
 						<form action="${pageContext.request.contextPath}/approval/approve.do"
 							  method="POST"
 							  id="approve">
+						<input type="hidden" name="title" value="${appr.title}"/>
 						<input type="hidden" name="apprckKey1" value="${apprck1.key}"/>
 						<input type="hidden" name="apprckKey2" value="${apprck2.key}"/>
 						<input type="hidden" name="apprckKey3" value="${apprck3.key}"/>
 						<input type="hidden" name="key" value="${appr.key}"/>
+						<input type="hidden" name="memId" value="${appr.memId}"/>
 						
 						</form>
 						
@@ -221,8 +232,7 @@
 						<div class="modal-body">
 
 							<textarea id="returnResult" class="form-control" name="approval_content"  cols="40" rows="9" 
-		      							  style="width:100%; resize:none">
-							</textarea>
+		      							  style="width:100%; resize:none"></textarea>
 							
 						</div>
 						<div class="modal-footer float-right">
@@ -251,6 +261,9 @@ function returnApprove() {
 	$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/returnApprove.do").attr('method', 'POST').attr('id','returnApprovalForm').appendTo('#body');
 	$('<input></input>').attr('type','hidden').attr('value',$('#returnResult').val()).attr('name','opinion').appendTo('#returnApprovalForm');
 	$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','returnApprKey').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.title}').attr('name','title').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.memId}').attr('name','memId').appendTo('#returnApprovalForm');
+	$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','key').appendTo('#returnApprovalForm');
 	
 	$('#returnApprovalForm').submit();
 }

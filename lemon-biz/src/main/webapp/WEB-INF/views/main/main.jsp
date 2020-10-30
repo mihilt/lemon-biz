@@ -22,37 +22,93 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 	rel="stylesheet">
-<!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
-<!-- Custom styles for this template-->
 <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
-<!-- <style>
-.timecheck {
-	margin-top: 5px;
-}
-.map_wrap {position:relative;overflow:hidden;width:100%;height:350px;}
-.radius_border{border:1px solid #919191;border-radius:5px;}     
-.custom_typecontrol {position:absolute;top:10px;right:10px;overflow:hidden;width:130px;height:30px;margin:0;padding:0;z-index:1;font-size:12px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
-.custom_typecontrol span {display:block;width:65px;height:30px;float:left;text-align:center;line-height:30px;cursor:pointer;}
-.custom_typecontrol .btn {background:#fff;background:linear-gradient(#fff,  #e6e6e6);}       
-.custom_typecontrol .btn:hover {background:#f5f5f5;background:linear-gradient(#f5f5f5,#e3e3e3);}
-.custom_typecontrol .btn:active {background:#e6e6e6;background:linear-gradient(#e6e6e6, #fff);}    
-.custom_typecontrol .selected_btn {color:#fff;background:#425470;background:linear-gradient(#425470, #5b6d8a);}
-.custom_typecontrol .selected_btn:hover {color:#fff;}   
-.custom_zoomcontrol {position:absolute;top:50px;right:10px;width:36px;height:80px;overflow:hidden;z-index:1;background-color:#f5f5f5;} 
-.custom_zoomcontrol span {display:block;width:36px;height:40px;text-align:center;cursor:pointer;}     
-.custom_zoomcontrol span img {width:15px;height:15px;padding:12px 0;border:none;}             
-.custom_zoomcontrol span:first-child{border-bottom:1px solid #bfbfbf;} 
-
-.customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
-.customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-.customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
-.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
-.customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-
-</style> -->
+<style>
+	.customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+	.customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+	.customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
+	.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
+	.customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+</style>
 
 <script type="text/javascript">
+
+		 
+
+
+		 $(document).ready(function() {
+
+				msg = { memberId : '${loginMember.memberId}' }
+					
+				$.ajax({
+					url : "${pageContext.request.contextPath}/approval/getCountApproval",
+					method : "GET",
+					data : msg,
+					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+					success: function(response){
+						console.log(response);
+						$('#apvCount4').text(response);
+					},
+					error : function(xhr,status,err){
+						console.log("처리 실패");
+						console.log(xhr);
+						console.log(status);
+						console.log(err);
+					}
+				});
+			});
+
+		 $(document).ready(function() {
+
+				var now=new Date;
+				msg = { memberId : "${ loginMember.memberId }",
+						date : now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() }
+					
+				$.ajax({
+					url : "${pageContext.request.contextPath}/attend/getAttendLeave",
+					method : "GET",
+					data : msg,
+					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+					success: function(response){
+						console.log('asdasd',response);
+						if(response != ''){
+							console.log('qqqq',moment(response.arrive).format('YYYY-MM-DD'));
+							$('#arriveTime').text(moment(response.arrive).format('YYYY-MM-DD hh:mm'));
+							if(response.leave != null)
+							$('#leaveTime').text(moment(response.leave).format('YYYY-MM-DD hh:mm')); 
+						}
+					},
+					error : function(xhr,status,err){
+						console.log("처리 실패");
+						console.log(xhr);
+						console.log(status);
+						console.log(err);
+					}
+				});
+			});
+			
+		 $(document).ready(function() {
+
+				msg = { memberId : '${loginMember.memberId}' }
+					
+				$.ajax({
+					url : "${pageContext.request.contextPath}/mail/getCountNoReadMail",
+					method : "GET",
+					data : msg,
+					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+					success: function(response){
+						console.log(response);
+						$('#main_email_count').text(response);
+					},
+					error : function(xhr,status,err){
+						console.log("처리 실패");
+						console.log(xhr);
+						console.log(status);
+						console.log(err);
+					}
+				});
+			});	
 
 		$(document).ready(function() {
 
@@ -99,7 +155,7 @@
 	               } //End of options
 	               
 	             });// calendar end
-		})
+		});
 
 			function printTime() {
 				
@@ -117,23 +173,40 @@
 				
 			}
 
-</script>
-<script type="text/javascript">
-
-</script>
-<script type="text/javascript">
+		
 
 		$(document).ready(function(){
 			$.ajax({
-				url : "${pageContext.request.contextPath}/cost/selectAllCost.do",
+				url : "${pageContext.request.contextPath}/board/getBoardTopFive",
+				method : "GET",
+				contentType : "application/json; charset=utf-8",
+				success : function(response){
+					console.log('resposne',response);
+
+					var str = '<table class="table table-hover text-center">';
+					for(var i = 0; i < response.length; i++){
+						str += '<tr>';
+						str += '<td class="text-left" style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">';
+						str += '<a>' + response[i].title + '</a></td>';
+						str += '</tr>';
+					}
+					str += "</table>";	
+					$('#manin_board').html(str);
+				}
+			});
+		});
+		
+		$(document).ready(function(){
+
+			var now = new Date();
+			
+			$.ajax({
+				url : "${pageContext.request.contextPath}/cost/selectAllCost.do?date="+ now.getFullYear() + (now.getMonth()+1),
 				method : "GET",
 				contentType : "application/json; charset=utf-8",
 				success : function(response) {
 					console.log('불러오기 성공');
 					console.log('response',response);
-					console.log('response[]',response[0]);
-					console.log('response.length',response.length);
-					console.log(typeof(response[0].transportationCosts));
 
 					var pay1 = 0; var pay2 = 0; var pay3 = 0; var pay4 = 0; var pay5 = 0; var sum = 0;
 
@@ -189,6 +262,59 @@
 				}
 		     });
 		});
+
+		$(document).ready(function() {
+			
+			var now = new Date();
+			
+			var msg = { memberId : "${ loginMember.memberId }",
+						date : now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() }
+
+			console.log('msg',msg);
+			
+			$.ajax({
+				url : "${pageContext.request.contextPath}/calendar/getTodayCount",
+				method : "POST",
+				data : msg,
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				success: function(response){
+					console.log(response);
+					$('#calCount3').text(response);
+				},
+				error : function(xhr,status,err){
+					console.log("처리 실패");
+					console.log(xhr);
+					console.log(status);
+					console.log(err);
+				}
+			});
+		});		
+
+		$(document).ready(function() {
+			
+			var now = new Date();
+			
+			var msg = { date : now.getFullYear() + "" + (now.getMonth() + 1) + "" + now.getDate() }
+
+			console.log('msg getTodayAttend',msg);
+			
+			$.ajax({
+				url : "${pageContext.request.contextPath}/attend/getTodayAttend",
+				method : "POST",
+				data : msg,
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				success: function(response){
+					console.log(response);
+					$('#mainleftVacat').text(response);
+				},
+				error : function(xhr,status,err){
+					console.log("처리 실패");
+					console.log(xhr);
+					console.log(status);
+					console.log(err);
+				}
+			});
+		});		
 		
 
 		$(document).ready(function() {
@@ -197,7 +323,7 @@
 					
 					var costForm = $('#costForm');
 				
-					var memberId = ${loginMember.memberId};
+					var memberId = '${loginMember.memberId}';
 					
 					var transportationCosts = $('#transportationCosts');
 					var fitment = $('#fitment');
@@ -232,6 +358,21 @@
 							alert('날짜는 필수입니다.');
 							return false;
 						}
+
+						var date = costData.expenditureDate;
+						var str = /^([0-9]{8})$/;
+						
+						if (!str.test(date)) {
+							alert('날짜를 올바르게 입력하세요.');
+							return false;
+						}
+
+						console.log(typeof(costData.expenditureDate));
+
+						/* if (expenditureDate.val() != '/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/'){
+							alert('형식에 맞는 날짜를 쓰세요.');
+							return false;
+						} */
 		
 						costForm.find('input').val('');
 		
@@ -243,6 +384,8 @@
 							dataType : "json",
 							success : function(data) {
 								console.log("처리 성공");
+								alert('등록 성공');
+								location.reload();
 							},
 							error : function(xhr, status, err) {
 								console.log("처리 실패");
@@ -327,8 +470,7 @@
 								<div class="row no-gutters align-items-center">
 									<div class="col mr-2">
 										<div
-											class="text-xs font-weight-bold text-info text-uppercase mb-1">오늘의
-											일정</div>
+											class="text-xs font-weight-bold text-info text-uppercase mb-1">나의 오늘 일정</div>
 										<div class="row no-gutters align-items-center">
 											<div class="col-auto">
 												<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
@@ -353,11 +495,10 @@
 								<div class="row no-gutters align-items-center">
 									<div class="col mr-2">
 										<div
-											class="text-xs font-weight-bold text-warning text-uppercase mb-1">남은
-											휴가</div>
+											class="text-xs font-weight-bold text-warning text-uppercase mb-1">오늘 출근한 직원 수</div>
 
 										<div class="h5 mb-0 font-weight-bold text-gray-800">
-											(<span id="mainleftVacat">0</span>일)
+											(<span id="mainleftVacat">0</span>명)
 										</div>
 									</div>
 									<div class="col-auto">
@@ -378,7 +519,7 @@
 							<!-- 1번 상단바 -->
 							<div
 								class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-								<h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
+								<h6 class="m-0 font-weight-bold text-primary">공지사항(최신 5개)</h6>
 								<div class="dropdown no-arrow">
 									<a class="dropdown-toggle" href="#" role="button"
 										id="dropdownMenuLink" data-toggle="dropdown"
@@ -483,8 +624,8 @@
 										class="card bg-info text-white shadow btn-outline-info">
 										<div class="card-body" align="center" style="cursor: pointer;"
 											id="arrTime">
-											출근체크
-											<div class="text-white-50 small" align="center">9시 이전에
+											출근
+											<div class="text-white-50 small" align="center" id="arriveTime">9시 이전에
 												체크해주세요!</div>
 										</div>
 									</div>
@@ -494,9 +635,9 @@
 									<div id="leave" style="width: 100%;"
 										class="card bg-warning text-white shadow btn-outline-warning">
 										<div class="card-body" align="center" style="cursor: pointer;"
-											id="leavTime">
-											퇴근체크
-											<div class="text-white-50 small" align="center">6시 이후에
+											id="leavTime"> 
+											퇴근
+											<div class="text-white-50 small" align="center" id="leaveTime">6시 이후에
 												체크해주세요!</div>
 										</div>
 									</div>
@@ -516,7 +657,7 @@
 							<!-- 공지사항으로 상단바 -->
 							<div
 								class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-								<h6 class="m-0 font-weight-bold text-primary">지출 작성</h6>
+								<h6 class="m-0 font-weight-bold text-primary">개인 지출 작성</h6>
 								<div class="dropdown no-arrow"></div>
 							</div>
 							<!-- 근무차트바디 -->
@@ -566,7 +707,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text" style="width: 100px;">날짜</span>
 										</div>
-										<input type="text" class="form-control" id="expenditureDate" placeholder="yyyy-MM-dd형식으로 입력." aria-label="Username" aria-describedby="basic-addon1" style="height: 40px;">
+										<input type="text" class="form-control" id="expenditureDate" placeholder="ex) 20201020 형식으로 입력." aria-label="Username" aria-describedby="basic-addon1" style="height: 40px;">
 									</div>
 								</div>
 								<hr>
@@ -660,10 +801,10 @@ var position = new kakao.maps.LatLng(37.279643, 127.072610);
 
 //커스텀 오버레이를 생성합니다
 var customOverlay = new kakao.maps.CustomOverlay({
-	map: map,
-	position: position,
-	content: content,
-	yAnchor: 1
+    map: map,
+    position: position,
+    content: content,
+    yAnchor: 1 
 });
 
 //일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다

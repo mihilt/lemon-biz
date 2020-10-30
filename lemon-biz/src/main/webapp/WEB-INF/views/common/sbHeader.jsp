@@ -47,19 +47,21 @@
 				<div class="bg-white py-2 collapse-inner rounded">
 					<h6 class="collapse-header">Approval</h6>
 					<a class="collapse-item"
-						href="${pageContext.request.contextPath}/approval/writeForm.do">일반결재</a>
+						href="${pageContext.request.contextPath}/approval/writeForm.do">결재문서작성</a>
+					<div class="collapse-divider"></div>
+					<h6 class="collapse-header">Draft ApprovalList</h6>
+					<a class="collapse-item"
+						href="${pageContext.request.contextPath}/approval/requestApprovalList?page=1">요청문서함</a>
+					<div class="collapse-divider"></div>
+					<h6 class="collapse-header">My ApprovalList</h6>
 					<a class="collapse-item"
 						href="${pageContext.request.contextPath}/approval/myApvList?page=1">임시저장함</a>
-					<div class="collapse-divider"></div>
-					<h6 class="collapse-header">My Approval</h6>
 					<a class="collapse-item"
 						href="${pageContext.request.contextPath}/approval/myApprovalList?page=1">내문서함</a>
 					<a class="collapse-item"
-						href="${pageContext.request.contextPath}/approval/requestApprovalList?page=1">요청결제문서함</a>
-					<a class="collapse-item"
-						href="${pageContext.request.contextPath}/approval/returnApprovalList?page=1">반려된 문서</a>
+						href="${pageContext.request.contextPath}/approval/returnApprovalList?page=1">반려문서함</a>
 					<a class="collapse-item" 
-						href="${pageContext.request.contextPath}/approval/compliteApprovalList?page=1">결재완료문서</a>
+						href="${pageContext.request.contextPath}/approval/compliteApprovalList?page=1">결재완료문서함</a>
 				</div>
 			</div></li>
 
@@ -201,6 +203,11 @@
 							양식 조회</a>
 					</div>
 				</div></li>
+				
+			<li class="nav-item"><a class="nav-link"
+			href="${pageContext.request.contextPath}/manager/manageAttend.do"> <i
+				class="fas fa-fw fa-building"></i> <span>근태조회</span></a></li>
+				
 
 			<!-- Divider -->
 			<hr class="sidebar-divider">

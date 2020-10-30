@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lemon.lemonbiz.approval.model.vo.DocType;
+import com.lemon.lemonbiz.attend.model.service.AttendService;
+import com.lemon.lemonbiz.attend.model.vo.Attend;
 import com.lemon.lemonbiz.manager.model.service.ManagerService;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
@@ -29,6 +31,9 @@ public class ManagerController {
 	
 	@Autowired
 	private MemberService memberService;
+
+	@Autowired
+	private AttendService attendService;
 	
 	@Autowired
 	private ManagerService managerService;
@@ -317,4 +322,12 @@ public class ManagerController {
 		return "redirect:/manager/manageApprovalDoc.do";
 	}
 	
+	@RequestMapping(value = "/manageAttend.do", method = RequestMethod.GET)
+	public String attendMember(Model model) {
+		
+		List<Attend> attendList = attendService.selectAttendList();
+		
+		model.addAttribute("attendList",attendList);
+		return "/attend/managerAttend";
+	}
 }

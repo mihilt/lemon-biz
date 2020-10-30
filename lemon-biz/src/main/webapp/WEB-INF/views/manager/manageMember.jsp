@@ -12,7 +12,6 @@
 		<h4 id="m-title" class="card-header">
 			<strong>사원 정보</strong>
 		</h4>
-		
 		<div class="m-5">
 			<p class = "text-danger text-center">*그룹웨어 관리자 권한을 갖고있는 사원은 붉은색으로 표시</p>
 			<table class="table table-bordered" id="dataTable" width="100%"
@@ -53,12 +52,8 @@
 				</tbody>
 			</table>
 		</div>
-		
 	</div>
 </div>
 
-
-
-  
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp" />
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

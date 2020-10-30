@@ -8,7 +8,7 @@
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 <style>
 /*글쓰기버튼*/
-button#btn-leabe{float:right; margin:0 15px;}
+button#btn-Leave{float:right; margin:0 15px;}
 button#btn-arrive{float:right; margin: 0 0 15px;}
 div#attendInfo{width: 100%; height: 100px; text-align: center;  margin-top: 20px;}
 div.infoVal{display:inline-block; width: 24%; height: 85%;color:#fff; margin: 8px; background-color: #FB0; border-radius: 35px 35px 35px 0px;"}
@@ -31,14 +31,17 @@ tr[data-no]{cursor: pointer;}
 		</div>
 	</div>
  	 <form id="form1" class="form-inline" method="post"
-		action="<%-- ${pageContext.request.contextPath }/attend/attendLeabe.do --%>" >
+		action="<%-- ${pageContext.request.contextPath }/attend/attendLeave.do --%>" >
 		<input type="hidden" value="전달할값1" class="form-control col-sm-5" name="value1" required/>&nbsp;
 	 </form>
 	 		<div id="lastarrive" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="yyyyMMdd"/></div>
 	 		<div id="lastLeave" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="HH"/></div>
 	<div>
-		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="attendCal();">월별 근태</button>
-		<button id="btn-leabe" class="btn btn-outline-warning" type="button" onclick="attendLeabe();">퇴근</button>
+		<c:if test="${ loginMember.isManager eq 1 }">			
+		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="location.href='${pageContext.request.contextPath}/manager/manageAttend.do' ">근태 조회</button>
+		</c:if>
+		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="location.href='${pageContext.request.contextPath}/attend/attendCal.do' ">월별 근태</button>
+		<button id="btn-Leave" class="btn btn-outline-warning" type="button" onclick="attendLeave();">퇴근</button>
 	 	<button id="btn-arrive" class="btn btn-outline-warning" type="button" onclick="attendArrive();">출근</button>
 	</div>
 	<table id="tbl-attend" class="table ">
@@ -49,10 +52,10 @@ tr[data-no]{cursor: pointer;}
 			<th>출근시간</th>
 			<th>퇴근시간</th>
 			<th>근무시간</th>
-			<th>번호</th>
 		</tr>
 			</thead>
 		<c:forEach items="${ list }" var="attend">
+
 		<c:if test="${attend.leave ne null}">
 		<thead class="alert-warning">
 		</c:if>
@@ -65,7 +68,6 @@ tr[data-no]{cursor: pointer;}
 			<td><fmt:formatDate value="${ attend.arrive }" pattern="HH:mm"/></td>
 			<td><fmt:formatDate value="${ attend.leave }" pattern="HH:mm"/></td>
 			<td>${ attend.time }</td>
-			<td>${ attend.key }</td>
 		</tr>
 		</c:forEach>
 	</table>
@@ -91,7 +93,7 @@ function attendArrive(){
 	}
 }
 //퇴근
-function attendLeabe(){
+function attendLeave(){
 
 	var lastLeave=$("#lastLeave").text();
 	time = new Date().getHours();
@@ -100,14 +102,14 @@ function attendLeabe(){
 	var last_1 =Number(lastarrive);
 	
 	 if(lastTime=='0.0'&& last_1==Number(today)){			//퇴근하지않았거나 오늘퇴근이라면
-	 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeabe.do")
+	 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeave.do")
 		.attr("method", "POST")
 		.submit();
 	}else if(++last_1==Number(today)){				//야근일시 24시간전에 퇴근가능
 
 		time=time-Number(lastLeave);
 		if(time<=24){
-		$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeabe.do")
+		$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeave.do")
 		.attr("method", "POST")
 		.submit();
 		}else{
@@ -118,13 +120,6 @@ function attendLeabe(){
 	}   
 }
 
-
-//Cal 호출
-function attendCal(){
-	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendCal.do")
-	.attr("method", "POST")
-	.submit(); 
-}
 </script>
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

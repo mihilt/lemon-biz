@@ -38,6 +38,13 @@
   border: none;
 }
 
+.popover-header{
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
 .popover-content {
   padding: 15px 15px;
   font-size: 13px;
@@ -228,6 +235,7 @@ select.filter {
 }
 
 .popover {
+  width : 300px;
   background: #fff !important;
   color: #2E2F34;
   border: none;

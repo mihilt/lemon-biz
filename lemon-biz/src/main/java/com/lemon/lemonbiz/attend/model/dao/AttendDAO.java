@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.attend.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +20,16 @@ public interface AttendDAO {
 
 	Attend selectAttendInfo(Attend attend);
 
+
+	int getTodayCount(String date);
+
 	int countAttend(Attend attend);
 
 	List<Map<String, Object>> selectAttendList(int cPage, int numPerPage, Map<String, Object> map ,String memId);
+
+	List<Attend> selectAttendList();
+
+	Attend getAttendLeave(HashMap<Object, Object> params);
+
 
 }

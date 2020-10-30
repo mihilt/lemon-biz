@@ -1,6 +1,7 @@
 package com.lemon.lemonbiz.calendar.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,12 @@ public class CalendarServiceImpl implements CalendarService {
 	public int dragNdropCalendar(NewDates newDates) {
 		
 		return calendarDAO.dragNdropCalendar(newDates);
+	}
+
+	@Override
+	public int getTodayCount(HashMap<Object, Object> params) {
+		
+		return calendarDAO.getTodayCount(params);
 	}
 
 }

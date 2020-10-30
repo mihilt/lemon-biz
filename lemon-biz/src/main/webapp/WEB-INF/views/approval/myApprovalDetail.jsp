@@ -13,11 +13,14 @@
 
 <div class="container">
 		<div class="container-fluid">
-		<h2>요청결제문서</h2>
+		
 		<!-- 게시글 -->
  			<div class="col-lg-12">			
              	<div class="card" >
-                	<div class="card-header py-3" align="center">	
+                	<div class="card-header py-2" align="center">
+                	<br />
+                	<h2>결재문서</h2>
+                	<br />	
 						<table class="table table text-center">
 					    <tr>
 					    	<td><strong>기안담당</strong>
@@ -36,8 +39,7 @@
 							
 							<td>
 							<strong>기안일자</strong>
-							<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
-							<c:out value="${today}"/>
+							<fmt:formatDate value="${appr.draftDate}"  pattern="yyyy-MM-dd"/>
 							</td>
 						</tr>
 					    </table>
@@ -45,31 +47,36 @@
 					<div>
 					
 					
-					    <!-- ================결제칸=============== -->
+					    <!-- ================결재칸=============== -->
 					
 						
-					    <table>
-						<tr><td width="50%">
-						<div class="float-center">
-							<!-- Button trigger modal -->
+					    <div class="float-left col-md-5" >
+						<div class="float-left col-md-4">
+						
+						</div>
+						
+						
+						<div class="float-left col-md-10" style="padding:15px">
+							
+					
 							
 						</div>
-						</td>
-						<td width="50%">
-						<div class="float-center">
-						<table border="1" style="display: inline-block">
+						</div>
 						
+						
+					    <table>
 						<tr>
-							<td></td>
-							<td>기안자</td>
-							<td id="proNum1">1차 결제자</td>
-							<td id="proNum2">2차 결제자</td>
-							<td id="proNum3">3차 결제자</td>
+						<td width="40%">
+						<div class="float-center"  style="padding:15px">
+						<table class="table table-hover text-center" >
+						<tr>
+							<td>분류</td>
+							<td id="proNum1">1차 결재자</td>
+							<td id="proNum2">2차 결재자</td>
+							<td id="proNum3">3차 결재자</td>
 						</tr>
 						<tr>
-						<td class="tt" rowspan='4'>결재</td>
-						<td class="aa">작성자</td>
-						
+						<td class="tt" >직급</td>
 						<td id="authRank1" class="aa">
 						${ apprck1.rankName }
 						</td>
@@ -91,7 +98,7 @@
 						
 						<tr>
 						
-						<td>${ loginMember.name }</td>
+						<td>성명</td>
 						<td id="authName1">${ apprck1.ckName }</td>
 						<td id="authName2">${ apprck2.ckName }</td>
 						<td id="authName3">${ apprck3.ckName }</td>
@@ -100,11 +107,55 @@
 						
 						<tr>
 						
-						<td>${ loginMember.memberId }</td>
+						<td>사원번호</td>
 						<td id="apv_mem1">${ apprck1.memId }</td>
 						<td id="apv_mem2">${ apprck2.memId }</td>
 						<td id="apv_mem3">${ apprck3.memId }</td>
 	
+						</tr>
+						
+						<tr>
+						<td>승인여부</td>
+						<td>
+							<c:choose>
+								<c:when test="${ apprck1.status eq null}">
+									미결재
+								</c:when>
+								<c:when test="${ apprck1.status eq 't' }">
+									승인
+								</c:when>
+								<c:when test="${ apprck1.status eq 'f' }">
+									반려
+								</c:when>
+							</c:choose>
+						</td>
+						<td>
+							<c:choose>
+								<c:when test="${ apprck2.status eq null }">
+									미결재
+								</c:when>
+								<c:when test="${ apprck2.status eq 't' }">
+									승인
+								</c:when>
+								<c:when test="${ apprck2.status eq 'f' }">
+									반려
+								</c:when>
+							</c:choose>
+						</td>
+						<td>
+							<c:choose>
+								<c:when test="${ apprck3.status eq null }">
+									미결재
+								</c:when>
+								<c:when test="${ apprck3.status eq 't' }">
+									승인
+								</c:when>
+								<c:when test="${ apprck3.status eq 'f' }">
+									반려
+								</c:when>
+							</c:choose>
+						</td>
+						
 						</tr>
 						
 						</table>
@@ -112,10 +163,12 @@
 						
 						</table>
 						</div>
-						<!-- ==============결제칸 끝============== -->
+						
+						
+						<!-- ==============결재칸 끝============== -->
 						<!-- 폼 내용 -->
 						
-						
+						<hr />
 						
 						<form id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
 							
@@ -130,7 +183,12 @@
 							
 							
 							
-							&nbsp;<label>첨부: ${ attach.reName } </label> <br>
+							&nbsp;<label>첨부: ${ attach.originName } </label> <br>
+							<button type="button"
+									class="btn btn-outline-primary"
+									onclick="fileDownload('${attach.key}')">
+									다운로드
+							</button>
 							<hr>
 						               
 						</form>
@@ -147,6 +205,14 @@
 				</div>
 			</div>
 		</div>
+		
+<script>
+
+function fileDownload(key) {
+	location.href = "${ pageContext.request.contextPath }/approval/fileDownload.do?key=" + key;
+}
+
+</script>
 		
 
 
