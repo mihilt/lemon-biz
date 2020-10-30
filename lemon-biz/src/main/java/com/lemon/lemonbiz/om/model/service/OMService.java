@@ -6,7 +6,6 @@ import java.util.Map;
 import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.om.model.vo.OM;
-import com.lemon.lemonbiz.om.model.vo.OMComment;
 
 public interface OMService {
 
@@ -16,7 +15,7 @@ public interface OMService {
 
 	List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
-	int insertOM(OM om);
+	int insertOM(OM om, String omrId);
 
 	OM selectOneOMCollection(int key);
 

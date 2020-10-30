@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.lemon.lemonbiz.common.vo.Attachment;
+import com.lemon.lemonbiz.member.model.vo.Dept;
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.om.model.vo.OM;
-import com.lemon.lemonbiz.om.model.vo.OMComment;
 
 public interface OMDAO {
 
@@ -16,7 +16,7 @@ public interface OMDAO {
 
 	List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
-	int insertOM(OM om);
+	int insertOM(OM om, String omrId);
 
 	int insertAttachment(Attachment attach);
 
@@ -33,8 +33,6 @@ public interface OMDAO {
 	List<OM> selectOMList(Map<String, Object> map);
 
 	int countOM();
-
-	void omInsert(OMComment omComment);
 
 	void omfrmDelete(int key);
 
@@ -57,5 +55,20 @@ public interface OMDAO {
 	int countOM3();
 
 	String selectTeamName(Member loginMember);
+	
+	// 여기서부터 jstree 관련
+	List<Dept> deptList();
+
+	List<Dept> child();
+
+	List<Dept> child2();
+
+	List<Member> memberList(String node);
+
+	List<Member> selectMember(String param);
+
+	List<Member> joinMemberList(String param);
+
+	String SeqApprKey();
 
 }

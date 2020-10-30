@@ -102,30 +102,32 @@
          <!-- 여기서부터 네비게이션 헤더 -->
            <ul class="nav nav-tabs" id="addl-btns" role="tablist">
 		      <li class="nav-item">
-		        <a class="nav-link active" id="allMail-tab" data-toggle="tab" href="#allMail" 
-		        	role="tab" aria-controls="allMail" aria-selected="true">전체</a>
+		        <a class="nav-link active" id="allOM-tab" data-toggle="tab" href="#allOM" 
+		        	role="tab" aria-controls="allOM" aria-selected="true">전체</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" id="deptMail-tab" data-toggle="tab" href="#deptMail" 
-		        	role="tab" aria-controls="deptMail" aria-selected="false">내 부서 메일</a>
+		        <a class="nav-link" id="deptOM-tab" data-toggle="tab" href="#deptOM" 
+		        	role="tab" aria-controls="deptOM" aria-selected="false">내 부서 메일</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" id="myMail-tab" data-toggle="tab" href="#myMail" 
-		        	role="tab" aria-controls="myMail" aria-selected="false">내가 보낸 메일</a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" id="starredMail-tab" data-toggle="tab" href="#starredMail" 
-		        	role="tab" aria-controls="starredMail" aria-selected="false">중요 메일</a>
-		      </li>
-<!-- 		      <li class="nav-item">
-		        <a class="nav-link" href="#">임시 저장 메일</a>
-		      </li> -->
-		      <li class="nav-item">
-		        <a class="nav-link" href="#">첨부 메일</a>
+		        <a class="nav-link" id="myOM-tab" data-toggle="tab" href="#myOM" 
+		        	role="tab" aria-controls="myOM" aria-selected="false">내가 보낸 메일</a>
 		      </li>
 		       <li class="nav-item">
-                     <a class="nav-link disabled" href="#">
-                     	<input type="text" name="search-mail" id="search-mail" 
+		        <a class="nav-link" id="selfOM-tab" data-toggle="tab" href="#selfOM" 
+		        	role="tab" aria-controls="selfOM" aria-selected="false">내게 보낸 메일</a>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link" id="starredOM-tab" data-toggle="tab" href="#starredOM" 
+		        	role="tab" aria-controls="starredOM" aria-selected="false">중요 메일</a>
+		      </li>
+		     <li class="nav-item">
+		        <a class="nav-link" id="attachedOM-tab" data-toggle="tab" href="#attachedOM" 
+		        	role="tab" aria-controls="attachedOM" aria-selected="false">첨부 메일</a>
+		      </li>
+		       <li class="nav-item"> 
+                     <a class="nav-link disabled" href="#" style="margin-left:.2rem">
+                     	<input type="text" name="search-om" id="search-om" 
                      		style="width:10rem; height:1.6rem; margin-right: .2rem; margin-bottom: -.1rem"/>
                      	<i class="fa fa-search"></i>
                      </a>
@@ -152,65 +154,7 @@
 				<!-- </table> -->
 			</div>
 			<!-- 여기까지 메일함 상단부 헤더 -->
-			
-		 <!-- 지금부터 메일 표시 -->	
-			<%-- <!-- 여기서부터 전체 메일 리스트 -->
-			<div class="tab-pane fade show active" id="allMail" role="tabpanel" aria-labelledby="allMail-tab">
-				<!-- <table id="tbl-all" class="table"> -->
-					<c:forEach items="${ list }" var="mail">
-					<tr data-no="${ mail.key }">
-						<td><input type="checkbox" name="ck-mail" id="ck-mail"/></td>
-					   	<td>
-					   	<div class="the-star">
-					   		<input class="star" type="checkbox" title="bookmark" id="star"
-					   		<c:if test="${ mail.isStarred gt 0 }">checked="checked"</c:if>
-					   		/></div>						
-					   	</td>
-						<td>${ mail.memId }</td>
-						<td>${ mail.title }</td>
-						<td>${ mail.content }</td>
-						<td><fmt:formatDate value="${ mail.mailDate }" pattern="yyyy/MM/dd"/></td>
-						<td>
-							<c:if test="${ mail.fileCount gt 0 }">
-								<img src="${ pageContext.request.contextPath }/resources/images/file.png"
-									style="width:.4rem;" />
-							</c:if>
-						</td>
-					</tr>
-					</c:forEach>
-					<!-- </table> -->
-			</div>
-			<!-- 여기까지 전체 메일 리스트 -->
-			
-		<!-- table+nav의 충돌로 navbar를 클릭했을 때 분기처리가 되지 않고 한 페이지에 병합된 데이터가 보여짐. 
-			  또한 td가 무너지지 않는 선에서 내용의 '일부 표기'를 위한 max-height 등의 설정이 추가 필요. 수정 예정 -->
-			
-			<!-- 여기서부터 내 부서 메일 리스트 -->
-			<div class="tab-pane fade" id="deptMail" role="tabpanel" aria-labelledby="deptMail-tab">
-				<!-- <table id="tbl-dept" class="table"> -->
-				<c:forEach items="${ listDept }" var="mail">
-					<tr data-no="${ mail.key }">
-						<td><input type="checkbox" name="ck-mail" id="ck-mail" /></td>
-					   	<td>
-					   	<div class="the-star">
-					   		<input class="star" type="checkbox" title="bookmark" id="star"
-					   		<c:if test="${ mail.isStarred gt 0 }">checked="checked"</c:if>
-					   		/></div>						
-					   	</td>
-						<td>${ mail.memId }</td>
-						<td>${ mail.title }</td>
-						<td>${ mail.content }</td>
-						<td><fmt:formatDate value="${ mail.mailDate }" pattern="yyyy/MM/dd"/></td>
-						<td>
-							<c:if test="${ mail.fileCount gt 0 }">
-								<img src="${ pageContext.request.contextPath }/resources/images/file.png"
-									style="width:.4rem;" />
-							</c:if>
-						</td>
-					</tr>
-					</c:forEach>
-				</div>
-			<!-- 여기까지 부서 메일 리스트 -->	 --%>
+
 			
 			<!-- 여기서부터 내가 보낸 메일 리스트 -->
 			<div class="tab-pane fade" id="myMail" role="tabpanel" aria-labelledby="myMail-tab">

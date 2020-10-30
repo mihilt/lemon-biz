@@ -52,6 +52,11 @@ form {
 #multiple-ok {
 	font-size: .9rem;
 }
+td[id^="authName"]{
+	padding-top: .4rem;
+	padding-bottom: -.3rem;
+	border-radius: .2rem;
+}
 </style>
 </head>
 
@@ -72,18 +77,49 @@ form {
 							<input type="text" readonly class="form-control" id="toShow"
 								name="name" value="${loginMember.name}" readonly> <input
 								type="hidden" name="memId" class="form-control" id="memId"
-								value="${loginMember.memberId}" />
+								value="${loginMember.memberId}" /> <input type="hidden"
+								name="deptKey" class="form-control" id="deptKey"
+								value="${loginMember.deptKey}" />
 						</div>
 					</div>
+					
+					<!-- 수신인 추가 파트 -->
 					<div class="form-group row">
 						<label for="mTo" class="col-sm-1 col-form-label" id="send-to">수신자</label>
-						<div class="col-sm-9">
-							<input type="text" class="form-control" id="omrId" name="omrId"
-								placeholder="수신인을 선택하세요.">
+						&emsp;
+						<div class="col-sm-8" style="border:1px solid lightgray; border-radius:.2rem; padding-left:.5rem">
+							<!-- <input type="text" class="form-control" id="omrId" name="omrId"
+								placeholder="수신인을 선택하세요."> -->
+							<table>
+								<tr>
+								<!-- 사용자에게 보여지는 부분 -->
+									<td id="authName1">${ apprck1.ckname }</td> 
+									<td id="authName2">${ apprck2.ckname }</td>
+									<td id="authName3">${ apprck3.ckname }</td>
+									<td id="authName4">${ apprck4.ckname }</td>
+									<td id="authName5">${ apprck5.ckname }</td>
+									<td id="authName6">${ apprck6.ckname }</td>
+									<td id="authName7">${ apprck7.ckname }</td>
+									<td id="authName8">${ apprck8.ckname }</td>
+									<td id="authName9">${ apprck9.ckname }</td>
+									<td id="authName10">${ apprck10.ckname }</td>
+								</tr>
+							</table>
 						</div>
-						<button type="button" class="btn btn-light"
-							data-target="#addReceiverModal" id="addReceiverBtn">수신인
-							추가</button>
+						<!-- controller로 실제 값이 넘어가는 부분 : name 값으로 대입 -->
+							<input type="hidden" id="authId1" name="omrId1" />
+							<input type="hidden" id="authId2" name="omrId2" />
+							<input type="hidden" id="authId3" name="omrId3" />
+							<input type="hidden" id="authId4" name="omrId4" />
+							<input type="hidden" id="authId5" name="omrId5" />
+							<input type="hidden" id="authId6" name="omrId6" />
+							<input type="hidden" id="authId7" name="omrId7" />
+							<input type="hidden" id="authId8" name="omrId8" />
+							<input type="hidden" id="authId9" name="omrId9" />
+							<input type="hidden" id="authId10" name="omrId10" />
+							&emsp;
+						<button type="button" class="btn btn-light" data-toggle="modal"
+							data-target="#exampleModal" id="addReceiverBtn">수신인 추가</button>
 					</div>
 
 					<div class="form-group row">
@@ -94,14 +130,15 @@ form {
 						</div>
 					</div>
 					<div class="form-group row">
-					<label for="upFile" class="col-sm-1 col-form-label" id="attch-lab">&ensp;첨부</label>
-					&emsp;
+						<label for="upFile" class="col-sm-1 col-form-label" id="attch-lab">&ensp;첨부</label>
+						&emsp;
 						<div class="custom-file col-sm">
 							<input type="file" class="custom-file-input" name="upFile"
 								id="upFile" multiple> <label class="custom-file-label"
-								for="upFile1" style="width:80%">파일을 선택하세요</label>
+								for="upFile1" style="width: 80%">파일을 선택하세요: 복수 선택이
+								가능합니다.</label>
 						</div>
-					</div> 
+					</div>
 					<div align="justify">
 						<textarea id="brdmemo" class="summernote" name="content"
 							cols="120" rows="12" style="width: 100%; resize: none"
@@ -109,14 +146,13 @@ form {
 					</div>
 					<div align="center" id="btns">
 						<input type="submit" value="메일 발송" id="send-mail"
-							class="btn btn-success" onclick="fn_formSubmit()"> <input
-							type="button" value="파일 첨부" id="attach-to" class="btn btn-info"
-							data-target="#attachModal" /> <input type="button" value="임시 저장"
+							class="btn btn-success" onclick="fn_formSubmit()"> 
+							<input type="button" value="임시 저장"
 							id="content-temp" class="btn btn-secondary" /> <input
 							type="button" value="작성 취소" id="content-reset"
 							class="btn btn-danger" />
 					</div>
-					
+
 				</form>
 			</div>
 		</div>
@@ -125,162 +161,161 @@ form {
 	<!-- container div 끝 -->
 	<br />
 
-	<!-- 수신인 추가 모달 -->
-	<!-- Modal -->
-<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="max-width: 90%;" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">결제라인 추가</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <div class="row">
-      <div class="col-md-4">
-      <h5>부서 선택</h5>
-        <!-- tree -->
-	<div id="appr" style="margin: 5px; padding: 5px; border:1px solid lightgray;">
-        <ul id="approvalSelect">
-        	<c:forEach items="${dept}" var="dept">
-            <li><a>${dept.name}</a>
-                <ul>
-                	<c:forEach items="${child}" var="child">
-                    <li><a>${child.name}</a>
-                        <ul>
-                        	<c:forEach items="${child2}" var="child2">
-                        	<c:if test="${child.key eq child2.ref }">
-                            <li>${child2.name}</li>
-                            </c:if>
-                            </c:forEach>
-                        </ul>
-                    </li>
-                    </c:forEach>
-                </ul>
-            </li>
-            </c:forEach>
-        </ul>
-    </div>
-    </div>
-    
-        <!-- tree end-->
-        
-        <!-- printList Form -->
-      
-		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결제자 선택</h5>
-    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
-    			<div class="row" style="margin: 5px 5px"> 
-    			<label>성명</label>
-    			<input type="text" id="searchN"/>
-    			<button class="btn btn-outline-primary" id="searchNm" onclick="searchName()">검색</button>
-    			</div>
-    	
-    			<div class="row" style="margin: 5px 5px">
-    			
-			    	<table>
-			    	
-			    	<tr>
-			    	<th>부서</th>
-			    	<th>성명</th>
-			    	<th>직위</th>
-			    	<th>사번</th>
-			    	</tr>
-			    	
-			    	<tbody id="tbody">
-				    <c:forEach var="item" items="${ memberList }">
-				    	<tr onclick="selectMember(${item.memberId})" style="cursor:pointer;" class="memberList">
-				    	<td>
-				    	<c:choose>
-				    		<c:when test="${ item.deptName == null }">${ item.deptName = "발령대기" }</c:when>
-				    		<c:otherwise>${ item.deptName }</c:otherwise>
-				    	</c:choose>
-				    	</td>
-				    	<td>${ item.name }</td>
-				    	<td>${ item.rankKey }</td>
-				    	<td>${ item.memberId }</td>
-				    	</tr>
-				    </c:forEach>	
-			    	</tbody>
-			    	</table>
-    	
-    			</div>
-    
-    		</div>
-    	</div>
-    	<!-- printList Form end -->
-    	
-    	
-      	<!-- selectMember Form-->
-		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결제자 선택</h5>
-    		<div id="apprst" style="margin: 5px; padding: 5px; border:1px solid lightgray; height:360px;">
-    			
-    	
-    			<div class="row" style="margin: 5px 5px">
-			<table>
-    
-		      	<tr>
-		      	<th>No.</th>
-		    	<th>부서</th>
-		    	<th>성명</th>
-		    	<th>직위</th>
-		    	<th>사번</th>
-		    	<th>순서</th>
-		    	<th>삭제</th>
-		    	</tr>
-		    	
-		    	<tbody id="finalList">
-		    	<c:forEach begin="1" end="3" varStatus="stat">
-		    	
-		    	<tr id="${ stat.count }" >
-		    	<td id="no_${ stat.count }">${ stat.count }</td>
-		    	<td id="dept_${ stat.count }"></td>
-		    	<td id="name_${ stat.count }"></td>
-		    	<td id="rank_${ stat.count }"></td>
-		    	<td id="memId_${ stat.count }"></td>
-		    	<td id="order_${ stat.count }"></td>
-		    	<td id="del_${ stat.count }"></td>
-		    	</tr>
-		    	
-		    	</c:forEach>
-		    	</tbody>
-    
-    		</table>
-    			</div>
-    
-    		</div>
-    	</div>
-      	
-      	
-      	<!-- selectMember Form end-->
-      	
-    
+<!-- 여기서부터 수신인 추가 모달 -->
+	<div class="modal" id="exampleModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="max-width: 90%;" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">수신인 추가</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-4">
+							<h5>부서 선택</h5>
+						<!-- 여기서부터 jstree로 조직도 노출 -->
+							<div id="appr"
+								style="margin: 5px; padding: 5px; border: 1px solid lightgray;">
+								<ul id="omSelect">
+									<c:forEach items="${dept}" var="dept">
+										<li><a>${dept.name}</a>
+											<ul>
+												<c:forEach items="${child}" var="child">
+													<li><a>${child.name}</a>
+														<ul>
+															<c:forEach items="${child2}" var="child2">
+																<c:if test="${child.key eq child2.ref }">
+																	<li>${child2.name}</li>
+																</c:if>
+															</c:forEach>
+														</ul></li>
+												</c:forEach>
+											</ul></li>
+									</c:forEach>
+								</ul>
+							</div>
+						</div>
+					<!-- 여기까지 조직도 노출 -->
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-primary" onclick="apply()">저장하기</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-	
-	
-	<!-- 주. 모달 본체에 해당하는 애들은 container/wrapper로 감쌀 필요가 없으므로 /body태그의 바로 윗 편, 즉 body 태그 내부 최 하단에 위치시켜 주어야 문제가 안 생긴다! -->
+					<!-- 여기서부터 수신인 선택 또는 사원명으로 검색 -->
+						<div class="container col-4"
+							style="height: 400px; margin: 0px; overflow-y: auto;">
+							<h5>사원 조회</h5>
+							<div id="apprst"
+								style="margin: 0px; padding: 0px; border: 1px solid lightgray; height: 360px;">
+								<div class="row" style="margin: 5px 5px">
+									<label>사원명으로 검색 </label> <input type="text" id="searchN" />
+									<button class="btn btn-outline-primary" id="searchNm"
+										onclick="searchName()">검색</button>
+								</div>
 
-	
+								<div class="row" style="margin: 5px 5px">
+
+									<table>
+
+										<tr>
+											<th>부서명</th>
+											<th>사원명</th>
+											<th>직급명</th>
+											<th>사번</th>
+										</tr>
+
+										<tbody id="tbody">
+											<c:forEach var="item" items="${ memberList }">
+												<tr onclick="selectMember(${item.memberId})"
+													style="cursor: pointer;" class="memberList">
+													<td><c:choose>
+															<c:when test="${ item.deptName == null }">${ item.deptName = "발령대기" }</c:when>
+															<c:otherwise>${ item.deptName }</c:otherwise>
+														</c:choose></td>
+													<td>${ item.name }</td>
+													<td>${ item.rankKey }</td>
+													<td>${ item.memberId }</td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+
+								</div>
+
+							</div>
+						</div>
+					<!-- 여기까지 수신인 선택 또는 사원명으로 검색 -->
+
+
+					<!-- 여기서부터 선택된 수신인 리스트 보여주기 -->
+						<div class="container col-4"
+							style="height: 400px; margin: 0px; overflow-y: auto;">
+							<h5>수신인 선택</h5>
+							<div id="apprst"
+								style="margin: 5px; padding: 5px; border: 1px solid lightgray; height: 360px;">
+
+
+								<div class="row" style="margin: 5px 5px">
+									<table>
+
+										<tr>
+											<th>No.</th>
+											<th>부서</th>
+											<th>성명</th>
+											<th>직위</th>
+											<th>사번</th>
+											<!-- <th>순서</th> -->
+											<th>삭제</th>
+										</tr>
+
+										<tbody id="finalList">
+											<c:forEach begin="1" end="10" varStatus="stat">
+
+												<tr id="${ stat.count }">
+													<td id="no_${ stat.count }">${ stat.count }</td>
+													<td id="dept_${ stat.count }"></td>
+													<td id="name_${ stat.count }"></td>
+													<td id="rank_${ stat.count }"></td>
+													<td id="memId_${ stat.count }"></td>
+													<%-- <td id="order_${ stat.count }"></td> --%>
+													<td id="del_${ stat.count }"></td>
+												</tr>
+
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
+
+							</div>
+						</div>
+					<!-- 여기까지 선택된 수신인 리스트 보여주기 -->
+					
+				<!-- 여기서부터 수신인 선택 모달 footer -->
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">취소</button>
+						<button type="button" class="btn btn-primary" onclick="apply()">저장하기</button>
+					</div>
+				<!-- 여기까지 수신인 선택 모달 footer -->
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- 여기까지 수신인 선택 모달 -->
+
+
 </body>
 <script>
+
+/* 여기서부터 jstree 및 수신인 추가 모달 제어 */
 $(document).ready(function() {
 	$('#proNum1').val(1);
 	$('#proNum2').val(2);
 	$('#proNum3').val(3);
 	
 	MIN_NUM = 1;
-	MAX_NUM = 3;
+	MAX_NUM = 10;
 
 	for(var i = MIN_NUM; i <= MAX_NUM ; i++) {
 
@@ -308,7 +343,7 @@ $("#appr").jstree({
 	console.log(data.node.text);
 	$.ajax({
 		type: "GET",
-		url : "${pageContext.request.contextPath}/approval/approvalSelect.do",
+		url : "${pageContext.request.contextPath}/om/omReceivers.do",
 		data : {
 			node : data.node.text
 		},
@@ -359,19 +394,19 @@ function selectMember(memberId) {
 	console.log(memberId);
 	
 	
-	if(memberId == "${loginMember.memberId}") { 
+/* 	if(memberId == "${loginMember.memberId}") { 
 		alert('본인은 선택할 수 없습니다.');
 		return;
-	}
+	} */
 	
 	
 	var trArr = $('#finalList > tr');
-	var cnt = 3; 
+	var cnt = 10; 
 	
 	
 	for(var j = MIN_NUM; j <= MAX_NUM; j++) {
-		if($('#memId_'+j).text()==memberId) {
-			alert('이미 추가되어있는 결제자 입니다.');
+		if($('#memId_'+j).text() == memberId) {
+			alert('이미 추가된 수신자입니다.');
 			return;	
 		}
 		if(trArr[j-1].value != 'exist') {
@@ -379,8 +414,8 @@ function selectMember(memberId) {
 		} 
 	}
 	
-	if(cnt==3) {
-		alert('결제자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
+	if(cnt > 10) {
+		alert('수신인은 최대 10명까지 선택 가능합니다.');
 		return;
 	}
 
@@ -390,7 +425,7 @@ function selectMember(memberId) {
 	var param = memberId;
 	$.ajax({
 		type: "POST",
-		url : "${pageContext.request.contextPath}/approval/selectMember.do",
+		url : "${pageContext.request.contextPath}/om/selectMember.do",
 		dataType : "json",
 		data: {
 			param : param
@@ -424,12 +459,11 @@ function selectMember(memberId) {
 		$('#rank_'+(i+1)).text(rankKey);
 
 		$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
-		$('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
+		/* $('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;') */
 		$('#'+(i+1)+'').val('exist');
 
 		return;
 	}
-
 
  }
 		}
@@ -440,19 +474,23 @@ function selectMember(memberId) {
 
 function delLine(i){
 	 
-	 if($('#'+(i+1)+'').val() == 'exist'){
-		 alert('차순 결재자가 있습니다.');
-		 return;
-	 }else{
+	 if($('#'+(i)+'').val() == 'exist'){
+		 var deleteConfirm = confirm('선택한 수신인을 정말로 삭제하시겠습니까?');
+		 
+		if(deleteConfirm == true){
 		$('#'+i+'').val(null); 
 		$('#dept_'+i+'').text('');
 		$('#dept_'+i+'').val('');
 		$('#name_'+i+'').text('');
 		$('#rank_'+i+'').text('');
-		$('#memId_'+i+'').text('');
-		
-		$('#del_'+i+'').html('');
-		$('#order_'+i+'').html('');
+		$('#memId_'+i+'').text('');	
+		$('#del_'+i+'').html('');	
+		 return;
+		} else return false;
+		 
+	 }else{
+		/* $('#del_'+i+'').html(''); */
+		/* $('#order_'+i+'').html(''); */
 	 }
 	 
  }
@@ -464,7 +502,7 @@ function delLine(i){
 	 var param = searchN;
 	 $.ajax({
          type: 'POST',
-         url: "${ pageContext.request.contextPath }/approval/searchName.do",
+         url: "${ pageContext.request.contextPath }/om/searchName.do",
          data: {
 			param : param
          },
@@ -512,52 +550,6 @@ function delLine(i){
 		}
  }
 
- function upBtn(i){
-	 
-		if(i == MIN_NUM){
-			return;
-		}
-		 
-		var dept = $('#dept_'+(i-1)+'').text();
-		var name = $('#name_'+(i-1)+'').text();
-		var rank = $('#rank_'+(i-1)+'').text();
-		var memId = $('#memId_'+(i-1)+'').text();
-		
-		$('#dept_'+(i-1)+'').text($('#dept_'+i+'').text());
-		$('#name_'+(i-1)+'').text($('#name_'+i+'').text());
-		$('#rank_'+(i-1)+'').text($('#rank_'+i+'').text());
-		$('#memId_'+(i-1)+'').text($('#memId_'+i+'').text());
-		
-		$('#dept_'+i+'').text(dept);
-		$('#name_'+i+'').text(name);
-		$('#rank_'+i+'').text(rank);
-		$('#memId_'+i+'').text(memId);
-		 
-	 }
-
- function dnBtn(i){
-
-		if(i == MAX_NUM){
-			return;
-		}
-		 
-		var dept = $('#dept_'+(i+1)+'').text();
-		var name = $('#name_'+(i+1)+'').text();
-		var rank = $('#rank_'+(i+1)+'').text();
-		var memId = $('#memId_'+(i+1)+'').text();
-		
-		$('#dept_'+(i+1)+'').text($('#dept_'+i+'').text());
-		$('#name_'+(i+1)+'').text($('#name_'+i+'').text());
-		$('#rank_'+(i+1)+'').text($('#rank_'+i+'').text());
-		$('#memId_'+(i+1)+'').text($('#memId_'+i+'').text());
-		
-		$('#dept_'+i+'').text(dept);
-		$('#name_'+i+'').text(name);
-		$('#rank_'+i+'').text(rank);
-		$('#memId_'+i+'').text(memId);
-
- }
-
 function apply(){
 
 	for(var i = MIN_NUM; i <= MAX_NUM ; i++){
@@ -567,15 +559,14 @@ function apply(){
 		$(document).find('#authDept'+i).val($('#dept_'+i).text());
 		$(document).find('#authId'+i).val($('#memId_'+i).text());
 		$(document).find('#apv_mem'+i).text($('#memId_'+i).text());
+
 		
 		$('#exampleModal').modal('hide');
-		 			
-
+		
 	 }
-
 }
 </script>
-
+<!-- 여기까지 수신인 추가 모달 & jstree 관련  -->
 
 
 <script>
@@ -597,9 +588,6 @@ function apply(){
 						    }
 						});
 							});
-
-
-
 						
 						$('#send-mail').click(function() {
 							alert("정말로 발송하시겠습니까?");
@@ -685,6 +673,13 @@ function apply(){
 		if (!chkInputValue("#brdmemo", "글 내용을"))
 			return;
 
+		/* for(int i=1; i>10; i++){
+		$('#auth[i]').val()
+			}
+ */
+
+
+		
 		$("#omFrm").submit();
 	}
 
@@ -699,16 +694,6 @@ function apply(){
 				$label.html(file.name);
 		});
 	});
-
-	/* $(function(){
-		$("#searchType").change(function(){
-			console.log($(this).val());
-			var type = $(this).val();
-			$(".search-type").hide()
-							 .filter("#search-" + type)
-							 .css("display", "inline-block");
-		});
-	}); */
 </script>
 </html>
 
