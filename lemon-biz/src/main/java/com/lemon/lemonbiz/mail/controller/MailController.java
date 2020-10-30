@@ -178,23 +178,22 @@ public class MailController {
 		 // *mail 앞에 / 빼먹지 말 것*
 		 return "redirect:/mail/sendMail";
 		} 
-	
-	@RequestMapping("/getCountNoReadMail")
-	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
-		
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		System.out.println("params = " + params);
-		
-		int num = mailService.getCountNoReadMail(params);
-		
-		System.out.println("num = " + num);
-
-		return new ResponseEntity<>(num,HttpStatus.OK);		
-	}
-<<<<<<< HEAD
-		
-=======
 }
+//	@RequestMapping("/getCountNoReadMail")
+//	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
+//		
+//		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+//		System.out.println("params = " + params);
+//		
+//		int num = mailService.getCountNoReadMail(params);
+//		
+//		System.out.println("num = " + num);
+//
+//		return new ResponseEntity<>(num,HttpStatus.OK);		
+//	}
+//<<<<<<< HEAD
+//		
+//=======
 
 	
 		/*
@@ -313,4 +312,5 @@ public class MailController {
 	 * 
 	 * return "redirect:/mail/sendMail"; } }
 	 */
->>>>>>> branch 'yb' of https://github.com/mihilt/lemon-biz.git
+/*>>>>>>> branch 'yb' of https://github.com/mihilt/lemon-biz.git
+*/

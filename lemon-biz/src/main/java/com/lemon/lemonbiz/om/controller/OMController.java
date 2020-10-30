@@ -176,6 +176,7 @@ public class OMController {
 			@RequestParam(value = "upFile", required = false) MultipartFile[] upFiles, RedirectAttributes redirectAttr,
 			HttpServletRequest request, Model model, @SessionAttribute("loginMember") Member loginMember, 
 			@RequestParam(value = "goG", required = false) String goG,
+			@RequestParam(value = "goT", required = false) String goT,
 			@RequestParam(value="omrId1", required= true) String omrId1, 
 			@RequestParam(value="omrId2", required= false) String omrId2, 
 			@RequestParam(value="omrId3", required= false) String omrId3, 
@@ -187,8 +188,6 @@ public class OMController {
 			@RequestParam(value="omrId9", required= false) String omrId9, 
 			@RequestParam(value="omrId10", required= false) String omrId10
 			) throws IllegalStateException, IOException{
-		
-		log.debug("om = {}", om);
 		
 		// 수신자 추가 (최대 10명)
 		List<String> omrs = new ArrayList<>();
@@ -203,42 +202,19 @@ public class OMController {
 		omrs.add(omrId8);
 		omrs.add(omrId9);
 		omrs.add(omrId10);
-		
-		// 여기서부터 첨부파일 추가
-				List<Attachment> attachList = new ArrayList<>();
 
-				String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om");
-
-				for (MultipartFile upFile : upFiles) {
-					if (upFile.isEmpty())
-						continue;
-					String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
-					File dest = new File(saveDirectory, renamedFilename);
-					upFile.transferTo(dest);
-					
-					Attachment attach = new Attachment();
-					attach.setOriginName(upFile.getOriginalFilename());
-					attach.setReName(renamedFilename);
-					attachList.add(attach);
-				}
-
-				log.debug("attachList = {}", attachList);
-				om.setAttachList(attachList);
-				om.setName(name);
-				// 여기까지 첨부파일 추가
-		
 		// insert 처리
 		int result = 0;
 		
 		for(int i=0; i< omrs.size(); i++) {
 			if(omrs.get(i).length() > 0) {
 				
+				// 여기서부터 외부로도 발송 (체크박스 체크한 경우)
 				if(goG != null) {
 					
 					Member mem = memberService.selectOneMember(omrs.get(i));
 					
 					String mFrom = "lemonbiz.manager@gmail.com";
-					/* String mTo = request.getParameter("mTo"); */
 					String sendTo = mem.getEmail();
 					String title = request.getParameter("title");
 					String content = request.getParameter("content");
@@ -251,29 +227,75 @@ public class OMController {
 					      messageHelper.setTo(sendTo);    
 					      messageHelper.setSubject(title); 
 					      messageHelper.setText(content); 
+					      
+					  	List<Attachment> attachList = new ArrayList<>();
+						String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om");
+						
+					      for (MultipartFile upFileG : upFiles) {
+								if (upFileG.isEmpty())
+									continue;
+								String renamedFilename = Utils.getRenamedFileName(upFileG.getOriginalFilename());
+								File destG = new File(saveDirectory, renamedFilename);
+								upFileG.transferTo(destG);
+								messageHelper.addAttachment(renamedFilename, destG);
+					      }
 
-					      omService.insertOM(om, omrs.get(i));
+					      omService.insertOME(om, omrs.get(i));
 					      mailSender.send(message);
 					      result++;
 					    } catch(Exception e){
 					      System.out.println(e);
 					    }
+					 // 여기까지 외부로도 발송
 					
+				// 사내 메일 공통 분기
 				} else {
+					for (MultipartFile upFile : upFiles) {
+						
+						List<Attachment> attachList = new ArrayList<>();
+						String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om");
+						
+						if (upFile.isEmpty())
+							continue;
+						String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
+						File destI = new File(saveDirectory, renamedFilename);
+						/* upFile.transferTo(destI); */
+						
+						Attachment attach = new Attachment();
+						attach.setOriginName(upFile.getOriginalFilename());
+						attach.setReName(renamedFilename);
+						attachList.add(attach);
+						
+						log.debug("attachList = {}", attachList);
+						om.setAttachList(attachList);
+						om.setName(name);
+					}
+					
+				// 임시 저장하는 경우
+				if(goT != null) {
+				omService.insertOMT(om, omrs.get(i));
+				result = 999;
+				
+				// 사내 메일로 발송하는 경우
+				} else
 				omService.insertOM(om, omrs.get(i));
 				log.debug("omrs = {}", omrs.get(i));
 				result++;
 				log.debug("result = {}", result);
-				
+				// 여기까지 사내메일로만 발송
 				}
 			} 
 		}
-		
 
-		if (result > 0)
-			redirectAttr.addFlashAttribute("msg", " 총 "+result+"건의 사내 메일이 성공적으로 전송되었습니다.");
-		else
-			redirectAttr.addFlashAttribute("msg", "사내 메일 전송에 실패하였습니다.");
+		if (result > 0) {
+			redirectAttr.addFlashAttribute("msg", " 총 "+result+"건의 메일이 성공적으로 전송되었습니다.");
+		}
+		else if (result > 999) {
+			redirectAttr.addFlashAttribute("msg", "성공적으로 임시 저장되었습니다.");
+		}
+		else {
+			redirectAttr.addFlashAttribute("msg", "메일 전송에 실패하였습니다.");
+		}
 
 		return "redirect:/om/omList.do";
 	}

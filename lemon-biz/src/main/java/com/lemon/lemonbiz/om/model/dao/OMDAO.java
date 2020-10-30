@@ -17,6 +17,10 @@ public interface OMDAO {
 	List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
 	int insertOM(OM om, String omrId);
+	
+	int insertOME(OM om, String omrId);
+	
+	int insertOMT(OM om, String omrId);
 
 	int insertAttachment(Attachment attach);
 

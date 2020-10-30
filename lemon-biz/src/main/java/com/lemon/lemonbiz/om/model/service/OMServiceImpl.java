@@ -72,6 +72,44 @@ public class OMServiceImpl implements OMService {
 		}
 		return result;
 	}
+	
+	@Override
+	public int insertOME(OM om, String omrId) {
+		int result = 0;
+		// 1. om insert
+		result = omDAO.insertOME(om, omrId);
+		
+		// 2. attachment insert
+		if (om.getAttachList() != null) {
+			
+			for (Attachment attach : om.getAttachList()) {
+				// 생성된 omNo값 대입하기
+				attach.setMailKey(om.getKey());
+				result = omDAO.insertAttachment(attach);
+			}
+			
+		}
+		return result;
+	}
+	
+	@Override
+	public int insertOMT(OM om, String omrId) {
+		int result = 0;
+		// 1. om insert
+		result = omDAO.insertOMT(om, omrId);
+
+		// 2. attachment insert
+		if (om.getAttachList() != null) {
+
+			for (Attachment attach : om.getAttachList()) {
+				// 생성된 omNo값 대입하기
+				attach.setMailKey(om.getKey());
+				result = omDAO.insertAttachment(attach);
+			}
+
+		}
+		return result;
+	}
 
 	@Transactional(readOnly = true)
 	@Override

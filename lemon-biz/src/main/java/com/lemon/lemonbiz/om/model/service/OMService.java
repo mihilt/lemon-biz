@@ -15,7 +15,14 @@ public interface OMService {
 
 	List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
+	// 사내메일로만 발송하는 경우
 	int insertOM(OM om, String omrId);
+	
+	// 외부 메일로도 발송하는 경우
+	int insertOME(OM om, String omrId);
+	
+	// 임시 저장하는 경우
+	int insertOMT(OM om, String omrId);
 
 	OM selectOneOMCollection(int key);
 
@@ -48,5 +55,7 @@ public interface OMService {
 	int countOM3();
 
 	String selectTeamName(Member loginMember);
+
+	
 
 }

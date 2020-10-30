@@ -131,13 +131,6 @@ function goOmForm(){
 		        <a class="nav-link" id="attachedOM-tab" href="${pageContext.request.contextPath}/om/omAttachedList.do"
 		        	role="tab" aria-controls="attachedOM" aria-selected="false">첨부 메일</a>
 		      </li>
-		       <li class="nav-item"> 
-                     <a class="nav-link disabled" href="#" style="margin-left:.2rem">
-                     	<input type="text" name="search-om" id="search-om" 
-                     		style="width:10rem; height:1.6rem; margin-right: .2rem; margin-bottom: -.1rem"/>
-                     	<i class="fa fa-search"></i>
-                     </a>
-		      	</li>
 		   </ul>
 		   <!-- 여기까지 네비게이션 헤더 -->
 		   

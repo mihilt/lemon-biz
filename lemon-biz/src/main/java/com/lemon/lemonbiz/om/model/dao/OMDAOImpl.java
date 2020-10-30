@@ -70,6 +70,17 @@ public class OMDAOImpl implements OMDAO {
 		om.setOmrId(omrId);
 		return sqlSession.insert("om.insertOM", om);
 	}
+	@Override
+	public int insertOME(OM om, String omrId) {
+		om.setOmrId(omrId);
+		return sqlSession.insert("om.insertOME", om);
+	}
+	
+	@Override
+	public int insertOMT(OM om, String omrId) {
+		om.setOmrId(omrId);
+		return sqlSession.insert("om.insertOMT", om);
+	}
 
 	@Override
 	public int insertAttachment(Attachment attach) {
