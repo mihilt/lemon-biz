@@ -191,9 +191,7 @@ public class MailController {
 
 		return new ResponseEntity<>(num,HttpStatus.OK);		
 	}
-<<<<<<< HEAD
-		
-=======
+
 }
 
 	
@@ -313,4 +311,3 @@ public class MailController {
 	 * 
 	 * return "redirect:/mail/sendMail"; } }
 	 */
->>>>>>> branch 'yb' of https://github.com/mihilt/lemon-biz.git
