@@ -11,6 +11,8 @@
 			cost
 		<where>
 			member_id = #{ memberId }
+		and
+			expenditure_date like '%'||#{ date }||'%'
 		</where>
 	</select>
 	

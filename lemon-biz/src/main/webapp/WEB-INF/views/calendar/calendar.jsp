@@ -240,23 +240,18 @@
 
 	    		function(event,element,view){
 
-	    			/* console.log('이벤트 호버');
-	    			console.log('event',event);
-	    			console.log('element',element);
-	    			console.log('view',view); */
-
 	    			element.popover(
 	    	    	
 	    	    		{
 	    				title : $('<div />',{
-	    					class : 'hoverHead',
+	    					class : 'popoverTitleCalendar',
 	    					text  : event.title
 	    					}).css({
 	    						'background' : event.color,
 	    						'color' : '#000000'
 	    					}),
 	    				content : $('<div />',{
-	    					class : 'hoverBody'
+	    					class : 'popoverInfoCalendar'
 	    					})
 	    					.append('<p><strong>구분 : </strong>' + event.type + '</p>')
 	    					.append('<p><strong>시간 : </strong>' + displayDate(event) + '</p>')
@@ -331,7 +326,6 @@
 
 	    				if(view.type === 'agendaWeek' || view.type === 'agendaDay'){
 	    					
-	    					location.reload();
 	    					return false;
 	    				}
 
@@ -349,6 +343,7 @@
 	    						console.log(data);
 	    						alert(data.msg);
 	    						$('#calendar').fullCalendar('refetchEvents');
+	    						location.reload();
 	    					 },
 	    					error : function(xhr, status, err) {
 	    						console.log("처리 실패");
@@ -530,6 +525,7 @@
 											console.log(data);
 											alert(data.msg);
 											$('#calendar').fullCalendar('refetchEvents');
+											location.reload();
 										},
 										error : function(xhr, status, err) {
 											console.log("처리 실패");
@@ -628,6 +624,7 @@
 						console.log(data);
 						alert(data.msg);
 						$('#calendar').fullCalendar('refetchEvents');
+						location.reload();
 					 },
 					 error : function(xhr, status, err) {
 						console.log("처리 실패");
@@ -658,6 +655,7 @@
 					console.log(response);
 					alert(response.msg);
 					$('#calendar').fullCalendar('refetchEvents');
+					location.reload();
 				},
 				error : function(xhr,status,err){
 					console.log("처리 실패");
@@ -670,10 +668,12 @@
 
 		function displayDate(event){
 
+			console.log('display event',event);
+
 			var contentDate;
 
 			if(event.allDay == '0'){
-				contentDate = moment(event.startDate).format('HH:mm') + " ~ " + moment(event.endDate).format('HH:mm');
+				contentDate = moment(event.start).format('HH:mm') + " ~ " + moment(event.end).format('HH:mm');
 			} else {
 				contentDate = "하루종일";
 			}

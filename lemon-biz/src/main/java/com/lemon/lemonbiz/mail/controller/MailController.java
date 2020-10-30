@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -178,7 +180,22 @@ public class MailController {
 		 // *mail 앞에 / 빼먹지 말 것*
 		 return "redirect:/mail/sendMail";
 		} 
+	
+	@RequestMapping("/getCountNoReadMail")
+	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("params = " + params);
+		
+		int num = mailService.getCountNoReadMail(params);
+		
+		System.out.println("num = " + num);
+
+		return new ResponseEntity<>(num,HttpStatus.OK);		
 	}
+}
+
+	
 		/*
 		 * 
 		 * 

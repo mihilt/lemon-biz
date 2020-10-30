@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.attend.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,13 @@ public class AttendDAOImpl implements AttendDAO {
 	}
 
 	@Override
+
+	public int getTodayCount(String date) {
+		
+		return sqlSession.selectOne("attend.getTodayCount",date);
+	}
+	
+
 	public int countAttend(Attend attend) {
 		return sqlSession.selectOne("attend.countAttend");
 	}
@@ -59,6 +67,16 @@ public class AttendDAOImpl implements AttendDAO {
 		map.put("endRnum", endRnum);
 		map.put("memId",memId);
 		return sqlSession.selectList("attend.selectAttendListPaging",map);
+	}
+
+	@Override
+	public List<Attend> selectAttendList() {
+		return sqlSession.selectList("attend.AttendAllList");
+	}
+
+	@Override
+	public Attend getAttendLeave(HashMap<Object, Object> params) {
+		return sqlSession.selectOne("attend.getAttendLeave",params);
 	}
 
 	

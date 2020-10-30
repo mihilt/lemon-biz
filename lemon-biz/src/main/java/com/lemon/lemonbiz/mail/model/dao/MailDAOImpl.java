@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.mail.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,5 +76,11 @@ public class MailDAOImpl implements MailDAO{
 	@Override
 	public Member selectMyInfo(Member loginMember) {
 		return sqlSession.selectOne("mail.selectMyInfo", loginMember);
+	}
+
+	@Override
+	public int getCountNoReadMail(HashMap<Object, Object> params) {
+		
+		return sqlSession.selectOne("mail.getCountNoReadMail", params);
 	}
 }

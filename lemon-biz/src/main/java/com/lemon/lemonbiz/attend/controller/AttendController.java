@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.attend.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,10 +76,14 @@ public class AttendController {
 			}catch(Exception e){
 				totalContents=0;
 			}
-			log.debug("totalContents = {} ",totalContents);
+
 			String url = request.getRequestURI();
-			log.debug("url = {} " , url);
-			String pageBar = Paging.attendPageHtml(cPage, numPerPage, totalContents, url);
+			log.debug("totalContents = {} ",totalContents);
+			log.debug("cPage = {} ",totalContents);
+			log.debug("numPerPage = {} ",totalContents);
+			log.debug("url = {} ",totalContents);
+			
+			String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
 			Map<String,Object> map = new HashMap<String, Object>();
 		
 			String memId =attend.getMemId();
@@ -96,10 +103,9 @@ public class AttendController {
 			HttpSession session = request.getSession();
 			Member loginMember = (Member)session.getAttribute("loginMember");
 			attend.setMemId(loginMember.getMemberId());
-
+			
 			try {
 				attendService.attendArrive(attend);
-				redirectAttr.addFlashAttribute("msg", "출근록됨!");
 			} catch (Exception e) {
 				log.error("출근 등록 오류!", e);
 				redirectAttr.addFlashAttribute("msg", "출근 등록 오류!");
@@ -108,7 +114,7 @@ public class AttendController {
 		}
 		
 		//퇴근
-		@RequestMapping("/attendLeabe.do")
+		@RequestMapping("/attendLeave.do")
 		public String attendLeabe( RedirectAttributes redirectAttr,
 									HttpServletRequest request,  Attend attend) {
 			
@@ -116,9 +122,9 @@ public class AttendController {
 			Member loginMember = (Member)session.getAttribute("loginMember");
 			attend.setMemId(loginMember.getMemberId());
 			
+
 			try {
 				attendService.attendLeabe(attend);
-				redirectAttr.addFlashAttribute("msg", "퇴근록됨!");
 			} catch (Exception e) {
 				log.error("출결 등록 오류!", e);
 				redirectAttr.addFlashAttribute("msg", "퇴근 등록 오류!");
@@ -134,15 +140,6 @@ public class AttendController {
 		return "attend/attendCal";
 		}
 		
-		public void aa(HttpServletRequest request) {
-			int numPerPage = 3;
-			int cPage = 1;
-			
-			try {
-				cPage = Integer.parseInt(request.getParameter("cPage"));
-			} catch (NumberFormatException e) {
-			}
-		}
 		//캘린더 데이터값
 		@ResponseBody
 		@RequestMapping("/selectCalAttend.do") 
@@ -155,5 +152,47 @@ public class AttendController {
 		
 		return list;
 		}
+		
+		//wj
+		@RequestMapping("/getTodayAttend")
+		public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
+			
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+			System.out.println("params = " + params);
+			
+			String date = (String)params.get("date");
+			
+			System.out.println("date = " + date);
+			
+			int num = attendService.getTodayCount(date);
+			
+			System.out.println("num = " + num);
+
+
+			return new ResponseEntity<>(num,HttpStatus.OK);		
+		}
+		
+		
+		@RequestMapping("/getAttendLeave")
+		public ResponseEntity<?> getAttendLeave(@RequestParam HashMap<Object,Object> params) {
+			
+
+			
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+			System.out.println("params = " + params);
+			
+			String date = (String)params.get("date");
+			
+			System.out.println("date = " + date);
+			
+			Attend attend = attendService.getAttendLeave(params);
+			
+			System.out.println("attend = " + attend);
+			
+			
+			return new ResponseEntity<>(attend,HttpStatus.OK);		
+		}
+		
+		
 
 }

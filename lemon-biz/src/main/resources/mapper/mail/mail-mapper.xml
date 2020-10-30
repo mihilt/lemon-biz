@@ -178,6 +178,17 @@
 		FROM ATTACHMENT
 		WHERE KEY = #{ key }
 	</select>
+	
+	<select id="getCountNoReadMail" resultType="int">
+		select 
+			count(*)
+		from
+			om
+		where 
+			mem_id = #{ memberId }
+		and 
+			read_count = '0'
+	</select>
 </mapper>
 
 
