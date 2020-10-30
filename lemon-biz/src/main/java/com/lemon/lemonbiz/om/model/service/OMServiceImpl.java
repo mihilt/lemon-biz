@@ -18,7 +18,6 @@ import com.lemon.lemonbiz.notice.model.service.NoticeService;
 import com.lemon.lemonbiz.notice.model.vo.Notice;
 import com.lemon.lemonbiz.om.model.dao.OMDAO;
 import com.lemon.lemonbiz.om.model.vo.OM;
-import com.lemon.lemonbiz.om.model.vo.OMComment;
 
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 @Service
@@ -56,10 +55,10 @@ public class OMServiceImpl implements OMService {
 	}
 
 	@Override
-	public int insertOM(OM om) {
+	public int insertOM(OM om, String omrId) {
 		int result = 0;
 		// 1. om insert
-		result = omDAO.insertOM(om);
+		result = omDAO.insertOM(om, omrId);
 
 		// 2. attachment insert
 		if (om.getAttachList() != null) {

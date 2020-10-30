@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.lemon.lemonbiz.common.vo.Attachment;
-import com.lemon.lemonbiz.member.model.vo.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +34,6 @@ public class OM implements Serializable{
 	
 	private int fileCount;
 	private List<Attachment> attachList;
-	private List<Member> omrList;
+	private List<String> omrList;
 
 }

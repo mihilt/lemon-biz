@@ -87,7 +87,7 @@
 	    DEFAULT, 
 	    DEFAULT,
 	    #{ deptKey },
-	   	#{omrId}	 
+	   	#{ omrId }	 
 	)
 	
 		<!-- 현재 시점 가장 최근에 시퀀스에서 사출된 사내메일 고유 번호 조회 -->
@@ -260,12 +260,6 @@
 		</selectKey>
   	</insert>
   	
-  	
-  	
-  	
-  	
-  	
-  	
   	<select id="omSearch" resultType="member">
 		SELECT M.*, ( SELECT NAME
 		              FROM DEPT D 
@@ -419,8 +413,77 @@
   	<select id="selectTeamName" resultType="string">
   	select distinct D.name from om P left join dept D on P.dept_key = D.key where P.categ_key=2  and  P.dept_key = #{deptKey}
   	</select>
+
+<!-- 여기서부터 jstree 관련  -->
+<select id="selectDeptList" resultMap="deptMap">
+		select
+	    	*
+		from
+	    	dept
+		<where>
+	    	dept_level=1
+		</where>
+	</select>
+	
+	<select id="selectChild" resultMap="deptMap">
+		select
+			*
+		from
+			dept
+		where
+			dept_level=2
+	</select>
+	
+	<select id="selectChild2" resultMap="deptMap">
+		select
+			*
+		from
+			dept
+		where
+			dept_level=3
+	</select>
+	
+	<select id="memberList" resultMap="memberMap">
+        SELECT
+	    M.*,
+	    (select name from dept D2 where M.dept_key = D2.key) "dept_name",
+	    (select name from rank R2 where M.rank_key = R2.key) "rank_name"
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE D.NAME = #{node}
+	</select>
+	
+	<select id="selectMember" resultMap="memberMap">
+		SELECT
+		M.*,
+        D.key,
+        D.ref,
+        D.name as deptName,
+        (select name from rank R2 where M.rank_key = R2.key) "rank_name"
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE M.MEMBER_ID = #{param}
+	</select>
+	
+	<select id="joinMemberList" resultMap="memberMap">
+		SELECT
+		*
+		FROM MEMBER M FULL OUTER JOIN DEPT D
+		ON M.DEPT_KEY = D.KEY
+		WHERE M.NAME = #{param}
+	</select>
+	
+	<select id="SeqApprKey" resultType="String">
+	select seq_appr_key.nextval from dual
+	</select>
+
+  <resultMap type="dept" id="deptMap">
   
+  </resultMap>
+  
+  <resultMap type="member" id="memberMap">
+  
+  </resultMap>
+
 </mapper>
-
-
 
