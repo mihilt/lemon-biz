@@ -43,6 +43,16 @@ public class OMServiceImpl implements OMService {
 			String myId) {
 		return omDAO.selectMyOMMapList(cPage, numPerPage, map, myId);
 	}
+	@Override
+	public List<Map<String, Object>> selectMyOMMapListEX(int cPage, int numPerPage, Map<String, Object> map,
+			String myId) {
+		return omDAO.selectMyOMMapListEX(cPage, numPerPage, map, myId);
+	}
+	@Override
+	public List<Map<String, Object>> selectMyOMMapListIN(int cPage, int numPerPage, Map<String, Object> map,
+			String myId) {
+		return omDAO.selectMyOMMapListIN(cPage, numPerPage, map, myId);
+	}
 
 	@Override
 	public List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map,
@@ -70,6 +80,63 @@ public class OMServiceImpl implements OMService {
 				result = omDAO.insertAttachment(attach);
 			}
 
+		}
+		return result;
+	}
+	
+	@Override
+	public int insertOME(OM om, String omrId) {
+		int result = 0;
+		// 1. om insert
+		result = omDAO.insertOME(om, omrId);
+		
+		// 2. attachment insert
+		if (om.getAttachList() != null) {
+			
+			for (Attachment attach : om.getAttachList()) {
+				// 생성된 omNo값 대입하기
+				attach.setMailKey(om.getKey());
+				result = omDAO.insertAttachment(attach);
+			}
+			
+		}
+		return result;
+	}
+	
+	@Override
+	public int insertOMT(OM om, String omrId) {
+		int result = 0;
+		// 1. om insert
+		result = omDAO.insertOMT(om, omrId);
+
+		// 2. attachment insert
+		if (om.getAttachList() != null) {
+
+			for (Attachment attach : om.getAttachList()) {
+				// 생성된 omNo값 대입하기
+				attach.setMailKey(om.getKey());
+				result = omDAO.insertAttachment(attach);
+			}
+
+		}
+		return result;
+	}
+	
+	@Override
+	public int insertOMS(OM om, String omrId) {
+		int result = 0;
+		// 1. om insert
+		result = omDAO.insertOMS(om, omrId);
+		
+		// 2. attachment insert
+		if (om.getAttachList() != null) {
+			
+			for (Attachment attach : om.getAttachList()) {
+				// 생성된 omNo값 대입하기
+				attach.setMailKey(om.getKey());
+				result = omDAO.insertAttachment(attach);
+			}
+			
 		}
 		return result;
 	}
@@ -149,64 +216,7 @@ public class OMServiceImpl implements OMService {
 		}
 		return result;
 	}
-
-	@Override
-	public List<Member> omSearch(String searchType, String searchKeyword, Map<String, Object> map) {
-		return omDAO.omSearch(searchType, searchKeyword, map);
-	}
-
-	@Override
-	public int insertMaOM(OM om) {
-
-		int result = 0;
-		// 1. om insert
-		result = omDAO.insertMaOM(om);
-
-		// 2. attachment insert
-		if (om.getAttachList() != null) {
-
-			for (Attachment attach : om.getAttachList()) {
-				// 생성된 omNo값 대입하기
-				attach.setMailKey(om.getKey());
-				result = omDAO.insertAttachment(attach);
-			}
-
-		}
-
-		// 전체 회원 단체 알림 등록
-		List<Member> memberList = memberService.selectMemberList();
-		List<Notice> groupNoticeList = new ArrayList<Notice>();
-
-		for (Member sameDeptMember : memberList) {
-			Notice groupNotice = new Notice();
-			groupNotice.setContent("새로운 공지사항 " + "\"" + om.getTitle() + "\"" + " 등록되었습니다.");
-			groupNotice.setAddress("/om/omMaList.do");
-			groupNotice.setIcon("fa-exclamation");
-			groupNotice.setColor("danger");
-			groupNotice.setMemId(sameDeptMember.getMemberId());
-
-			groupNoticeList.add(groupNotice);
-		}
-
-		noticeService.insertNoticeList(groupNoticeList);
-
-		return result;
-	}
-
-	@Override
-	public List<OM> omtitleSearch(String searchKeyword) {
-		return omDAO.omtitleSearch(searchKeyword);
-	}
-
-	@Override
-	public List<OM> omMSearch(String searchKeyword) {
-		return omDAO.omMSearch(searchKeyword);
-	}
-
-	@Override
-	public int countOM3() {
-		return omDAO.countOM3();
-	}
+	
 
 	@Override
 	public String selectTeamName(Member loginMember) {

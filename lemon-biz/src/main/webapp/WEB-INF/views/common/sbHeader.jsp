@@ -77,11 +77,13 @@
             <a class="collapse-item" href="${pageContext.request.contextPath}/om/omForm.do">새 메일 작성</a>             
             <a class="collapse-item" href="${pageContext.request.contextPath}/om/omList.do">전체 메일함</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/om/omTeamList.do">부서 메일함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omAttachedList.do">첨부 메일함</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">My Mail</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omMyList.do">보낸 메일함</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omAttachedList.do">첨부 메일함</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omSelfList.do">내게 쓴 메일함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omMyList.do">보낸 메일함(전체)</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omMyListIn.do">보낸 메일함(사내)</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omMyListEx.do">보낸 메일함(외부)</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/om/omSelfList.do">내게 보낸 메일함</a>
           </div>
         </div>
       </li> 

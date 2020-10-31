@@ -14,10 +14,18 @@ public interface OMDAO {
 	List<Map<String, Object>> selectOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
 	List<Map<String, Object>> selectMyOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
+	List<Map<String, Object>> selectMyOMMapListEX(int cPage, int numPerPage, Map<String, Object> map, String myId);
+	List<Map<String, Object>> selectMyOMMapListIN(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
 	List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
 	int insertOM(OM om, String omrId);
+	
+	int insertOME(OM om, String omrId);
+	
+	int insertOMT(OM om, String omrId);
+	
+	int insertOMS(OM om, String omrId);
 
 	int insertAttachment(Attachment attach);
 
@@ -44,16 +52,6 @@ public interface OMDAO {
 	int insertTeamOM(OM om);
 
 	List<Member> omSearch(String searchType, String searchKeyword, Map<String, Object> map);
-
-	int insertMaOM(OM om);
-
-	List<OM> omtitleSearch(String searchKeyword);
-
-	List<OM> omTeamSearch(Member loginMember);
-
-	List<OM> omMSearch(String searchKeyword);
-
-	int countOM3();
 
 	String selectTeamName(Member loginMember);
 	
