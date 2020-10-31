@@ -119,25 +119,10 @@ function goOmForm(){
 		        <a class="nav-link" id="deptOM-tab" href="${pageContext.request.contextPath}/om/omTeamList.do"
 		        	role="tab" aria-controls="deptOM" aria-selected="false">내 부서 메일</a>
 		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyList.do"
-		        	role="tab" aria-controls="myOM" aria-selected="false">내가 보낸 메일</a>
-		      </li>
-		       <li class="nav-item">
-		        <a class="nav-link" id="selfOM-tab" href="${pageContext.request.contextPath}/om/omSelfList.do"
-		        	role="tab" aria-controls="selfOM" aria-selected="false">내게 보낸 메일</a>
-		      </li>
 		     <li class="nav-item">
 		        <a class="nav-link active" id="attachedOM-tab" href="${pageContext.request.contextPath}/om/omAttachedList.do"
 		        	role="tab" aria-controls="attachedOM" aria-selected="true">첨부 메일</a>
 		      </li>
-		       <li class="nav-item"> 
-                     <a class="nav-link disabled" href="#" style="margin-left:.2rem">
-                     	<input type="text" name="search-om" id="search-om" 
-                     		style="width:10rem; height:1.6rem; margin-right: .2rem; margin-bottom: -.1rem"/>
-                     	<i class="fa fa-search"></i>
-                     </a>
-		      	</li>
 		   </ul>
 		   <!-- 여기까지 네비게이션 헤더 -->
 		   
@@ -162,31 +147,33 @@ function goOmForm(){
 			<!-- 여기까지 메일함 상단부 헤더 -->
 			
 		 <!-- 지금부터 메일 표시 -->	
-			 <!-- 여기서부터 전체 메일 리스트 -->
-			<div class="tab-pane fade show active" id="attachedOM" role="tabpanel" aria-labelledby="attachedOM-tab">
-				<!-- <table id="tbl-all" class="table"> -->
-					<c:forEach items="${ list }" var="om">
-				<c:if test="${ om.fileCount gt 0 }">
-					<tr data-no="${ om.key }">
-						<td><input type="checkbox" name="ck-om" id="ck-om"/></td>
+			<!-- 여기서부터 메일 리스트 -->
+			<div class="tab-pane fade" id="myOM" role="tabpanel" aria-labelledby="myOM-tab">
+				<c:forEach items="${ list }" var="om">
+			<c:if test="${om.readCount gt 0}">
+					<tr data-no="${ om.key }" style="background:#DCDCDC">
+			</c:if>
+						<td><input type="checkbox" name="ck-om" id="ck-om" /></td>
 					   	<td>
 					   	<div class="the-star">
-					   		<input class="star" type="checkbox" title="bookmark" id="star"/>
-					   	</div>						
+					   		<input class="star" type="checkbox" title="bookmark" id="star"
+					   		<c:if test="${ om.isStarred gt 0 }">checked="checked"</c:if>
+					   		/></div>						
 					   	</td>
 						<td>${ om.memId }</td>
 						<td>${ om.title }</td>
 						<td>${ om.content }</td>
 						<td><fmt:formatDate value="${ om.omDate }" pattern="yy/MM/dd"/></td>
 						<td>
+							<c:if test="${ om.fileCount gt 0 }">
 								<img src="${ pageContext.request.contextPath }/resources/images/file.png"
-									style="width: 1rem;" />
+									style="width:1rem;" />
+							</c:if>
 						</td>
 					</tr>
-				</c:if>
 					</c:forEach>
-					<!-- </table> -->
-			</div>
+				</div>
+			<!-- 여기까지 메일 리스트 -->	
 			</table>
 			<!-- 여기까지 전체 메일 리스트 -->
 
@@ -201,7 +188,6 @@ function goOmForm(){
 			 <!-- 하단 버튼 영역 -->
 		   	 <div align="center" id="btns">
 		      <input type="submit" value="중요 메일로 이동" id="send-om" class="btn btn-success">
-		      <input type="button" value="첨부파일 다운로드" id="attach-to" class="btn btn-info"/>
 		       <input type="button" value="선택 메일 삭제" id="content-reset" class="btn btn-danger"/>
 		       <input type="button" value="새 메일 작성" id="btn-add" class="btn btn-warning" onclick="goOmForm();"/>
 			</div>	   

@@ -21,12 +21,12 @@ public class OM implements Serializable{
 	
 	private  int key;
 	private String memId;
-	private int categKey;
+	private int isDone;
 	private String title;
 	private String content;
 	private Date omDate;
 	private int isStarred;
-	private int isDeleted;
+	private int isExternal;
 	private int deptKey;
 	private String name;
 	private int readCount;

@@ -12,10 +12,22 @@ public interface OMService {
 	List<Map<String, Object>> selectOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
 	List<Map<String, Object>> selectMyOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
+	List<Map<String, Object>> selectMyOMMapListEX(int cPage, int numPerPage, Map<String, Object> map, String myId);
+	List<Map<String, Object>> selectMyOMMapListIN(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
 	List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
+	// 사내메일로만 발송하는 경우
 	int insertOM(OM om, String omrId);
+	
+	// 외부 메일로도 발송하는 경우
+	int insertOME(OM om, String omrId);
+	
+	// 임시 저장하는 경우
+	int insertOMT(OM om, String omrId);
+	
+	// 중요 메일로 발송하는 경우
+	int insertOMS(OM om, String omrId);
 
 	OM selectOneOMCollection(int key);
 
@@ -37,16 +49,8 @@ public interface OMService {
 
 	int insertTeamOM(OM om);
 
-	List<Member> omSearch(String searchType, String searchKeyword, Map<String, Object> map);
-
-	int insertMaOM(OM om);
-
-	List<OM> omtitleSearch(String searchKeyword);
-
-	List<OM> omMSearch(String searchKeyword);
-
-	int countOM3();
-
 	String selectTeamName(Member loginMember);
+
+	
 
 }

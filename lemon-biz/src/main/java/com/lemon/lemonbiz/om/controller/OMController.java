@@ -37,7 +37,6 @@ import com.lemon.lemonbiz.common.vo.Attachment;
 import com.lemon.lemonbiz.common.vo.Paging;
 import com.lemon.lemonbiz.member.model.service.MemberService;
 import com.lemon.lemonbiz.member.model.vo.Dept;
-//github.com/mihilt/lemon-biz.git
 import com.lemon.lemonbiz.member.model.vo.Member;
 import com.lemon.lemonbiz.om.model.service.OMService;
 import com.lemon.lemonbiz.om.model.vo.OM;
@@ -66,7 +65,8 @@ public class OMController {
 /// DQL ///
 	// 여기서부터 DQL - List 처리
 	// 사내 메일 리스트 조회 분기처리
-	@RequestMapping(value = { "/omList.do", "/omAttachedList.do", "/omMyList.do", "/omSelfList.do", "/omTeamList.do" })
+	@RequestMapping(value = { "/omList.do", "/omAttachedList.do", "/omMyList.do", "/omSelfList.do", "/omTeamList.do",
+							  "/omMyListIn.do", "/omMyListEx.do"})
 	public ModelAndView omLists(ModelAndView mav, HttpServletRequest request,
 			@SessionAttribute("loginMember") Member loginMember) {
 
@@ -90,18 +90,25 @@ public class OMController {
 		if (request.getServletPath().equals("/om/omList.do")) {
 			list = omService.selectOMMapList(cPage, numPerPage, map, myId);
 			mav.setViewName("om/omList");
-		} else if (request.getServletPath().equals("/om/omMyList.do")) {
-			list = omService.selectMyOMMapList(cPage, numPerPage, map, myId);
-			mav.setViewName("om/omMyList");
 		} else if (request.getServletPath().equals("/om/omTeamList.do")) {
 			list = omService.selectTeamOMMapList(loginMember);
 			mav.setViewName("om/omTeamList");
 		} else if (request.getServletPath().equals("/om/omAttachedList.do")) {
 			list = omService.selectOMMapList(cPage, numPerPage, map, myId);
 			mav.setViewName("om/omAttachedList");
+			
 		} else if (request.getServletPath().equals("/om/omSelfList.do")) {
 			list = omService.selectSelfOMMapList(cPage, numPerPage, map, myId);
 			mav.setViewName("om/omSelfList");
+		} else if (request.getServletPath().equals("/om/omMyList.do")) {
+			list = omService.selectMyOMMapList(cPage, numPerPage, map, myId);
+			mav.setViewName("om/omMyList");
+		} else if (request.getServletPath().equals("/om/omMyListEx.do")) {
+			list = omService.selectMyOMMapListEX(cPage, numPerPage, map, myId);
+			mav.setViewName("om/omMyListEx");
+		} else if (request.getServletPath().equals("/om/omMyListIn.do")) {
+			list = omService.selectMyOMMapListIN(cPage, numPerPage, map, myId);
+			mav.setViewName("om/omMyListIn");
 		}
 
 		mav.addObject("list", list);
@@ -113,7 +120,7 @@ public class OMController {
 
 	// 여기서부터 DQL - Detail 처리
 	// 각 사내 메일 상세 조회
-	@RequestMapping("omDetail.do")
+	@RequestMapping("/omDetail.do")
 	public ModelAndView omDeatil(@RequestParam("key") int key, ModelAndView mav, HttpServletRequest request,
 			HttpServletResponse response, @SessionAttribute("loginMember") Member loginMember) {
 
@@ -143,30 +150,14 @@ public class OMController {
 			response.addCookie(omCookie);
 		}
 		OM om = omService.selectOneOMCollection(key, hasRead);
+		Member sender = memberService.selectOneMember(om.getMemId());
+		mav.addObject("sender", sender);
 		mav.addObject("om", om);
 		mav.setViewName("om/omDetail");
 
 		return mav;
 	}
 	// 여기까지 DQL - Detail 처리
-
-	// DQL 중 메일 검색 파트
-	// 여기서부터 전체 메일 중 검색한 메일 조회
-	@ResponseBody
-	@RequestMapping("/omSearch.do")
-	public ModelAndView omSearch(ModelAndView mav, @RequestParam("searchKeyword") String searchKeyword,
-			@RequestParam("searchType") String searchType) {
-
-		Map<String, Object> map = new HashMap<>();
-		List<Member> found = omService.omSearch(searchType, searchKeyword, map);
-
-		log.debug("found ={}", found);
-		mav.addObject("found", found);
-		mav.setViewName("om/omForm");
-
-		return mav;
-	}
-	// 여기까지 전체 메일 중 검색한 메일 조회
 /// DQL 끝 ///
 
 /// DML 시작 ///
@@ -176,6 +167,9 @@ public class OMController {
 			@RequestParam(value = "upFile", required = false) MultipartFile[] upFiles, RedirectAttributes redirectAttr,
 			HttpServletRequest request, Model model, @SessionAttribute("loginMember") Member loginMember, 
 			@RequestParam(value = "goG", required = false) String goG,
+			@RequestParam(value = "goT", required = false) String goT,
+			@RequestParam(value = "goS", required = false) String goS,
+			
 			@RequestParam(value="omrId1", required= true) String omrId1, 
 			@RequestParam(value="omrId2", required= false) String omrId2, 
 			@RequestParam(value="omrId3", required= false) String omrId3, 
@@ -187,8 +181,6 @@ public class OMController {
 			@RequestParam(value="omrId9", required= false) String omrId9, 
 			@RequestParam(value="omrId10", required= false) String omrId10
 			) throws IllegalStateException, IOException{
-		
-		log.debug("om = {}", om);
 		
 		// 수신자 추가 (최대 10명)
 		List<String> omrs = new ArrayList<>();
@@ -203,42 +195,19 @@ public class OMController {
 		omrs.add(omrId8);
 		omrs.add(omrId9);
 		omrs.add(omrId10);
-		
-		// 여기서부터 첨부파일 추가
-				List<Attachment> attachList = new ArrayList<>();
 
-				String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om");
-
-				for (MultipartFile upFile : upFiles) {
-					if (upFile.isEmpty())
-						continue;
-					String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
-					File dest = new File(saveDirectory, renamedFilename);
-					upFile.transferTo(dest);
-					
-					Attachment attach = new Attachment();
-					attach.setOriginName(upFile.getOriginalFilename());
-					attach.setReName(renamedFilename);
-					attachList.add(attach);
-				}
-
-				log.debug("attachList = {}", attachList);
-				om.setAttachList(attachList);
-				om.setName(name);
-				// 여기까지 첨부파일 추가
-		
 		// insert 처리
 		int result = 0;
 		
 		for(int i=0; i< omrs.size(); i++) {
 			if(omrs.get(i).length() > 0) {
 				
+				// 여기서부터 외부로도 발송 (체크박스 체크한 경우)
 				if(goG != null) {
 					
 					Member mem = memberService.selectOneMember(omrs.get(i));
 					
 					String mFrom = "lemonbiz.manager@gmail.com";
-					/* String mTo = request.getParameter("mTo"); */
 					String sendTo = mem.getEmail();
 					String title = request.getParameter("title");
 					String content = request.getParameter("content");
@@ -251,29 +220,80 @@ public class OMController {
 					      messageHelper.setTo(sendTo);    
 					      messageHelper.setSubject(title); 
 					      messageHelper.setText(content); 
+					      
+					  	List<Attachment> attachList = new ArrayList<>();
+						String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om");
+						
+					      for (MultipartFile upFileG : upFiles) {
+								if (upFileG.isEmpty())
+									continue;
+								String renamedFilename = Utils.getRenamedFileName(upFileG.getOriginalFilename());
+								File destG = new File(saveDirectory, renamedFilename);
+								upFileG.transferTo(destG);
+								messageHelper.addAttachment(renamedFilename, destG);
+					      }
 
-					      omService.insertOM(om, omrs.get(i));
+					      omService.insertOME(om, omrs.get(i));
 					      mailSender.send(message);
 					      result++;
 					    } catch(Exception e){
 					      System.out.println(e);
 					    }
+					 // 여기까지 외부로도 발송
 					
+				// 사내 메일 공통 분기
 				} else {
+					for (MultipartFile upFile : upFiles) {
+						
+						List<Attachment> attachList = new ArrayList<>();
+						String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om");
+						
+						if (upFile.isEmpty())
+							continue;
+						String renamedFilename = Utils.getRenamedFileName(upFile.getOriginalFilename());
+						File destI = new File(saveDirectory, renamedFilename);
+						/* upFile.transferTo(destI); */
+						
+						Attachment attach = new Attachment();
+						attach.setOriginName(upFile.getOriginalFilename());
+						attach.setReName(renamedFilename);
+						attachList.add(attach);
+						
+						log.debug("attachList = {}", attachList);
+						om.setAttachList(attachList);
+						om.setName(name);
+					}
+					
+				// 임시 저장하는 경우
+				if(goT != null) {
+				omService.insertOMT(om, omrs.get(i));
+				result = 999;
+				
+				// 사내 메일로 발송하는 경우
+				} else if (goS != null){
+					omService.insertOMS(om, omrs.get(i));
+					result = 9999;
+				} else
 				omService.insertOM(om, omrs.get(i));
 				log.debug("omrs = {}", omrs.get(i));
 				result++;
 				log.debug("result = {}", result);
-				
+				// 여기까지 사내메일로만 발송
 				}
 			} 
 		}
-		
 
-		if (result > 0)
-			redirectAttr.addFlashAttribute("msg", " 총 "+result+"건의 사내 메일이 성공적으로 전송되었습니다.");
-		else
-			redirectAttr.addFlashAttribute("msg", "사내 메일 전송에 실패하였습니다.");
+		if (result > 0) {
+			redirectAttr.addFlashAttribute("msg", " 총 "+result+"건의 메일이 성공적으로 전송되었습니다.");
+		}
+		else if (result > 999 && result < 9999) {
+			redirectAttr.addFlashAttribute("msg", "성공적으로 임시 저장되었습니다.");
+		} else if (result > 9999) {
+			
+		}
+		else {
+			redirectAttr.addFlashAttribute("msg", "메일 전송에 실패하였습니다.");
+		}
 
 		return "redirect:/om/omList.do";
 	}

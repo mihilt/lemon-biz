@@ -144,13 +144,22 @@ td[id^="authName"]{
 							cols="120" rows="12" style="width: 100%; resize: none"
 							class="form-control"></textarea>
 					</div>
+					<br />
+					<div align="center" id="cks">
+						<input type="checkbox" name="goG" id="goG" value="goG"/>
+						<label for="goG">외부 발송</label>
+						&ensp;
+						<input type="checkbox" name="goI" id="goI" value="goI"/>
+						<label for="goI">중요 메일</label>
+						&ensp;
+						<input type="checkbox" name="goT" id="goT" value="goT"/>
+						<label for="goT">임시 저장</label>
+					</div>					
 					<div align="center" id="btns">
-						<input type="checkbox" name="goG" id="goG" value="2"/>
-						<label for="goG">Gmail로 본문 발송</label> &emsp;
 						<input type="submit" value="메일 발송" id="send-mail"
 							class="btn btn-success" onclick="fn_formSubmit()"> 
-							<input type="button" value="임시 저장"
-							id="content-temp" class="btn btn-secondary" /> <input
+						
+							<input
 							type="button" value="작성 취소" id="content-reset"
 							class="btn btn-danger" />
 					</div>
@@ -674,6 +683,7 @@ function apply(){
 			return;
 		if (!chkInputValue("#brdmemo", "글 내용을"))
 			return;
+		
 		$("#omFrm").submit();
 	}
 

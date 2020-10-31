@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -105,23 +105,28 @@ function goOmForm(){
 <body>
 	<div class="container">
 		<div class="card">
-		  <h4 id="m-title" class="card-header"><strong>전체 메일</strong></h4>
+		  <h4 id="m-title" class="card-header"><strong>발송함(사내)</strong></h4>
 			<div class="container-inner card-body">
-		  <form action="${pageContext.request.contextPath}/om/omList" method="GET">
+		  <form action="${pageContext.request.contextPath}/om/omMyListIn" method="GET">
+		
 		 <!-- 여기서부터 card-body내 본문 영역 -->
          <!-- 여기서부터 네비게이션 헤더 -->
-         <ul class="nav nav-tabs" id="addl-btns" role="tablist">
+        <ul class="nav nav-tabs" id="addl-btns" role="tablist">
 		      <li class="nav-item">
-		        <a class="nav-link active" id="allOM-tab" href="${pageContext.request.contextPath}/om/omList.do" 
-		        	role="tab" aria-controls="allOM" aria-selected="true">전체</a>
+		        <a class="nav-link" id="allOM-tab" href="${pageContext.request.contextPath}/om/omList.do" 
+		        	role="tab" aria-controls="allOM" aria-selected="false">발송함 전체</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" id="deptOM-tab" href="${pageContext.request.contextPath}/om/omTeamList.do"
-		        	role="tab" aria-controls="deptOM" aria-selected="false">내 부서 메일</a>
+		        <a class="nav-link active" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyListIn.do"
+		        	role="tab" aria-controls="myOM" aria-selected="true">발송함(사내)</a>
 		      </li>
-		     <li class="nav-item">
-		        <a class="nav-link" id="attachedOM-tab" href="${pageContext.request.contextPath}/om/omAttachedList.do"
-		        	role="tab" aria-controls="attachedOM" aria-selected="false">첨부 메일</a>
+		      <li class="nav-item">
+		        <a class="nav-link" id="myOM-tab" href="${pageContext.request.contextPath}/om/omMyListEx.do"
+		        	role="tab" aria-controls="myOM" aria-selected="false">발송함(외부)</a>
+		      </li>
+		       <li class="nav-item">
+		        <a class="nav-link" id="selfOM-tab" href="${pageContext.request.contextPath}/om/omSelfList.do"
+		        	role="tab" aria-controls="selfOM" aria-selected="false">내게 보낸 메일</a>
 		      </li>
 		   </ul>
 		   <!-- 여기까지 네비게이션 헤더 -->
@@ -145,8 +150,8 @@ function goOmForm(){
 				<!-- </table> -->
 			</div>
 			<!-- 여기까지 메일함 상단부 헤더 -->
+
 			
-		 <!-- 지금부터 메일 표시 -->	
 			<!-- 여기서부터 메일 리스트 -->
 			<div class="tab-pane fade" id="myOM" role="tabpanel" aria-labelledby="myOM-tab">
 				<c:forEach items="${ list }" var="om">
@@ -174,8 +179,7 @@ function goOmForm(){
 					</c:forEach>
 				</div>
 			<!-- 여기까지 메일 리스트 -->	
-			</table>
-			<!-- 여기까지 중요 메일 리스트 -->	
+		</table>
 		
 		</div> <!-- 여기까지 card 본문 영역 -->	
 		<hr style="margin-top:-1rem"/>	
@@ -204,6 +208,7 @@ function goOmForm(){
 		</div>
 		<br />
 	</body>
+	
 <script>
 $(function(){
 	$("tr[data-key]").click(function(){
@@ -213,7 +218,7 @@ $(function(){
 	});
 });
 function goOMForm(){
-	location.href = "${pageContext.request.contextPath}/board/omForm.do";
+	location.href = "${pageContext.request.contextPath}/om/omForm.do";
 }
 $(document).ready(function() { 	
 	$('#star-all').click(function(){
@@ -242,6 +247,10 @@ $(document).ready(function() {
 			 return false;
 		}
 	});
+	$(".nav a").on("click", function(){
+		   $(".nav").find(".active").removeClass("active");
+		   $(this).parent().addClass("active");
+		});
 </script>
 </html> 
 

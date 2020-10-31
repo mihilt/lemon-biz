@@ -46,6 +46,30 @@ public class OMDAOImpl implements OMDAO {
 		map.put("myId", myId);
 		return sqlSession.selectList("om.selectMyOMMapList", map);
 	}
+	@Override
+	public List<Map<String, Object>> selectMyOMMapListEX(int cPage, int numPerPage, Map<String, Object> map,
+			String myId) {
+		int startRnum = (cPage - 1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("myId", myId);
+		return sqlSession.selectList("om.selectMyOMMapListEX", map);
+	}
+	@Override
+	public List<Map<String, Object>> selectMyOMMapListIN(int cPage, int numPerPage, Map<String, Object> map,
+			String myId) {
+		int startRnum = (cPage - 1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("myId", myId);
+		return sqlSession.selectList("om.selectMyOMMapListIN", map);
+	}
 
 	@Override
 	public List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map,
@@ -69,6 +93,23 @@ public class OMDAOImpl implements OMDAO {
 	public int insertOM(OM om, String omrId) {
 		om.setOmrId(omrId);
 		return sqlSession.insert("om.insertOM", om);
+	}
+	@Override
+	public int insertOME(OM om, String omrId) {
+		om.setOmrId(omrId);
+		return sqlSession.insert("om.insertOME", om);
+	}
+	
+	@Override
+	public int insertOMT(OM om, String omrId) {
+		om.setOmrId(omrId);
+		return sqlSession.insert("om.insertOMT", om);
+	}
+	
+	@Override
+	public int insertOMS(OM om, String omrId) {
+		om.setOmrId(omrId);
+		return sqlSession.insert("om.insertOMS", om);
 	}
 
 	@Override
@@ -132,40 +173,6 @@ public class OMDAOImpl implements OMDAO {
 		map.put("searchType", searchType);
 		map.put("searchKeyword", searchKeyword);
 		return sqlSession.selectList("om.omSearch", map);
-	}
-
-	/*
-	 * @Override public List<Map<String, Object>> selectMaList(int cPage, int
-	 * numPerPage, Map<String, Object> map) { int startRnum = (cPage - 1) *
-	 * numPerPage + 1; int endRnum = cPage * numPerPage; map.put("cPage", cPage);
-	 * map.put("numPerPage", numPerPage); map.put("startRnum", startRnum);
-	 * map.put("endRnum", endRnum); return sqlSession.selectList("om.selectMaList",
-	 * map); }
-	 */
-
-	@Override
-	public int insertMaOM(OM om) {
-		return sqlSession.insert("om.insertMaOM", om);
-	}
-
-	@Override
-	public List<OM> omtitleSearch(String searchKeyword) {
-		return sqlSession.selectList("om.omtitleSearch", searchKeyword);
-	}
-
-	@Override
-	public List<OM> omTeamSearch(Member loginMember) {
-		return sqlSession.selectList("om.omTeamSearch", loginMember);
-	}
-
-	@Override
-	public List<OM> omMSearch(String searchKeyword) {
-		return sqlSession.selectList("om.omMSearch", searchKeyword);
-	}
-
-	@Override
-	public int countOM3() {
-		return sqlSession.selectOne("om.countOM3");
 	}
 
 	@Override

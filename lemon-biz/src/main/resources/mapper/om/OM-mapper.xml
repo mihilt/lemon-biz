@@ -15,12 +15,13 @@
 	                                  FROM ATTACHMENT
 	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
 	                  		 FROM OM O
-	                  WHERE OMR_ID = #{ myId } AND CATEG_KEY = 1 ) RECEIVED) RECEIVED
+	                  WHERE OMR_ID = #{ myId } AND IS_DONE = 1 
+	                  ORDER BY OM_DATE DESC) RECEIVED) RECEIVED
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
 	ORDER BY OM_DATE DESC
 	</select>
 	
-	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 -->
+	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 (일괄) -->
 	<select id="selectMyOMMapList" resultMap="omMap">
 	SELECT * 
 	FROM ( SELECT ROWNUM AS RNUM, MY.* 
@@ -28,7 +29,36 @@
 	                                  FROM ATTACHMENT
 	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
 	                  		 FROM OM O
-	                  WHERE MEM_ID = #{ myId } AND CATEG_KEY = 1 ) MY) MY
+	                  WHERE MEM_ID = #{ myId } AND IS_DONE = 1 
+	                  ORDER BY OM_DATE DESC) MY) MY
+	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
+	ORDER BY OM_DATE DESC
+	</select>
+	
+	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 (사내 ONLY) -->
+	<select id="selectMyOMMapListIN" resultMap="omMap">
+	SELECT * 
+	FROM ( SELECT ROWNUM AS RNUM, MY.* 
+	                  FROM ( SELECT ( SELECT COUNT(*)
+	                                  FROM ATTACHMENT
+	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
+	                  		 FROM OM O
+	                  WHERE MEM_ID = #{ myId } AND IS_DONE = 1 AND IS_EXTERNAL = 0
+	                  ORDER BY OM_DATE DESC) MY) MY
+	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
+	ORDER BY OM_DATE DESC
+	</select>
+	
+	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 (외부 ONLY) -->
+	<select id="selectMyOMMapListEX" resultMap="omMap">
+	SELECT * 
+	FROM ( SELECT ROWNUM AS RNUM, MY.* 
+	                  FROM ( SELECT ( SELECT COUNT(*)
+	                                  FROM ATTACHMENT
+	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
+	                  		 FROM OM O
+	                  WHERE MEM_ID = #{ myId } AND IS_DONE = 1 AND IS_EXTERNAL = 1
+	                  ORDER BY OM_DATE DESC) MY) MY
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
 	ORDER BY OM_DATE DESC
 	</select>
@@ -41,7 +71,8 @@
 	                                  FROM ATTACHMENT
 	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
 	                  		 FROM OM O
-	                  WHERE OMR_ID = #{ myId } AND CATEG_KEY = 1 AND MEM_ID = #{ myId } ) SELF) SELF
+	                  WHERE OMR_ID = #{ myId } AND IS_DONE = 1 AND MEM_ID = #{ myId } 
+	                  ORDER BY OM_DATE DESC) SELF) SELF
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
 	ORDER BY OM_DATE DESC
 	</select> 
@@ -49,12 +80,12 @@
 	<resultMap type="map" id="omMap">
   		<id column="key" property="key"/>
   		<result column="mem_id" property="memId"/>
-  		<result column="categ_key" property="categKey"/>
+  		<result column="is_done" property="isDone"/>
   		<result column="title" property="title"/>
   		<result column="content" property="content"/>
   		<result column="om_date" property="omDate"/>
   		<result column="is_starred" property="isStarred"/>
-  		<result column="is_deleted" property="isDeleted"/>
+  		<result column="is_external" property="isExternal"/>
   		<result column="read_count" property="readCount"/>
   		<result column="dept_key" property="deptKey"/>
   		<result column="omr_id" property="omrId"/>
@@ -73,7 +104,7 @@
 	FROM ( SELECT * 
 	              FROM OM
 	              WHERE OMR_ID = #{ memId }
-	              ORDER BY KEY DESC ) RECEIVED
+	              ORDER BY OM_DATE DESC ) RECEIVED
 	WHERE ROWNUM BETWEEN #{startRnum} AND #{endRnum}
 	ORDER BY OM_DATE DESC
 	</select>
@@ -88,7 +119,76 @@
 	    #{ content },
 	    DEFAULT,
 	    #{ isStarred },
-	    DEFAULT, 
+	    0, 
+	    DEFAULT,
+	    #{ deptKey },
+	   	#{ omrId }	 
+	)
+	
+		<!-- 현재 시점 가장 최근에 시퀀스에서 사출된 사내메일 고유 번호 조회 -->
+		<selectKey order="AFTER" resultType="_int" keyProperty="key">
+			SELECT SEQ_OM_KEY.CURRVAL
+			FROM DUAL
+		</selectKey>
+  	</insert>
+  	
+  	<!-- gmail로도 발송하는 경우 INSERT 구문 -->
+  	<insert id="insertOME">
+	INSERT INTO OM VALUES (
+	    SEQ_OM_KEY.NEXTVAL,
+	    #{ memId },
+	    1,
+	    #{ title },
+	    #{ content },
+	    DEFAULT,
+	    #{ isStarred },
+	    1, 
+	    DEFAULT,
+	    #{ deptKey },
+	   	#{ omrId }	 
+	)
+	
+		<!-- 현재 시점 가장 최근에 시퀀스에서 사출된 사내메일 고유 번호 조회 -->
+		<selectKey order="AFTER" resultType="_int" keyProperty="key">
+			SELECT SEQ_OM_KEY.CURRVAL
+			FROM DUAL
+		</selectKey>
+  	</insert>
+  	
+  	<!-- 임시 저장하는 경우 INSERT 구문 -->
+  	<insert id="insertOMT">
+	INSERT INTO OM VALUES (
+	    SEQ_OM_KEY.NEXTVAL,
+	    #{ memId },
+	    0,
+	    #{ title },
+	    #{ content },
+	    DEFAULT,
+	    #{ isStarred },
+	    0, 
+	    DEFAULT,
+	    #{ deptKey },
+	   	#{ omrId }	 
+	)
+	
+		<!-- 현재 시점 가장 최근에 시퀀스에서 사출된 사내메일 고유 번호 조회 -->
+		<selectKey order="AFTER" resultType="_int" keyProperty="key">
+			SELECT SEQ_OM_KEY.CURRVAL
+			FROM DUAL
+		</selectKey>
+  	</insert>
+  	
+  	<!-- 중요 메일로 발송하는 경우 INSERT 구문 -->
+  	<insert id="insertOMS">
+	INSERT INTO OM VALUES (
+	    SEQ_OM_KEY.NEXTVAL,
+	    #{ memId },
+	    1,
+	    #{ title },
+	    #{ content },
+	    DEFAULT,
+	    1,
+	    0, 
 	    DEFAULT,
 	    #{ deptKey },
 	   	#{ omrId }	 
@@ -145,12 +245,12 @@
   <resultMap type="OM" id="omCollectionMap">
   		<id column="key" property="key"/>
   		<result column="mem_id" property="memId"/>
-  		<result column="categ_key" property="categKey"/>
+  		<result column="is_done" property="isDone"/>
   		<result column="title" property="title"/>
   		<result column="content" property="content"/>
   		<result column="om_date" property="omDate"/>
   		<result column="is_starred" property="isStarred"/>
-  		<result column="is_deleted" property="isDeleted"/>
+  		<result column="is_external" property="isExternal"/>
   		<result column="read_count" property="readCount"/>
   		<result column="dept_key" property="deptKey"/>
   		<result column="omr_id" property="omrId"/>
@@ -197,7 +297,7 @@
   	<select id="countOM" resultType="_int">
   		SELECT COUNT(*) AS "CNT"
 		FROM OM
-		WHERE CATEG_KEY = 1
+		WHERE IS_DONE = 1
   	</select>
 
 	<!-- 고유 구분 코드가 일치하는 사내 메일을 삭제 -->
@@ -227,12 +327,12 @@
   	<resultMap type="map" id="omTeam">
   		<id column="key" property="key"/>
   		<result column="mem_id" property="memId"/>
-  		<result column="categ_key" property="categKey"/>
+  		<result column="is_done" property="isDone"/>
   		<result column="title" property="title"/>
   		<result column="content" property="content"/>
   		<result column="om_date" property="omDate"/>
   		<result column="is_starred" property="isStarred"/>
-  		<result column="is_deleted" property="isDeleted"/>
+  		<result column="is_external" property="isExternal"/>
   		<result column="read_count" property="readCount"/>
   		<result column="dept_key" property="deptKey"/>
   		<result column="omr_id" property="omrId"/>
@@ -264,159 +364,9 @@
 				dual
 		</selectKey>
   	</insert>
-  	
-  	<select id="omSearch" resultType="member">
-		SELECT M.*, ( SELECT NAME
-		              FROM DEPT D 
-		              WHERE M.DEPT_KEY = D.KEY) "DEPT_NAME",
-		            ( SELECT NAME
-		              FROM RANK R 
-		              WHERE M.RANK_KEY = R.KEY) "RANK_NAME"
-		FROM MEMBER M
-		WHERE ${ searchType } LIKE '%${ searchKeyword }%'
-  	</select>
-  	
-  	
-  	
-<!--   	<select id="selectMaList" resultMap="omMa">
-  	select * 
-        	from ( select rownum as rnum, v.* 
-        			from ( select(select count(*) 
-        						from attachment 
-        							where mail_key = P.key)file_count,P.*
-        		from om P 
-        			where categ_key=3 
-        				order by is_starred desc,key desc)v)v
-        			where rnum between #{startRnum} and #{endRnum}
-  	</select>
-  	<resultMap type="map" id="omMa">
-  		<id column="key" property="key"/>
-  		<result column="mem_id" property="memId"/>
-  		<result column="categ_key" property="categKey"/>
-  		<result column="title" property="title"/>
-  		<result column="content" property="content"/>
-  		<result column="om_date" property="omDate"/>
-  		<result column="is_starred" property="isStarred"/>
-  		<result column="is_deleted" property="isDeleted"/>
-  		<result column="read_count" property="readCount"/>
-  		<result column="dept_key" property="deptKey"/>
-		<result column="omr_id" property="omrId"/>
-  		<result column="file_count" property="fileCount"/>
-  		<result column="startRnum" property="startRnum"/>
-  		<result column="endRnum" property="endRnum"/>
-  		<result column="cPage" property="cPage"/>
-  		<result column="numPerPage" property="numPerPage"/>
-  	</resultMap> -->
-  	
-  	<insert id="insertMaOM">
-  	insert into
-			om
-		values(
-			seq_om_key.nextval,
-			#{ name },
-			 3,
-			#{ title },
-			#{ content },
-			default,
-			1,
-			default,
-			default,
-			null,
-			#{ omrId }	
-		)
-		<selectKey order="AFTER" resultType="_int" keyProperty="key">
-			select
-				seq_om_key.currval
-			from 
-				dual
-		</selectKey>
-  	</insert>
-  	
-  	<select id="omtitleSearch" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where categ_key=1 and 
-        title like '%'||#{ searchKeyword }||'%'
-         order by is_starred desc ,key desc
-  	</select>
-  	
-  	<select id="omTeamSearch" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where categ_key=2
-        and mem_id like '%'||#{ searchKeyword }||'%' and dept_key = #{ deptKey }  
-         order by is_starred desc ,key desc
-  	</select>
-  	
-  	<select id="omTeamSearch2" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where categ_key=2
-        and title like '%'||#{ searchKeyword }||'%' and dept_key = #{ deptKey }  
-         order by is_starred desc ,key desc
-  	</select>
-  	
-  	<select id="omMSearch" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where categ_key=3
-        and title like '%'||#{ searchKeyword }||'%'  
-         order by is_starred desc ,key desc
-  	</select>
-  	
-  	<select id="omMSearch2" resultType="om">
-  	select
-    		P.*,
-			    (select 
-			        count(*)
-			    from 
-			        attachment
-			    where
-		        mail_key = P.key) file_count
-		from
-   			 om P
-   		where categ_key=3
-        and mem_id like '%'||#{ searchKeyword }||'%'  
-         order by is_starred desc ,key desc
-  	</select>
-  	<select id="countOM3" resultType="_int">
-  	SELECT COUNT(*) as "cnt" FROM om where categ_key=3
-  	</select>
-  	
+
   	<select id="selectTeamName" resultType="string">
-  	select distinct D.name from om P left join dept D on P.dept_key = D.key where P.categ_key=2  and  P.dept_key = #{deptKey}
+  	select distinct D.name from om P left join dept D on P.dept_key = D.key where P.is_done=2  and  P.dept_key = #{deptKey}
   	</select>
 
 <!-- 여기서부터 jstree 관련  -->
