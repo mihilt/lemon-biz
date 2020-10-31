@@ -258,7 +258,7 @@ $("[name=boardCommentFrm]").submit(function(){
 
 });
 
-	/*  추천 */
+/*  추천 */
 	
     $(function(){
 		// 추천버튼 클릭시(추천 추가 또는 추천 제거)
@@ -274,8 +274,13 @@ $("[name=boardCommentFrm]").submit(function(){
                     key: ${board.key},
                     id
                 },
-                success: function () {
-          
+                success: function (result) {
+          			if(result == 0){
+							alert("추천되었습니다!");
+              		}
+          			else{
+						alert("추천 취소!");
+              		}
                    
 			       recCount(); 
                 },
