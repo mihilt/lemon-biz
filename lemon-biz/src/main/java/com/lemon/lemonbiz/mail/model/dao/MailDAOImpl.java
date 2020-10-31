@@ -78,9 +78,5 @@ public class MailDAOImpl implements MailDAO{
 		return sqlSession.selectOne("mail.selectMyInfo", loginMember);
 	}
 
-	@Override
-	public int getCountNoReadMail(HashMap<Object, Object> params) {
-		
-		return sqlSession.selectOne("mail.getCountNoReadMail", params);
-	}
+	
 }

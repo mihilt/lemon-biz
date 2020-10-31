@@ -107,7 +107,7 @@
 				} else {
 					tag += "<tr>"+
 								"<td>"+(idx+1)+"</td>"+
-								"<td>"+"<p class='float-left ml-3'>"+ rn +"</P>"+"</td>"+
+								"<td>"+"<p class='float-left ml-5'>"+ rn +"</P>"+"</td>"+
 								"<td><button type='button' class='btn btn-outline-secondary' onclick='goRoom(\""+roomNumber+"\", \""+rn+"\")'>참여</button></td>"+
 								"<td></td>"
 			   			   "</tr>";	

@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.om.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,5 +69,7 @@ public interface OMDAO {
 	List<Member> joinMemberList(String param);
 
 	String SeqApprKey();
+
+	int getCountNoReadMail(HashMap<Object, Object> params);
 
 }

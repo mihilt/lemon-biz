@@ -93,7 +93,7 @@
 				msg = { memberId : '${loginMember.memberId}' }
 					
 				$.ajax({
-					url : "${pageContext.request.contextPath}/mail/getCountNoReadMail",
+					url : "${pageContext.request.contextPath}/om/getCountNoReadMail",
 					method : "GET",
 					data : msg,
 					contentType : "application/x-www-form-urlencoded; charset=UTF-8",

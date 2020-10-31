@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.om.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -214,6 +215,12 @@ public class OMDAOImpl implements OMDAO {
 	@Override
 	public String SeqApprKey() {
 		return sqlSession.selectOne("om.SeqApprKey");
+	}
+	
+	@Override
+	public int getCountNoReadMail(HashMap<Object, Object> params) {
+		
+		return sqlSession.selectOne("om.getCountNoReadMail", params);
 	}
 
 }

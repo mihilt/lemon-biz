@@ -439,6 +439,17 @@
   <resultMap type="member" id="memberMap">
   
   </resultMap>
+  
+  <select id="getCountNoReadMail" resultType="int">
+		select 
+			count(*)
+		from
+			om
+		where 
+			omr_id = #{ memberId }
+		and 
+			read_count = '0'
+	</select>
 
 </mapper>
 
