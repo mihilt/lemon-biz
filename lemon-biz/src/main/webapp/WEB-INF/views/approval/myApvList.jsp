@@ -28,7 +28,7 @@
 	<th>제목</th>
 	<th>작성자</th>
 	<th>작성일</th>
-	<th>문서분류</th>
+	
 	
 	
 	</tr>
@@ -42,7 +42,7 @@
 			<td><a >${ item.title }</a></td>
 			<td>${ item.name } </td>
 			<td><fmt:formatDate value="${ item.writeDate }"  pattern="yyyy-MM-dd HH:mm:ss"/></td>
-			<td>${ item.docName }</td>
+			
 			
 		</tr>
 	</c:if>

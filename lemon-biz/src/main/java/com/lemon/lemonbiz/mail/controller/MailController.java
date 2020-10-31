@@ -178,6 +178,7 @@ public class MailController {
 		 // *mail 앞에 / 빼먹지 말 것*
 		 return "redirect:/mail/sendMail";
 		} 
+
 }
 //	@RequestMapping("/getCountNoReadMail")
 //	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
@@ -311,6 +312,3 @@ public class MailController {
 	 * } catch(Exception e){ }
 	 * 
 	 * return "redirect:/mail/sendMail"; } }
-	 */
-/*>>>>>>> branch 'yb' of https://github.com/mihilt/lemon-biz.git
-*/

@@ -325,9 +325,9 @@ $(document).ready(function() {
 						
 						<!-- 폼 내용 -->
 						<form class="p-2" id="sendApv" action="${ pageContext.request.contextPath }/approval/updateApproval.do" method="POST" enctype="multipart/form-data">
-							<input type="hidden" id="authId1" name="approval_mem1" />
-							<input type="hidden" id="authId2" name="approval_mem2" />
-							<input type="hidden" id="authId3" name="approval_mem3" />
+							<input type="hidden" id="authId1" name="approval_mem1" value="${ apprck1.seqNum }"/>
+							<input type="hidden" id="authId2" name="approval_mem2" value="${ apprck2.seqNum }"/>
+							<input type="hidden" id="authId3" name="approval_mem3" value="${ apprck3.seqNum }"/>
 							<input type="hidden" id="processNum1" name="process_num1">
 							<input type="hidden" id="processNum2" name="process_num2">
 							<input type="hidden" id="processNum3" name="process_num3">
