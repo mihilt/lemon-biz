@@ -1,5 +1,6 @@
 package com.lemon.lemonbiz.om.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,4 +50,5 @@ public interface OMService {
 
 	String selectTeamName(Member loginMember);
 
+	int getCountNoReadMail(HashMap<Object, Object> params);
 }

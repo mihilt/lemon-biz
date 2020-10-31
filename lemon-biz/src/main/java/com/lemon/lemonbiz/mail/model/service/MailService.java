@@ -31,5 +31,5 @@ public interface MailService {
 
 	Member selectMyInfo(Member loginMember);
 
-	int getCountNoReadMail(HashMap<Object, Object> params);
+	
 }

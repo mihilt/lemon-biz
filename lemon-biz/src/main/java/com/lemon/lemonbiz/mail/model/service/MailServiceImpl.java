@@ -96,10 +96,6 @@ public class MailServiceImpl implements MailService{
 		return mailDAO.selectMyInfo(loginMember);
 	}
 
-	@Override
-	public int getCountNoReadMail(HashMap<Object, Object> params) {
-		
-		return mailDAO.getCountNoReadMail(params);
-	}
+	
 
 }
