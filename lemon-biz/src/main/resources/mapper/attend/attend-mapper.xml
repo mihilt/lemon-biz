@@ -102,6 +102,7 @@ where rnum between #{startRnum} and #{endRnum}
 	
 	</select>
 	
+	<!-- 메인화면 출퇴근 -->
 	<select  id="getAttendLeave" resultType="attend">
 	select *
 	from attend 
