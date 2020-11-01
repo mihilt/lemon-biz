@@ -18,10 +18,13 @@ public interface OMDAO {
 	List<Map<String, Object>> selectMyOMMapListIN(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
 	List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
+	List<Map<String, Object>> selectTeamOMMapList(int cPage, int numPerPage, Map<String, Object> map, Member loginMember);
 
 	int insertOM(OM om, String omrId);
 	
 	int insertOME(OM om, String omrId);
+	
+	int insertOMES(OM om, String omrId);
 	
 	int insertOMT(OM om, String omrId);
 	
@@ -47,7 +50,6 @@ public interface OMDAO {
 
 	void omFileDelete(int key);
 
-	List<Map<String, Object>> selectTeamOMMapList(Member loginMember);
 
 	int insertTeamOM(OM om);
 

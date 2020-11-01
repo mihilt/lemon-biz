@@ -16,7 +16,9 @@
 				<div class="card-body p-0">
 					<!-- Nested Row within Card Body -->
 					<div class="row">
-						<div class="col-lg-6 d-none d-lg-block bg-gray-900"></div>
+						<div class="col-lg-6 d-none d-lg-block bg-gray-900",
+							 style="background-image: url('${pageContext.request.contextPath }/resources/images/favicon/lemonBiz.jpg');
+							 		background-size: 480px 420px;"></div>
 						<div class="col-lg-6">
 							<div class="p-5">
 								<div class="text-center">
