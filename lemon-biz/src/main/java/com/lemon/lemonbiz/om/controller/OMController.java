@@ -328,6 +328,7 @@ public class OMController {
 						messageHelper.setSubject(title);
 						messageHelper.setText(content, true);
 
+						List<Attachment> attachList = new ArrayList<>();
 						String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om/external");
 
 						for (MultipartFile upFileG : upFilesE) {
@@ -337,6 +338,15 @@ public class OMController {
 							File destK = new File(saveDirectory, renamedFilename);
 							upFileG.transferTo(destK);
 							messageHelper.addAttachment(renamedFilename, destK);
+							
+							Attachment attach = new Attachment();
+							attach.setOriginName(upFileG.getOriginalFilename());
+							attach.setReName(renamedFilename);
+							attachList.add(attach);
+
+							log.debug("attachList = {}", attachList);
+							om.setAttachList(attachList);
+							om.setName(name);
 						}
 						// 외부로 발송하면서 동시에 발송인이 해당 메일을 중요 메일로 설정하는 경우
 						if (goS != null) {

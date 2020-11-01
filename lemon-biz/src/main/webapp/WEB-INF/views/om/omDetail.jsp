@@ -48,10 +48,10 @@
 							</div>
 							<hr>
 							<div>
+								<strong>첨부파일 목록</strong><br>
 								<c:forEach items="${ om.attachList }" var="attach">
 								<c:choose>
 									<c:when test="${ attach.originName != null }">
-								<strong>첨부파일 목록</strong><br>
 										<a href="javascript:fileDownload('${ attach.key }');"> <img
 											alt="첨부파일"
 											src="${ pageContext.request.contextPath }/resources/images/file.png"
