@@ -48,7 +48,7 @@ function goBoardForm(){
 	<table id="tbl-board" class="table table-striped table-hover">
 	<strong style="font-size:25px; font-family: 'Jua', sans-serif;">전사 게시판</strong>
 		<tr>
-			<th>추천</th>
+			<th>공지</th>
 			<th>제목</th>
 			<th>작성자</th>
 			<th>작성일</th>
