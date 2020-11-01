@@ -79,12 +79,16 @@ tr[data-no]{cursor: pointer;}
 var lastarrive=$("#lastarrive").text();
 var today = new Date();
 var month = today.getMonth()+1;
-if(month < 10) {month = "0"+month;}
-today=today.getFullYear()+""+month+today.getDate();
-
+var todate = today.getDate();
+if(month < 10) {month ="0"+month;}
+if(todate < 10) {todate ="0"+todate;}
+today=today.getFullYear()+""+month+""+todate;
+console.log(today);
 //출근
 function attendArrive(){
-	if(lastarrive==today){
+	console.log(lastarrive);
+	console.log(today);
+	 if(lastarrive==today){
 		alert("이미 출근되었습니다.");
 	}else{
 		$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendArrive.do")
@@ -100,8 +104,10 @@ function attendLeave(){
 	time+=24;
 	var lastTime ='${lastAttend.time}';
 	var last_1 =Number(lastarrive);
-	
-	 if(lastTime=='0.0'&& last_1==Number(today)){			//퇴근하지않았거나 오늘퇴근이라면
+	console.log(lastTime);
+	console.log(last_1);
+	console.log(today);
+	if(lastTime=='0.0'&& last_1==Number(today)){			//퇴근하지않았거나 오늘퇴근이라면
 	 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeave.do")
 		.attr("method", "POST")
 		.submit();
@@ -117,7 +123,7 @@ function attendLeave(){
 		}
 	}else{
 		alert("출근후 퇴근이 가능합니다.");
-	}   
+	}
 }
 
 </script>
