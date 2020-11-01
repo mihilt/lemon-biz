@@ -108,14 +108,11 @@ table.calendar td{
 			dataType : "json",
 		    success: function(data) {
 			    calattend =data;
-		    	console.log(calattend);
 		    	var j=0;
 		    	var maxcal =calattend.length;
 		    	for(var i=firstDay.getDay();i<firstDay.getDay()+lastDay.getDate();i++){
-					
 					if($tdDay.eq(i)){
 						$tdDay.eq(i).text(++dayCount);
-		 
 						if(dayCount<10){
 							var daycon="0"+dayCount;
 							yyyymm=year+""+month+daycon;
