@@ -2,6 +2,7 @@
 package com.lemon.lemonbiz.om.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -240,6 +241,12 @@ public class OMServiceImpl implements OMService {
 	@Override
 	public String selectTeamName(Member loginMember) {
 		return omDAO.selectTeamName(loginMember);
+	}
+	
+	@Override
+	public int getCountNoReadMail(HashMap<Object, Object> params) {
+		
+		return omDAO.getCountNoReadMail(params);
 	}
 
 }

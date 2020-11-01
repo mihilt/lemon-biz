@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -579,5 +581,18 @@ public class OMController {
 	
 
 /// DML 끝 ///
+	
+	@RequestMapping("/getCountNoReadMail")
+	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("params = " + params);
+		
+		int num = omService.getCountNoReadMail(params);
+		
+		System.out.println("num = " + num);
+
+		return new ResponseEntity<>(num,HttpStatus.OK);		
+	}
 
 }

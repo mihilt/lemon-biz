@@ -564,7 +564,7 @@ public class BoardController {
 	public String boardSearch(@RequestParam("searchKeyword")String searchKeyword,
 									Model model,HttpServletRequest request) {
 		
-		int numPerPage = 2;
+		int numPerPage = 10;
 		int cPage = 1;
 		
 		try {
@@ -589,7 +589,7 @@ public class BoardController {
 	@RequestMapping("/boardMaList.do")
 	public ModelAndView boardMaList(ModelAndView mav,HttpServletRequest request,@SessionAttribute("loginMember") Member loginMember) {
 
-		int numPerPage = 3;
+		int numPerPage = 10;
 		int cPage = 1;
 		
 		try {
@@ -742,7 +742,7 @@ public class BoardController {
 	public String boardSearch2(@RequestParam("searchKeyword")String searchKeyword,
 								Model model,HttpServletRequest request) {
 
-		int numPerPage = 2;
+		int numPerPage = 10;
 		int cPage = 1;
 		
 		try {
@@ -790,7 +790,7 @@ public class BoardController {
 	public String boardMSearch(@RequestParam("searchKeyword")String searchKeyword,
 								Model model,HttpServletRequest request) {
 
-		int numPerPage = 2;
+		int numPerPage = 10;
 		int cPage = 1;
 		
 		try {
@@ -814,7 +814,7 @@ public class BoardController {
 	@RequestMapping("/boardMSearch2.do")
 	public String boardMSearch2(@RequestParam("searchKeyword")String searchKeyword,
 								Model model,HttpServletRequest request) {
-		int numPerPage = 4;
+		int numPerPage = 10;
 		int cPage = 1;
 		
 		try {
