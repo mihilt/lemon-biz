@@ -238,4 +238,39 @@ public class OMDAOImpl implements OMDAO {
 		return sqlSession.selectOne("om.getCountNoReadMail", params);
 	}
 
+	@Override
+	public int countAll(String myId) {
+		return sqlSession.selectOne("om.countAll", myId);
+	}
+
+	@Override
+	public int countTeam(String myId) {
+		return sqlSession.selectOne("om.countTeam", myId);
+	}
+
+	@Override
+	public int countAtt(String myId) {
+		return sqlSession.selectOne("om.countAtt", myId);
+	}
+
+	@Override
+	public int countSelf(String myId) {
+		return sqlSession.selectOne("om.countSelf", myId);
+	}
+
+	@Override
+	public int countMy(String myId) {
+		return sqlSession.selectOne("om.countMy", myId);
+	}
+
+	@Override
+	public int countMyEx(String myId) {
+		return sqlSession.selectOne("om.countMyEx", myId);
+	}
+
+	@Override
+	public int countMyIn(String myId) {
+		return sqlSession.selectOne("om.countMyIn", myId);
+	}
+
 }

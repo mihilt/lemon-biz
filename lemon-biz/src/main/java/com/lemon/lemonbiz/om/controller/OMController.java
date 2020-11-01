@@ -78,9 +78,8 @@ public class OMController {
 			cPage = Integer.parseInt(request.getParameter("cPage"));
 		} catch (NumberFormatException e) {
 		}
-		int totalContents = omService.countOM();
 		String url = request.getRequestURI();
-		String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
+		int totalContents = 0;
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, Object>> list = null;
@@ -92,28 +91,42 @@ public class OMController {
 		// 일반 메일 리스트
 		if (request.getServletPath().equals("/om/omList.do")) {
 			list = omService.selectOMMapList(cPage, numPerPage, map, myId);
+			totalContents = omService.countAll(myId);
 			mav.setViewName("om/omList");
+			
 		} else if (request.getServletPath().equals("/om/omTeamList.do")) {
 			list = omService.selectTeamOMMapList(cPage, numPerPage, map, loginMember);
+			totalContents = omService.countTeam(myId);
 			mav.setViewName("om/omTeamList");
+			
 		} else if (request.getServletPath().equals("/om/omAttachedList.do")) {
 			list = omService.selectOMMapList(cPage, numPerPage, map, myId);
+			totalContents = omService.countAtt(myId);
 			mav.setViewName("om/omAttachedList");
+			
 			// 사용자 메일 리스트
 		} else if (request.getServletPath().equals("/om/omSelfList.do")) {
 			list = omService.selectSelfOMMapList(cPage, numPerPage, map, myId);
+			totalContents = omService.countSelf(myId);
 			mav.setViewName("om/omSelfList");
+			
 		} else if (request.getServletPath().equals("/om/omMyList.do")) {
 			list = omService.selectMyOMMapList(cPage, numPerPage, map, myId);
+			totalContents = omService.countMy(myId);
 			mav.setViewName("om/omMyList");
+			
 		} else if (request.getServletPath().equals("/om/omMyListEx.do")) {
 			list = omService.selectMyOMMapListEX(cPage, numPerPage, map, myId);
+			totalContents = omService.countMyEx(myId);
 			mav.setViewName("om/omMyListEx");
+			
 		} else if (request.getServletPath().equals("/om/omMyListIn.do")) {
 			list = omService.selectMyOMMapListIN(cPage, numPerPage, map, myId);
+			totalContents = omService.countMyIn(myId);
 			mav.setViewName("om/omMyListIn");
 		}
 		
+		String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
 		mav.addObject("list", list);
 		mav.addObject("pagebar", pageBar);
 
@@ -315,6 +328,7 @@ public class OMController {
 						messageHelper.setSubject(title);
 						messageHelper.setText(content, true);
 
+						List<Attachment> attachList = new ArrayList<>();
 						String saveDirectory = request.getServletContext().getRealPath("/resources/upload/om/external");
 
 						for (MultipartFile upFileG : upFilesE) {
@@ -324,6 +338,15 @@ public class OMController {
 							File destK = new File(saveDirectory, renamedFilename);
 							upFileG.transferTo(destK);
 							messageHelper.addAttachment(renamedFilename, destK);
+							
+							Attachment attach = new Attachment();
+							attach.setOriginName(upFileG.getOriginalFilename());
+							attach.setReName(renamedFilename);
+							attachList.add(attach);
+
+							log.debug("attachList = {}", attachList);
+							om.setAttachList(attachList);
+							om.setName(name);
 						}
 						// 외부로 발송하면서 동시에 발송인이 해당 메일을 중요 메일로 설정하는 경우
 						if (goS != null) {

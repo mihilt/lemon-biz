@@ -21,6 +21,20 @@
 	ORDER BY OM_DATE DESC
 	</select>
 	
+  	<select id="countAll" resultType="_int">
+  		SELECT COUNT(*) AS "CNT"
+		FROM OM
+		WHERE OMR_ID = #{ myId } AND IS_DONE = 1 
+  	</select>
+  	
+  	<select id="countAtt" resultType="_int">
+  		SELECT COUNT(DISTINCT A.MAIL_KEY) AS "CNT"
+		FROM OM O JOIN ATTACHMENT A
+		ON O.KEY = A.MAIL_KEY
+		WHERE OMR_ID = #{ myId } AND IS_DONE = 1 
+			  AND O.KEY = A.MAIL_KEY
+  	</select>
+  	
 	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 (일괄) -->
 	<select id="selectMyOMMapList" resultMap="omMap">
 	SELECT * 
@@ -35,6 +49,13 @@
 	ORDER BY OM_DATE DESC
 	</select>
 	
+	<select id="countMy" resultType="_int">
+  		SELECT COUNT(*) AS "CNT"
+		FROM OM
+		WHERE MEM_ID = #{ myId } AND IS_DONE = 1
+  	</select>
+
+
 	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 (사내 ONLY) -->
 	<select id="selectMyOMMapListIN" resultMap="omMap">
 	SELECT * 
@@ -48,6 +69,13 @@
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
 	ORDER BY OM_DATE DESC
 	</select>
+	
+	<select id="countMyIn" resultType="_int">
+  		SELECT COUNT(*) AS "CNT"
+		FROM OM
+		WHERE MEM_ID = #{ myId } AND IS_DONE = 1 AND IS_EXTERNAL = 0
+  	</select>
+	
 	
 	<!-- 페이징 처리 + 로그인 사용자가 발송인인 사내 메일 및 그의 첨부파일 조회 (외부 ONLY) -->
 	<select id="selectMyOMMapListEX" resultMap="omMap">
@@ -63,6 +91,12 @@
 	ORDER BY OM_DATE DESC
 	</select>
 	
+	<select id="countMyEx" resultType="_int">
+  		SELECT COUNT(*) AS "CNT"
+		FROM OM
+		WHERE MEM_ID = #{ myId } AND IS_DONE = 1 AND IS_EXTERNAL = 1
+  	</select>
+	
 	<!-- 페이징 처리 + 로그인 사용자가 자신에게 발송한 사내 메일 및 그의 첨부파일 조회 -->
  	<select id="selectSelfOMMapList" resultMap="omMap">
 	SELECT * 
@@ -75,7 +109,13 @@
 	                  ORDER BY OM_DATE DESC) SELF) SELF
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
 	ORDER BY OM_DATE DESC
-	</select> 
+	</select>
+	
+	<select id="countSelf" resultType="_int">
+  		SELECT COUNT(*) AS "CNT"
+		FROM OM
+		WHERE OMR_ID = #{ myId } AND IS_DONE = 1 AND MEM_ID = #{ myId }
+  	</select>
 
 	<resultMap type="map" id="omMap">
   		<id column="key" property="key"/>
@@ -110,6 +150,12 @@
 	                  ORDER BY OM_DATE DESC) DEP) DEP
 	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
 	ORDER BY OM_DATE DESC
+  	</select>
+  	
+  	<select id="countTeam" resultType="_int">
+  		SELECT COUNT(*) AS "CNT"
+		FROM OM
+		WHERE IS_DONE = 1
   	</select>
   	
   	<resultMap type="map" id="omTeam">
@@ -358,13 +404,6 @@
                 READ_COUNT = READ_COUNT +1
                 WHERE KEY = #{ key }
   	</update>
-  	
-  	<!-- 1번 카테고리 구분자를 부여받은 사내 메일의 수를 세어 리턴 -->
-  	<select id="countOM" resultType="_int">
-  		SELECT COUNT(*) AS "CNT"
-		FROM OM
-		WHERE IS_DONE = 1
-  	</select>
 
 	<!-- 고유 구분 코드가 일치하는 사내 메일을 삭제 -->
   	<delete id="omfrmDelete">
@@ -377,7 +416,7 @@
   		DELETE FROM ATTACHMENT
 		WHERE MAIL_KEY = #{ key }
   	</delete>
-
+<!-- 여기까지 분류별 TOTALCONTENTS 채번 -->
   		
   	<!-- 같은 부서 인원 전원에게 메일 발송 기능으로 변경할 건데 우선 보류 -->
   	<insert id="insertTeamOM">

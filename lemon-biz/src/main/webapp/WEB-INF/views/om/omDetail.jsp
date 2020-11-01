@@ -11,15 +11,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- 헤드 네비게이션 효과 -->
-<link
-	href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css"
-	rel="stylesheet">
-<script
-	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-<script
-	src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-
 
 <!-- summernote -->
 <link
@@ -57,10 +48,10 @@
 							</div>
 							<hr>
 							<div>
+								<strong>첨부파일 목록</strong><br>
 								<c:forEach items="${ om.attachList }" var="attach">
 								<c:choose>
 									<c:when test="${ attach.originName != null }">
-								<strong>첨부파일 목록</strong><br>
 										<a href="javascript:fileDownload('${ attach.key }');"> <img
 											alt="첨부파일"
 											src="${ pageContext.request.contextPath }/resources/images/file.png"

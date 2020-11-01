@@ -157,9 +157,9 @@ $(document).ready(function() {
 			 return false;
 		}
 	});
-
+});
 </script>
-</html> 
+
 
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
