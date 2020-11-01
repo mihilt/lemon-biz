@@ -75,7 +75,7 @@ public interface OMDAO {
 	int getCountNoReadMail(HashMap<Object, Object> params);
 
 	int countAll(String myId);
-	int countTeam(String myId);
+	int countTeam(String myId, String myDeptKey, Map<String, Object> mapTeam);
 	int countAtt(String myId);
 	int countSelf(String myId);
 	int countMy(String myId);

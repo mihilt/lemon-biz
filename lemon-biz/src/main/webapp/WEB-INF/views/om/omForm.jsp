@@ -74,12 +74,9 @@ td[id^="authName"]{
 					<div class="form-group row">
 						<label for="mFrom" class="col-sm-1 col-form-label">작성자</label>
 						<div class="col-sm-9">
-							<input type="text" readonly class="form-control" id="toShow"
-								name="name" value="${loginMember.name}" readonly> <input
-								type="hidden" name="memId" class="form-control" id="memId"
-								value="${loginMember.memberId}" /> <input type="hidden"
-								name="deptKey" class="form-control" id="deptKey"
-								value="${loginMember.deptKey}" />
+							<input type="text" readonly class="form-control" id="toShow" name="name" value="${loginMember.name}" readonly> 
+							<input type="hidden" name="memId" class="form-control" id="memId" value="${loginMember.memberId}" /> 
+							<input type="hidden" name="deptKey" class="form-control" id="deptKey" value="${loginMember.deptKey}" />
 						</div>
 					</div>
 					
@@ -140,10 +137,8 @@ td[id^="authName"]{
 						<label for="upFile" class="col-sm-1 col-form-label" id="attch-lab">&ensp;첨부</label>
 						&emsp;
 						<div class="custom-file col-sm">
-							<input type="file" class="custom-file-input" name="upFile"
-								id="upFile" multiple> <label class="custom-file-label"
-								for="upFile1" style="width: 80%">파일을 선택하세요: 복수 선택이
-								가능합니다.</label>
+							<input type="file" class="custom-file-input" name="upFile" id="upFile" multiple> 
+							<label class="custom-file-label" for="upFile1" style="width: 80%">파일을 선택하세요: 복수 선택이 가능합니다.</label>
 						</div>
 					</div>
 					<div align="right" id="cks">

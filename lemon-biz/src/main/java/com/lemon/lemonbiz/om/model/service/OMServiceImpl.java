@@ -250,8 +250,8 @@ public class OMServiceImpl implements OMService {
 	}
 
 	@Override
-	public int countTeam(String myId) {
-		return omDAO.countTeam(myId);
+	public int countTeam(String myId, String myDeptKey, Map<String, Object> mapTeam) {
+		return omDAO.countTeam(myId, myDeptKey, mapTeam);
 	}
 
 	@Override
