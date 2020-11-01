@@ -488,9 +488,7 @@ public class ApprovalController {
 		log.debug("approvalKey={}",approvalKey);
 		log.debug("approvalKey={}",approvalKey);
 		log.debug("approvalKey={}",approvalKey);
-		System.out.println("머지이거=["+approvalKey+"];;"); //머지이거=[];; 이렇게 나오는데 왜 else로 빠지는거야 시;발
 		if(approvalKey.equals("")) {
-			System.out.println("------------------------------");
 			
 			log.debug("approvalKey={}",approvalKey);
 			log.debug("approvalKey={}",approvalKey);
@@ -843,7 +841,6 @@ public class ApprovalController {
 
 		int result = approvalService.returnApproval(map, appr);
 		
-		System.out.println("dddddddddddddddddddddddddd");
 		red.addFlashAttribute("msg", "반려되었습니다.");
 		
 		return "redirect:/approval/requestApprovalList?page=1";
@@ -900,13 +897,7 @@ public class ApprovalController {
 	@RequestMapping("/getCountApproval")
 	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
 		
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		System.out.println("params = " + params);
-		
 		int num = approvalService.getCountApproval(params);
-		
-		System.out.println("num = " + num);
-
 		return new ResponseEntity<>(num,HttpStatus.OK);		
 	}
 	

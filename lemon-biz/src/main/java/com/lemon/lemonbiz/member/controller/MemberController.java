@@ -281,7 +281,6 @@ public class MemberController {
 
 				mailSender.send(message);
 			} catch (Exception e) {
-				System.out.println(e);
 			}
 
 		} else {
