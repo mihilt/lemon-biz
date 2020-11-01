@@ -244,8 +244,10 @@ public class OMDAOImpl implements OMDAO {
 	}
 
 	@Override
-	public int countTeam(String myId) {
-		return sqlSession.selectOne("om.countTeam", myId);
+	public int countTeam(String myId, String myDeptKey, Map<String, Object> mapTeam) {
+		mapTeam.put("myId", myId);
+		mapTeam.put("myDeptKey", myDeptKey);
+		return sqlSession.selectOne("om.countTeam", mapTeam);
 	}
 
 	@Override

@@ -1,0 +1,68 @@
+@RequestMapping(value="/writeForm.do")
+    public String writeForm(Model model) {
+        
+
+        List<Dept> dept = approvalService.deptList();
+        List<Dept> child = approvalService.child();
+        List<Dept> child2 = approvalService.child2();
+
+        log.debug("dept = {}",dept);
+        log.debug("child = {}",child);
+        log.debug("child2 = {}",child2);
+        
+        model.addAttribute("dept",dept);
+        model.addAttribute("child",child);
+        model.addAttribute("child2",child2);
+
+        
+        
+        
+        return "approval/writeForm";
+    }
+    
+    @RequestMapping(value="/approvalSelect.do")
+    public String approvalSelect(@RequestParam("node") String node,
+                                 Model model) {
+        
+        List<Member> memberList = approvalService.memberList(node);
+
+        log.debug("node = {}",node);
+        log.debug("memberList={}",memberList);
+        
+        model.addAttribute("memberList",memberList);
+        
+        return "jsonView";
+    }
+    
+    @RequestMapping(value="/selectMember.do",
+                    method=RequestMethod.POST,
+                    produces = "application/json; charset=utf8")
+    @ResponseBody
+    public Map<String, Object> selectMember(@RequestParam("param") String param,
+                               Model model) {
+        log.debug("11");
+        log.debug("param = {}",param);
+        Map<String, Object> map = new HashMap<>();
+        
+        List<Member> selectMember = approvalService.selectMember(param);
+        
+        map.put("selectMember",selectMember);
+        
+        return map;
+    }
+    
+    
+    @RequestMapping(value="/searchName.do",
+                    method=RequestMethod.POST,
+                    produces="application/json; charset=utf8")
+    @ResponseBody
+    public Map<String, Object> joinMemberList(@RequestParam("param") String param) {
+        
+        log.debug("param ={}", param);
+        Map<String, Object> map = new HashMap<>();
+        List<Member> joinMemberList = approvalService.joinMemberlist(param);
+        
+        map.put("joinMemberList", joinMemberList);
+        
+        return map;
+    }

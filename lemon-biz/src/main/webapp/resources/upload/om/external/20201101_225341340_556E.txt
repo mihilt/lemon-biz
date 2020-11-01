@@ -1,0 +1,300 @@
+	$(document).ready(function() {
+		$('#proNum1').val(1);
+		$('#proNum2').val(2);
+		$('#proNum3').val(3);
+		
+		MIN_NUM = 1;
+		MAX_NUM = 3;
+
+		for(var i = MIN_NUM; i <= MAX_NUM ; i++) {
+
+			if($(document).find('#authRank'+i+'').text().trim() != ''){
+		    	$('#rank_'+i+'').text($(document).find('#authRank'+i+'').text());
+		    	$('#name_'+i+'').text($(document).find('#authName'+i+'').text());
+		    	$('#dept_'+i+'').text($(document).find('#authDept'+i+'').val());
+		    	$('#memId_'+i+'').text($(document).find('#apv_mem'+i+'').text());
+				$('#del_'+i+'').html('<a class="xBtn" onclick="delLine('+i+')">[ X ]</a>');
+				$('#order_'+i+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+i+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+i+')">▼</a>&nbsp;');
+				$('#'+i+'').val('exist');
+			}
+		}
+	})
+	
+	$("#appr").jstree({
+	  "plugins": ["wholerow","types","themes","html_data"],
+	  "themes" : {            
+	      'responsive' : true,
+	      'themes' : ["classic"],
+	  }
+
+	}).bind('select_node.jstree',function(e,data){
+
+		console.log(data.node.text);
+		$.ajax({
+			type: "GET",
+			url : "${pageContext.request.contextPath}/approval/approvalSelect.do",
+			data : {
+				node : data.node.text
+			},
+			dataType : "json",
+			contentType: "application/json; charset=utf-8;",
+			success : function(data) {
+
+				$("#tbody").empty();
+				
+				printList(data);
+				return;
+					
+			},
+			error:function() {
+				return;
+			}
+		})
+	});
+	
+
+	function printList(data) {
+
+		for(var i in data.memberList) {
+ 			console.log(data.memberList[1].name);
+			console.log(data.memberList);
+			
+			if(data.memberList[i].deptName==null){
+				data.memberList[i].deptName='발령대기';
+			}
+			if(data.memberList[i].memberId==null) {
+				data.memberList[i].deptName='입사대기';
+			}
+			
+			$('<tr></tr>').css('cursor','pointer').attr('class','memberList')
+						  .attr('onclick','selectMember("'+data.memberList[i].memberId+'")')
+						  .attr('id',data.memberList[i].memberId).appendTo('#tbody');
+			$('<td></td>').text(data.memberList[i].deptName).appendTo('#'+data.memberList[i].memberId+'');
+			$('<td></td>').text(data.memberList[i].name).appendTo('#'+data.memberList[i].memberId+'');
+			$('<td></td>').text(data.memberList[i].rankKey).appendTo('#'+data.memberList[i].memberId+'');
+			$('<td></td>').text(data.memberList[i].memberId).appendTo('#'+data.memberList[i].memberId+'');
+		}
+	}
+
+ 
+	function selectMember(memberId) {
+
+		
+		console.log(memberId);
+		
+		
+		if(memberId == "${loginMember.memberId}") { 
+			alert('본인은 선택할 수 없습니다.');
+			return;
+		}
+		
+		
+		var trArr = $('#finalList > tr');
+		var cnt = 3; 
+		
+		
+		for(var j = MIN_NUM; j <= MAX_NUM; j++) {
+			if($('#memId_'+j).text()==memberId) {
+				alert('이미 추가되어있는 결제자 입니다.');
+				return;	
+			}
+			if(trArr[j-1].value != 'exist') {
+				cnt--;
+			} 
+		}
+		
+		if(cnt==3) {
+			alert('결제자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
+			return;
+		}
+
+		var rankKey;
+		var deptName;
+		var memberName;
+		var param = memberId;
+		$.ajax({
+			type: "POST",
+			url : "${pageContext.request.contextPath}/approval/selectMember.do",
+			dataType : "json",
+			data: {
+				param : param
+			},
+			success : function(data) {
+
+				var result = data.selectMember;
+				
+				rankKey = result[0].rankKey;
+				deptName = result[0].deptName;
+				memberName = result[0].name;
+				console.log(memberName);
+				console.log(deptName);
+				
+		if(rankKey == null) {
+			rankKey = '입사대기';
+		}
+		if(deptName == null) {
+			deptName = '발령대기';
+		}
+		if(memberName == null) {
+			memberName= '오류';
+		}
+		
+		for(var i=0; i<trArr.length; i++ ) {
+
+			if($('#'+(i+1)+'').val() != 'exist'){
+			$('#memId_'+(i+1)).text(memberId);
+			$('#dept_'+(i+1)).text(deptName);
+			$('#name_'+(i+1)).text(memberName);
+			$('#rank_'+(i+1)).text(rankKey);
+
+			$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
+			$('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
+			$('#'+(i+1)+'').val('exist');
+
+			return;
+		}
+
+
+	 }
+			}
+		});
+
+	}
+
+	
+	function delLine(i){
+		 
+		 if($('#'+(i+1)+'').val() == 'exist'){
+			 alert('차순 결재자가 있습니다.');
+			 return;
+		 }else{
+			$('#'+i+'').val(null); 
+			$('#dept_'+i+'').text('');
+			$('#dept_'+i+'').val('');
+			$('#name_'+i+'').text('');
+			$('#rank_'+i+'').text('');
+			$('#memId_'+i+'').text('');
+			
+			$('#del_'+i+'').html('');
+			$('#order_'+i+'').html('');
+		 }
+		 
+	 }
+	 
+	 function searchName(){
+		 var searchN = $('#searchN').val();
+		 $('#searchN').val('');
+		 
+		 var param = searchN;
+		 $.ajax({
+             type: 'POST',
+             url: "${ pageContext.request.contextPath }/approval/searchName.do",
+             data: {
+				param : param
+             },
+             dataType : "json",
+             success: function(data) {
+					if(data == 'error'){
+						return;
+					}
+					var obj = data.joinMemberList; 
+					//var obj = data; <-- 이렇게 해버리면 불러올때 obj[i].joinMemberList.name 하면 undifine뜸
+					//java에서 정의한 ArrayList명을 적어준다. 중요..안그럼 불러오기 까다로워짐
+					
+					$('#tbody').empty();
+					
+					MprintList(obj);
+
+					return;
+
+			},
+			error: function(){
+				return;
+			}
+		});
+	 }
+	 
+	 function MprintList(obj){
+		 	
+			for(var i in obj){
+			
+			
+			if(obj[i].deptName == null){
+				obj[i].deptName = '발령대기'
+			}
+				if(obj[i].rankKey == null){
+					obj[i].rankKey = '입사대기'	
+				}
+				$('<tr></tr>').css('cursor','pointer').attr('class','memberList')
+							  .attr('onclick','selectMember('+obj[i].memberId+')')
+							  .attr('id', obj[i].memberId).appendTo('#tbody');
+				$('<td></td>').text(obj[i].deptName).appendTo('#'+obj[i].memberId+'');
+				$('<td></td>').text(obj[i].name).appendTo('#'+obj[i].memberId+'');
+				$('<td></td>').text(obj[i].rankKey).appendTo('#'+obj[i].memberId+'');
+				$('<td></td>').text(obj[i].memberId).appendTo('#'+obj[i].memberId+'');
+				
+			}
+	 }
+
+	 function upBtn(i){
+		 
+			if(i == MIN_NUM){
+				return;
+			}
+			 
+			var dept = $('#dept_'+(i-1)+'').text();
+			var name = $('#name_'+(i-1)+'').text();
+			var rank = $('#rank_'+(i-1)+'').text();
+			var memId = $('#memId_'+(i-1)+'').text();
+			
+			$('#dept_'+(i-1)+'').text($('#dept_'+i+'').text());
+			$('#name_'+(i-1)+'').text($('#name_'+i+'').text());
+			$('#rank_'+(i-1)+'').text($('#rank_'+i+'').text());
+			$('#memId_'+(i-1)+'').text($('#memId_'+i+'').text());
+			
+			$('#dept_'+i+'').text(dept);
+			$('#name_'+i+'').text(name);
+			$('#rank_'+i+'').text(rank);
+			$('#memId_'+i+'').text(memId);
+			 
+		 }
+
+	 function dnBtn(i){
+
+			if(i == MAX_NUM){
+				return;
+			}
+			 
+			var dept = $('#dept_'+(i+1)+'').text();
+			var name = $('#name_'+(i+1)+'').text();
+			var rank = $('#rank_'+(i+1)+'').text();
+			var memId = $('#memId_'+(i+1)+'').text();
+			
+			$('#dept_'+(i+1)+'').text($('#dept_'+i+'').text());
+			$('#name_'+(i+1)+'').text($('#name_'+i+'').text());
+			$('#rank_'+(i+1)+'').text($('#rank_'+i+'').text());
+			$('#memId_'+(i+1)+'').text($('#memId_'+i+'').text());
+			
+			$('#dept_'+i+'').text(dept);
+			$('#name_'+i+'').text(name);
+			$('#rank_'+i+'').text(rank);
+			$('#memId_'+i+'').text(memId);
+
+	 }
+
+	function apply(){
+
+		for(var i = MIN_NUM; i <= MAX_NUM ; i++){
+ 
+			$(document).find('#authName'+i).text($('#name_'+i).text());
+			$(document).find('#authRank'+i).text($('#rank_'+i).text());
+			$(document).find('#authDept'+i).val($('#dept_'+i).text());
+			$(document).find('#authId'+i).val($('#memId_'+i).text());
+			$(document).find('#apv_mem'+i).text($('#memId_'+i).text());
+			
+			$('#exampleModal').modal('hide');
+			 			
+
+		 }
+
+	}
