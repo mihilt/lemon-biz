@@ -119,7 +119,7 @@ $(document).ready(function() {
     	
       	<!-- selectMember Form-->
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결재자 선택</h5>
+    	<h5>결재자 입력</h5>
     		<div id="apprst" style="margin: 5px; padding: 5px; border:1px solid lightgray; height:360px;">
     			
     	
@@ -231,7 +231,7 @@ $(document).ready(function() {
 						<div class="float-left col-md-4">
 							<!-- Button trigger modal -->
 							
-							<label for="#approvalSelectBtn">결제자 등록 : </label>
+							<label for="#approvalSelectBtn">결재자 등록 : </label>
 							<button id="approvalSelectBtn" type="button" class="btn btn-outline-primary" 
 							data-toggle="modal" data-target="#exampleModal">
 							  결재라인 추가
@@ -445,7 +445,8 @@ $(document).ready(function() {
 		}
 	})
 	
-	$("#appr").jstree({
+	<!-- 부서선택 jstree-->
+	$("#appr").jstree({ 
 	  "plugins": ["wholerow","types","themes","html_data"],
 	  "themes" : {            
 	      'responsive' : true,
@@ -477,7 +478,7 @@ $(document).ready(function() {
 		})
 	});
 	
-
+	<!-- 부서선택 시 결제자선택 영역에 비동기형식으로 데이터가 입력 -->
 	function printList(data) {
 
 		for(var i in data.memberList) {
@@ -501,22 +502,16 @@ $(document).ready(function() {
 		}
 	}
 
- 
+ 	<!-- 결제자 선택시 결제자입력영역에 비동기형식으로 데이터가 입력-->
 	function selectMember(memberId) {
-
-		
-		console.log(memberId);
-		
 		
 		if(memberId == "${loginMember.memberId}") { 
 			alert('본인은 선택할 수 없습니다.');
 			return;
 		}
 		
-		
 		var trArr = $('#finalList > tr');
 		var cnt = 3; 
-		
 		
 		for(var j = MIN_NUM; j <= MAX_NUM; j++) {
 			if($('#memId_'+j).text()==memberId) {
