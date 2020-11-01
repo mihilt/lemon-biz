@@ -312,3 +312,4 @@ public class MailController {
 	 * } catch(Exception e){ }
 	 * 
 	 * return "redirect:/mail/sendMail"; } }
+	 */
