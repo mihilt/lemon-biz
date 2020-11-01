@@ -62,9 +62,12 @@
 		 $(document).ready(function() {
 
 				var now=new Date;
+				var month = now.getMonth()+1;
+				var todate = now.getDate();
+				if(month < 10) {month ="0"+month;}
+				if(todate < 10) {todate ="0"+todate;}
 				msg = { memberId : "${ loginMember.memberId }",
-						date : now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() }
-					
+						date : now.getFullYear() + "/" + month + "/" + todate }
 				$.ajax({
 					url : "${pageContext.request.contextPath}/attend/getAttendLeave",
 					method : "GET",
