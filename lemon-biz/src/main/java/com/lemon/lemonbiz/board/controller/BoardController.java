@@ -55,7 +55,8 @@ public class BoardController {
 	private ResourceLoader resourceLoader;
 	
 	@RequestMapping("/boardList.do")
-	public ModelAndView boardList(ModelAndView mav,HttpServletRequest request,@SessionAttribute("loginMember") Member loginMember) {
+	public ModelAndView boardList(ModelAndView mav,HttpServletRequest request,
+								  @SessionAttribute("loginMember") Member loginMember) {
 
 		int numPerPage = 10;
 		int cPage = 1;
@@ -66,15 +67,13 @@ public class BoardController {
 			
 		}
 		int totalContents = boardService.countBoard();
-		/* log.debug("totalContents = {} ",totalContents); */
+		
 		String url = request.getRequestURI();
-		/* log.debug("url = {} " , url); */
 		String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
 		Map<String,Object> map = new HashMap<String, Object>();
 	
 		
 		List<Map<String, Object>> list = boardService.selectBoardMapList(cPage,numPerPage,map);
-		log.debug("list = {}", list);
 		mav.addObject("list", list);
 		mav.addObject("pagebar",pageBar);		
 		mav.setViewName("board/boardList");
@@ -100,7 +99,7 @@ public class BoardController {
 						  RedirectAttributes redirectAttr,
 						  HttpServletRequest request) 
 								  throws IllegalStateException, IOException {
-	log.debug("board = {}", board);
+//	log.debug("board = {}", board);
 	
 	
 	//1. 서버컴퓨터에 업로드한 파일 저장하기
@@ -188,7 +187,7 @@ public class BoardController {
 		Board board = boardService.selectOneBoardCollection(key,hasRead);
 		List<BoardComment> commentList = boardService.selectCommentList(key);
 		
-		log.debug("commentList = {}", commentList); 
+//		log.debug("commentList = {}", commentList); 
 		mav.addObject("board", board);
 		mav.addObject("commentList", commentList);
 		
@@ -238,7 +237,7 @@ public class BoardController {
 		Board board = boardService.selectOneBoardCollection(key,hasRead);
 		List<BoardComment> commentList = boardService.selectCommentList(key);
 		
-		/* log.debug("commentList = {}", commentList); */
+//		 log.debug("commentList = {}", commentList); 
 		mav.addObject("board", board);
 		mav.addObject("commentList", commentList);
 		
@@ -261,7 +260,7 @@ public class BoardController {
 									  .getRealPath("/resources/upload/board");
 		File downFile = new File(saveDirectory, attach.getReName());
 		Resource resource = resourceLoader.getResource("file:" + downFile);
-		log.debug("resource = {}", resource);
+//		log.debug("resource = {}", resource);
 		
 		//3. 응답헤더
 		//IE대비 파일명 분기처리
@@ -292,11 +291,11 @@ public class BoardController {
 		if(board.getAttachList() !=null) {
 		try {
 		List<Attachment> atc =board.getAttachList();
-		log.debug("atc={}",atc);
+//		log.debug("atc={}",atc);
 		String Oname1 = atc.get(0).getOriginName();
 		String Oname2 = atc.get(1).getOriginName();
-		log.debug("dd={}",Oname1);
-		log.debug("d2={}",Oname2);
+//		log.debug("dd={}",Oname1);
+//		log.debug("d2={}",Oname2);
 		mav.addObject("Oname1",Oname1);
 		mav.addObject("Oname2",Oname2);
 		}catch (Exception e) {
@@ -325,31 +324,21 @@ public class BoardController {
 		List<Attachment> oldBoard = boardService.SelectBoardOne(key); 
 		String oldRename = oldBoard.get(0).getReName();	
 		String oldRename2= oldBoard.get(1).getReName();	
-			
-
-		
 		//첨부파일 수정관련
 			//이전 첨부파일이 존재하는 경우만 실행
 		  String saveDirectory = request.getServletContext()
-				  .getRealPath("/resources/upload/board");
-		 
-				
-				
-				 
-
-		  
-		  log.debug("upFileget={}",upFile1.getOriginalFilename());
-		  log.debug("upFileget={}",upFile2.getOriginalFilename());
+				  .getRealPath("/resources/upload/board");  
+//		  log.debug("upFileget={}",upFile1.getOriginalFilename());
+//		  log.debug("upFileget={}",upFile2.getOriginalFilename());
 	
-		  log.debug("getOriginalFilename()={}",upFile1.getOriginalFilename());
+//		  log.debug("getOriginalFilename()={}",upFile1.getOriginalFilename());
 		  //2.메모리의 파일 -> 서버컴퓨터 디렉토리 저장  transferTo
 		  // 첨부파일을 새로 추가한 경우
 				if(upFile1.getOriginalFilename() != "") {	
 					  File dest = new File(saveDirectory, oldRename); //
 					  upFile1.transferTo(dest);
 					 				
-					String oldRenamedFileName1 = oldBoard.get(0).getReName();
-					
+					String oldRenamedFileName1 = oldBoard.get(0).getReName();				
 					Attachment attach = new Attachment();
 					attach.setOriginName(upFile1.getOriginalFilename());
 					attach.setReName(oldRenamedFileName1);
@@ -359,12 +348,10 @@ public class BoardController {
 					board.setKey(key);
 					boardService.updateBoard(board,oldBoard);
 					mav.addObject("board", board);
-					log.debug("attachList11={}",attachList);
-					log.debug("board11= {}",board);
+//					log.debug("attachList11={}",attachList);
+//					log.debug("board11= {}",board);
 					mav.setViewName("redirect:/board/boardDetail.do?key="+key);
-					
-					
-						
+			
 				}
 				
 				if(upFile2.getOriginalFilename() != "") {
@@ -383,20 +370,19 @@ public class BoardController {
 					board.setKey(key);
 					boardService.updateBoard(board,oldBoard);
 					mav.addObject("board", board);
-					log.debug("attachList11={}",attachList);
-					log.debug("board11= {}",board);
+//					log.debug("attachList11={}",attachList);
+//					log.debug("board11= {}",board);
 					mav.setViewName("redirect:/board/boardDetail.do?key="+key);
 					
 			}	
-
-				
+			
 				if(upFile1.getOriginalFilename() == "" && upFile2.getOriginalFilename() == "")  { 			
 					board.setAttachList(oldBoard);
 					board.setKey(key);
 					boardService.updateBoard2(board,oldBoard);
 					mav.addObject("board", board);
-					log.debug("attachList11={}",attachList);
-					log.debug("board11= {}",board);
+//					log.debug("attachList11={}",attachList);
+//					log.debug("board11= {}",board);
 					mav.setViewName("redirect:/board/boardDetail.do?key="+key);
 				}
 			
@@ -419,10 +405,7 @@ public class BoardController {
 		
 		
 		boardService.boardInsert(boardComment);
-		int key = boardComment.getBoardRef();
-		
-		
-		
+		int key = boardComment.getBoardRef();		
 		redirectAttr.addFlashAttribute("msg", "댓글 등록 성공");
 		return "redirect:/board/boardDetail.do?key="+key;
 	}
@@ -547,7 +530,7 @@ public class BoardController {
 		
 	}
 	
-	log.debug("attachList = {}", attachList);
+//	log.debug("attachList = {}", attachList);
 	board.setAttachList(attachList);
 	board.setDeptKey(deptKey);
 	//2. Board, Attachment객체 DB에 저장하기
@@ -624,7 +607,7 @@ public class BoardController {
 						  RedirectAttributes redirectAttr,
 						  HttpServletRequest request) 
 								  throws IllegalStateException, IOException {
-	log.debug("board = {}", board);
+//	log.debug("board = {}", board);
 	
 	
 	//1. 서버컴퓨터에 업로드한 파일 저장하기
@@ -657,7 +640,7 @@ public class BoardController {
 		
 	}
 	
-	log.debug("attachList = {}", attachList);
+//	log.debug("attachList = {}", attachList);
 	board.setAttachList(attachList);
 	board.setName(name);
 	
@@ -758,7 +741,7 @@ public class BoardController {
 		Map<String,Object> map = new HashMap<String, Object>();
 		List<Map<String, Object>> list = boardService.boardtitleSearch(searchKeyword,cPage,numPerPage,map);
 		
-		log.debug("list222 ={}" , list);
+//		log.debug("list222 ={}" , list);
 		model.addAttribute("list", list);
 		model.addAttribute("pagebar",pageBar);		
 		return "board/boardFindNList";
@@ -770,7 +753,7 @@ public class BoardController {
 		
 		loginMember.setSearchKeyword(searchKeyword);
 		List<Board> list = boardService.boardTeamSearch(loginMember);
-		 log.debug("loginMember = {}",loginMember); 
+//		 log.debug("loginMember = {}",loginMember); 
 		model.addAttribute("list", list);
 		return "board/boardFindTList";
 	}
@@ -781,7 +764,7 @@ public class BoardController {
 		
 		loginMember.setSearchKeyword(searchKeyword);
 		List<Board> list = boardService.boardTeamSearch2(loginMember);
-		 log.debug("loginMember = {}",loginMember); 
+//		 log.debug("loginMember = {}",loginMember); 
 		model.addAttribute("list", list);
 		return "board/boardFindTList";
 	}
@@ -839,11 +822,7 @@ public class BoardController {
 	@RequestMapping(value = "/getBoardTopFive")
 	public @ResponseBody List<Board> getBoardTopFive(){
 		
-		List<Board> list = boardService.getBoardTopFive();
-		
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		System.out.println("list = " + list);
-		
+		List<Board> list = boardService.getBoardTopFive();		
 		return list;
 	}
 	@RequestMapping(value="/RecUpdate.do")
@@ -855,7 +834,7 @@ public class BoardController {
 		map.put("id", id);
 
 		int result = boardService.recCheck(map);
-		log.debug("result= {}",result);
+//		log.debug("result= {}",result);
 		if(result == 0){ // 추천하지 않았다면 추천 추가
 			boardService.recUpdate(map);
 		}else{ // 추천을 하였다면 추천 삭제
@@ -870,7 +849,7 @@ public class BoardController {
 	public Object RecCount(@RequestParam("key")int key) {
 		
 		int count = boardService.RecCount(key);
-		log.debug("count={}",count );
+//		log.debug("count={}",count );
 		return count;
 	}
 }

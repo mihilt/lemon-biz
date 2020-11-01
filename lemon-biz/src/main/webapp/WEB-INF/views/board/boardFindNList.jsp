@@ -77,10 +77,10 @@ function goBoardForm(){
 			</c:if>	
 			
 			<c:if test="${ post.isNotice eq 1 }">
-			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.memId }</td>
+			<td style="color:red; font-weight:bold; fontsize:25px;">${ post.name }</td>
 			</c:if>
 			<c:if test="${ post.isNotice eq 0 }">
-			<td>${ post.memId }</td>
+			<td>${ post.name }</td>
 			</c:if>
 			
 			<c:if test="${ post.isNotice eq 1 }">

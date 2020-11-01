@@ -46,7 +46,7 @@ div#search-memberName{display:none;}
 	</c:choose>
 	</strong>
 		<tr>
-			<th>번호</th>
+			<th>공지</th>
 			<th>제목</th>
 			<th>작성자</th>
 			<th>작성일</th>			
