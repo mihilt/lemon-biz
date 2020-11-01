@@ -42,7 +42,13 @@ public interface OMService {
 
 	OM selectOneOMCollection(int key, boolean hasRead);
 
-	int countOM();
+	int countAll(String myId);
+	int countTeam(String myId);
+	int countAtt(String myId);
+	int countSelf(String myId);
+	int countMy(String myId);
+	int countMyEx(String myId);
+	int countMyIn(String myId);
 
 	List<OM> selectOMList(Map<String, Object> map);
 

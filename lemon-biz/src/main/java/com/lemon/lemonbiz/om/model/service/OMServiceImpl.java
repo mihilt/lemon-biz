@@ -202,11 +202,6 @@ public class OMServiceImpl implements OMService {
 	}
 
 	@Override
-	public int countOM() {
-		return omDAO.countOM();
-	}
-
-	@Override
 	public void omfrmDelete(int key) {
 		omDAO.omfrmDelete(key);
 	}
@@ -248,5 +243,41 @@ public class OMServiceImpl implements OMService {
 		
 		return omDAO.getCountNoReadMail(params);
 	}
+
+	@Override
+	public int countAll(String myId) {
+		return omDAO.countAll(myId);
+	}
+
+	@Override
+	public int countTeam(String myId) {
+		return omDAO.countTeam(myId);
+	}
+
+	@Override
+	public int countAtt(String myId) {
+		return omDAO.countAtt(myId);
+	}
+
+	@Override
+	public int countSelf(String myId) {
+		return omDAO.countSelf(myId);
+	}
+
+	@Override
+	public int countMy(String myId) {
+		return omDAO.countMy(myId);
+	}
+
+	@Override
+	public int countMyEx(String myId) {
+		return omDAO.countMyEx(myId);
+	}
+
+	@Override
+	public int countMyIn(String myId) {
+		return omDAO.countMyIn(myId);
+	}
+
 
 }
