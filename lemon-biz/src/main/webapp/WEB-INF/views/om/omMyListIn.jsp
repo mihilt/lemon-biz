@@ -8,84 +8,9 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
 
-<title>전체 메일</title>
-<style>
-	#btns{
-		margin: 1rem 0rem 1rem 0rem;
-	}
-	#send-om, #content-temp, #attach-to, #content-reset{
-		margin-right: .2rem;
-	}
-	.btn.btn-light{
-		border: 1px solid lightgray;
-	}
-	form{
-		padding: 1rem;
-		text-align: center;
-	}
-	.container{
-		transform: scale(.96);
-	}
-	#write-title{
-		margin: 0rem 0rem 1rem 0rem; 
-	}
-	/* 별 모양 체크박스 만들기(북마크) */
-	/* 클릭 이전 상태를 2606(outline only 별 모양)으로 설정 */
-	.star:before {
-	   content: "\2606";
-	   visibility:visible;
-	   color: gray;
-	}
-	/* 클릭 이전 상태를 2605(filled 별 모양)으로 설정 */
-	.star:checked:before {
-	   content: "\2605";
-	}
-	.star:checked:before {
-	   content: "\2605";
-	   color: orange;
-	}
-	.star {
-	    visibility:hidden;
-	    font-size: 1.3rem;
-	    cursor:pointer;
-	}
-	.the-star{
-	    margin-top: -.7rem;
-	    width: 1.3rem;
-    }
-    #star-all{
-    	/* border: 1px solid tomato; */
-    }
-    #btns{
-    	transform: scale(.8);
-    	margin-top: -1rem;
-    }
-    input[id^="om-btn"]{
-    	padding: .4rem 1.2rem .4rem 1.2rem;
-    	margin: 0rem .2rem 0rem .2rem;
-    }
-    table th, td{
-    text-align: center;
-    }
-    td{
-    font-size: .9rem;
-    }
-    .pagenation{
-    	text-align: center;
-    }
-    #addl-btns{
-    margin-bottom: 0rem;
-    }
-    .nav-link.active{
-    font-weight: bold;
-    }
-    .nav-link, #pagenate li{
-    color: black;
-    }
-    .nav-link:hover{
-    color: blue;
-    }
-</style>
+<link
+	href="${pageContext.request.contextPath}/resources/css/om.css"
+	rel="stylesheet" type="text/css">
 <script>
 $(function(){
 	$("tr[data-no]").click(function(){
@@ -131,11 +56,10 @@ function goOmForm(){
 		   </ul>
 		   <!-- 여기까지 네비게이션 헤더 -->
 		   
-		    <!-- 여기서부터 메일함 상단부 헤더 -->
+		       <!-- 여기서부터 메일함 상단부 헤더 -->
 			<div class="tab-content"> 
 				<table class="table" id="tbl-header">
 				<tr>
-					<th><input type="checkbox" name="ck-om" id="ck-om-all" /></th>
 					<th id="star-all">
 						<div class="the-star">
 					   		<input class="star" type="checkbox" title="bookmark-all" id="bookmark-all">
@@ -143,7 +67,6 @@ function goOmForm(){
 					</th>
 					<th>발신인</th> 
 					<th>제목</th>
-					<th>내용</th>
 					<th>수신일</th>
 					<th>첨부파일</th>
 				</tr>
@@ -155,19 +78,19 @@ function goOmForm(){
 			<!-- 여기서부터 메일 리스트 -->
 			<div class="tab-pane fade" id="myOM" role="tabpanel" aria-labelledby="myOM-tab">
 				<c:forEach items="${ list }" var="om">
+					<tr data-no="${ om.key }" 
 			<c:if test="${om.readCount gt 0}">
-					<tr data-no="${ om.key }" style="background:#DCDCDC">
+					style="background:#DCDCDC"
 			</c:if>
-						<td><input type="checkbox" name="ck-om" id="ck-om" /></td>
+			>
 					   	<td>
 					   	<div class="the-star">
 					   		<input class="star" type="checkbox" title="bookmark" id="star"
 					   		<c:if test="${ om.isStarred gt 0 }">checked="checked"</c:if>
 					   		/></div>						
 					   	</td>
-						<td>${ om.memId }</td>
-						<td>${ om.title }</td>
-						<td>${ om.content }</td>
+						<td >${ om.memId }</td>
+						<td id="titlee">${ om.title }</td>
 						<td><fmt:formatDate value="${ om.omDate }" pattern="yy/MM/dd"/></td>
 						<td>
 							<c:if test="${ om.fileCount gt 0 }">
@@ -179,7 +102,7 @@ function goOmForm(){
 					</c:forEach>
 				</div>
 			<!-- 여기까지 메일 리스트 -->	
-		</table>
+			</table>
 		
 		</div> <!-- 여기까지 card 본문 영역 -->	
 		<hr style="margin-top:-1rem"/>	
@@ -189,8 +112,6 @@ function goOmForm(){
 		<!-- 여기부터 하단부 버튼 및 페이징 영역 -->
 			 <!-- 하단 버튼 영역 -->
 		   	 <div align="center" id="btns">
-		      <input type="submit" value="중요 메일로 이동" id="send-om" class="btn btn-success">
-		       <input type="button" value="선택 메일 삭제" id="content-reset" class="btn btn-danger"/>
 		       <input type="button" value="새 메일 작성" id="btn-add" class="btn btn-warning" onclick="goOmForm();"/>
 			</div>	   
 			<br />
@@ -208,7 +129,6 @@ function goOmForm(){
 		</div>
 		<br />
 	</body>
-	
 <script>
 $(function(){
 	$("tr[data-key]").click(function(){
@@ -217,15 +137,9 @@ $(function(){
 		location.href = "${ pageContext.request.contextPath }/om/omDetail.do?no=" + no;
 	});
 });
-function goOMForm(){
-	location.href = "${pageContext.request.contextPath}/om/omForm.do";
-}
+
 $(document).ready(function() { 	
-	$('#star-all').click(function(){
-		/* alert("test success"); */
-		/* 이후 추가 */
-	});
-});
+
 	$("#attach-to").click(function(){
 	    $("#attachModal").modal({backdrop: true});
 	  });
@@ -247,10 +161,7 @@ $(document).ready(function() {
 			 return false;
 		}
 	});
-	$(".nav a").on("click", function(){
-		   $(".nav").find(".active").removeClass("active");
-		   $(this).parent().addClass("active");
-		});
+
 </script>
 </html> 
 

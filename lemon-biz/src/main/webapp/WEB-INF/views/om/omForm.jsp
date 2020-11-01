@@ -87,7 +87,7 @@ td[id^="authName"]{
 					<div class="form-group row">
 						<label for="mTo" class="col-sm-1 col-form-label" id="send-to">수신자</label>
 						&emsp;
-						<div class="col-sm-8" style="border:1px solid lightgray; border-radius:.2rem; padding-left:.5rem">
+						<div class="col-sm-7" style="border:1px solid lightgray; border-radius:.2rem; padding-left:.5rem">
 							<!-- <input type="text" class="form-control" id="omrId" name="omrId"
 								placeholder="수신인을 선택하세요."> -->
 							<table>
@@ -118,10 +118,17 @@ td[id^="authName"]{
 							<input type="hidden" id="authId9" name="omrId9" />
 							<input type="hidden" id="authId10" name="omrId10" />
 							&emsp;
-						<button type="button" class="btn btn-light" data-toggle="modal"
+						<button type="button" class="btn btn-outline-warning" data-toggle="modal" 
+						style="padding: 0rem 1.4rem 0rem 1.4rem; font-weight:bold"
 							data-target="#exampleModal" id="addReceiverBtn">수신인 추가</button>
 					</div>
-
+					<div class="form-group row">
+						<label for="title" class="col-sm-1 col-form-label">이메일</label>
+						<div class="col-sm-9">
+							<input type="text" name="goE" placeholder="발송할 외부 이메일 주소를 입력 해 주세요. (공백 없이 콤마(,)로 구분)"
+								class="form-control" id="goE">
+						</div>
+					</div>
 					<div class="form-group row">
 						<label for="title" class="col-sm-1 col-form-label">&ensp;제목</label>
 						<div class="col-sm-9">
@@ -139,22 +146,19 @@ td[id^="authName"]{
 								가능합니다.</label>
 						</div>
 					</div>
+					<div align="right" id="cks">
+					<input type="checkbox" name="goEI" id="goEI" value="goEI" />
+							<label for="goEI">해당 사원 이메일로도 발송&nbsp;</label>
+							&nbsp;
+						<input type="checkbox" name="goS" id="goS" value="goS"/>
+						<label for="goS">중요 메일로 설정&nbsp;</label>
+					</div>	
 					<div align="justify">
 						<textarea id="brdmemo" class="summernote" name="content"
 							cols="120" rows="12" style="width: 100%; resize: none"
 							class="form-control"></textarea>
 					</div>
 					<br />
-					<div align="center" id="cks">
-						<input type="checkbox" name="goG" id="goG" value="goG"/>
-						<label for="goG">외부 발송</label>
-						&ensp;
-						<input type="checkbox" name="goI" id="goI" value="goI"/>
-						<label for="goI">중요 메일</label>
-						&ensp;
-						<input type="checkbox" name="goT" id="goT" value="goT"/>
-						<label for="goT">임시 저장</label>
-					</div>					
 					<div align="center" id="btns">
 						<input type="submit" value="메일 발송" id="send-mail"
 							class="btn btn-success" onclick="fn_formSubmit()"> 
@@ -163,7 +167,6 @@ td[id^="authName"]{
 							type="button" value="작성 취소" id="content-reset"
 							class="btn btn-danger" />
 					</div>
-
 				</form>
 			</div>
 		</div>
@@ -214,12 +217,13 @@ td[id^="authName"]{
 
 					<!-- 여기서부터 수신인 선택 또는 사원명으로 검색 -->
 						<div class="container col-4"
-							style="height: 400px; margin: 0px; overflow-y: auto;">
+							style="height: 400px; margin: 0px;">
 							<h5>사원 조회</h5>
 							<div id="apprst"
-								style="margin: 0px; padding: 0px; border: 1px solid lightgray; height: 360px;">
+								style="margin: 0px; padding: 0px; border: 1px solid lightgray; height: 360px; overflow-y: auto;">
 								<div class="row" style="margin: 5px 5px">
-									<label>사원명으로 검색 </label> <input type="text" id="searchN" />
+									<label>사원명 </label> 
+									<input type="text" id="searchN"/>
 									<button class="btn btn-outline-primary" id="searchNm"
 										onclick="searchName()">검색</button>
 								</div>
@@ -244,7 +248,7 @@ td[id^="authName"]{
 															<c:otherwise>${ item.deptName }</c:otherwise>
 														</c:choose></td>
 													<td>${ item.name }</td>
-													<td>${ item.rankKey }</td>
+													<td>${ item.rankName }</td>
 													<td>${ item.memberId }</td>
 												</tr>
 											</c:forEach>
@@ -268,17 +272,14 @@ td[id^="authName"]{
 
 								<div class="row" style="margin: 5px 5px">
 									<table>
-
 										<tr>
 											<th>No.</th>
 											<th>부서</th>
 											<th>성명</th>
 											<th>직위</th>
 											<th>사번</th>
-											<!-- <th>순서</th> -->
 											<th>삭제</th>
 										</tr>
-
 										<tbody id="finalList">
 											<c:forEach begin="1" end="10" varStatus="stat">
 
@@ -288,7 +289,6 @@ td[id^="authName"]{
 													<td id="name_${ stat.count }"></td>
 													<td id="rank_${ stat.count }"></td>
 													<td id="memId_${ stat.count }"></td>
-													<%-- <td id="order_${ stat.count }"></td> --%>
 													<td id="del_${ stat.count }"></td>
 												</tr>
 
@@ -392,7 +392,7 @@ function printList(data) {
 					  .attr('id',data.memberList[i].memberId).appendTo('#tbody');
 		$('<td></td>').text(data.memberList[i].deptName).appendTo('#'+data.memberList[i].memberId+'');
 		$('<td></td>').text(data.memberList[i].name).appendTo('#'+data.memberList[i].memberId+'');
-		$('<td></td>').text(data.memberList[i].rankKey).appendTo('#'+data.memberList[i].memberId+'');
+		$('<td></td>').text(data.memberList[i].rankName).appendTo('#'+data.memberList[i].memberId+'');
 		$('<td></td>').text(data.memberList[i].memberId).appendTo('#'+data.memberList[i].memberId+'');
 	}
 }
@@ -400,16 +400,8 @@ function printList(data) {
 
 function selectMember(memberId) {
 
-	
 	console.log(memberId);
-	
-	
-/* 	if(memberId == "${loginMember.memberId}") { 
-		alert('본인은 선택할 수 없습니다.');
-		return;
-	} */
-	
-	
+
 	var trArr = $('#finalList > tr');
 	var cnt = 10; 
 	
@@ -425,7 +417,7 @@ function selectMember(memberId) {
 		} 
 	}
 	
-	if(cnt > 10) {
+	if(cnt >= 10) {
 		alert('수신인은 최대 10명까지 선택 가능합니다.');
 		return;
 	}
@@ -433,6 +425,7 @@ function selectMember(memberId) {
 	var rankKey;
 	var deptName;
 	var memberName;
+	var rankName;
 	var param = memberId;
 	$.ajax({
 		type: "POST",
@@ -446,6 +439,7 @@ function selectMember(memberId) {
 			var result = data.selectMember;
 			
 			rankKey = result[0].rankKey;
+			rankName = result[0].rankName;
 			deptName = result[0].deptName;
 			memberName = result[0].name;
 			console.log(memberName);
@@ -467,10 +461,9 @@ function selectMember(memberId) {
 		$('#memId_'+(i+1)).text(memberId);
 		$('#dept_'+(i+1)).text(deptName);
 		$('#name_'+(i+1)).text(memberName);
-		$('#rank_'+(i+1)).text(rankKey);
+		$('#rank_'+(i+1)).text(rankName);
 
 		$('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
-		/* $('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;') */
 		$('#'+(i+1)+'').val('exist');
 
 		return;
@@ -523,11 +516,7 @@ function delLine(i){
 					return;
 				}
 				var obj = data.joinMemberList; 
-				//var obj = data; <-- 이렇게 해버리면 불러올때 obj[i].joinMemberList.name 하면 undifine뜸
-				//java에서 정의한 ArrayList명을 적어준다. 중요..안그럼 불러오기 까다로워짐
-				
 				$('#tbody').empty();
-				
 				MprintList(obj);
 
 				return;
