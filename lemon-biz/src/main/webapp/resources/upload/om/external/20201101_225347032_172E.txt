@@ -1,0 +1,141 @@
+<!-- Modal -->
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="max-width: 90%;" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">결제라인 추가</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="row">
+      <div class="col-md-4">
+      <h5>부서 선택</h5>
+        <!-- tree -->
+	<div id="appr" style="margin: 5px; padding: 5px; border:1px solid lightgray;">
+        <ul id="approvalSelect">
+        	<c:forEach items="${dept}" var="dept">
+            <li><a>${dept.name}</a>
+                <ul>
+                	<c:forEach items="${child}" var="child">
+                    <li><a>${child.name}</a>
+                        <ul>
+                        	<c:forEach items="${child2}" var="child2">
+                        	<c:if test="${child.key eq child2.ref }">
+                            <li>${child2.name}</li>
+                            </c:if>
+                            </c:forEach>
+                        </ul>
+                    </li>
+                    </c:forEach>
+                </ul>
+            </li>
+            </c:forEach>
+        </ul>
+    </div>
+    </div>
+    
+        <!-- tree end-->
+        
+        <!-- printList Form -->
+      
+		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
+    	<h5>결제자 선택</h5>
+    		<div id="apprst" style="margin: 0px; padding: 0px; border:1px solid lightgray; height:360px;">
+    			<div class="row" style="margin: 5px 5px"> 
+    			<label>성명</label>
+    			<input type="text" id="searchN"/>
+    			<button class="btn btn-outline-primary" id="searchNm" onclick="searchName()">검색</button>
+    			</div>
+    	
+    			<div class="row" style="margin: 5px 5px">
+    			
+			    	<table>
+			    	
+			    	<tr>
+			    	<th>부서</th>
+			    	<th>성명</th>
+			    	<th>직위</th>
+			    	<th>사번</th>
+			    	</tr>
+			    	
+			    	<tbody id="tbody">
+				    <c:forEach var="item" items="${ memberList }">
+				    	<tr onclick="selectMember(${item.memberId})" style="cursor:pointer;" class="memberList">
+				    	<td>
+				    	<c:choose>
+				    		<c:when test="${ item.deptName == null }">${ item.deptName = "발령대기" }</c:when>
+				    		<c:otherwise>${ item.deptName }</c:otherwise>
+				    	</c:choose>
+				    	</td>
+				    	<td>${ item.name }</td>
+				    	<td>${ item.rankKey }</td>
+				    	<td>${ item.memberId }</td>
+				    	</tr>
+				    </c:forEach>	
+			    	</tbody>
+			    	</table>
+    	
+    			</div>
+    
+    		</div>
+    	</div>
+    	<!-- printList Form end -->
+    	
+    	
+      	<!-- selectMember Form-->
+		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
+    	<h5>결제자 선택</h5>
+    		<div id="apprst" style="margin: 5px; padding: 5px; border:1px solid lightgray; height:360px;">
+    			
+    	
+    			<div class="row" style="margin: 5px 5px">
+			<table>
+    
+		      	<tr>
+		      	<th>No.</th>
+		    	<th>부서</th>
+		    	<th>성명</th>
+		    	<th>직위</th>
+		    	<th>사번</th>
+		    	<th>순서</th>
+		    	<th>삭제</th>
+		    	</tr>
+		    	
+		    	<tbody id="finalList">
+		    	<c:forEach begin="1" end="3" varStatus="stat">
+		    	
+		    	<tr id="${ stat.count }" >
+		    	<td id="no_${ stat.count }">${ stat.count }</td>
+		    	<td id="dept_${ stat.count }"></td>
+		    	<td id="name_${ stat.count }"></td>
+		    	<td id="rank_${ stat.count }"></td>
+		    	<td id="memId_${ stat.count }"></td>
+		    	<td id="order_${ stat.count }"></td>
+		    	<td id="del_${ stat.count }"></td>
+		    	</tr>
+		    	
+		    	</c:forEach>
+		    	</tbody>
+    
+    		</table>
+    			</div>
+    
+    		</div>
+    	</div>
+      	
+      	
+      	<!-- selectMember Form end-->
+      	
+    
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" onclick="apply()">저장하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
