@@ -77,9 +77,10 @@
 							<br>
 							<div align="center" id="btns">
 								<input type="button" value="메일 회신" id="btn-add"
-									class="btn btn-success" onclick="goOmForm();" />
+									class="btn btn-success" onclick="omReturn(${om.key})" />
+									<input type="hidden" name="sender" value="${om.memId}" />
 									<input type="button" value="메일 삭제" id="content-reset"
-										class="btn btn-danger" />
+										class="btn btn-danger" onclick="deleteOm(${om.key})"/>
 								<input type="button" value="이전 화면" id="content-reset"
 									class="btn btn-secondary" onclick="window.history.back();" />
 									<br />
@@ -159,6 +160,10 @@
 			return;
 		location.href = "${ pageContext.request.contextPath }/om/omfrmDelete.do?key="
 				+ key;
+	}
+	function omReturn(key){
+		location.href = "${pageContext.request.contextPath}/om/omReturn.do?key="
+			+key;
 	}
 </script>
 </html>

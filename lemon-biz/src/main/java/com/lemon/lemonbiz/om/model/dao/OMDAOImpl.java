@@ -14,8 +14,6 @@ import com.lemon.lemonbiz.om.model.vo.OM;
 
 import lombok.extern.slf4j.Slf4j;
 
-
-@Slf4j
 @Repository
 public class OMDAOImpl implements OMDAO {
 
@@ -83,6 +81,22 @@ public class OMDAOImpl implements OMDAO {
 		map.put("myId", myId);
 		return sqlSession.selectList("om.selectSelfOMMapList", map);
 	}
+	
+
+	@Override
+	public List<Map<String, Object>> selectTeamOMMapList(int cPage, int numPerPage, Map<String, Object> map, Member loginMember) {
+		String myId = loginMember.getMemberId();
+		String deptKey = Integer.toString(loginMember.getDeptKey());
+		int startRnum = (cPage - 1) * numPerPage + 1;
+		int endRnum = cPage * numPerPage;
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("startRnum", startRnum);
+		map.put("endRnum", endRnum);
+		map.put("myId", myId);
+		map.put("deptKey", deptKey);
+		return sqlSession.selectList("om.selectTeamOMMapList", map);
+	}
 
 	@Override
 	public List<OM> selectOMList(Map<String, Object> map) {
@@ -98,6 +112,12 @@ public class OMDAOImpl implements OMDAO {
 	public int insertOME(OM om, String omrId) {
 		om.setOmrId(omrId);
 		return sqlSession.insert("om.insertOME", om);
+	}
+	
+	@Override
+	public int insertOMES(OM om, String omrId) {
+		om.setOmrId(omrId);
+		return sqlSession.insert("om.insertOMES", om);
 	}
 	
 	@Override
@@ -156,11 +176,6 @@ public class OMDAOImpl implements OMDAO {
 	public void omFileDelete(int key) {
 		sqlSession.delete("om.omFileDelete", key);
 
-	}
-
-	@Override
-	public List<Map<String, Object>> selectTeamOMMapList(Member loginMember) {
-		return sqlSession.selectList("om.selectTeamOMMapList", loginMember);
 	}
 
 	@Override

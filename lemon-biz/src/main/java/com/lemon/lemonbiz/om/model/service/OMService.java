@@ -14,6 +14,7 @@ public interface OMService {
 	List<Map<String, Object>> selectMyOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 	List<Map<String, Object>> selectMyOMMapListEX(int cPage, int numPerPage, Map<String, Object> map, String myId);
 	List<Map<String, Object>> selectMyOMMapListIN(int cPage, int numPerPage, Map<String, Object> map, String myId);
+	List<Map<String, Object>> selectTeamOMMapList(int cPage, int numPerPage, Map<String, Object> map, Member loginMember);
 
 	List<Map<String, Object>> selectSelfOMMapList(int cPage, int numPerPage, Map<String, Object> map, String myId);
 
@@ -28,6 +29,9 @@ public interface OMService {
 	
 	// 중요 메일로 발송하는 경우
 	int insertOMS(OM om, String omrId);
+	
+	// 외부 메일로 발송하며 동시에 중요 메일로 설정하는 경우
+	int insertOMES(OM om, String omrId);
 
 	OM selectOneOMCollection(int key);
 
@@ -45,7 +49,6 @@ public interface OMService {
 
 	void omFileDelete(int key);
 
-	List<Map<String, Object>> selectTeamOMMapList(Member loginMember);
 
 	int insertTeamOM(OM om);
 

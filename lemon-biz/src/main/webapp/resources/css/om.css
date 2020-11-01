@@ -1,0 +1,84 @@
+#btns{
+		margin: 1rem 0rem 1rem 0rem;
+	}
+	#send-om, #content-temp, #attach-to, #content-reset{
+		margin-right: .2rem;
+	}
+	.btn.btn-light{
+		border: 1px solid lightgray;
+	}
+	form{
+		padding: 1rem;
+		text-align: center;
+	}
+	.container{
+		transform: scale(.96);
+	}
+	#write-title{
+		margin: 0rem 0rem 1rem 0rem; 
+	}
+	/* 별 모양 체크박스 만들기(북마크) */
+	/* 클릭 이전 상태를 2606(outline only 별 모양)으로 설정 */
+	.star:before {
+	   content: "\2606";
+	   visibility:visible;
+	   color: gray;
+	}
+	/* 클릭 이전 상태를 2605(filled 별 모양)으로 설정 */
+	.star:checked:before {
+	   content: "\2605";
+	}
+	.star:checked:before {
+	   content: "\2605";
+	   color: orange;
+	}
+	.star {
+	    visibility:hidden;
+	    font-size: 1.3rem;
+	    cursor:pointer;
+	}
+	.the-star{
+	    margin-top: -.7rem;
+	    width: 1.3rem;
+    }
+    #star-all{
+    	/* border: 1px solid tomato; */
+    }
+    #btns{
+    	transform: scale(.9);
+    	margin-top: -1rem;
+    }
+    input[id^="om-btn"]{
+    	padding: .4rem 1.2rem .4rem 1.2rem;
+    	margin: 0rem .2rem 0rem .2rem;
+    }
+    table th, td{
+    text-align: center;
+    }
+    td{
+    font-size: .9rem;
+    }
+    .pagenation{
+    	text-align: center;
+    }
+    #addl-btns{
+    margin-bottom: 0rem;
+    }
+    .nav-link.active{
+    font-weight: bold;
+    }
+    .nav-link, #pagenate li{
+    color: black;
+    }
+    .nav-link:hover{
+    color: blue;
+    }
+    #titlee{
+    display: inline-block;
+    line-height: 1.3rem;
+    max-height: 2rem;
+    width: 100%;
+    min-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    }
