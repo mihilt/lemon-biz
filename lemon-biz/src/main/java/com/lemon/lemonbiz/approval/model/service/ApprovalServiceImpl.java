@@ -82,17 +82,14 @@ public class ApprovalServiceImpl implements ApprovalService {
 		//2. attachment insert	
 		ApprCheck apprck1 = appr.getApprck1();
 		result = approvalDAO.insertSaveApprck1(apprck1);
-		System.out.println(apprck1.getSeqNum());
 		
 	
 		ApprCheck apprck2 = appr.getApprck2();
 		result = approvalDAO.insertSaveApprck2(apprck2);
-		System.out.println(apprck2.getSeqNum());
 		
 	
 		ApprCheck apprck3 = appr.getApprck3();
 		result = approvalDAO.insertSaveApprck3(apprck3);
-		System.out.println(apprck3.getSeqNum());
 		
 		
 		return result;
@@ -126,17 +123,12 @@ public class ApprovalServiceImpl implements ApprovalService {
 		
 		ApprCheck apprck1 = appr.getApprck1();
 		result = approvalDAO.updateApprck1(apprck1);
-		System.out.println(apprck1.getSeqNum());
-		
 	
 		ApprCheck apprck2 = appr.getApprck2();
 		result = approvalDAO.updateApprck2(apprck2);
-		System.out.println(apprck2.getSeqNum());
-		
 	
 		ApprCheck apprck3 = appr.getApprck3();
 		result = approvalDAO.updateApprck3(apprck3);
-		System.out.println(apprck3.getSeqNum());
 		
 		//3. attachment insert
 		if(appr.getAttachment() != null) {
@@ -157,18 +149,13 @@ public class ApprovalServiceImpl implements ApprovalService {
 		//2. apprckeck insert
 		ApprCheck apprck1 = appr.getApprck1();
 		result = approvalDAO.insertSaveApprck1(apprck1);
-		System.out.println(apprck1.getSeqNum());
-		
 	
 		ApprCheck apprck2 = appr.getApprck2();
 		result = approvalDAO.insertSaveApprck2(apprck2);
-		System.out.println(apprck2.getSeqNum());
-		
 	
 		ApprCheck apprck3 = appr.getApprck3();
 		result = approvalDAO.insertSaveApprck3(apprck3);
-		System.out.println(apprck3.getSeqNum());
-		
+
 		//3. attachment insert
 		if(appr.getAttachment() != null) {
 			Attachment attach = appr.getAttachment();
