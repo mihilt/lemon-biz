@@ -42,7 +42,7 @@
 					<ul class="nav nav-tabs" id="addl-btns" role="tablist">
 						<li class="nav-item"><a class="nav-link active"
 							id="allOM-tab"
-							href="${pageContext.request.contextPath}/om/omList.do" role="tab"
+							href="${pageContext.request.contextPath}/om/omMyList.do" role="tab"
 							aria-controls="allOM" aria-selected="true">발송함 전체</a></li>
 						<li class="nav-item"><a class="nav-link" id="myOM-tab"
 							href="${pageContext.request.contextPath}/om/omMyListIn.do"
