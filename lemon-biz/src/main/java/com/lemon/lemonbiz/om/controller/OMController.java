@@ -292,8 +292,7 @@ public class OMController {
 							continue;
 						String renamedFilename = Utils.getRenamedFileNameN(upFile.getOriginalFilename());
 						File destI = new File(saveDirectory, renamedFilename);
-						upFile.transferTo(destI);
-
+						/* upFile.transferTo(destI); */
 						Attachment attach = new Attachment();
 						attach.setOriginName(upFile.getOriginalFilename());
 						attach.setReName(renamedFilename);
