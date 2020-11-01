@@ -28,11 +28,6 @@
 				</thead>
 				<tbody>
 					<c:forEach items="${ attendList }" var="attend">
-						<tr
-							<%-- <c:if test="${ attend.isManager eq 1 }">
-								class = "text-danger font-weight-bold"
-							</c:if>	 --%>					
-						>
 				<td><fmt:formatDate value="${ attend.arrive }" pattern="yyyy/MM/dd"/></td>
 				<td><fmt:formatDate value="${ attend.arrive }" pattern="E"/></td>
 				<td>${attend.memId }</td>

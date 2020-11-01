@@ -48,28 +48,16 @@ public class AttendController {
 			model.addAttribute("sumTime",attendInfo.getMemId());
 			model.addAttribute("avgTime",attendInfo.getTime());
 			
-			log.debug("list2값="+attendInfo);
-			
-			//내 모든 리스트
-			/*
-			 * List<Attend> list = attendService.selectAttendList(attend);
-			 * model.addAttribute("list", list);
-			 */
-			
-			
 			//마지막 기록 정보
 			Attend lastAttend = attendService.selectLastOne(attend);
 			model.addAttribute("lastAttend", lastAttend);
-			log.debug("lastAttend값="+lastAttend);
-			
 			
 			//페이징 처리 코드
 			int numPerPage = 5;
 			int cPage = 1;
 			try {
 				cPage = Integer.parseInt(request.getParameter("cPage"));
-			} catch (NumberFormatException e) {
-			}
+			} catch (NumberFormatException e) {		}
 			int totalContents;
 			try {
 				totalContents= attendInfo.getKey();
@@ -78,10 +66,6 @@ public class AttendController {
 			}
 
 			String url = request.getRequestURI();
-			log.debug("totalContents = {} ",totalContents);
-			log.debug("cPage = {} ",totalContents);
-			log.debug("numPerPage = {} ",totalContents);
-			log.debug("url = {} ",totalContents);
 			
 			String pageBar = Paging.getPageBarHtml(cPage, numPerPage, totalContents, url);
 			Map<String,Object> map = new HashMap<String, Object>();
@@ -121,7 +105,6 @@ public class AttendController {
 			HttpSession session = request.getSession();
 			Member loginMember = (Member)session.getAttribute("loginMember");
 			attend.setMemId(loginMember.getMemberId());
-			
 
 			try {
 				attendService.attendLeabe(attend);
@@ -135,8 +118,9 @@ public class AttendController {
 		
 		//Cal근태호출
 		@RequestMapping("/attendCal.do")
-		public String attendtest(/* Model model, Attend attend*/) {
-
+		public String attendtest() {
+			//코드
+			
 		return "attend/attendCal";
 		}
 		
@@ -157,17 +141,9 @@ public class AttendController {
 		@RequestMapping("/getTodayAttend")
 		public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
 			
-			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-			System.out.println("params = " + params);
-			
 			String date = (String)params.get("date");
-			
-			System.out.println("date = " + date);
-			
-			int num = attendService.getTodayCount(date);
-			
-			System.out.println("num = " + num);
 
+			int num = attendService.getTodayCount(date);
 
 			return new ResponseEntity<>(num,HttpStatus.OK);		
 		}
@@ -176,19 +152,9 @@ public class AttendController {
 		@RequestMapping("/getAttendLeave")
 		public ResponseEntity<?> getAttendLeave(@RequestParam HashMap<Object,Object> params) {
 			
-
-			
-			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-			System.out.println("params = " + params);
-			
 			String date = (String)params.get("date");
-			
-			System.out.println("date = " + date);
-			
+
 			Attend attend = attendService.getAttendLeave(params);
-			
-			System.out.println("attend = " + attend);
-			
 			
 			return new ResponseEntity<>(attend,HttpStatus.OK);		
 		}
