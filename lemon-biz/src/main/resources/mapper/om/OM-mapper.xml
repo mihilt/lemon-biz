@@ -96,6 +96,42 @@
   		<result column="numPerPage" property="numPerPage"/>
   	</resultMap>
   	
+  	  	
+  	<!-- 동 부서 메일 조회: 수신자가 로그인 중인 사원 본인이면서 발신자의 부서 코드가 사용자와 동일한 메일의 조회 -->
+  	<select id="selectTeamOMMapList" resultMap="omTeam">
+  	SELECT * 
+	FROM ( SELECT ROWNUM AS RNUM, DEP.*
+	                  FROM ( SELECT ( SELECT COUNT(*)
+	                                  FROM ATTACHMENT
+	                                  WHERE MAIL_KEY = O.KEY) FILE_COUNT, O.*
+	                  		 FROM  OM O LEFT JOIN DEPT D
+	     						   ON O.DEPT_KEY  = D.KEY
+	                  WHERE O.OMR_ID = #{ myId } AND O.DEPT_KEY = #{ deptKey }
+	                  ORDER BY OM_DATE DESC) DEP) DEP
+	WHERE RNUM BETWEEN #{ startRnum } AND #{ endRnum }
+	ORDER BY OM_DATE DESC
+  	</select>
+  	
+  	<resultMap type="map" id="omTeam">
+  		<id column="key" property="key"/>
+  		<result column="mem_id" property="memId"/>
+  		<result column="is_done" property="isDone"/>
+  		<result column="title" property="title"/>
+  		<result column="content" property="content"/>
+  		<result column="om_date" property="omDate"/>
+  		<result column="is_starred" property="isStarred"/>
+  		<result column="is_external" property="isExternal"/>
+  		<result column="read_count" property="readCount"/>
+  		<result column="dept_key" property="deptKey"/>
+  		<result column="omr_id" property="omrId"/>
+  		<result column="name" property="name"/>
+  		<result column="file_count" property="fileCount"/>
+  		<result column="startRnum" property="startRnum"/>
+  		<result column="endRnum" property="endRnum"/>
+  		<result column="cPage" property="cPage"/>
+  		<result column="numPerPage" property="numPerPage"/>
+  	</resultMap>
+  	
   	<!-- 페이징 처리 + 로그인 사용자가 수신자인 사내 메일 및 첨부파일의 수 조회 -->
 	<select id="selectOMList" resultType="om">
 	SELECT ROWNUM, RECEIVED.*,  (SELECT COUNT (*)
@@ -132,8 +168,38 @@
 		</selectKey>
   	</insert>
   	
+  	
+  	<!-- INSERT 시 참고: 
+  		  컬럼순 / 
+  		 KEY : MEM_ID : IS_DONE : TITLE : CONTENT : OM_DATE : IS_STARRED : IS_EXTERNAL : READ_COUNT : DEPT_KEY : OMR_ID
+  		  고유 번호 : 발송인 아이디 : 임시저장 여부 : 제목 : 내용 : 발송일시 : 중요 여부 : 외부 발송 여부 : 조회 여부 : 발송인 부서코드 : 수신인 아이디
+  		 -->
+  	
   	<!-- gmail로도 발송하는 경우 INSERT 구문 -->
   	<insert id="insertOME">
+	INSERT INTO OM VALUES (
+	    SEQ_OM_KEY.NEXTVAL,
+	    #{ memId },
+	    1,
+	    #{ title },
+	    #{ content },
+	    DEFAULT,
+	    #{ isStarred },
+	    1, 
+	    DEFAULT,
+	    #{ deptKey },
+	   	#{ omrId }	 
+	)
+	
+		<!-- 현재 시점 가장 최근에 시퀀스에서 사출된 사내메일 고유 번호 조회 -->
+		<selectKey order="AFTER" resultType="_int" keyProperty="key">
+			SELECT SEQ_OM_KEY.CURRVAL
+			FROM DUAL
+		</selectKey>
+  	</insert>
+  	
+  	<!-- gmail로도 발송하며 중요 메일로 설정한 경우 INSERT 구문 -->
+  	<insert id="insertOMES">
 	INSERT INTO OM VALUES (
 	    SEQ_OM_KEY.NEXTVAL,
 	    #{ memId },
@@ -227,7 +293,7 @@
 	<!-- 첨부파일 메일 구분자 고유 번호로 첨부파일 조회 -->
 	<select id="selectAttachList" resultType="attachment">
 		SELECT *
-		FROM OM
+		FROM ATTACHMENT
 		WHERE MAIL_KEY =  #{ mailKey } 
 	</select>
   
@@ -311,34 +377,7 @@
   		DELETE FROM ATTACHMENT
 		WHERE MAIL_KEY = #{ key }
   	</delete>
-  	
-  	<!-- 동 부서 메일 조회: 수신자가 로그인 중인 사원 본인이면서 발신자의 부서 코드가 사용자와 동일한 메일의 조회 -->
-  	<select id="selectTeamOMMapList" resultMap="omTeam">
-  	SELECT  O.*, D.*,
-               ( SELECT COUNT(*) 
-                 FROM ATTACHMENT
-                 WHERE MAIL_KEY = O.KEY ) FILE_COUNT
-	FROM OM O LEFT JOIN DEPT D
-	     ON O.DEPT_KEY  = D.KEY
-	WHERE OMR_ID = #{ memberId } AND O.DEPT_KEY = #{ deptKey }
-	ORDER BY O.OM_DATE DESC
-  	</select>
-  	
-  	<resultMap type="map" id="omTeam">
-  		<id column="key" property="key"/>
-  		<result column="mem_id" property="memId"/>
-  		<result column="is_done" property="isDone"/>
-  		<result column="title" property="title"/>
-  		<result column="content" property="content"/>
-  		<result column="om_date" property="omDate"/>
-  		<result column="is_starred" property="isStarred"/>
-  		<result column="is_external" property="isExternal"/>
-  		<result column="read_count" property="readCount"/>
-  		<result column="dept_key" property="deptKey"/>
-  		<result column="omr_id" property="omrId"/>
-  		<result column="name" property="name"/>
-  		<result column="file_count" property="fileCount"/>
-  	</resultMap>
+
   		
   	<!-- 같은 부서 인원 전원에게 메일 발송 기능으로 변경할 건데 우선 보류 -->
   	<insert id="insertTeamOM">
