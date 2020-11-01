@@ -18,7 +18,7 @@
              	<div class="card" >
                 	<div class="card-header py-2" align="center">
                 	<br />	
-                	<h2>요청결제문서</h2>
+                	<h2>요청결재문서</h2>
                 	<br />
 						<table class="table table text-center">
 					    <tr>
