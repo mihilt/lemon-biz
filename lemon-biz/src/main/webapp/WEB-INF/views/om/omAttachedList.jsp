@@ -74,12 +74,13 @@
 							</div>
 							<!-- 여기까지 메일함 상단부 헤더 -->
 
-							<!-- 지금부터 메일 표시 -->
+							<!-- 지금부터 메일 표시 --> 
 							<!-- 여기서부터 메일 리스트 -->
 							<div class="tab-pane fade" id="myOM" role="tabpanel"
 								aria-labelledby="myOM-tab">
 								<c:forEach items="${ list }" var="om">
-									<c:if test="${ om.fileCount gt 0 }">
+								<c:if test="${ om.fileCount gt 0 }">
+									<c:if test="${om.readCount gt 0}">
 										<tr data-no="${ om.key }" style="background: #DCDCDC">
 									</c:if>
 									<td><input type="checkbox" name="ck-om" id="ck-om" /></td>
@@ -94,7 +95,7 @@
 									<td>${ om.title }</td>
 									<td><fmt:formatDate value="${ om.omDate }"
 											pattern="yy/MM/dd" /></td>
-									<td><c:if test="${om.readCount gt 0}">
+									<td>
 											<img
 												src="${ pageContext.request.contextPath }/resources/images/file.png"
 												style="width: 1rem;" />
