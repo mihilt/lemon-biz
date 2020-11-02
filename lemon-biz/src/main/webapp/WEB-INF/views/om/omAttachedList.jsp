@@ -74,7 +74,7 @@
 							</div>
 							<!-- 여기까지 메일함 상단부 헤더 -->
 
-							<!-- 지금부터 메일 표시 -->
+							<!-- 지금부터 메일 표시 --> 
 							<!-- 여기서부터 메일 리스트 -->
 							<div class="tab-pane fade" id="myOM" role="tabpanel"
 								aria-labelledby="myOM-tab">
