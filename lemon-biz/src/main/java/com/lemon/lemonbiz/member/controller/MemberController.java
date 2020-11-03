@@ -46,16 +46,20 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
 
+	//사원 등록
 	@RequestMapping(value = "/memberEnroll.do", method = RequestMethod.POST)
 	public String memberEnroll(RedirectAttributes redirectAttr, Member member) {
 
-		log.debug("member={}" + member);
-
 		// 존재하는 사원인지 검사
-		if (memberService.selectOneMember(member.getMemberId()) != null) {
-			String msg = "이미 존재하는 사원 번호 입니다.";
-			redirectAttr.addFlashAttribute("msg", msg);
-			return "redirect:/manager/insertMember.do";
+		try {
+			if (memberService.selectOneMember(member.getMemberId()) != null) {
+				String msg = "이미 존재하는 사원 번호 입니다.";
+				redirectAttr.addFlashAttribute("msg", msg);
+				return "redirect:/manager/insertMember.do";
+			}
+		}catch(Exception e) {
+			log.error("사원 조회 오류", e);
+			throw e;
 		}
 
 		// BCryptPasswordEncoder
@@ -63,14 +67,13 @@ public class MemberController {
 		String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
 		member.setPassword(encodedPassword);
 
-		// 사원 등록
 		int result = 0;
 
 		try {
 			result = memberService.insertMember(member);
 
 		} catch (Exception e) {
-			log.debug("사원 등록 실패");
+			log.error("사원 등록 실패");
 		}
 
 		String msg = result > 0 ? "사원 등록에 성공했습니다." : "사원 등록에 실패했습니다.";
@@ -79,6 +82,7 @@ public class MemberController {
 		return "redirect:/manager/insertMember.do";
 	}
 
+	//사원 로그인
 	@RequestMapping(value = "/memberLogin.do", method = RequestMethod.POST)
 	public String memberLogin(@RequestParam("memberId") String memberId, @RequestParam("password") String password,
 			RedirectAttributes redirectAttr, Model model) {
@@ -91,23 +95,22 @@ public class MemberController {
 				return "redirect:/";
 			} else {
 				// 로그인 실패
-				log.debug("로그인 실패");
+				log.error("로그인 실패");
 				redirectAttr.addFlashAttribute("msg", "아이디 또는 비밀번호가 일치하지 않습니다.");
 				return "redirect:memberLogin.do";
 			}
 		} catch (Exception e) {
 			// 오류
-			log.debug("오류");
+			log.error("오류");
 			redirectAttr.addFlashAttribute("msg", "로그인 처리 중 오류가 발생했습니다.");
 			return "redirect:memberLogin.do";
 		}
 
 	}
 
+	//로그아웃
 	@RequestMapping("/memberLogout.do")
 	public String memberLogout(SessionStatus sessionStatus) {
-
-		log.debug("로그아웃 요청");
 
 		if (!sessionStatus.isComplete())
 			sessionStatus.setComplete();
@@ -115,17 +118,33 @@ public class MemberController {
 		return "redirect:/";
 	}
 
+	//로그인 화면 요청
 	@RequestMapping(value = "/memberLogin.do", method = RequestMethod.GET)
 	public String memberLogin() {
 
 		return "forward:/WEB-INF/views/login/memberLogin.jsp";
 	}
 
+	//마이페이지 화면 요청
 	@RequestMapping(value = "/myPage.do", method = RequestMethod.GET)
 	public String myPage(Model model) {
 
-		List<Dept> deptList = memberService.selectDeptList();
-		List<Rank> rankList = memberService.selectRankList();
+		List<Dept> deptList = null;
+		List<Rank> rankList = null;
+		
+		try {
+			deptList = memberService.selectDeptList();
+		}catch(Exception e) {
+			log.error("부서 리스트 조회 오류", e);
+			throw e;
+		}
+		
+		try {
+			rankList = memberService.selectRankList();
+		}catch(Exception e) {
+			log.error("직급 리스트 조회 오류", e);
+			throw e;
+		}
 
 		model.addAttribute("deptList", deptList);
 		model.addAttribute("rankList", rankList);
@@ -133,6 +152,7 @@ public class MemberController {
 		return "forward:/WEB-INF/views/mypage/showMyPage.jsp";
 	}
 
+	//사용자 정보 수정
 	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.POST)
 	public String update(Member member, RedirectAttributes redirectAttr, Model model, HttpServletRequest request,
 			@RequestParam(value = "profile_img", required = false) MultipartFile[] profileImgs)
@@ -154,19 +174,38 @@ public class MemberController {
 
 		}
 
-		int result = memberService.updateMember(member);
+		int result = 0;
+		
+		try {
+			result = memberService.updateMember(member);
+		}catch(Exception e) {
+			log.error("사원 수정 오류", e);
+			throw e;
+		}
+		
 		redirectAttr.addFlashAttribute("msg", (result > 0) ? "수정을 완료하였습니다." : "수정에 오류가 발생했습니다.");
-		Member loginMember = memberService.selectOneMember(member.getMemberId());
+		
+		Member loginMember = null;
+		
+		try {
+			loginMember = memberService.selectOneMember(member.getMemberId());
+		}catch(Exception e) {
+			log.error("사원 조회 오류", e);
+			throw e;
+		}
+		
 		model.addAttribute("loginMember", loginMember);
 
 		return "redirect:myPage.do";
 	}
 
+	//비밀번호 변경 화면요청
 	@RequestMapping(value = "updatePassword.do", method = RequestMethod.GET)
 	public String updatePassword() {
 		return "forward:/WEB-INF/views/mypage/updatePassword.jsp";
 	}
 
+	//비밀번호 변경
 	@RequestMapping(value = "updatePassword.do", method = RequestMethod.POST)
 	public String updatePasswordPost(Member member, @RequestParam("change_pwd") String changePwd,
 			RedirectAttributes redirectAttr) {
@@ -174,6 +213,7 @@ public class MemberController {
 		Member loginMember = null;
 
 		try {
+			//이미 존재하는 사원인지 검사
 			loginMember = memberService.selectOneMember(member.getMemberId());
 
 			if (loginMember != null && bcryptPasswordEncoder.matches(member.getPassword(), loginMember.getPassword())) {
@@ -197,20 +237,44 @@ public class MemberController {
 
 	}
 
+	//조직도 화면요청
 	@RequestMapping(value = "organization.do", method = RequestMethod.GET)
 	public void organization(Model model) {
-		List<Dept> hierarchicalDeptList = memberService.hierarchicalDeptList();
-		List<Member> memberList = memberService.selectMemberList();
+		
+		List<Dept> hierarchicalDeptList = null;
+		List<Member> memberList = null;
 
+		try {
+			hierarchicalDeptList = memberService.hierarchicalDeptList();
+		}catch(Exception e) {
+			log.error("부서목록 계층형 리스트 조회 오류", e);
+			throw e;
+		}
+		
+		try {	
+			memberList = memberService.selectMemberList();
+		}catch(Exception e) {
+			log.error("사원 목록 조회 오류", e);
+			throw e;
+		}
+		
 		model.addAttribute("hierarchicalDeptList", hierarchicalDeptList);
 		model.addAttribute("memberList", memberList);
 
 	}
 
+	//ajax 사원 한명 정보 json형식으로 담기
 	@RequestMapping(value = "selectOneMemberAjax.do", method = RequestMethod.GET)
 	public void selectOneMemberAjax(@RequestParam("memberId") String memberId, HttpServletResponse response) {
-		Member member = memberService.selectOneMember(memberId);
-
+		
+		Member member = null;
+		
+		try {
+			member = memberService.selectOneMember(memberId);
+		}catch(Exception e) {
+			log.error("사원 조회 오류", e);
+			throw e;
+		}
 		response.setContentType("application/json; charset=utf-8");
 
 		Gson gson = new Gson();
@@ -222,18 +286,28 @@ public class MemberController {
 
 	}
 
+	//비밀번호 찾기 화면요청
 	@RequestMapping(value = "memberForgotPassword.do", method = RequestMethod.GET)
 	public String memberForgotPasswordGet() {
 		return "forward:/WEB-INF/views/login/memberForgotPassword.jsp";
 	}
 
+	//비밀번호 찾기 
 	@RequestMapping(value = "memberForgotPassword.do", method = RequestMethod.POST)
 	public String memberForgotPasswordPost(Member receivedMember, RedirectAttributes redirectAttr) {
 
 		log.debug("member={}", receivedMember);
 
-		Member realMember = memberService.selectOneMember(receivedMember.getMemberId());
-
+		//존재하는 사원인지 검사
+		
+		Member realMember = null;
+		try {
+			realMember = memberService.selectOneMember(receivedMember.getMemberId());
+		}catch(Exception e) {
+			log.error("사원 조회 오류", e);
+			throw e;
+		}
+		
 		if (realMember == null) {
 			redirectAttr.addFlashAttribute("msg", "존재하지 않는 사원 번호입니다.");
 			return "redirect:memberForgotPassword.do";
@@ -264,7 +338,16 @@ public class MemberController {
 			realMember.setPassword(encodedPassword);
 			
 			//변경 service
-			int result = memberService.updatePasswordWithEmail(realMember);
+			
+			int result = 0;
+			
+			try {
+				result = memberService.updatePasswordWithEmail(realMember);
+			}catch(Exception e) {
+				log.error("사원 조회 오류", e);
+				throw e;
+			}
+			
 			String msg = result > 0 ? "사원 비밀번호 초기화를 성공하였습니다. 메일 확인을 해주세요." : "사원 비밀번호 초기화를 실패했습니다.";
 			redirectAttr.addFlashAttribute("msg", msg);
 			

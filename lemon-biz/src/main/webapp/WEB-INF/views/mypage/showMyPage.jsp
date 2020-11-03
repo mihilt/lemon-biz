@@ -18,13 +18,11 @@
 		</h4>
 		<form class="p-4"
 			action="${ pageContext.request.contextPath }/member/memberUpdate.do"
-			method="post"
-			enctype="multipart/form-data">
-			
+			method="post" enctype="multipart/form-data">
+
 			<!-- 프로필 사진 -->
-			<div id = "profile_file_add"
-				 class="m-5 mx-auto" 
-				 style="
+			<div id="profile_file_add" class="m-5 mx-auto"
+				style="
 				 	width: 200px;
 				 	height: 200px;
 				 	background-size: 200px 200px;
@@ -56,21 +54,21 @@
 				 	cursor: pointer;
 				 ">
 			</div>
-			<p class="text-center text-danger font-weight-bolder" 
-			   style="font-size: small;">*프로필 사진 클릭을 통해 이미지를 업로드 해주세요!</p>
-			
+			<p class="text-center text-danger font-weight-bolder"
+				style="font-size: small;">*프로필 사진 클릭을 통해 이미지를 업로드 해주세요!</p>
+
 			<!-- input file -->
-			<input type="file" id="myfile" name="profile_img" style="display:none;" accept="image/png">
-			
+			<input type="file" id="myfile" name="profile_img"
+				style="display: none;" accept="image/png">
+
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">사번 :</div>
 				<div class="col-10 form-control bg-gray-200">${ loginMember.memberId }</div>
 				<input type="hidden" name="memberId"
-					value="${ loginMember.memberId }" />
-				<input type="hidden" name="isManager"
-					value="${ loginMember.isManager }" />
-				<input type="hidden" name="deptKey" value="${ loginMember.deptKey }" />
-				<input type="hidden" name="rankKey" value="${ loginMember.rankKey }" />
+					value="${ loginMember.memberId }" /> <input type="hidden"
+					name="isManager" value="${ loginMember.isManager }" /> <input
+					type="hidden" name="deptKey" value="${ loginMember.deptKey }" /> <input
+					type="hidden" name="rankKey" value="${ loginMember.rankKey }" />
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">이름 :</div>
@@ -79,7 +77,7 @@
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">부서 :</div>
-				<select disabled  name="deptKey" class="col-10 form-control"
+				<select disabled name="deptKey" class="col-10 form-control"
 					id="exampleFormControlSelect1">
 					<c:forEach items="${ deptList }" var="dept">
 						<option value="${ dept.key }"

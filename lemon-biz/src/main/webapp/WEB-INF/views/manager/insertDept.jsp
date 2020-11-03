@@ -14,24 +14,22 @@
 		</h4>
 		<form class="p-4 mx-auto w-75"
 			action="${ pageContext.request.contextPath }/manager/insertDept.do"
-			onsubmit="return checkFrm()"
-			method="post"
-			>
+			onsubmit="return checkFrm()" method="post">
 			<div class="mb-1 row mx-5">
-				<input name="key" placeholder="부서 번호" class="col form-control" type="text" required>
+				<input name="key" placeholder="부서 번호" class="col form-control"
+					type="text" required>
 			</div>
-			
+
 			<div class="mb-1 row mx-5 mb-4">
-				<input name="name"  placeholder="부서명" class="col form-control" type="text" required>
+				<input name="name" placeholder="부서명" class="col form-control"
+					type="text" required>
 			</div>
 			<div class="mb-2 row mx-5">
 				<div class="col-3 pt-2 text-right">상위 부서 :</div>
-				<select name="ref" class="col-9 form-control"
-					id="deptKey">
+				<select name="ref" class="col-9 form-control" id="deptKey">
 					<option value="none" selected></option>
 					<c:forEach items="${ deptList }" var="dept">
-						<option value="${ dept.key }">
-							${ dept.name }(${ dept.key })
+						<option value="${ dept.key }">${ dept.name }(${ dept.key })
 						</option>
 
 					</c:forEach>

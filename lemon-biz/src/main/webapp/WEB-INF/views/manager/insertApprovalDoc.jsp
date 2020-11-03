@@ -1,17 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<fmt:requestEncoding value="utf-8"/>
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
-<jsp:include page="/WEB-INF/views/common/sbHeader.jsp"/>
+<fmt:requestEncoding value="utf-8" />
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/sbHeader.jsp" />
 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
 <!-- include summernote-ko-KR -->
-<script src="${pageContext.request.contextPath }/resources/summernoteKr/summernote-ko-KR.js"></script>
+<script
+	src="${pageContext.request.contextPath }/resources/summernoteKr/summernote-ko-KR.js"></script>
 
 <script>
 //add summernote
@@ -30,13 +34,11 @@ $(document).ready(function() {
 			<strong>전자결재 양식 생성</strong>
 		</h4>
 		<form class="p-4 mx-auto"
-			  action="${ pageContext.request.contextPath }/manager/insertApprovalDoc.do"
-			  method="post"
-		 	  style="width: 100%;"
-			>
+			action="${ pageContext.request.contextPath }/manager/insertApprovalDoc.do"
+			method="post" style="width: 100%;">
 			<div class="mb-4">
-				<label>제목</label>
-				<input name="name" class="col form-control" type="text" required>
+				<label>제목</label> <input name="name" class="col form-control"
+					type="text" required>
 			</div>
 			<div>
 				<label>내용</label>
@@ -46,14 +48,12 @@ $(document).ready(function() {
 			</div>
 			<button
 				class="btn bg-warning text-white font-weight-bold float-right mt-4"
-				type="submit">
-				양식 등록
-			</button>
+				type="submit">양식 등록</button>
 		</form>
 	</div>
 </div>
 
 
-			 
-<jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
-<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+
+<jsp:include page="/WEB-INF/views/common/sbFooter.jsp" />
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />

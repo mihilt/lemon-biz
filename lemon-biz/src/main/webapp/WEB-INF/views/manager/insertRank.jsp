@@ -14,10 +14,10 @@
 		</h4>
 		<form class="p-4 mx-auto w-75"
 			action="${ pageContext.request.contextPath }/manager/insertRank.do"
-			method="post"
-			>
+			method="post">
 			<div class="mb-1 row mx-5">
-				<input name="name" placeholder="직급 이름" class="col form-control" type="text" value="" required>
+				<input name="name" placeholder="직급 이름" class="col form-control"
+					type="text" value="" required>
 			</div>
 			<div class="text-center">
 				<button
