@@ -14,13 +14,15 @@
 <div class="container">
 	<div class="card">
 		<h4 id="m-title" class="card-header">
-			<strong><a href="${ pageContext.request.contextPath }/manager/manageMember.do">사원 정보</a> / 상세보기</strong>
+			<strong><a
+				href="${ pageContext.request.contextPath }/manager/manageMember.do">사원
+					정보</a> / 상세보기</strong>
 		</h4>
 		<form class="p-4"
 			action="${ pageContext.request.contextPath }/manager/manageMember/detail/update.do"
 			method="get">
-			<div class="m-5 mx-auto" 
-				 style="
+			<div class="m-5 mx-auto"
+				style="
 				 	width: 200px;
 				 	height: 200px;
 				 	background-size: 200px 200px;
@@ -53,8 +55,7 @@
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">사번 :</div>
 				<div class="col-10 form-control bg-gray-200">${ member.memberId }</div>
-				<input type="hidden" name="memberId"
-					value="${ member.memberId }" />
+				<input type="hidden" name="memberId" value="${ member.memberId }" />
 			</div>
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">이름 :</div>
@@ -104,23 +105,22 @@
 				<div class="col-2 pt-2 text-right">이메일 :</div>
 				<div class="col-10 form-control bg-gray-200">${ member.email }</div>
 			</div>
-			<input type="hidden" name="email" value="${ member.email }" />
-			<input type="hidden" name="emailPwd" value="${ member.emailPwd }" />
-			<br />
+			<input type="hidden" name="email" value="${ member.email }" /> <input
+				type="hidden" name="emailPwd" value="${ member.emailPwd }" /> <br />
 			<div class="mb-1 row mx-5">
 				<div class="col-2 pt-2 text-right">관리자 :</div>
 				<div class="col-10 pt-2">
 					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="isManager" id="no" value="0" <c:if test="${ member.isManager eq 0 }">checked</c:if>>
-					  <label class="form-check-label" for="no">
-					    	아니오
-					  </label>
+						<input class="form-check-input" type="radio" name="isManager"
+							id="no" value="0"
+							<c:if test="${ member.isManager eq 0 }">checked</c:if>> <label
+							class="form-check-label" for="no"> 아니오 </label>
 					</div>
 					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="isManager" id="yes" value="1" <c:if test="${ member.isManager eq 1 }">checked</c:if>>
-					  <label class="form-check-label" for="yes">
-					 	   네
-					  </label>
+						<input class="form-check-input" type="radio" name="isManager"
+							id="yes" value="1"
+							<c:if test="${ member.isManager eq 1 }">checked</c:if>> <label
+							class="form-check-label" for="yes"> 네 </label>
 					</div>
 				</div>
 			</div>

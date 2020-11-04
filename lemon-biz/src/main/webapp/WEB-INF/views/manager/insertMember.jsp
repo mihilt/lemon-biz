@@ -13,33 +13,30 @@
 			<strong>사원 등록</strong>
 		</h4>
 		<div class="container-inner card-body">
-		
-			<h6 class="text-danger text-center mt-2 mb-4">*등록한 사원의 초기 비밀번호는 사원번호와 동일</h6>
 
-			<form class="mx-auto w-75" 
-			      method="post"
-			      onsubmit="return checkFrm()"
-				  action="${pageContext.request.contextPath}/member/memberEnroll.do">
+			<h6 class="text-danger text-center mt-2 mb-4">*등록한 사원의 초기 비밀번호는
+				사원번호와 동일</h6>
+
+			<form class="mx-auto w-75" method="post" onsubmit="return checkFrm()"
+				action="${pageContext.request.contextPath}/member/memberEnroll.do">
 				<div class="mb-2 row mx-5">
 					<div class="col-2 pt-2 text-right"></div>
 					<input class="form-control col-10" type="text" id="memberId"
 						name="memberId" placeholder="사원 번호" required>
 				</div>
-				
+
 				<div class="mb-4 row mx-5">
 					<div class="col-2 pt-2 text-right"></div>
-					<input class="form-control col-10" type="text"
-						name="name" placeholder="이름" required>
+					<input class="form-control col-10" type="text" name="name"
+						placeholder="이름" required>
 				</div>
 
 				<div class="mb-2 row mx-5">
 					<div class="col-2 pt-2 text-right">부서 :</div>
-					<select name="deptKey" class="col-10 form-control"
-						id="deptKey">
+					<select name="deptKey" class="col-10 form-control" id="deptKey">
 						<option value="none" selected></option>
 						<c:forEach items="${ deptList }" var="dept">
-							<option value="${ dept.key }">
-								${ dept.name }(${ dept.key })
+							<option value="${ dept.key }">${ dept.name }(${ dept.key })
 							</option>
 
 						</c:forEach>
@@ -47,13 +44,10 @@
 				</div>
 				<div class="row mx-5">
 					<div class="col-2 pt-2 text-right">직급 :</div>
-					<select name="rankKey" class="col-10 form-control"
-						id="rankKey">
+					<select name="rankKey" class="col-10 form-control" id="rankKey">
 						<option value="none" selected></option>
 						<c:forEach items="${ rankList }" var="rank">
-							<option value="${ rank.key }">
-								${ rank.name }
-							</option>
+							<option value="${ rank.key }">${ rank.name }</option>
 
 						</c:forEach>
 					</select>

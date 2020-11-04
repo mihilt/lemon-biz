@@ -42,7 +42,7 @@ public class ManagerCheckAspect {
 		log.debug("manager 권한 체크 : " + loginMember.getIsManager());
 		
 		if(loginMember.getIsManager() != 1) {
-			log.debug("일반 사용자가 manager 권한에 접근!!");
+			log.debug("일반 사용자가 manager 권한에 접근했습니다.");
 
 			FlashMap map = new FlashMap();
 			map.put("msg", "그룹웨어 관리자 권한이 없는 사용자 입니다.");
