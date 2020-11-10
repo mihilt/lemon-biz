@@ -206,14 +206,21 @@
 	</select>
 
 	<select id="getCountApproval" resultType="int">
-		select 
-			count(*)
-		from 
-			appr_check
-		where 
-			mem_id = #{ memberId } 
-		and 
-			status is null
+		select
+		    COUNT(*) 
+		from
+		    appr A
+		        left outer join appr_check C on A.key = C.approval_key
+		where
+		    C.mem_id = #{memberId}
+		    and
+            (
+		    (select V.status from appr_check V where V.key =  C.key - 1) = 't'
+            or 
+            C.seq_num = 1
+            )
+            AND A.status = 'p'
+		order by A.key DESC
 	</select>
 
 	<update id="updateApproval">

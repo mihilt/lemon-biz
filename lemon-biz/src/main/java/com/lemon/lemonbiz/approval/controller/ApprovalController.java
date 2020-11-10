@@ -68,105 +68,45 @@ public class ApprovalController {
 	private ResourceLoader resourceLoader;
 	
 	
-	@RequestMapping(value="/compliteApprovalList")
-	public String compliteApprovalList(@ModelAttribute("loginMember") Member loginMember,
-									   @RequestParam(value="page") int page,
-									   Model model) {
-		
-		List<Appr> apprList = new ArrayList<>();
-		apprList = approvalService.compliteApprList(loginMember.getMemberId());
-		
-		model.addAttribute("apvList",apprList);
-		model.addAttribute("auth", 0);
-		model.addAttribute("pageInfo",paging(page,apprList));
-		model.addAttribute("toSearch", "approval/compliteApprovalList");
-		
-		return "approval/compliteApprovalList";
-	}
-	
-	@RequestMapping(value="/returnApprovalList")
-	public String returnApprovalList(@ModelAttribute("loginMember") Member loginMember,
-									 @RequestParam(value="page") int page,
-									 Model model) {
-		
-		List<Appr> apprList = new ArrayList<>();
-		apprList = approvalService.returnApprList(loginMember.getMemberId());
-		
-		model.addAttribute("apvList",apprList);
-		model.addAttribute("auth", 0);
-		model.addAttribute("pageInfo",paging(page,apprList));
-		model.addAttribute("toSearch", "approval/requestApprovalList");
-		
-		
-		return "approval/returnApprovalList";
-	}
-	
-	@RequestMapping(value="/requestApprovalList")
-	public String requestApprovalList(@ModelAttribute("loginMember") Member loginMember,
-									  @RequestParam(value="page") int page,
-									  Model model) {
-		
-		
-		List<Appr> apprList = new ArrayList<>();
-		apprList = approvalService.apprAndCkList(loginMember);
-		
-		model.addAttribute("apvList",apprList);
-		model.addAttribute("auth", 0);
-		model.addAttribute("pageInfo",paging(page,apprList));
-		model.addAttribute("toSearch", "approval/requestApprovalList");
-		
-		return "approval/requestApprovalList";
-	}
 	
 	
-	@RequestMapping(value="/myApprovalList")
-	public String myApprovalList(@ModelAttribute("loginMember") Member loginMember,
-								 @RequestParam(value="page") int page,
-								 
-								 Model model) {
-		List<Appr> apprList = new ArrayList<>();
-		apprList = approvalService.myApprovalList(loginMember.getMemberId());
-		
-		
-		
-		model.addAttribute("apvList",apprList);
-		model.addAttribute("auth", 0);
-		model.addAttribute("pageInfo",paging(page,apprList));
-		model.addAttribute("toSearch", "approval/myApprovalList");
-		
-		
-		return "approval/myApprovalList";
-	}
+	//===================================================writeFrom(전자결재문서 작성페이지)===============================================
 	
-	
-	@RequestMapping(value="/myApvList")
-	public String myApvList(HttpServletRequest req, 
-							Model model,
-							@ModelAttribute("loginMember") Member loginMember,
-							@RequestParam(value="page") int page) {
+	// 결재문서작성 시 필요한 요소들 model객체에 저장(Tree에 사용될 부서정보(dept -> child -> child2), 문서종류) 
+	@RequestMapping(value="/writeForm.do")
+	public String writeForm(Model model,
+							@RequestParam(value="approval_id" , required=false) String key) {
 		
-		HttpSession session = req.getSession(); 
-		
-		List<Appr> apprList = new ArrayList<>();
+		if(key!=null) {
+		Appr appr = approvalService.reWriteAppr(key);
+
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
 		try {
-			apprList = approvalService.ApprovalList(loginMember.getMemberId());
-			
-			model.addAttribute("apvList",apprList);
-			model.addAttribute("auth", 0);
-			model.addAttribute("pageInfo",paging(page,apprList));
-			model.addAttribute("toSearch", "approval/myApvList");
-			
+		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("attach",attach);
 		} catch(Exception e) {
-			
+		}
+
+		
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
+	
+		apprck1 = apprchList.get(0);
+		apprck2 = apprchList.get(1);
+		apprck3 = apprchList.get(2);
+		
+		
+		model.addAttribute("appr",appr);
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
 		}
 		
-		return "approval/myApvList";
-	}
-	
-	@RequestMapping(value="/writeForm.do")
-	public String writeForm(Model model) {
 		
-
+		
+		//트리에 부서정보 나열하기 위해 상위부서를 기준으로 model객체에 저장
 		List<Dept> dept = approvalService.deptList();
 		List<Dept> child = approvalService.child();
 		List<Dept> child2 = approvalService.child2();
@@ -177,16 +117,20 @@ public class ApprovalController {
 		model.addAttribute("dept",dept);
 		model.addAttribute("child",child);
 		model.addAttribute("child2",child2);
-
+		
+		//문서종류 리스트로 model에 저장
 		List<DocType> docTypeList = approvalService.selectDocTypeTitleList();
 		model.addAttribute("docTypeList", docTypeList);
 		
 		
-		
 		return "approval/writeForm";
+		
 	}
 	
-	@RequestMapping(value="/approvalSelect.do")
+	
+	//---------------결제라인추가
+	//결제라인추가-부서선택시 해당부서직원List 출력
+	@RequestMapping(value="/deptSelect.do")
 	public String approvalSelect(@RequestParam("node") String node,
 								 Model model) {
 		
@@ -200,7 +144,7 @@ public class ApprovalController {
 		
 		return "jsonView";
 	}
-	
+	//결제라인추가-직원선택시 결제자순번영역으로 이동
 	@RequestMapping(value="/selectMember.do",
 					method=RequestMethod.POST,
 					produces = "application/json; charset=utf8")
@@ -218,99 +162,85 @@ public class ApprovalController {
 		return map;
 	}
 	
-	
+	// ajax결제자선택 -> 이름 검색 | json으로 검색한 이름에 대한 결제자정보 map에 담아 넘김
 	@RequestMapping(value="/searchName.do",
-					method=RequestMethod.POST,
-					produces="application/json; charset=utf8")
+			method=RequestMethod.POST,
+			produces="application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> joinMemberList(@RequestParam("param") String param) {
-		
+	
 		log.debug("param ={}", param);
 		Map<String, Object> map = new HashMap<>();
 		List<Member> joinMemberList = approvalService.joinMemberlist(param);
 		
 		map.put("joinMemberList", joinMemberList);
-		
+	
 		return map;
 	}
-	//updateApproval.do
+	//---------------결제라인추가 end
+	
+	//결제문서양식 불러오기
+	@RequestMapping(value="selectOneDocTypeAjax.do", method=RequestMethod.GET)
+	public void selectOneDocTypeAjax(DocType docType, HttpServletResponse response) {
+		
+		DocType oneDocType = approvalService.selectOneDocTypeAjax(docType);
+		
+
+		response.setContentType("application/json; charset=utf-8");
+
+		Gson gson = new Gson();
+		try {
+			gson.toJson(oneDocType, response.getWriter());
+		} catch (JsonIOException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//--------임시저장
 	@RequestMapping(value="applovalSave.do", method=RequestMethod.POST)
 	public String updateApproval(HttpServletRequest req,
 								Model model,
 								Appr appr,
-								@RequestParam (value="updateTitle", required=true) String title,
-								@RequestParam (value="updateContent", required=true) String semmernote,
-								@RequestParam (value="updateStatus", required=true) String status,
 								@RequestParam (value="updatdAuthId1", required=true) String authId1,
 								@RequestParam (value="updatdAuthId2", required=true) String authId2,
-								@RequestParam (value="updatdAuthId3", required=true) String authId3,
-								@RequestParam (value="updateProcessNum1", required=true) int processNum1,
-								@RequestParam (value="updateProcessNum2", required=true) int processNum2,
-								@RequestParam (value="updateProcessNum3", required=true) int processNum3,
-								@RequestParam (value="updateApprovalKey", required=true) String approvalKey
+								@RequestParam (value="updatdAuthId3", required=true) String authId3
 								)
 								throws IOException, Exception, IllegalStateException {
 		
 		
 		HttpSession session = req.getSession();
-//		int updateApprckKey11 = Integer.valueOf(updateApprckKey1); 
-//		int updateApprckKey22 = Integer.valueOf(updateApprckKey2); 
-//		int updateApprckKey33 = Integer.valueOf(updateApprckKey3); 
+
 		
 		//======================================공통 속성들====================================
 		
-		//2. 문서종류
-		
-		//3. 사원번호 : 전자결재에 대한 사원번호 받기
+		//사원번호 : 전자결재에 대한 사원번호 받기
 		String memId = ((Member)session.getAttribute("loginMember")).getMemberId();
 		appr.setMemId(memId);
 		
-		//4. 제목 : 전자결재에 대한 제목받기(title)
-		appr.setTitle(title);
-		
-		//5. 내용 : 전자결재에 대한 제목받기(semmernote)
-		log.debug("semmernote={}", semmernote);
-		appr.setContent(semmernote);
-		
-		//6. 기안일자 : 전자결재에 대한 작성일자 받기(디비에서 default)
-		
-		//7. 상태 : 전자결재에 대한 상태받기(status)
-		log.debug("status={}", status);
-		appr.setStatus(status);
-		
+		//상태 : 전자결재에 대한 상태받기(status) --> 임시저장이므로 t
 		ApprCheck apprck1 = new ApprCheck();
 		ApprCheck apprck2 = new ApprCheck();
 		ApprCheck apprck3 = new ApprCheck();
 		
-		//8. apprCheck 객체 생성
+		//apprCheck 객체 생성
 		//1번 결재자
-		log.debug("authId1={}",authId1);
-		log.debug("authId2={}",authId2);
-		log.debug("authId3={}",authId3);
 		apprck1.setSeqNum(1);
-		log.debug("apprck1={}",apprck1.getSeqNum());
 		apprck1.setMemId(authId1);
-		apprck1.setStatus(status);
+		
 		//2번결재자
 		apprck2.setSeqNum(2);
-		log.debug("apprck2={}",apprck2.getSeqNum());
 		apprck2.setMemId(authId2);
-		apprck2.setStatus(status);
+		
 		//3번결재자
 		apprck3.setSeqNum(3);
 		apprck3.setMemId(authId3);
-		apprck3.setStatus(status);	
-		
-		
 		
 		//======================================공통 속성들 end====================================
 		
-		
-		
 		//문서번호 : 처음 제출 시 문서번호 받기위한 시퀸스 생성 후 insert, key(seq)생성 필수(행이 존재하지 않기때문에 새로 만들어야함)
 		//approvalKey(임시저장에서 넘어온 key값, key값이 존재하면 행이 존재한다는것임) 
-		log.debug("approvalKey={}",approvalKey);
-		if(approvalKey.equals("")) {
+		
+		if(appr.getKey().equals("")) {
 			
 			String seqApprKey = approvalService.SeqApprKey();
 			appr.setKey(seqApprKey);
@@ -325,29 +255,13 @@ public class ApprovalController {
 			
 			//appr(전자결재), apprch(전자결재승인) attachment(파일) 객체 db에 저장
 			int result = approvalService.insertApproval(appr);
-			log.debug("result={}",result);
 			
 		}else {
 			//임시저장 후 제출의 경우 문서번호가 이미 존재하기 때문에 update
-			appr.setKey(approvalKey);
-			
-			log.debug("approvalKey={}",approvalKey);
-			
 			//appr_check 도 행이 이미 존재하기 때문에 jsp에서 apprCheck.key값을 받아와서 update처리.
 			
-			List<ApprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
-			
-			log.debug("approvalchange={}",apprchList.get(0).getKey());
-			log.debug("approvalchange={}",apprchList.get(1).getKey());
-			log.debug("approvalchange={}",apprchList.get(2).getKey());
-			log.debug("apprchmemid={}",apprck1.getMemId());
-			log.debug("apprchmemid={}",apprck2.getMemId());
-			log.debug("apprchmemid={}",apprck3.getMemId());
-			log.debug("apprchSeqNum={}",apprck1.getSeqNum());
-			log.debug("apprchSeqNum={}",apprck2.getSeqNum());
-			log.debug("apprchSeqNum={}",apprck3.getSeqNum());
-			
-			
+			List<ApprCheck> apprchList = approvalService.reWriteApprck(appr.getKey()); 
+						
 			apprck1.setKey(apprchList.get(0).getKey());
 			apprck2.setKey(apprchList.get(1).getKey());
 			apprck3.setKey(apprchList.get(2).getKey());
@@ -361,40 +275,47 @@ public class ApprovalController {
 			log.debug("result={}",result);
 		}
 		
-		
 		model.addAttribute("appr",appr);
 		
 		model.addAttribute("apprck1",apprck1);
 		model.addAttribute("apprck2",apprck2);
 		model.addAttribute("apprck3",apprck3);
 		
-		
 		return "redirect:/approval/myApvList?page=1";
 	}
 	
+	//----------------임시저장함
+	@RequestMapping(value="/myApvList")
+	public String myApvList(HttpServletRequest req, 
+							Model model,
+							@ModelAttribute("loginMember") Member loginMember,
+							@RequestParam(value="page") int page) { 
+		
+		List<Appr> apprList = new ArrayList<>();
+		try {
+			apprList = approvalService.ApprovalList(loginMember.getMemberId());
+			
+			model.addAttribute("apvList",apprList);
+			model.addAttribute("pageInfo",paging(page,apprList));
+			model.addAttribute("toSearch", "approval/myApvList");
+		} catch(Exception e) {
+			
+		}
+		
+		return "approval/myApvList";
+	}
 	
-	/*
-	 * appr appr, apprCheck apprck, docType docType,  applovalSave.do
-	 */
+	//----------------제출하기(요청보내기)
 	@RequestMapping(value="updateApproval.do", method=RequestMethod.POST)
 	public String approvalWrite(HttpServletRequest req,
 								Model model,
 								Appr appr,
-								@RequestParam (value="approval_title", required=true) String title,
-								@RequestParam (value="approval_content", required=true) String semmernote,
-								@RequestParam (value="status", required=true) String status,
 								@RequestParam (value="approval_mem1", required=true) String authId1,
 								@RequestParam (value="approval_mem2", required=true) String authId2,
 								@RequestParam (value="approval_mem3", required=true) String authId3,
-								@RequestParam (value="upFile", required=false) MultipartFile upFile,
-								@RequestParam (value="process_num1", required=true) int processNum1,
-								@RequestParam (value="process_num2", required=true) int processNum2,
-								@RequestParam (value="process_num3", required=true) int processNum3,
-								@RequestParam (value="updateApprovalKey", required=true) String approvalKey
+								@RequestParam (value="upFile", required=false) MultipartFile upFile
 								)
 								throws IOException, Exception, IllegalStateException {
-		
-		
 		
 		HttpSession session = req.getSession();
 		
@@ -402,53 +323,24 @@ public class ApprovalController {
 		ApprCheck apprck2 = new ApprCheck();
 		ApprCheck apprck3 = new ApprCheck();
 		
-		
-		
-		//-----------------------전자결재에 대한 속성저장
-		
-		
-		//2. 문서종류번호
-		
-		//3. 사원번호 : 전자결재에 대한 사원번호 받기 
+		//사원번호 : 전자결재에 대한 사원번호 받기 
 		String memId = ((Member)session.getAttribute("loginMember")).getMemberId();
 		appr.setMemId(memId);
 		
-		//4. 제목 : 전자결재에 대한 제목받기(title)
-		log.debug("title={}",title);
-		appr.setTitle(title);
-		
-		//5. 내용 : 전자결재에 대한 제목받기(semmernote)
-		log.debug("semmernote={}", semmernote);
-		appr.setContent(semmernote);
-		
-		//6. 기안일자 : 전자결재에 대한 작성일자 받기(디비에서 default)
-		
-		//7. 상태 : 전자결재에 대한 상태받기(status)
-		log.debug("status={}", status);
-		appr.setStatus(status);
-		
-		//8. apprCheck 객체 생성
+		//-----------------------전자결재에 대한 속성저장
 		//1번 결재자
-		log.debug("authId1={}",authId1);
-		log.debug("authId2={}",authId2);
-		log.debug("authId3={}",authId3);
 		apprck1.setSeqNum(1);
 		apprck1.setMemId(authId1);
-		apprck1.setStatus(status);
 		//2번결재자
 		apprck2.setSeqNum(2);
 		apprck2.setMemId(authId2);
-		apprck2.setStatus(status);
 		//3번결재자
 		apprck3.setSeqNum(3);
 		apprck3.setMemId(authId3);
-		apprck3.setStatus(status);
 		
 		//9. attachment객체 생성
 		Attachment attach = new Attachment();
 		//파일이 있는지 없는지 확인후 객체에 속성값 저장
-		
-		
 		
 		if(!upFile.isEmpty()) {
 			
@@ -475,24 +367,11 @@ public class ApprovalController {
 			attach.setReName(renamedFilename);
 			
 			attach.setMemId(appr.getMemId());
-			
-			log.debug("appr={}",appr);
 		}
 		
-		
 		//2. appr(전자결재), apprch(전자결재승인) 객체 db에 저장
-		
-		log.debug("approvalKey={}",approvalKey);
-		log.debug("approvalKey={}",approvalKey);
-		log.debug("approvalKey={}",approvalKey);
-		log.debug("approvalKey={}",approvalKey);
-		log.debug("approvalKey={}",approvalKey);
-		log.debug("approvalKey={}",approvalKey);
-		if(approvalKey.equals("")) {
+		if(appr.getKey().equals("")) {
 			
-			log.debug("approvalKey={}",approvalKey);
-			log.debug("approvalKey={}",approvalKey);
-			log.debug("approvalKey={}",approvalKey);
 			String seqApprKey = approvalService.SeqApprKey();
 			appr.setKey(seqApprKey);
 			apprck1.setApprovalKey(appr.getKey());
@@ -512,14 +391,8 @@ public class ApprovalController {
 			
 		}else{
 			//임시저장 후 임시저장의 경우 문서번호가 이미 존재하기 때문에 update
-			appr.setKey(approvalKey);
-			
-			log.debug("approvalKey={}",approvalKey);
-			
 			//appr_check 도 행이 이미 존재하기 때문에 jsp에서 apprCheck.key값을 받아와서 update처리.
-			
-			List<ApprCheck> apprchList = approvalService.reWriteApprck(approvalKey); 
-			
+			List<ApprCheck> apprchList = approvalService.reWriteApprck(appr.getKey()); 
 			
 			apprck1.setKey(apprchList.get(0).getKey());
 			apprck2.setKey(apprchList.get(1).getKey());
@@ -536,88 +409,178 @@ public class ApprovalController {
 			log.debug("result={}",result);
 		}
 		
-		
-		//처리결과 msg 전달
-		
 		model.addAttribute("appr",appr);
 		model.addAttribute("apprck1",apprck1);
 		model.addAttribute("apprck2",apprck2);
 		model.addAttribute("apprck3",apprck3);
 		model.addAttribute("attach",attach);
-		
-		
-		
 		
 		return "redirect:/approval/myApprovalList?page=1";
 	}
 	
 	
 	
-	
-	
-	@RequestMapping(value="/reWrite.do", method=RequestMethod.POST)
-	public String reWrite(Model model,
-						  @RequestParam(value="approval_id") String key) {
+	//===========================================myApproval(내문서, 내문서디테일)=======================================
+	//-----------내문서함(제출하기 시 이동 페이지) 
+	@RequestMapping(value="/myApprovalList")
+	public String myApprovalList(@ModelAttribute("loginMember") Member loginMember,
+								 @RequestParam(value="page") int page,
+								 
+								 Model model) {
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.myApprovalList(loginMember.getMemberId());
 		
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/myApprovalList");
+		
+		
+		return "approval/myApprovalList";
+	}
+	
+	//------------내문서 클릭시 상세페이지
+	@RequestMapping(value="/myApprovalDetail", method=RequestMethod.GET)
+	public String myApprovalDetail(Model model,
+								   @RequestParam(value="apprKey") String key) {
 		
 		Appr appr = approvalService.reWriteAppr(key);
-
-
-		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
-		try {
 		Attachment attach = approvalService.reWriteAttach(key);
-		model.addAttribute("attach",attach);
-		} catch(Exception e) {
-		}
-
 		
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
 		ApprCheck apprck1 = new ApprCheck();
 		ApprCheck apprck2 = new ApprCheck();
 		ApprCheck apprck3 = new ApprCheck();
-
-		
 		apprck1 = apprchList.get(0);
 		apprck2 = apprchList.get(1);
 		apprck3 = apprchList.get(2);
-		log.debug("apprchList={}",apprchList);
-		log.debug("apprck1={}",apprck1);
-		log.debug("apprck2={}",apprck2);
-		log.debug("apprck3={}",apprck3);
-		log.debug("appr={}",appr);
-		
-		List<Dept> dept = approvalService.deptList();
-		List<Dept> child = approvalService.child();
-		List<Dept> child2 = approvalService.child2();
-
-		log.debug("dept = {}",dept);
-		log.debug("child = {}",child);
-		log.debug("child2 = {}",child2);
-		
-		model.addAttribute("dept",dept);
-		model.addAttribute("child",child);
-		model.addAttribute("child2",child2);
-		
 		
 		model.addAttribute("appr",appr);
-		
-		
+		model.addAttribute("attach",attach);
 		model.addAttribute("apprck1",apprck1);
 		model.addAttribute("apprck2",apprck2);
 		model.addAttribute("apprck3",apprck3);
 		
-		
-		List<DocType> docTypeList = approvalService.selectDocTypeTitleList();
-		model.addAttribute("docTypeList", docTypeList);
-		
-		
-		return "approval/writeForm";
+		return "approval/myApprovalDetail";
 	}
 	
+	//==========================================requestApproval(결제자-결제요청문서)===========================================
+	//-----------결제요청문서함
+	@RequestMapping(value="/requestApprovalList")
+	public String requestApprovalList(@ModelAttribute("loginMember") Member loginMember,
+									  @RequestParam(value="page") int page,
+									  Model model) {
+		
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.apprAndCkList(loginMember);
+		
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/requestApprovalList");
+		
+		return "approval/requestApprovalList";
+	}
 	
+	//----------결제요청문서 디테일
+	@RequestMapping(value="/reauestApprovalDetail.do")
+	public String requestApprovalDetail(Model model,
+								   @RequestParam(value="apprKey") String key,
+								   @RequestParam(value="ckKey") int ckKey) {
+			
+		List<ApprCheck> apprchList = approvalService.reWriteApprck(key); //이건 항상 공통되는것같은데...?
+		try {
+		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("attach",attach);
+		}catch(Exception e) {
+		}
+		Appr appr = approvalService.apprckDetail(ckKey);
+		
+		ApprCheck apprck1 = new ApprCheck();
+		ApprCheck apprck2 = new ApprCheck();
+		ApprCheck apprck3 = new ApprCheck();
+		apprck1 = apprchList.get(0);
+		apprck2 = apprchList.get(1);
+		apprck3 = apprchList.get(2);
+		
+		model.addAttribute("appr",appr);
+		model.addAttribute("apprck1",apprck1);
+		model.addAttribute("apprck2",apprck2);
+		model.addAttribute("apprck3",apprck3);
+		
+		return "approval/reauestApprovalDetail";
+	}
+	
+	//------------결제요청승인
+	@RequestMapping(value="approve.do", method=RequestMethod.POST)
+	public String approve(Model model,
+						  Appr appr,
+						  RedirectAttributes red,
+						  @ModelAttribute("loginMember") Member loginMember,
+						  @RequestParam("apprckKey1") int apprckKey1,
+						  @RequestParam("apprckKey2") int apprckKey2,
+						  @RequestParam("apprckKey3") int apprckKey3
+						  ) {
+		
+		String apprKey = appr.getKey();
+		String memberId = loginMember.getMemberId();
+		Map<String, String> map = new HashMap<>();
+		map.put("apprKey",apprKey);
+		map.put("memberId",memberId);
+		
+		ApprCheck apprck = approvalService.selectcApprck(map);
+		if(apprck.getSeqNum() == 1 || apprck.getSeqNum() == 2) {
+			int result = approvalService.changeApprck(apprck.getKey(),appr);
+		}
+		else {
+			//3차결제자가 승인하면 최종결제완료
+			int result = approvalService.compliteApprck(apprck.getKey(),apprKey,appr);
+		}
+		red.addFlashAttribute("msg", "승인이 완료되었습니다.");
+		return "redirect:/approval/requestApprovalList?page=1";
+		
+	}
+	
+	//-------------결제요청반려
+	@RequestMapping(value="/returnApprove.do", method=RequestMethod.POST)
+	public String returnApprove(@ModelAttribute("loginMember") Member loginMember,
+								Model model,
+								Appr appr,
+								ApprCheck apprCheck,
+								RedirectAttributes red) {
+		
+		String memberId = loginMember.getMemberId();
+		Map<String, String> map = new HashMap<>();
+		map.put("key",appr.getKey());
+		map.put("opinion",apprCheck.getOpinion());
+		map.put("memberId",memberId);
+		
+		int result = approvalService.returnApproval(map, appr);
+		
+		red.addFlashAttribute("msg", "반려되었습니다.");
+		
+		return "redirect:/approval/requestApprovalList?page=1";
+	}
+	
+	//========================================returnApproval(기안자-반려된 문서)==========================================
+	//-------------반려문서함
+	@RequestMapping(value="/returnApprovalList")
+	public String returnApprovalList(@ModelAttribute("loginMember") Member loginMember,
+									 @RequestParam(value="page") int page,
+									 Model model) {
+		
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.returnApprList(loginMember.getMemberId());
+		
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/returnApprovalList");
+		
+		return "approval/returnApprovalList";
+	}
+	
+	//--------------반려문서 디테일
 	@RequestMapping(value="/returnApprovalDetail.do", method=RequestMethod.GET)
 	public String returnApprovalDetail(Model model,
 						  @RequestParam(value="apprKey") String key) {
-		
 		
 		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
 		try {
@@ -635,94 +598,33 @@ public class ApprovalController {
 		apprck2 = apprchList.get(1);
 		apprck3 = apprchList.get(2);
 		
-		log.debug("apprck1={}",apprck1);
-		log.debug("apprck2={}",apprck2);
-		log.debug("apprck3={}",apprck3);
-		
-		
 		model.addAttribute("appr",appr);
-		
 		model.addAttribute("apprck1",apprck1);
 		model.addAttribute("apprck2",apprck2);
 		model.addAttribute("apprck3",apprck3);
-		
-		
-		
-		
-		
+
 		return "approval/returnApprovalDetail";
 	}
 	
-	@RequestMapping(value="/myApprovalDetail", method=RequestMethod.GET)
-	public String myApprovalDetail(Model model,
-								   @RequestParam(value="apprKey") String key) {
+	//========================================compliteApproval(기안자-결제완료문서)==========================================
+	//--------결제완료문서함
+	@RequestMapping(value="/compliteApprovalList")
+	public String compliteApprovalList(@ModelAttribute("loginMember") Member loginMember,
+									   @RequestParam(value="page") int page,
+									   Model model) {
 		
+		List<Appr> apprList = new ArrayList<>();
+		apprList = approvalService.compliteApprList(loginMember.getMemberId());
 		
-		Appr appr = approvalService.reWriteAppr(key);
-		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
-		Attachment attach = approvalService.reWriteAttach(key);
+		model.addAttribute("apvList",apprList);
+		model.addAttribute("auth", 0);
+		model.addAttribute("pageInfo",paging(page,apprList));
+		model.addAttribute("toSearch", "approval/compliteApprovalList");
 		
-		
-		
-		ApprCheck apprck1 = new ApprCheck();
-		ApprCheck apprck2 = new ApprCheck();
-		ApprCheck apprck3 = new ApprCheck();
-		
-		apprck1 = apprchList.get(0);
-		apprck2 = apprchList.get(1);
-		apprck3 = apprchList.get(2);
-		
-		
-		model.addAttribute("appr",appr);
-		
-		model.addAttribute("apprck1",apprck1);
-		model.addAttribute("apprck2",apprck2);
-		model.addAttribute("apprck3",apprck3);
-		
-		model.addAttribute("attach",attach);
-		
-		
-		return "approval/myApprovalDetail";
+		return "approval/compliteApprovalList";
 	}
-	
-	@RequestMapping(value="/reauestApprovalDetail.do")
-	
-	public String requestApprovalDetail(Model model,
-								   @RequestParam(value="apprKey") String key,
-								   @RequestParam(value="ckKey") int ckKey) {
-			
-		List<ApprCheck> apprchList = approvalService.reWriteApprck(key);
-		try {
-
-		Attachment attach = approvalService.reWriteAttach(key);
-		model.addAttribute("attach",attach);
-		}catch(Exception e) {
-		}
-		Appr appr = approvalService.apprckDetail(ckKey);
-		
-		ApprCheck apprck1 = new ApprCheck();
-		ApprCheck apprck2 = new ApprCheck();
-		ApprCheck apprck3 = new ApprCheck();
-		
-		apprck1 = apprchList.get(0);
-		apprck2 = apprchList.get(1);
-		apprck3 = apprchList.get(2);
-		
-		model.addAttribute("appr",appr);
-		
-		model.addAttribute("apprck1",apprck1);
-		model.addAttribute("apprck2",apprck2);
-		model.addAttribute("apprck3",apprck3);
-		
-		
-		
-		
-		
-		return "approval/reauestApprovalDetail";
-	}
-	
+	//--------결제완료문서 디테일
 	@RequestMapping(value="/compliteApprovalDetail.do")
-	
 	public String compliteApprovalDetail(Model model,
 								   @RequestParam(value="apprKey") String key) {
 			
@@ -752,7 +654,8 @@ public class ApprovalController {
 		return "approval/compliteApprovalDetail";
 	}
 	
-	
+	//==================================================그 외 기능들================================================
+	//---------파일다운로드 메소드
 	@RequestMapping(value="/fileDownload.do")
 	@ResponseBody
 	public Resource fileDownload(@RequestParam("key") String key,
@@ -789,68 +692,8 @@ public class ApprovalController {
 		return resource;
 	}
 	
-	@RequestMapping(value="approve.do", method=RequestMethod.POST)
-	public String approve(@ModelAttribute("loginMember") Member loginMember,
-						  Model model,
-						  Appr appr,
-						  @RequestParam("apprckKey1") int apprckKey1,
-						  @RequestParam("apprckKey2") int apprckKey2,
-						  @RequestParam("apprckKey3") int apprckKey3,
-						  RedirectAttributes red) {
-		
-		log.debug("appr={}",appr);
-		log.debug("apprckKey1={}",apprckKey1);
-		log.debug("apprckKey2={}",apprckKey2);
-		log.debug("apprckKey3={}",apprckKey3);
-		
-		String apprKey = appr.getKey();
-		String memberId = loginMember.getMemberId();
-		Map<String, String> map = new HashMap<>();
-		map.put("apprKey",apprKey);
-		map.put("memberId",memberId);
-		ApprCheck apprck = approvalService.selectcApprck(map);
-		
-		log.debug("apprck={}",apprck);
-
-		if(apprck.getSeqNum() == 1 || apprck.getSeqNum() == 2) {
-			int result = approvalService.changeApprck(apprck.getKey(),appr);
-		}
-		else {
-			int result = approvalService.backApprck(apprck.getKey(),apprKey,appr);
-		}
-		
-		red.addFlashAttribute("msg", "승인이 완료되었습니다.");
-		return "redirect:/approval/requestApprovalList?page=1";
-		
-	}
 	
-	@RequestMapping(value="/returnApprove.do", method=RequestMethod.POST)
-	public String returnApprove(@ModelAttribute("loginMember") Member loginMember,
-								Model model,
-								@RequestParam("opinion") String opinion,
-								@RequestParam("returnApprKey") String key,
-								Appr appr,
-								RedirectAttributes red) {
-		
-		
-		String memberId = loginMember.getMemberId();
-		Map<String, String> map = new HashMap<>();
-		map.put("key",key);
-		map.put("opinion",opinion);
-		map.put("memberId",memberId);
-
-		int result = approvalService.returnApproval(map, appr);
-		
-		red.addFlashAttribute("msg", "반려되었습니다.");
-		
-		return "redirect:/approval/requestApprovalList?page=1";
-	}
-	
-	
-	
-	
-	
-	
+	//--------------------------페이징처리 메소드
 	public PagingInfo paging(int page, List<Appr> appr) {
 		
 		int countList = 10; //페이지당 게시물 수
@@ -894,31 +737,15 @@ public class ApprovalController {
 		
 	}
 	
+	//-----------------메인홈 알림기능추가
 	@RequestMapping("/getCountApproval")
 	public ResponseEntity<?> getTodayCount(@RequestParam HashMap<Object,Object> params) {
 		
 		int num = approvalService.getCountApproval(params);
+		
+		System.out.println("num = " + num);
+
 		return new ResponseEntity<>(num,HttpStatus.OK);		
 	}
-	
-	
-	
-	//양식 하나 불러오기
-	@RequestMapping(value="selectOneDocTypeAjax.do", method=RequestMethod.GET)
-	public void selectOneDocTypeAjax(DocType docType, HttpServletResponse response) {
-		
-		DocType oneDocType = approvalService.selectOneDocTypeAjax(docType);
-		
 
-		response.setContentType("application/json; charset=utf-8");
-
-		Gson gson = new Gson();
-		try {
-			gson.toJson(oneDocType, response.getWriter());
-		} catch (JsonIOException | IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-	}
 }

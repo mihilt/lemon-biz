@@ -216,10 +216,10 @@
 						<div><br></div>
 						</div>
 						
-						<form action="${pageContext.request.contextPath}/approval/reWrite.do"
+						<form action="${pageContext.request.contextPath}/approval/writeForm.do"
 							  method="POST"
-							  id="rewrite">
-						<input type="hidden" name="approval_id" value="${appr.key}"/>
+							  id="writeForm">
+						
 						</form>
 						
 					</div>
@@ -237,7 +237,7 @@ function fileDownload(key) {
 
 
 function rewrite() {
-	$('#rewrite').submit();
+	$('#writeForm').submit();
 }
 
 </script>
