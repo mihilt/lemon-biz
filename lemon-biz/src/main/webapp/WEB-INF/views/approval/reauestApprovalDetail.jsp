@@ -198,8 +198,10 @@
 						
 						<div class="container" align="center">
 						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
+						<c:if test="${ apprck1.status == null || apprck2.status == null || apprck3.status == null}">
 						<button class="btn btn-outline-primary" data-toggle="modal" data-target="#returnA">반려하기</button>
 						<button class="btn btn-outline-primary" onclick="approve()">승인하기</button>
+						</c:if>
 						<div><br></div>
 						</div>
 						
@@ -260,7 +262,6 @@ function returnApprove() {
 
 	$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/returnApprove.do").attr('method', 'POST').attr('id','returnApprovalForm').appendTo('#body');
 	$('<input></input>').attr('type','hidden').attr('value',$('#returnResult').val()).attr('name','opinion').appendTo('#returnApprovalForm');
-	$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','returnApprKey').appendTo('#returnApprovalForm');
 	$('<input></input>').attr('type','hidden').attr('value','${appr.title}').attr('name','title').appendTo('#returnApprovalForm');
 	$('<input></input>').attr('type','hidden').attr('value','${appr.memId}').attr('name','memId').appendTo('#returnApprovalForm');
 	$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','key').appendTo('#returnApprovalForm');

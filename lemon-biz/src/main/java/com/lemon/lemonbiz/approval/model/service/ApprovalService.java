@@ -59,7 +59,7 @@ public interface ApprovalService {
 
 	int changeApprck(int key, Appr appr);
 
-	int backApprck(int key, String apprKey, Appr appr);
+	int compliteApprck(int key, String apprKey, Appr appr);
 
 	List<Appr> myApprovalList(String memberId);
 

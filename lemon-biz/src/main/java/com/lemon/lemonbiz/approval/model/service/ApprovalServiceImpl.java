@@ -231,7 +231,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	
 	//마지막 3차 승인
 	@Override
-	public int backApprck(int key, String apprKey, Appr appr) {
+	public int compliteApprck(int key, String apprKey, Appr appr) {
 		//기안자에게 최종 승인 알림
 		Notice notice = new Notice();
 		notice.setMemId(appr.getMemId());

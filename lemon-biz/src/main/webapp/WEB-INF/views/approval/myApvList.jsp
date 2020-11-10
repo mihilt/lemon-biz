@@ -128,9 +128,8 @@ function reWrite(j){
 	
 	console.log(j);
 	
-	$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/reWrite.do").attr('method', 'POST').attr('id','reWrite').appendTo('#body');
+	$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/writeForm.do").attr('method', 'POST').attr('id','reWrite').appendTo('#body');
 	$('<input></input>').attr('type','hidden').attr('value',j).attr('name','approval_id').appendTo('#reWrite');
-	$('<input></input>').attr('type','hidden').attr('value', ${ auth }).attr('name','auth').appendTo('#reWrite');
 	$('#reWrite').submit();
 	
 	console.log(j);

@@ -19,7 +19,7 @@
 <script>
 //add summernote
 $(document).ready(function() {
-  $('#summernote').summernote({
+  $('#content').summernote({
     lang: 'ko-KR',
     height: 500
     
@@ -32,7 +32,7 @@ $(document).ready(function() {
 
 
 <!-- Modal -->
-<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true ">
   <div class="modal-dialog" style="max-width: 90%;" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -119,7 +119,7 @@ $(document).ready(function() {
     	
       	<!-- selectMember Form-->
 		<div class="container col-4" style="height:400px; margin: 0px; overflow-y:auto;">
-    	<h5>결재자 입력</h5>
+    	<h5>결재자 선택</h5>
     		<div id="apprst" style="margin: 5px; padding: 5px; border:1px solid lightgray; height:360px;">
     			
     	
@@ -231,7 +231,7 @@ $(document).ready(function() {
 						<div class="float-left col-md-4">
 							<!-- Button trigger modal -->
 							
-							<label for="#approvalSelectBtn">결재자 등록 : </label>
+							<label for="#approvalSelectBtn">결제자 등록 : </label>
 							<button id="approvalSelectBtn" type="button" class="btn btn-outline-primary" 
 							data-toggle="modal" data-target="#exampleModal">
 							  결재라인 추가
@@ -287,10 +287,6 @@ $(document).ready(function() {
 						${ apprck3.rankName }
 						</td>
 						
-						
-						<%-- <td id="authRank1" class="aa">${ apvReWrite.rank_name1 }</td>
-						<td id="authRank2" class="aa">${ apvReWrite.rank_name2 }</td>
-						<td id="authRank3" class="aa">${ apvReWrite.rank_name3 }</td> --%>
 						</tr>
 						
 						
@@ -328,17 +324,14 @@ $(document).ready(function() {
 							<input type="hidden" id="authId1" name="approval_mem1" value="${ apprck1.seqNum }"/>
 							<input type="hidden" id="authId2" name="approval_mem2" value="${ apprck2.seqNum }"/>
 							<input type="hidden" id="authId3" name="approval_mem3" value="${ apprck3.seqNum }"/>
-							<input type="hidden" id="processNum1" name="process_num1">
-							<input type="hidden" id="processNum2" name="process_num2">
-							<input type="hidden" id="processNum3" name="process_num3">
 							<input type="hidden" id="status" name="status" value="p"/>
 							
 							
-							&nbsp;제목 : <input class="form-control" id="title" type="text" name="approval_title" value="${ appr.title }">
+							&nbsp;제목 : <input class="form-control" id="title" type="text" name="title" value="${ appr.title }">
 							<br>
 							
 							<div>
-								<textarea id="summernote" class="form-control" name="approval_content"  cols="120" rows="18" 
+								<textarea id="content" class="form-control" name="content"  cols="120" rows="18" 
 		      							  style="width:100%; resize:none" >${ appr.content }</textarea> <br>
 							</div>
 							
@@ -354,7 +347,7 @@ $(document).ready(function() {
 						<div class="container" align="center">
 						<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
 						<button class="btn btn-outline-primary" onclick="save()">저장하기</button>
-						<button class="btn btn-outline-primary" onclick="tempchk()">제출하기</button>
+						<button class="btn btn-outline-primary" onclick="submit()">제출하기</button>
 						
 						<div><br></div>
 						</div>
@@ -365,7 +358,7 @@ $(document).ready(function() {
 		</div>
 	</div>
 	
-	<div class="modal" id="comment">
+	<div class="modal" id="submitModal">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -380,7 +373,7 @@ $(document).ready(function() {
 							
 						</div>
 						<div class="modal-footer float-right">
-							<button class="btn btn-outline-primary" type="submit" onclick="tempStore()" >제출</button>
+							<button class="btn btn-outline-primary" type="submit" onclick="submitForm()" >제출</button>
 							
 						</div>
 					</div>
@@ -404,7 +397,7 @@ $(document).ready(function() {
 							
 						</div>
 						<div class="modal-footer float-right">
-							<button class="btn btn-outline-primary" type="submit" onclick="updateApproval()" >제출</button>
+							<button class="btn btn-outline-primary" type="submit" onclick="saveApproval()" >제출</button>
 							
 						</div>
 					</div>
@@ -445,8 +438,7 @@ $(document).ready(function() {
 		}
 	})
 	
-	<!-- 부서선택 jstree-->
-	$("#appr").jstree({ 
+	$("#appr").jstree({
 	  "plugins": ["wholerow","types","themes","html_data"],
 	  "themes" : {            
 	      'responsive' : true,
@@ -458,7 +450,7 @@ $(document).ready(function() {
 		console.log(data.node.text);
 		$.ajax({
 			type: "GET",
-			url : "${pageContext.request.contextPath}/approval/approvalSelect.do",
+			url : "${pageContext.request.contextPath}/approval/deptSelect.do",
 			data : {
 				node : data.node.text
 			},
@@ -478,7 +470,7 @@ $(document).ready(function() {
 		})
 	});
 	
-	<!-- 부서선택 시 결제자선택 영역에 비동기형식으로 데이터가 입력 -->
+
 	function printList(data) {
 
 		for(var i in data.memberList) {
@@ -502,16 +494,22 @@ $(document).ready(function() {
 		}
 	}
 
- 	<!-- 결제자 선택시 결제자입력영역에 비동기형식으로 데이터가 입력-->
+ 
 	function selectMember(memberId) {
+
+		
+		console.log(memberId);
+		
 		
 		if(memberId == "${loginMember.memberId}") { 
 			alert('본인은 선택할 수 없습니다.');
 			return;
 		}
 		
+		
 		var trArr = $('#finalList > tr');
 		var cnt = 3; 
+		
 		
 		for(var j = MIN_NUM; j <= MAX_NUM; j++) {
 			if($('#memId_'+j).text()==memberId) {
@@ -721,7 +719,7 @@ $(document).ready(function() {
 	/*=================================== 결재라인추가 script end ====================================*/
 	
 	/* ======================================폼 제출관련 script start=================================== */
-	function tempchk() {
+	function submit() {
 
 		console.log("11");
 		console.log($('#authId1').val());
@@ -731,7 +729,7 @@ $(document).ready(function() {
 		console.log($('#proNum2').val());
 		console.log($('#proNum3').val());
 		console.log($('#title').val());
-		console.log($('#summernote').val());
+		console.log($('#content').val());
 		console.log($('#apvCateGo').val());
 		console.log($('#apv_comment').val());
 
@@ -739,7 +737,7 @@ $(document).ready(function() {
 			alert('제목을 입력해주세요')
 			return;
 		}
-		if(($('#summernote').val()).trim() == ''){
+		if(($('#content').val()).trim() == ''){
 			alert('내용을 입력해주세요')
 			return;
 		}
@@ -751,10 +749,10 @@ $(document).ready(function() {
 
 		
 
-		$('#comment').modal();
+		$('#submitModal').modal();
 	}
 
-	function tempStore() {
+	function submitForm() {
 		
 		
 		for(var i = 1 ; i <=3 ; i++){
@@ -763,7 +761,7 @@ $(document).ready(function() {
 		for(var i = 1 ; i <=3 ; i++) {
 			$("#processNum"+i).val($('#proNum'+i).val());
 		}
-		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','updateApprovalKey').appendTo('#sendApv');
+		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','key').appendTo('#sendApv');
 	
 		$('#sendApv').submit();
 		
@@ -771,24 +769,24 @@ $(document).ready(function() {
 		
 	}
 
+	//임시저장 모달띄우기
 	function save() {
 
 		$('#savingApproval').modal();
 	}
+	
+	//임시저장하기
+	function saveApproval() {
 
-	function updateApproval() {
-
+		
 		if(($('#title').val()).trim() == ''){
 			alert('제목을 입력해주세요')
 			return;
 		}
-		if(($('#summernote').val()).trim() == ''){
+		if(($('#content').val()).trim() == ''){
 			alert('내용을 입력해주세요')
 			return;
 		}
-
-		
-
 		for(var i = 1 ; i <=3 ; i++){
 			$('#authId'+i+'').val($('#apv_mem'+i+'').text());	
 		} 
@@ -797,40 +795,28 @@ $(document).ready(function() {
 		}
 
 
-		
-		
+		//임시저장이므로 상태값 t(임시저장)으로 넣어주기
 		var status = $('#status');
 		status.attr('value','t');
 		
-		
 		var authId11 = $('#authId1').val();
-		
-		console.log(authId11);
-		
-																																			
-		$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/applovalSave.do").attr('method', 'POST').attr('id','updateApproval').attr('enctype','multipart/form-data').appendTo('#body');
-		$('<input></input>').attr('type','hidden').attr('value',$('#authId1').val()).attr('name','updatdAuthId1').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',$('#authId2').val()).attr('name','updatdAuthId2').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',$('#authId3').val()).attr('name','updatdAuthId3').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',$('#processNum1').val()).attr('name','updateProcessNum1').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',$('#processNum2').val()).attr('name','updateProcessNum2').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',$('#processNum3').val()).attr('name','updateProcessNum3').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',$('#status').val()).attr('name','updateStatus').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',$('#title').val()).attr('name','updateTitle').appendTo('#updateApproval');
-		$('<input></input>').attr('type','hidden').attr('value',$('#summernote').val()).attr('name','updateContent').appendTo('#updateApproval');
-		
-		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','updateApprovalKey').appendTo('#updateApproval');
+														
+		$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/applovalSave.do").attr('method', 'POST').attr('id','saveApprovalForm').attr('enctype','multipart/form-data').appendTo('#body');
+		$('<input></input>').attr('type','hidden').attr('value',$('#authId1').val()).attr('name','updatdAuthId1').appendTo('#saveApprovalForm');
+		$('<input></input>').attr('type','hidden').attr('value',$('#authId2').val()).attr('name','updatdAuthId2').appendTo('#saveApprovalForm');
+		$('<input></input>').attr('type','hidden').attr('value',$('#authId3').val()).attr('name','updatdAuthId3').appendTo('#saveApprovalForm');
+		$('<input></input>').attr('type','hidden').attr('value',$('#status').val()).attr('name','status').appendTo('#saveApprovalForm');
+		$('<input></input>').attr('type','hidden').attr('value',$('#title').val()).attr('name','title').appendTo('#saveApprovalForm');
+		$('<input></input>').attr('type','hidden').attr('value',$('#content').val()).attr('name','content').appendTo('#saveApprovalForm');
+		//[임시저장->임시저장] 또는 [반려->재작성] 할 경우
+		$('<input></input>').attr('type','hidden').attr('value','${appr.key}').attr('name','key').appendTo('#saveApprovalForm');
 
 		if( $('#authId1').val() == '' || $('#authId2').val() == '' || $('#authId3').val() == '') {
 			alert('결재자를 모두 선택해주세요');
 			return;
 		}
 		
-		
-		console.dir($('#updateApproval'));
-		
-		
-		$('#updateApproval').submit();
+		$('#saveApprovalForm').submit();
 	
 
 	}
@@ -857,7 +843,7 @@ $(document).ready(function() {
 						success : function(data){
 							/* console.log(data); */
 							
-							$("#summernote").summernote("code", data.form);
+							$("#content").summernote("code", data.form);
 
 						},
 						error : function(xhr, status, err){
