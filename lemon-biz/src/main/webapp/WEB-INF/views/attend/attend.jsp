@@ -18,29 +18,26 @@ tr[data-no]{cursor: pointer;}
 <section id="attend-container" class="container">
 	<div id="attendInfo">
 		<div class="infoVal ">
-			<h6 class="h6Info ">총근무일</h6>
-			<p>&nbsp;${sumArr}일</p>
+			<h4 class="h4Info ">총근무일</h4>
+			<p>${attendInfo.totalDay }</p>
 		</div>
 		<div class="infoVal">
-			<h6 class="h6Info">총시간</h6>
-			<p>&nbsp;${sumTime}</p>
+			<h4 class="h4Info">총시간</h4>
+			<p>${attendInfo.totalTime }</p>
 		</div>
 		<div class="infoVal">
-			<h6 class="h6Info">평균시간</h6>
-			<p>&nbsp;${avgTime}</p>
+			<h4 class="h4Info">평균시간</h4>
+			<p>${attendInfo.totalAvg }</p>
 		</div>
 	</div>
- 	 <form id="form1" class="form-inline" method="post"
-		action="<%-- ${pageContext.request.contextPath }/attend/attendLeave.do --%>" >
-		<input type="hidden" value="전달할값1" class="form-control col-sm-5" name="value1" required/>&nbsp;
-	 </form>
-	 		<div id="lastarrive" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="yyyyMMdd"/></div>
-	 		<div id="lastLeave" style="display:none"><fmt:formatDate value="${ lastAttend.arrive }" pattern="HH"/></div>
+	
 	<div>
 		<c:if test="${ loginMember.isManager eq 1 }">			
-		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="location.href='${pageContext.request.contextPath}/manager/manageAttend.do' ">근태 조회</button>
+		<button id="btn-cal" class="btn btn-outline-warning" type="button" 
+				onclick="location.href='${pageContext.request.contextPath}/manager/manageAttend.do' ">근태 조회</button>
 		</c:if>
-		<button id="btn-cal" class="btn btn-outline-warning" type="button" onclick="location.href='${pageContext.request.contextPath}/attend/attendCal.do' ">월별 근태</button>
+		<button id="btn-cal" class="btn btn-outline-warning" type="button" 
+			onclick="location.href='${pageContext.request.contextPath}/attend/attendCal.do' ">월별 근태</button>
 		<button id="btn-Leave" class="btn btn-outline-warning" type="button" onclick="attendLeave();">퇴근</button>
 	 	<button id="btn-arrive" class="btn btn-outline-warning" type="button" onclick="attendArrive();">출근</button>
 	</div>
@@ -76,50 +73,32 @@ tr[data-no]{cursor: pointer;}
 		</div>
 </section>
 <script>
-var lastarrive=$("#lastarrive").text();
-var today = new Date();
-var month = today.getMonth()+1;
-var todate = today.getDate();
-if(month < 10) {month ="0"+month;}
-if(todate < 10) {todate ="0"+todate;}
-today=today.getFullYear()+""+month+""+todate;
+
 //출근
 function attendArrive(){
-	 if(lastarrive==today){
-		alert("이미 출근되었습니다.");
-	}else{
-		$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendArrive.do")
-		.attr("method", "POST")
-		.submit();
+	var today = new Date();
+	var month = today.getMonth()+1;
+	var todate = today.getDate();
+	if(month < 10) {month ="0"+month;}
+	if(todate < 10) {todate ="0"+todate;}
+	today=today.getFullYear()+""+month+""+todate;
+		location.href = "${pageContext.request.contextPath}/attend/attendArrive.do?today="+today;
 	}
-}
-//퇴근
-function attendLeave(){
-
-	var lastLeave=$("#lastLeave").text();
-	time = new Date().getHours();
-	time+=24;
-	var lastTime ='${lastAttend.time}';
-	var last_1 =Number(lastarrive);
-
-	if(lastTime=='0.0'&& last_1==Number(today)){			//퇴근하지않았거나 오늘퇴근이라면
-	 	$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeave.do")
-		.attr("method", "POST")
-		.submit();
-	}else if(++last_1==Number(today)){				//야근일시 24시간전에 퇴근가
-		time=time-Number(lastLeave);
-		if(time<=24){
-		$("#form1").attr("action","${pageContext.request.contextPath}/attend/attendLeave.do")
-		.attr("method", "POST")
-		.submit();
-		}else{
-			alert("퇴근시간이 지났습니다.");
-		}
-	}else{
-		alert("출근후 퇴근이 가능합니다.");
+	//퇴근
+	function attendLeave() {
+		var today = new Date();
+		var month = today.getMonth() + 1;
+		var todate = today.getDate();
+		if (month < 10) {
+			month = "0" + month;}
+		if (todate < 10) {
+			todate = "0" + todate;}
+		today = today.getFullYear() + "" + month + "" + todate;
+		time = new Date().getHours();
+		time += 24;		
+		today +=time; 
+		location.href = "${pageContext.request.contextPath}/attend/attendLeave.do?today="+today;
 	}
-}
-
 </script>
 <jsp:include page="/WEB-INF/views/common/sbFooter.jsp"/>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

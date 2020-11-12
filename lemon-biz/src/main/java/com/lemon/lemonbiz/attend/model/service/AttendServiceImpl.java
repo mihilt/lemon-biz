@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.lemon.lemonbiz.attend.model.dao.AttendDAO;
 import com.lemon.lemonbiz.attend.model.vo.Attend;
+import com.lemon.lemonbiz.attend.model.vo.AttendInfo;
 
 @Service
 public class AttendServiceImpl implements AttendService {
@@ -42,7 +43,7 @@ public class AttendServiceImpl implements AttendService {
 	}
 
 	@Override
-	public Attend selectAttendInfo(Attend attend) {
+	public AttendInfo selectAttendInfo(Attend attend) {
 		return attendanDAO.selectAttendInfo(attend);
 	}
 

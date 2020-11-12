@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.lemon.lemonbiz.attend.model.vo.Attend;
+import com.lemon.lemonbiz.attend.model.vo.AttendInfo;
 
 public interface AttendDAO {
 
@@ -18,8 +19,7 @@ public interface AttendDAO {
 
 	Attend selectLastOne(Attend attend);
 
-	Attend selectAttendInfo(Attend attend);
-
+	AttendInfo selectAttendInfo(Attend attend);
 
 	int getTodayCount(String date);
 

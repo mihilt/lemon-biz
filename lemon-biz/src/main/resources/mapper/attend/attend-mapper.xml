@@ -53,17 +53,23 @@ where rnum between #{startRnum} and #{endRnum}
   
     <!-- 마지막근태기록 -->
   <select id="selectLastOne" resultType="attend">
-    select *
+     select key,to_char(arrive,'YYYYMMDD')lastArrive,time,to_char(arrive,'hh')lastTime
 	from attend 
         where key= (    select max(key)
                  from attend
     where mem_id=#{memId} )
 	order by key desc
+<!--     select *
+	from attend 
+        where key= (    select max(key)
+                 from attend
+    where mem_id=#{memId} )
+	order by key desc -->
   </select>
   
-  	<!-- 출결 정보 -->
-    <select id="selectAttendInfo" resultType="attend">
-   	select count(*)key,round(sum(time))memId,round(avg(time),2)time
+  	<!-- 총 출결 정보 -->
+    <select id="selectAttendInfo" resultType="attendInfo">
+   	select count(*)totalDay,round(sum(time))totalTime,round(avg(time),2)totalAvg
 	from attend
 	where mem_id=#{memId}
   	</select>

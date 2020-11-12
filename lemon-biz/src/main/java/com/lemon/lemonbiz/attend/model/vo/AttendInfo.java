@@ -8,22 +8,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Attend implements Serializable {
-	//사용될 db값
-	private int key;
-	private String memId;
-	private Date arrive;
-	private Date leave;
-	private float time;
+public class AttendInfo implements Serializable{
 
-	private String lastArrive;
-	private int lastTime;
-	private String name;
-	private String yyyymm;
+	//총시간
+	private int totalDay;
+	private int totalTime;
+	private int totalAvg;
 }
