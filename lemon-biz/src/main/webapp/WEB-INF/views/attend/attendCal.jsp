@@ -105,7 +105,6 @@ table.calendar td{
 				memId :memId,
 				yyyymm :yyyymm
 			},
-			dataType : "json",
 		    success: function(data) {
 			    calattend =data;
 		    	var j=0;

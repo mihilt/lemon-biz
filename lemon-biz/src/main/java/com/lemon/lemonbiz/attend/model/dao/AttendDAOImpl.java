@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.lemon.lemonbiz.attend.model.vo.Attend;
+import com.lemon.lemonbiz.attend.model.vo.AttendInfo;
 
 @Repository
 public class AttendDAOImpl implements AttendDAO {
@@ -41,7 +42,7 @@ public class AttendDAOImpl implements AttendDAO {
 	}
 
 	@Override
-	public Attend selectAttendInfo(Attend attend) {
+	public AttendInfo selectAttendInfo(Attend attend) {
 		return sqlSession.selectOne("attend.selectAttendInfo",attend);
 	}
 
